@@ -520,7 +520,6 @@ class EjsWeb {
         if (isView) {
             controller = getNthSegment(sansExt, 1).toPascal()
             viewName = sansExt.basename
-
         } else {
             viewName = sansExt.name.replace(/(\\|\/)+/g, "_")
             if (exists("config/compiler.ecf")) {
@@ -536,11 +535,15 @@ class EjsWeb {
         controllerMod = "controllers/" + controller + ".mod"
         controllerSource = "controllers/" + controller + ".es"
 
-        if (isView && exists(controllerSource)) {
-            if (!exists(controllerMod)) {
-                build("controllers/" + controller + ".es")
+        if (isView) {
+            if (exists(controllerSource)) {
+                if (!exists(controllerMod)) {
+                    build("controllers/" + controller + ".es")
+                }
+                controllerPrefix = controller + "_"
+            } else {
+                throw "Can't find controller " + controllerSource + " for view " + file
             }
-            controllerPrefix = controller + "_"
         }
 
         /*
