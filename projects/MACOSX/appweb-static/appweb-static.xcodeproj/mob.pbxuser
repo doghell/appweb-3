@@ -1,0 +1,608 @@
+// !$*UTF8*$!
+{
+	C90A19A30FD6DAAB006A9E86 /* appweb */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+			YES,
+		);
+		argumentStrings = (
+			"-v",
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+			"PBXLSLaunchAction-0" = {
+				PBXLSLaunchAction = 0;
+				PBXLSLaunchStartAction = 1;
+				PBXLSLaunchStdioStyle = 2;
+				PBXLSLaunchStyle = 0;
+				class = PBXLSRunLaunchConfig;
+				commandLineArgs = (
+				);
+				displayName = "Executable Runner";
+				environment = {
+				};
+				identifier = com.apple.Xcode.launch.runConfig;
+				remoteHostInfo = "";
+				startActionInfo = "";
+			};
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = appweb;
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+		startupPath = /Users/mob/hg/appweb/src/test;
+		variableFormatDictionary = {
+		};
+	};
+	C90A19A40FD6DAAB006A9E86 /* ajs */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = ajs;
+		sourceDirectories = (
+		);
+	};
+	C90A19A50FD6DAAB006A9E86 /* ajsc */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = ajsc;
+		sourceDirectories = (
+		);
+	};
+	C90A19A60FD6DAAB006A9E86 /* ajsmod */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = ajsmod;
+		sourceDirectories = (
+		);
+	};
+	C90A19A70FD6DAAB006A9E86 /* ajssql */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = ajssql;
+		sourceDirectories = (
+		);
+	};
+	C90A19A80FD6DAAB006A9E86 /* cgiProgram */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = cgiProgram;
+		sourceDirectories = (
+		);
+	};
+	C90A19A90FD6DAAB006A9E86 /* httpPassword */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = httpPassword;
+		sourceDirectories = (
+		);
+	};
+	C90A19AA0FD6DAAB006A9E86 /* testAppweb */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = testAppweb;
+		sourceDirectories = (
+		);
+	};
+	C90A19AB0FD6DAAB006A9E86 /* makerom */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = makerom;
+		sourceDirectories = (
+		);
+	};
+	C90A19AC0FD6DAAB006A9E86 /* ajsweb */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = ajsweb;
+		sourceDirectories = (
+		);
+	};
+	C90A19AD0FD6DAAB006A9E86 /* appwebAngel */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = appwebAngel;
+		sourceDirectories = (
+		);
+	};
+	C90A19B10FD6DADD006A9E86 /* clean */ = {
+		activeExec = 0;
+	};
+	C90A19B70FD6DB38006A9E86 /* ejsweb.mod */ = {
+		activeExec = 0;
+	};
+	C90A19C40FD6DBB2006A9E86 /* PBXTargetBookmark */ = {
+		isa = PBXTargetBookmark;
+		trg = C90A19B10FD6DADD006A9E86 /* clean */;
+	};
+	C90A19CB0FD6DBB2006A9E86 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	C90A19CC0FD6DBB2006A9E86 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	C90B6037101E72F600EE0D2D /* mprLib.c:11122 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = C9AFCC6B0FC522930080E908 /* mprLib.c */;
+		functionName = "mprBreakpoint()";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 11122;
+		location = appweb;
+		modificationTime = 272264987.085338;
+		state = 1;
+	};
+	C976216C0FD063FF009C78E1 /* ejs.mod */ = {
+		activeExec = 0;
+	};
+	C97621710FD06417009C78E1 /* ajs */ = {
+		activeExec = 0;
+		executables = (
+			C90A19A40FD6DAAB006A9E86 /* ajs */,
+		);
+	};
+	C97621780FD06433009C78E1 /* ajsc */ = {
+		activeExec = 0;
+		executables = (
+			C90A19A50FD6DAAB006A9E86 /* ajsc */,
+		);
+	};
+	C976217F0FD06441009C78E1 /* ajsmod */ = {
+		activeExec = 0;
+		executables = (
+			C90A19A60FD6DAAB006A9E86 /* ajsmod */,
+		);
+	};
+	C97621860FD0644B009C78E1 /* ajssql */ = {
+		activeExec = 0;
+		executables = (
+			C90A19A70FD6DAAB006A9E86 /* ajssql */,
+		);
+	};
+	C976218D0FD06458009C78E1 /* cgiProgram */ = {
+		activeExec = 0;
+		executables = (
+			C90A19A80FD6DAAB006A9E86 /* cgiProgram */,
+		);
+	};
+	C97621940FD06461009C78E1 /* httpPassword */ = {
+		activeExec = 0;
+		executables = (
+			C90A19A90FD6DAAB006A9E86 /* httpPassword */,
+		);
+	};
+	C976219B0FD0646C009C78E1 /* testAppweb */ = {
+		activeExec = 0;
+		executables = (
+			C90A19AA0FD6DAAB006A9E86 /* testAppweb */,
+		);
+	};
+	C97621A20FD06474009C78E1 /* makerom */ = {
+		activeExec = 0;
+		executables = (
+			C90A19AB0FD6DAAB006A9E86 /* makerom */,
+		);
+	};
+	C97621A90FD0647F009C78E1 /* ajsweb */ = {
+		activeExec = 0;
+		executables = (
+			C90A19AC0FD6DAAB006A9E86 /* ajsweb */,
+		);
+	};
+	C97621B00FD0648E009C78E1 /* appwebAngel */ = {
+		activeExec = 0;
+		executables = (
+			C90A19AD0FD6DAAB006A9E86 /* appwebAngel */,
+		);
+	};
+	C97621B50FD0649B009C78E1 /* All */ = {
+		activeExec = 0;
+	};
+	C97B232A101E76F800C9AD8B /* ejsLib.c:32772 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = C9AFCC730FC522BC0080E908 /* ejsLib.c */;
+		functionName = "isWritable()";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 32772;
+		location = appweb;
+		modificationTime = 272264987.085538;
+		state = 1;
+	};
+	C97B232C101E76F900C9AD8B /* ejsLib.c:32771 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = C9AFCC730FC522BC0080E908 /* ejsLib.c */;
+		functionName = "isWritable()";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 32771;
+		location = appweb;
+		modificationTime = 272264987.085554;
+		state = 1;
+	};
+	C9AFCC4A0FC521150080E908 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = C90A19A30FD6DAAB006A9E86 /* appweb */;
+		activeTarget = C9AFCC550FC521440080E908 /* appweb */;
+		breakpoints = (
+			C90B6037101E72F600EE0D2D /* mprLib.c:11122 */,
+			C97B232A101E76F800C9AD8B /* ejsLib.c:32772 */,
+			C97B232C101E76F900C9AD8B /* ejsLib.c:32771 */,
+			C9D4794E103A6DD300055B85 /* conn.c:141 */,
+		);
+		codeSenseManager = C90A19CC0FD6DBB2006A9E86 /* Code sense */;
+		executables = (
+			C90A19A30FD6DAAB006A9E86 /* appweb */,
+			C90A19A40FD6DAAB006A9E86 /* ajs */,
+			C90A19A50FD6DAAB006A9E86 /* ajsc */,
+			C90A19A60FD6DAAB006A9E86 /* ajsmod */,
+			C90A19A70FD6DAAB006A9E86 /* ajssql */,
+			C90A19A80FD6DAAB006A9E86 /* cgiProgram */,
+			C90A19A90FD6DAAB006A9E86 /* httpPassword */,
+			C90A19AA0FD6DAAB006A9E86 /* testAppweb */,
+			C90A19AB0FD6DAAB006A9E86 /* makerom */,
+			C90A19AC0FD6DAAB006A9E86 /* ajsweb */,
+			C90A19AD0FD6DAAB006A9E86 /* appwebAngel */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					300,
+					229,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+					PBXExecutablesDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					563,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					301,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 272264411;
+			PBXWorkspaceStateSaveDate = 272264411;
+		};
+		perUserProjectItems = {
+			C90A19C40FD6DBB2006A9E86 /* PBXTargetBookmark */ = C90A19C40FD6DBB2006A9E86 /* PBXTargetBookmark */;
+			C9D47950103A6DDC00055B85 /* PBXTextBookmark */ = C9D47950103A6DDC00055B85 /* PBXTextBookmark */;
+			C9D47951103A6DDC00055B85 /* PBXBookmark */ = C9D47951103A6DDC00055B85 /* PBXBookmark */;
+			C9D47952103A6DDC00055B85 /* PBXTextBookmark */ = C9D47952103A6DDC00055B85 /* PBXTextBookmark */;
+			C9D47961103A715100055B85 /* PBXTextBookmark */ = C9D47961103A715100055B85 /* PBXTextBookmark */;
+		};
+		sourceControlManager = C90A19CB0FD6DBB2006A9E86 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	C9AFCC550FC521440080E908 /* appweb */ = {
+		activeExec = 0;
+		executables = (
+			C90A19A30FD6DAAB006A9E86 /* appweb */,
+		);
+	};
+	C9AFCC6B0FC522930080E908 /* mprLib.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1025, 376695}}";
+			sepNavSelRange = "{276054, 0}";
+			sepNavVisRange = "{274917, 1218}";
+		};
+	};
+	C9AFCC720FC522BC0080E908 /* ejsAppweb.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {838, 12960}}";
+			sepNavSelRange = "{1323, 22}";
+			sepNavVisRange = "{1123, 422}";
+		};
+	};
+	C9AFCC730FC522BC0080E908 /* ejsLib.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {733, 522885}}";
+			sepNavSelRange = "{950753, 25}";
+			sepNavVisRange = "{950560, 307}";
+			sepNavWindowFrame = "{{15, 497}, {1243, 1076}}";
+		};
+	};
+	C9AFCC7C0FC5230D0080E908 /* conn.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {873, 5550}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{3267, 1200}";
+		};
+	};
+	C9AFCCA60FC5230D0080E908 /* request.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1184, 19650}}";
+			sepNavSelRange = "{6371, 37}";
+			sepNavVisRange = "{5451, 1836}";
+			sepNavWindowFrame = "{{38, 476}, {1243, 1076}}";
+		};
+	};
+	C9D4794E103A6DD300055B85 /* conn.c:141 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = C9AFCC7C0FC5230D0080E908 /* conn.c */;
+		functionName = "maAcceptConn()";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 141;
+		location = appweb;
+		modificationTime = 272264990.949238;
+		state = 1;
+	};
+	C9D47950103A6DDC00055B85 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C9AFCC6B0FC522930080E908 /* mprLib.c */;
+		name = "mprLib.c: 24972";
+		rLen = 0;
+		rLoc = 624755;
+		rType = 0;
+		vrLen = 994;
+		vrLoc = 275046;
+	};
+	C9D47951103A6DDC00055B85 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = C9AFCC7C0FC5230D0080E908 /* conn.c */;
+	};
+	C9D47952103A6DDC00055B85 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C9AFCC6B0FC522930080E908 /* mprLib.c */;
+		name = "mprLib.c: 24972";
+		rLen = 0;
+		rLoc = 624755;
+		rType = 0;
+		vrLen = 994;
+		vrLoc = 275046;
+	};
+	C9D47961103A715100055B85 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C9AFCC7C0FC5230D0080E908 /* conn.c */;
+		name = "conn.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1200;
+		vrLoc = 3267;
+	};
+}
