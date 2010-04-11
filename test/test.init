@@ -1,0 +1,71 @@
+/*
+ *  Initialize for Appweb unit tests
+ */
+
+let APPWEB = "../bin/appweb"
+let PIDFILE = ".appweb.pid"
+let LOCALHOST = "127.0.0.1"
+
+let conf    = Path("appweb.conf").readString()
+let port    = conf.replace(/.*Listen ([0-9]+) *# MAIN.*/ms, "$1")
+let ssl     = conf.replace(/.*Listen ([0-9]+) *# SSL.*/ms, "$1")
+let vhost   = conf.replace(/.*Listen ([0-9]+) *# VHOST.*/ms, "$1")
+let iphost  = conf.replace(/.*Listen ([0-9]+) *# IPHOST.*/ms, "$1")
+
+if (!App.getenv("SECOND")) {
+    for each (file in find("web", "*.mod")) {
+        rm(file)
+    }
+    cleanDir("web/tmp")
+    for each (f in find(".", "*.tdat", true)) {
+        rm(f)
+    }
+    let files = find("web", "*.ejs", true)
+    for (let i in files) {
+        files[i] = files[i].portable
+    }
+    files = (" " + files.join(" ")).replace(/ web\//g, " ")
+    sh("cd web ; " + locate("ajsweb") + " --quiet compile " + files)
+}
+
+if (!App.getenv("NOSERVER")) {
+    /*
+     *   Stop an old web server
+     */
+    if (exists(PIDFILE)) {
+        path = Path(PIDFILE)
+        pid = path.readString()
+        path.remove()
+        try {
+            kill(pid)
+        } catch {}
+    }
+
+    /*
+     *   Start a web server for testing
+     */
+    let cmd = APPWEB + " --log trace.txt:6 --name forAppwebTest --config appweb.conf"
+    test.log(2, "[TestRun]", "Run: " + cmd)
+    pid = Cmd.daemon(cmd)
+    Path(PIDFILE).write(pid)
+    share("appwebPidFile", PIDFILE)
+
+    let http = new Http
+    let host = "http://" + LOCALHOST + ":" + port
+    for (i in 50) {
+        try { 
+            http.get(host + "/alive.html")
+        } catch {}
+        if (http.code == 200) break
+        App.sleep(500)
+    }
+    if (http.code != 200) throw "Can't start web server"
+}
+
+share("host", LOCALHOST + ":" + port)
+share("port", port)
+share("main", "http://" + LOCALHOST + ":" + port)
+share("vhost", "http://" + LOCALHOST + ":" + vhost)
+share("vhostPort", vhost)
+share("iphost", "http://" + LOCALHOST + ":" + iphost)
+share("ssl", "https://" + LOCALHOST + ":" + ssl)

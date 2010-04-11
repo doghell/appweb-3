@@ -1,0 +1,22 @@
+<html>
+<body>
+<% 	
+	if (request.method == "POST") {
+        /*
+         *  These trace statements must be here. The unit tests rely upon them
+         */
+        // dump("PARAMS", params)
+        // dump("request.files", request.files)
+
+        d("PARAMS", params)
+        d("request.files", request.files)
+        for each (f in request.files) {
+            // print("MV " + f.filename + " to " + "web/tmp/" + f.clientFilename)
+            mv(f.filename, "web/tmp/" + f.clientFilename)
+        }
+        write("Uploaded")
+    }
+%>
+</body>
+</html>
+

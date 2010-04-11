@@ -1,0 +1,568 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <title>Class Http</title>
+
+   <link rel="stylesheet" type="text/css" href="doc.css" />
+</head>
+
+<body>
+<div class='body'>
+
+<div class="content">
+
+<a name='top'></a>
+<h1 class='className'>Http</h1>
+<div class='classBlock'>
+<table class='classHead' summary='Http'>
+   <tr><td><strong>Module</strong></td><td>ejs.io</td></tr>
+   <tr><td><strong>Definition</strong></td><td> class Http</td></tr>
+   <tr><td><strong>Inheritance</strong></td><td>Http <img src='images/inherit.gif' alt='inherit'/> <a href='intrinsic-Object.html'>Object</a><tr><td><strong>Specified</strong></td><td>ejscript-1.0</td></tr>
+<tr><td><strong>Stability</strong></td><td>Prototype.</td></tr>
+       </td></tr>
+</table>
+
+<p class='classBrief'>The Http object represents a Hypertext Transfer Protocol version 1.1 client connection.</p>
+
+<p class='classDescription'>It is used to issue 
+HTTP requests and capture responses. It supports the HTTP/1.1 standard including methods for GET, POST, 
+PUT, DELETE, OPTIONS, and TRACE. It also supports Keep-Alive and SSL connections.</p>
+
+</div>
+
+
+<hr />
+<a name='Properties'></a>
+<h2 class='classSection'>Properties</h2>
+<table class='itemTable' summary='properties'>
+   <tr><th>Qualifiers</th><th>Property</th><th>Type</th><th width='95%'>Description</th></tr>
+<a name='Accepted'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Accepted</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='BadGateway'></a>
+   <tr><td nowrap align='left'>public static const </td><td>BadGateway</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='BadMethod'></a>
+   <tr><td nowrap align='left'>public static const </td><td>BadMethod</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='BadRequest'></a>
+   <tr><td nowrap align='left'>public static const </td><td>BadRequest</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='ClientTimeout'></a>
+   <tr><td nowrap align='left'>public static const </td><td>ClientTimeout</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Conflict'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Conflict</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Continue'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Continue</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Created'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Created</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='EntityTooLarge'></a>
+   <tr><td nowrap align='left'>public static const </td><td>EntityTooLarge</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Forbidden'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Forbidden</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='GatewayTimeout'></a>
+   <tr><td nowrap align='left'>public static const </td><td>GatewayTimeout</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Gone'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Gone</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='LengthRequired'></a>
+   <tr><td nowrap align='left'>public static const </td><td>LengthRequired</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='MovedPermanently'></a>
+   <tr><td nowrap align='left'>public static const </td><td>MovedPermanently</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='MovedTemporarily'></a>
+   <tr><td nowrap align='left'>public static const </td><td>MovedTemporarily</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='MultipleChoice'></a>
+   <tr><td nowrap align='left'>public static const </td><td>MultipleChoice</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='NoContent'></a>
+   <tr><td nowrap align='left'>public static const </td><td>NoContent</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='NotAccepted'></a>
+   <tr><td nowrap align='left'>public static const </td><td>NotAccepted</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='NotAuthoritative'></a>
+   <tr><td nowrap align='left'>public static const </td><td>NotAuthoritative</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='NotFound'></a>
+   <tr><td nowrap align='left'>public static const </td><td>NotFound</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='NotImplemented'></a>
+   <tr><td nowrap align='left'>public static const </td><td>NotImplemented</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='NotModified'></a>
+   <tr><td nowrap align='left'>public static const </td><td>NotModified</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Ok'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Ok</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Partial'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Partial</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='PaymentRequired'></a>
+   <tr><td nowrap align='left'>public static const </td><td>PaymentRequired</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='PrecondFailed'></a>
+   <tr><td nowrap align='left'>public static const </td><td>PrecondFailed</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='ProxyAuth'></a>
+   <tr><td nowrap align='left'>public static const </td><td>ProxyAuth</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Read'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Read</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Callback event mask for readable events. </td></tr>
+<a name='ReqTooLong'></a>
+   <tr><td nowrap align='left'>public static const </td><td>ReqTooLong</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Reset'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Reset</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='SeeOther'></a>
+   <tr><td nowrap align='left'>public static const </td><td>SeeOther</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='ServerError'></a>
+   <tr><td nowrap align='left'>public static const </td><td>ServerError</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Unauthorized'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Unauthorized</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Unavailable'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Unavailable</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='UnsupportedType'></a>
+   <tr><td nowrap align='left'>public static const </td><td>UnsupportedType</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='UseProxy'></a>
+   <tr><td nowrap align='left'>public static const </td><td>UseProxy</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Version'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Version</td><td><a href='intrinsic-Number.html'>Number</a></td><td>HTTP status code. </td></tr>
+<a name='Write'></a>
+   <tr><td nowrap align='left'>public static const </td><td>Write</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Callback event mask for writeable events. </td></tr>
+<a name='code'></a>
+   <tr><td nowrap align='left'>public get </td><td>code</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Http response status code. Set to an integer value or -1 if the Http response code is not known. e.g. 200.</td></tr>
+<a name='codeString'></a>
+   <tr><td nowrap align='left'>public get </td><td>codeString</td><td><a href='intrinsic-String.html'>String</a></td><td>Http response message from the Http response status line, e.g. OK. This is the additional text added to the
+first line in the Http protocol response.</td></tr>
+<a name='contentLength'></a>
+   <tr><td nowrap align='left'>public get  set</td><td>contentLength</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Request/Response body length. Reading this property, will return the response content body length. The value
+will be the response body length in bytes or -1 if no body or if the body length is not known.
+Setting this value will set the outgoing request body length. This will set the request Content-Length 
+header value and is used when using <a href='#write'>write</a> to manually send the requeset body data.
+WARNING: This API will change in the next release. It will become a sole getter. Use addHeader to define
+a Content-Length header if you require defining a request body content length.</td></tr>
+<a name='contentType'></a>
+   <tr><td nowrap align='left'>public get </td><td>contentType</td><td><a href='intrinsic-String.html'>String</a></td><td>Response content type derrived from the response Http Content-Type header. </td></tr>
+<a name='date'></a>
+   <tr><td nowrap align='left'>public get </td><td>date</td><td><a href='intrinsic-Date.html'>Date</a></td><td>When the response was generated. Response date derrived from the response Http Date header.</td></tr>
+<a name='expires'></a>
+   <tr><td nowrap align='left'>public get </td><td>expires</td><td><a href='intrinsic-Date.html'>Date</a></td><td>When the response content expires. This is derrived from the response Http Expires header.</td></tr>
+<a name='followRedirects'></a>
+   <tr><td nowrap align='left'>public get  set</td><td>followRedirects</td><td><a href='intrinsic-Boolean.html'>Boolean</a></td><td>Will response redirects be automatically followed by this Http object. If true, the Http class will 
+automatically reissue requests if redirected by the server.</td></tr>
+<a name='headers'></a>
+   <tr><td nowrap align='left'>public get </td><td>headers</td><td><a href='intrinsic-Array.html'>Array</a></td><td>Response headers. Use header() to retrieve a single header value.</td></tr>
+<a name='isSecure'></a>
+   <tr><td nowrap align='left'>public get </td><td>isSecure</td><td><a href='intrinsic-Boolean.html'>Boolean</a></td><td>Is the connection is utilizing SSL. </td></tr>
+<a name='lastModified'></a>
+   <tr><td nowrap align='left'>public get </td><td>lastModified</td><td><a href='intrinsic-Date.html'>Date</a></td><td>When the response content was last modified. Set to the the value of the response Http Last-Modified header.
+Set to null if not known.</td></tr>
+<a name='method'></a>
+   <tr><td nowrap align='left'>public get  set</td><td>method</td><td><a href='intrinsic-String.html'>String</a></td><td>Http request method for this Http object. </td></tr>
+<a name='response'></a>
+   <tr><td nowrap align='left'>public get </td><td>response</td><td><a href='intrinsic-String.html'>String</a></td><td>Response body content. The first time this property is read, the response content will be read and buffered.
+Set to the response as a string of characters. If the response has no body content, the empty string will 
+be returned.</td></tr>
+<a name='timeout'></a>
+   <tr><td nowrap align='left'>public get  set</td><td>timeout</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Request timeout in milliseconds. This is the idle timeout value. If the request has no I/O activity for 
+this time period, it will be retried or aborted.</td></tr>
+<a name='uri'></a>
+   <tr><td nowrap align='left'>public get  set</td><td>uri</td><td><a href='intrinsic-String.html'>String</a></td><td>URI for this Http object. </td></tr>
+</table>
+
+<p class='inheritedLink'><a href='intrinsic-Object.html#Properties'><i>Inherited Properties</i></a></p>
+
+<hr />
+<a name='Methods'></a>
+<h2 class='classSection'>Http Methods</h2>
+<table class='apiIndex' summary='methods'>
+   <tr><th>Qualifiers</th><th width='95%'>Method</th></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#addHeader'><b>addHeader</b></a>(key: <a href='intrinsic-String.html'>String</a>, value: <a href='intrinsic-String.html'>String</a>, overwrite: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Add a request header.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#close'><b>close</b></a>(graceful: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Close the connection to the server and free up all associated resources.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#connect'><b>connect</b></a>(uri: <a href='intrinsic-String.html'>String</a> = null, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Issue a HTTP request for the current method and uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#del'><b>del</b></a>(uri: <a href='intrinsic-String.html'>String</a> = null, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Issue a DELETE request for the current uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#flush'><b>flush</b></a>(graceful: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Flush any buffered write data.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#form'><b>form</b></a>(uri: <a href='intrinsic-String.html'>String</a>, postData: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Issue a POST request with form data the current uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#get'><b>get</b></a>(uri: <a href='intrinsic-String.html'>String</a> = null, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Issue a GET request for the current uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#head'><b>head</b></a>(uri: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Issue a HEAD request for the current uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#header'><b>header</b></a>(key: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get the value of any response header field.</td></tr>
+   <tr class='apiDef'><td class='apiType'> </td><td><a href='#Http'><b>Http</b></a>(uri: <a href='intrinsic-String.html'>String</a> = null)</tr><tr class='apiBrief'><td>&nbsp;</td><td>Create an Http object.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#mimeType'><b>mimeType</b></a>(path: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get the mime type for a path or extension string.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#options'><b>options</b></a>(uri: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Issue an OPTIONS request for the current uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#post'><b>post</b></a>(uri: <a href='intrinsic-String.html'>String</a>, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Initiate a POST request for the current uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#put'><b>put</b></a>(uri: <a href='intrinsic-String.html'>String</a>, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Issue a PUT request for the current uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#read'><b>read</b></a>(buffer: <a href='intrinsic-ByteArray.html'>ByteArray</a>, offset: <a href='intrinsic-Number.html'>Number</a> = 0 , count: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Number.html'>Number</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Read a block of response content data from the connection.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#readLines'><b>readLines</b></a>(count: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Read the request response as an array of lines.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#readString'><b>readString</b></a>(count: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Read the request response as a string.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#readXml'><b>readXml</b></a>(): <a href='intrinsic-XML.html'>XML</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Read the request response as an XML document.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setCredentials'><b>setCredentials</b></a>(username: <a href='intrinsic-String.html'>String</a>, password: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the user credentials to use if the request requires authentication.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#trace'><b>trace</b></a>(uri: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Issue a TRACE request for the current uri.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#upload'><b>upload</b></a>(url: <a href='intrinsic-String.html'>String</a>, files: <a href='intrinsic-Object.html'>Object</a>, fields: <a href='intrinsic-Object.html'>Object</a> = null): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Upload files using multipart/mime.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#wait'><b>wait</b></a>(timeout: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Wait for a request to complete.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#write'><b>write</b></a>(data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Write body data to the request stream.</td></tr>
+</table>
+
+<p class='inheritedLink'><a href='intrinsic-Object.html#Methods'><i>Inherited Methods</i></a></p>
+
+<hr />
+<h2>Method Detail</h2>
+<a name='addHeader'></a>
+<div class='api'>
+<div class='apiSig'>  public  addHeader(key: <a href='intrinsic-String.html'>String</a>, value: <a href='intrinsic-String.html'>String</a>, overwrite: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Add a request header.</p>
+<dl><dt>Description</dt><dd>Must be done before the Http request is issued.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>key: <a href='intrinsic-String.html'>String</a> </td><td>The header keyword for the request, e.g. "accept".</td></tr><tr class='param'><td class='param'>value: <a href='intrinsic-String.html'>String</a> </td><td>The value to associate with the header, e.g. "yes".</td></tr><tr class='param'><td class='param'>overwrite: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>If true, overwrite existing headers of the same key name. [default: true]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='close'></a>
+<div class='api'>
+<div class='apiSig'>  public  close(graceful: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Close the connection to the server and free up all associated resources.</p>
+<dl><dt>Description</dt><dd>This closes any open network connection and resets the http object to be ready for another connection. 
+Connections should be explicitly closed rather than relying on the garbage collector to dispose of the 
+Http object and automatically close the connection.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>graceful: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>If true, then close the socket gracefully after writing all pending data. [default: true]</td></tr></table></dd>
+</dl><dl><dt>Stability</dt>
+<dd>Prototype.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='connect'></a>
+<div class='api'>
+<div class='apiSig'>  public  connect(uri: <a href='intrinsic-String.html'>String</a> = null, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Issue a HTTP request for the current method and uri.</p>
+<dl><dt>Description</dt><dd>The HTTP method should be defined via the <a href='#method'>method</a> 
+property and uri via the <a href='#uri'>uri</a> property. This routine is typically not used. Rather <a href='#get,'>get,</a> <a href='#head,'>head,</a> <a href='#post'>post</a> or <a href='#put'>put</a> are used instead.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>New uri to use. This overrides any previously defined uri for the Http object. [default: null]</td></tr><tr class='param'><td class='param'>data: <a href='intrinsic-Array.html'>Array</a> </td><td>Data objects to send with the request. Data is written raw and is not encoded or converted.  However, the routine intelligently handles arrays such that, each element of the array will be written.</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='del'></a>
+<div class='api'>
+<div class='apiSig'>  public  del(uri: <a href='intrinsic-String.html'>String</a> = null, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Issue a DELETE request for the current uri.</p>
+<dl><dt>Description</dt><dd>This function will block until the the request completes or 
+fails, unless a callback function has been defined. If a callback has been specified, this function 
+will initiate the request and return immediately.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>The uri to delete. This overrides any previously defined uri for the Http object. [default: null]</td></tr><tr class='param'><td class='param'>data: <a href='intrinsic-Array.html'>Array</a> </td><td>Data objects to send with the request. Data is written raw and is not encoded or converted.  However, the routine intelligently handles arrays such that, each element of the array will be written.</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='flush'></a>
+<div class='api'>
+<div class='apiSig'>  public  flush(graceful: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Flush any buffered write data.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>graceful: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>If true, then write all pending. [default: true]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='form'></a>
+<div class='api'>
+<div class='apiSig'>  public  form(uri: <a href='intrinsic-String.html'>String</a>, postData: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Issue a POST request with form data the current uri.</p>
+<dl><dt>Description</dt><dd>This function will block until the the request 
+completes or fails, unless a callback function has been defined. If a callback has been specified, 
+this function will initiate the request and return immediately.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>Optional request uri. If non-null, this overrides any previously defined uri for the Http object.</td></tr><tr class='param'><td class='param'>postData: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional object hash of key value pairs to use as the post data. These are www-url-encoded and the content mime type is set to "application/x-www-form-urlencoded".</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server. 
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='get'></a>
+<div class='api'>
+<div class='apiSig'>  public  get(uri: <a href='intrinsic-String.html'>String</a> = null, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Issue a GET request for the current uri.</p>
+<dl><dt>Description</dt><dd>This call initiates a GET request. It does not wait for the
+request to complete. Once initiated, one of the <a href='#read'>read</a> or response routines  may be used to receive the 
+response data.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>The uri to get. This overrides any previously defined uri for the Http object. [default: null]</td></tr><tr class='param'><td class='param'>data: <a href='intrinsic-Array.html'>Array</a> </td><td>Data objects to send with the request. Data is written raw and is not encoded or converted.  However, the routine intelligently handles arrays such that, each element of the array will be written.</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='head'></a>
+<div class='api'>
+<div class='apiSig'>  public  head(uri: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Issue a HEAD request for the current uri.</p>
+<dl><dt>Description</dt><dd>This call initiates a HEAD request. Once initiated, <a href='#read'>read</a> and <a href='#write'>write</a> may be issued to send and receive data.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>The request uri. This overrides any previously defined uri for the Http object. [default: null]</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='header'></a>
+<div class='api'>
+<div class='apiSig'>  public  header(key: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-String.html'>String</a>
+</div>
+<div class='apiDetail'>
+<p>Get the value of any response header field.</p>
+<dl><dt>Returns</dt>
+<dd>The header field value as a string or null if not known.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='Http'></a>
+<div class='api'>
+<div class='apiSig'>  public  Http(uri: <a href='intrinsic-String.html'>String</a> = null)
+</div>
+<div class='apiDetail'>
+<p>Create an Http object.</p>
+<dl><dt>Description</dt><dd>The object is initialized with the URI.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>The (optional) URI to initialize with. [default: null]</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the URI is malformed.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='mimeType'></a>
+<div class='api'>
+<div class='apiSig'>static   public  mimeType(path: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-String.html'>String</a>
+</div>
+<div class='apiDetail'>
+<p>Get the mime type for a path or extension string.</p>
+<dl><dt>Description</dt><dd>NOTE: this routine will migrate to the Url class in the future.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>path: <a href='intrinsic-String.html'>String</a> </td><td>Path or extension string to examine.</td></tr></table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>The mime type string.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='options'></a>
+<div class='api'>
+<div class='apiSig'>  public  options(uri: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Issue an OPTIONS request for the current uri.</p>
+<dl><dt>Description</dt><dd>Use <a href='#readString'>readString</a> to retrieve the response.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>New uri to use. This overrides any previously defined uri for the Http object. [default: null]</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='post'></a>
+<div class='api'>
+<div class='apiSig'>  public  post(uri: <a href='intrinsic-String.html'>String</a>, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Initiate a POST request for the current uri.</p>
+<dl><dt>Description</dt><dd>Posted data is NOT URL encoded. If you want to post data to a 
+form, consider using the <a href='#form'>form</a> method instead which automatically URL encodes the data. Post data may be 
+supplied may alternatively be supplied via <a href='#write'>write</a>. </dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>Optional request uri. If non-null, this overrides any previously defined uri for the Http object.</td></tr><tr class='param'><td class='param'>data: <a href='intrinsic-Array.html'>Array</a> </td><td>Data objects to send with the post request. Data is written raw and is not encoded or converted.  However, this routine intelligently handles arrays such that, each element of the array will be written.</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server. 
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='put'></a>
+<div class='api'>
+<div class='apiSig'>  public  put(uri: <a href='intrinsic-String.html'>String</a>, data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Issue a PUT request for the current uri.</p>
+<dl><dt>Description</dt><dd>This call initiates a PUT request. If a contentLength has not been 
+previously defined for this request, chunked transfer encoding will be enabled (See <a href='#chunked)'>chunked)</a>. </dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>The uri to delete. This overrides any previously defined uri for the Http object.</td></tr><tr class='param'><td class='param'>data: <a href='intrinsic-Array.html'>Array</a> </td><td>Optional data objects to write to the request stream. Data is written raw and is not encoded  or converted.  However, put intelligently handles arrays such that, each element of the array will be  written. If encoding of put data is required, use the BinaryStream filter. If no putData is supplied, and the <a href='#contentLength'>contentLength</a> is non-zero you must call <a href='#write'>write</a> to supply the body data.</td></tr><tr class='param'><td class='param'>data: <a href='intrinsic-Array.html'>Array</a> </td><td>Optional object hash of key value pairs to use as the post data.</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server. 
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='read'></a>
+<div class='api'>
+<div class='apiSig'>  public  read(buffer: <a href='intrinsic-ByteArray.html'>ByteArray</a>, offset: <a href='intrinsic-Number.html'>Number</a> = 0 , count: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Number.html'>Number</a>
+</div>
+<div class='apiDetail'>
+<p>Read a block of response content data from the connection.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>buffer: <a href='intrinsic-ByteArray.html'>ByteArray</a> </td><td>Destination byte array for the read data.</td></tr><tr class='param'><td class='param'>offset: <a href='intrinsic-Number.html'>Number</a> </td><td>Offset in the byte array to place the data. If offset is -1, data is appended at the  current byte array write position. [default: 0 ]</td></tr><tr class='param'><td class='param'>count: <a href='intrinsic-Number.html'>Number</a> </td><td>Number of bytes to read. [default: -1]</td></tr></table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>A count of the bytes actually read. This call may return with fewer bytes read than requested. If a callback has been defined, this call will not block and may return zero if no data is currently  available. If no callback has been defined, it will block.</dd></dl>
+<dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if an I/O error occurs.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='readLines'></a>
+<div class='api'>
+<div class='apiSig'>  public  readLines(count: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Array.html'>Array</a>
+</div>
+<div class='apiDetail'>
+<p>Read the request response as an array of lines.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>count: <a href='intrinsic-Number.html'>Number</a> </td><td>Of linese to read. Returns the entire response contents if count is -1. [default: -1]</td></tr></table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>An array of strings.</dd></dl>
+<dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if an I/O error occurs.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='readString'></a>
+<div class='api'>
+<div class='apiSig'>  public  readString(count: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-String.html'>String</a>
+</div>
+<div class='apiDetail'>
+<p>Read the request response as a string.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>count: <a href='intrinsic-Number.html'>Number</a> </td><td>Of bytes to read. Returns the entire response contents if count is -1. [default: -1]</td></tr></table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>A string of $count characters beginning at the start of the response data.</dd></dl>
+<dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if an I/O error occurs.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='readXml'></a>
+<div class='api'>
+<div class='apiSig'>  public  readXml(): <a href='intrinsic-XML.html'>XML</a>
+</div>
+<div class='apiDetail'>
+<p>Read the request response as an XML document.</p>
+<dl><dt>Returns</dt>
+<dd>The response content as an XML object.</dd></dl>
+<dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if an I/O error occurs. 
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='setCredentials'></a>
+<div class='api'>
+<div class='apiSig'>  public  setCredentials(username: <a href='intrinsic-String.html'>String</a>, password: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Set the user credentials to use if the request requires authentication.</p>
+</div>
+</div>
+<hr />
+<a name='trace'></a>
+<div class='api'>
+<div class='apiSig'>  public  trace(uri: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Issue a TRACE request for the current uri.</p>
+<dl><dt>Description</dt><dd>Use <a href='#readString'>readString</a> to retrieve the response.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>uri: <a href='intrinsic-String.html'>String</a> </td><td>New uri to use. This overrides any previously defined uri for the Http object. [default: null]</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-IOError.html'>IOError</a>: if the request cannot be issued to the remote server.  
+</dd>
+</dl></div>
+</div>
+<hr />
+<a name='upload'></a>
+<div class='api'>
+<div class='apiSig'>  public  upload(url: <a href='intrinsic-String.html'>String</a>, files: <a href='intrinsic-Object.html'>Object</a>, fields: <a href='intrinsic-Object.html'>Object</a> = null): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Upload files using multipart/mime.</p>
+<dl><dt>Description</dt><dd>This routine initiates a POST request and sends the specified files
+and form fields using multipart mime encoding. This call also automatically enables chunked transfer 
+encoding (See <a href='#chunked)'>chunked)</a>. </dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>url: <a href='intrinsic-String.html'>String</a> </td><td>The url to upload to. This overrides any previously defined uri for the Http object.</td></tr><tr class='param'><td class='param'>files: <a href='intrinsic-Object.html'>Object</a> </td><td>Object hash of files to upload.</td></tr><tr class='param'><td class='param'>fields: <a href='intrinsic-Object.html'>Object</a> </td><td>Object hash of of form fields to send. [default: null]</td></tr></table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>fields = { name: "John Smith", address: "700 Park Avenue" }
+files = { file1: "a.txt, file2: "b.txt" }
+http.upload(URL, files, fields)
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='wait'></a>
+<div class='api'>
+<div class='apiSig'>  public  wait(timeout: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Boolean.html'>Boolean</a>
+</div>
+<div class='apiDetail'>
+<p>Wait for a request to complete.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>timeout: <a href='intrinsic-Number.html'>Number</a> </td><td>Time in seconds to wait for the request to complete. [default: -1]</td></tr></table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>True if the request successfully completes.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='write'></a>
+<div class='api'>
+<div class='apiSig'>  public  write(data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Write body data to the request stream.</p>
+<dl><dt>Description</dt><dd>The write call blocks while writing data. The Http.contentLength should 
+normally be set prior to writing any data to ensure that the request "Content-length" header is properly 
+defined. If the body length has not been defined, the data will be transferred using chunked transfers. In
+this case, you should call write() with no data to signify the end of the write stream.
+the Content-Length header will not be defined and the remote server will have to close the underling 
+HTTP connection at the completion of the request. This will prevent HTTP keep-alive for subsequent 
+requests.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>data: <a href='intrinsic-Array.html'>Array</a> </td><td>Data objects to write to the request stream. Data is written raw and is not encoded or converted.  However, write intelligently handles arrays such that, each element of the array will be written.  If encoding of write data is required, use the BinaryStream filter.</td></tr></table></dd>
+</dl><dl><dt>Throws</dt><dd>
+<a href='intrinsic-StateError.html'>StateError</a>: if the Http method is not set to POST. , 
+<a href='intrinsic-IOError.html'>IOError</a>: if more post data is written than specified via the contentLength property. 
+</dd>
+</dl></div>
+</div>
+<hr />
+<div class="terms">
+   <p class="terms">
+       <a href="http://www.embedthis.com/">       Embedthis Software LLC, 2003-2010. All rights reserved. Embedthis is a trademark of Embedthis Software LLC.</a>
+   </p>
+</div></div>
+</div>
+</body>
+</html>

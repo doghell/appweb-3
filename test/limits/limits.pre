@@ -1,0 +1,4 @@
+
+if (test.config["http_client"] != 1 || !session["main"]) {
+    test.skip("Http client not enabled")
+}

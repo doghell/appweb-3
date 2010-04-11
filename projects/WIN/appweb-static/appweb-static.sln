@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "appweb", "appweb.vcproj", "{246D3048-1A2E-4D2B-8D0F-08BE1FEF5757}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14D64C9F-EA9F-4D9E-A562-93334EC72DB2} = {14D64C9F-EA9F-4D9E-A562-93334EC72DB2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "angel", "angel.vcproj", "{793F7DF7-C619-4275-9368-4ECB8DE7FD88}"
+	ProjectSection(ProjectDependencies) = postProject
+		{246D3048-1A2E-4D2B-8D0F-08BE1FEF5757} = {246D3048-1A2E-4D2B-8D0F-08BE1FEF5757}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "appwebMonitor", "appwebMonitor.vcproj", "{454ACF89-33BF-4E9C-BE90-00357CD82E42}"
+	ProjectSection(ProjectDependencies) = postProject
+		{793F7DF7-C619-4275-9368-4ECB8DE7FD88} = {793F7DF7-C619-4275-9368-4ECB8DE7FD88}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ajsc", "ajsc.vcproj", "{2AF0D91D-AC9E-4275-8CEA-B3BB41023BE3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E} = {904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ajssql", "ajssql.vcproj", "{A7BCB8A7-4E7A-4854-8D83-D1BF49574606}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2AF0D91D-AC9E-4275-8CEA-B3BB41023BE3} = {2AF0D91D-AC9E-4275-8CEA-B3BB41023BE3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "http", "http.vcproj", "{7C12AE9C-C581-4609-8BB9-19D8164D0FFC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "httpPassword", "httpPassword.vcproj", "{5CECD82E-2EE5-4BC7-8649-C143CA9FB663}"
+	ProjectSection(ProjectDependencies) = postProject
+		{454ACF89-33BF-4E9C-BE90-00357CD82E42} = {454ACF89-33BF-4E9C-BE90-00357CD82E42}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ajsweb", "ajsweb.vcproj", "{14D64C9F-EA9F-4D9E-A562-93334EC72DB2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7BCB8A7-4E7A-4854-8D83-D1BF49574606} = {A7BCB8A7-4E7A-4854-8D83-D1BF49574606}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ajsmod", "ajsmod.vcproj", "{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{246D3048-1A2E-4D2B-8D0F-08BE1FEF5757}.Debug|Win32.ActiveCfg = Debug|Win32
+		{246D3048-1A2E-4D2B-8D0F-08BE1FEF5757}.Debug|Win32.Build.0 = Debug|Win32
+		{246D3048-1A2E-4D2B-8D0F-08BE1FEF5757}.Release|Win32.ActiveCfg = Release|Win32
+		{246D3048-1A2E-4D2B-8D0F-08BE1FEF5757}.Release|Win32.Build.0 = Release|Win32
+		{793F7DF7-C619-4275-9368-4ECB8DE7FD88}.Debug|Win32.ActiveCfg = Debug|Win32
+		{793F7DF7-C619-4275-9368-4ECB8DE7FD88}.Debug|Win32.Build.0 = Debug|Win32
+		{793F7DF7-C619-4275-9368-4ECB8DE7FD88}.Release|Win32.ActiveCfg = Release|Win32
+		{793F7DF7-C619-4275-9368-4ECB8DE7FD88}.Release|Win32.Build.0 = Release|Win32
+		{454ACF89-33BF-4E9C-BE90-00357CD82E42}.Debug|Win32.ActiveCfg = Debug|Win32
+		{454ACF89-33BF-4E9C-BE90-00357CD82E42}.Debug|Win32.Build.0 = Debug|Win32
+		{454ACF89-33BF-4E9C-BE90-00357CD82E42}.Release|Win32.ActiveCfg = Release|Win32
+		{454ACF89-33BF-4E9C-BE90-00357CD82E42}.Release|Win32.Build.0 = Release|Win32
+		{2AF0D91D-AC9E-4275-8CEA-B3BB41023BE3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2AF0D91D-AC9E-4275-8CEA-B3BB41023BE3}.Debug|Win32.Build.0 = Debug|Win32
+		{2AF0D91D-AC9E-4275-8CEA-B3BB41023BE3}.Release|Win32.ActiveCfg = Release|Win32
+		{2AF0D91D-AC9E-4275-8CEA-B3BB41023BE3}.Release|Win32.Build.0 = Release|Win32
+		{A7BCB8A7-4E7A-4854-8D83-D1BF49574606}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A7BCB8A7-4E7A-4854-8D83-D1BF49574606}.Debug|Win32.Build.0 = Debug|Win32
+		{A7BCB8A7-4E7A-4854-8D83-D1BF49574606}.Release|Win32.ActiveCfg = Release|Win32
+		{A7BCB8A7-4E7A-4854-8D83-D1BF49574606}.Release|Win32.Build.0 = Release|Win32
+		{7C12AE9C-C581-4609-8BB9-19D8164D0FFC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7C12AE9C-C581-4609-8BB9-19D8164D0FFC}.Debug|Win32.Build.0 = Debug|Win32
+		{7C12AE9C-C581-4609-8BB9-19D8164D0FFC}.Release|Win32.ActiveCfg = Release|Win32
+		{7C12AE9C-C581-4609-8BB9-19D8164D0FFC}.Release|Win32.Build.0 = Release|Win32
+		{5CECD82E-2EE5-4BC7-8649-C143CA9FB663}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5CECD82E-2EE5-4BC7-8649-C143CA9FB663}.Debug|Win32.Build.0 = Debug|Win32
+		{5CECD82E-2EE5-4BC7-8649-C143CA9FB663}.Release|Win32.ActiveCfg = Release|Win32
+		{5CECD82E-2EE5-4BC7-8649-C143CA9FB663}.Release|Win32.Build.0 = Release|Win32
+		{14D64C9F-EA9F-4D9E-A562-93334EC72DB2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{14D64C9F-EA9F-4D9E-A562-93334EC72DB2}.Debug|Win32.Build.0 = Debug|Win32
+		{14D64C9F-EA9F-4D9E-A562-93334EC72DB2}.Release|Win32.ActiveCfg = Release|Win32
+		{14D64C9F-EA9F-4D9E-A562-93334EC72DB2}.Release|Win32.Build.0 = Release|Win32
+		{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}.Debug|Win32.Build.0 = Debug|Win32
+		{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}.Release|Win32.ActiveCfg = Release|Win32
+		{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

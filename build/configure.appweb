@@ -1,0 +1,475 @@
+#!/bin/bash
+#
+#   configure.appweb -- Build configuration script for Embedthis Appweb Server
+#   Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
+#
+#   This script is included by configure and is never run stand-alone.
+#
+
+applyDependencies()
+{
+    local file status
+
+    if [ "$CFG_WITHOUT_SSL" = 1 ] ; then
+        without matrixssl
+        without openssl
+    fi
+}
+
+
+manageFeatures()
+{
+    local file status
+
+    BLD_FEATURE_MPR=1
+
+    if [ "$BLD_FEATURE_COMPLETE_CROSS" = 1 ] ; then
+        if [ "$BLD_FEATURE_EJS" = 1 ] ; then
+            BLD_FEATURE_EJS_CROSS_COMPILER=1
+        fi
+    fi
+
+    if [ "$BLD_FEATURE_EJS" = 0 ] ; then
+        BLD_FEATURE_EJS_ALL_IN_ONE=0
+        BLD_FEATURE_EJS_AUTO_COMPILE=0
+        BLD_FEATURE_EJS_CROSS_COMPILER=0
+        BLD_FEATURE_EJS_DB=1
+        BLD_FEATURE_EJS_DOC=0
+        BLD_FEATURE_EJS_E4X=0
+        BLD_FEATURE_EJS_LANG=0
+        BLD_FEATURE_EJS_WEB=0
+        BLD_FEATURE_XML=0
+    fi
+
+    if [ "$BLD_FEATURE_SQLITE" = 0 ] ; then
+        BLD_FEATURE_EJS_DB=0
+    fi
+
+    if [ "$BLD_FEATURE_ANGEL" = 0 -a "$BLD_HOST_OS" = WIN ] ; then
+        echo "The Angel process is required for Windows"
+        echo "Enabling the Angel"
+        BLD_FEATURE_ANGEL=1
+    fi
+    if [ "$BLD_FEATURE_ANGEL" = 1 -a "$BLD_HOST_OS" = WINCE ] ; then
+        BLD_FEATURE_ANGEL=0
+    fi
+
+    if [ "$BLD_FEATURE_NUM_TYPE" = "double" ] ; then
+        BLD_FEATURE_FLOATING_POINT=1
+        BLD_FEATURE_NUM_TYPE_DOUBLE=1
+    else
+        BLD_FEATURE_NUM_TYPE_DOUBLE=0
+    fi
+
+    if [ "$BLD_FEATURE_EJS_E4X" = 1 ] ; then
+        BLD_FEATURE_XML=1
+    else
+        BLD_FEATURE_XML=0
+    fi
+
+    if [ "$BLD_FEATURE_CGI" = 1 ] ; then
+        BLD_FEATURE_CMD=1
+    fi
+
+    if [ "$BLD_FEATURE_SEND" = 1 ] ; then
+        if [ "$BLD_FEATURE_ROMFS" = 1 ] ; then
+            BLD_FEATURE_SEND=0
+            BLD_FEATURE_NET=1
+        fi
+        if [ "$BLD_HOST_OS" != LINUX -a "$BLD_HOST_OS" != MACOSX -a "$BLD_HOST_OS" != FREEBSD ] ; then
+            BLD_FEATURE_SEND=0
+            BLD_FEATURE_NET=1
+        fi
+    fi
+
+    if [ "$BLD_FEATURE_SEND" = 0 -a "$BLD_FEATURE_NET" = 0 ] ; then
+        echo "Must have at least one network connector defined."
+        echo "Enabling the net connector"
+        BLD_FEATURE_NET=1
+    fi
+
+    if [ "$BLD_FEATURE_AUTH" = 1 ] ; then
+        if [ "$BLD_FEATURE_AUTH_PAM" = 1 ] ; then
+            if [ "$BLD_HOST_OS" = WIN  -o "$BLD_HOST_OS" = VXWORKS ] ; then
+                echo " "
+                echo "PAM authorization is only support on UNIX"
+                BLD_FEATURE_AUTH_PAM=0
+                BLD_FEATURE_AUTH_FILE=1
+            fi
+        fi
+        if [ "$BLD_FEATURE_AUTH_PAM" = 0 -a "$BLD_FEATURE_AUTH_FILE" = 0 ] ; then
+            echo " "
+            echo "Must have one auth backend enabled (PAM or FILE)."
+            echo "Enabling the auth-file authorization backend"
+            BLD_FEATURE_AUTH_FILE=1
+        fi
+    fi
+    if [ "$BLD_FEATURE_TEST" = 1 ] ; then
+        BLD_FEATURE_HTTP=1
+        BLD_FEATURE_HTTP_CLIENT=1
+    fi
+}
+
+
+createFeatureConfig()
+{
+    NAME=$1
+
+    cat >>$NAME <<!EOF_FEATURE_CONFIG1
+#
+#   Extended Feature Selection
+#
+BLD_FEATURE_ACCESS_LOG=$BLD_FEATURE_ACCESS_LOG
+BLD_FEATURE_ANGEL=$BLD_FEATURE_ANGEL
+BLD_FEATURE_AUTH_DIGEST=$BLD_FEATURE_AUTH_DIGEST
+BLD_FEATURE_AUTH=$BLD_FEATURE_AUTH
+BLD_FEATURE_AUTH_FILE=$BLD_FEATURE_AUTH_FILE
+BLD_FEATURE_AUTH_PAM=$BLD_FEATURE_AUTH_PAM
+BLD_FEATURE_CGI=$BLD_FEATURE_CGI
+BLD_FEATURE_CHUNK=$BLD_FEATURE_CHUNK
+BLD_FEATURE_DIR=$BLD_FEATURE_DIR
+BLD_FEATURE_EJS_ALL_IN_ONE=$BLD_FEATURE_EJS_ALL_IN_ONE
+BLD_FEATURE_EJS_AUTO_COMPILE=$BLD_FEATURE_EJS_AUTO_COMPILE
+BLD_FEATURE_EJS_CROSS_COMPILER=$BLD_FEATURE_EJS_CROSS_COMPILER
+BLD_FEATURE_EJS_DB=$BLD_FEATURE_EJS_DB
+BLD_FEATURE_EJS_DOC=$BLD_FEATURE_EJS_DOC
+BLD_FEATURE_EJS_E4X=$BLD_FEATURE_EJS_E4X
+BLD_FEATURE_EJS_LANG=$BLD_FEATURE_EJS_LANG
+BLD_FEATURE_EJS_WEB=$BLD_FEATURE_EJS_WEB
+BLD_FEATURE_EGI=$BLD_FEATURE_EGI
+BLD_FEATURE_CONFIG=$BLD_FEATURE_CONFIG
+BLD_FEATURE_CONFIG_PARSE=$BLD_FEATURE_CONFIG_PARSE
+BLD_FEATURE_FILE=$BLD_FEATURE_FILE
+BLD_FEATURE_HTTP=$BLD_FEATURE_HTTP
+BLD_FEATURE_HTTP_CLIENT=$BLD_FEATURE_HTTP_CLIENT
+BLD_FEATURE_LOG=$BLD_FEATURE_LOG
+BLD_FEATURE_NET=$BLD_FEATURE_NET
+BLD_FEATURE_NUM_TYPE_DOUBLE=$BLD_FEATURE_NUM_TYPE_DOUBLE
+BLD_FEATURE_RANGE=$BLD_FEATURE_RANGE
+BLD_FEATURE_RUN_AS_SERVICE=$BLD_FEATURE_RUN_AS_SERVICE
+BLD_FEATURE_SEND=$BLD_FEATURE_SEND
+BLD_FEATURE_UPLOAD=$BLD_FEATURE_UPLOAD
+BLD_FEATURE_XML=$BLD_FEATURE_XML
+
+BLD_HTTP_PORT=$BLD_HTTP_PORT
+BLD_SSL_PORT=$BLD_SSL_PORT
+
+!EOF_FEATURE_CONFIG1
+}
+
+
+help()
+{
+    cat <<!EOF_HELP
+
+Additional Appweb Features:
+  --enable-access-log      Enable logging of requests to the Appweb access log
+  --enable-angel           Enable building the Angel monitor process.
+  --enable-auth            Include the authorization filter.
+  --enable-auth-file       Build with httpPassword file based authorization
+  --enable-auth-pam        Build with PAM based authorization support.
+  --enable-cgi             Include the CGI handler.
+  --enable-chunk           Include the chunk transfer encoding filter.
+  --enable-config-parse    Build with the ability to parse Apache-style config
+                           files to configure Appweb. This is required to
+                           build the standard appweb main program.
+  --enable-cmd             Include ability to run commands.
+  --enable-digest-auth     Build with digest authentication support.
+  --enable-dir             Include the directory listing handler.
+  --enable-egi             Include the EGI handler.
+  --enable-file            Build support for the file handler.
+  --enable-http-client     Include HTTP client capability.
+  --enable-range           Include the range filter.
+  --enable-regex           Build with regular expression support.
+  --enable-send            Build with the file send file connector
+  --enable-upload          Build with the file upload handler
+  --enable-xml             Build xml parser.
+
+  --conf=FILE              File to use for the appweb.conf configuration file.
+  --port=PORT              Set the default HTTP port to use for the product.
+  --sslPort=PORT           Set the default SSL port to use for the product.
+  --webDir=PATH            Set the directory for web documents (DocumentRoot).
+
+Optional Components: ejs, matrixssl, mysql, openssl, regexp, php, sqlite
+
+  --with-NAME=[DIR]        Support the NAME package. The build/components/NAME
+                           file will describe compile and linker switches. DIR 
+                           is the base directory to find the module.
+  --without-NAME           Do not include support for the NAME.
+
+Options for the Ejscript (Server-Side JavaScript Web Framework)
+  --enable-auto-compile    Auto-recompile modified scripts
+  --enable-cross-compiler  Cross build the Ejscript compiler 
+  --enable-db              Include database support for Ejscript.
+  --enable-e4x             Include the EJS E4X XML extensions.
+  --number=TYPE            Set the EJS numeric type where TYPE is int, long, 
+                           int64 and double
+
+Examples:
+  ./configure --with-openssl=/usr/src/openssl
+
+!EOF_HELP
+}
+
+
+parseArg()
+{
+    local ARG SW
+
+    ARG="${1#*=}"
+    [ "$ARG" = "$1" ] && ARG=
+
+    SW=`echo ${1#--} | tr '[A-Z]' '[a-z]'`
+    case ${SW} in
+    conf=*|config=*)
+        if [ "${ARG}" = "${ARG/\/}" ] ; then
+            BLD_FEATURE_CONFIG="template/${ARG}"
+        else
+            BLD_FEATURE_CONFIG="${ARG}"
+        fi
+        ;;
+    disable-access-log)
+        BLD_FEATURE_ACCESS_LOG=0
+        ;;
+    disable-angel)
+        BLD_FEATURE_ANGEL=0
+        ;;
+    disable-all)
+        BLD_DISABLE_ALL=1
+        BLD_FEATURE_ACCESS_LOG=0
+        BLD_FEATURE_ANGEL=0
+        BLD_FEATURE_ASSERT=0
+        BLD_FEATURE_AUTH_DIGEST=0
+        BLD_FEATURE_AUTH=0
+        BLD_FEATURE_AUTH_FILE=0
+        BLD_FEATURE_AUTH_PAM=0
+        BLD_FEATURE_CGI=0
+        BLD_FEATURE_CHUNK=0
+        BLD_FEATURE_CMD=0
+        BLD_FEATURE_DIR=0
+        BLD_FEATURE_DOC=0
+        BLD_FEATURE_EJS_ALL_IN_ONE=0
+        BLD_FEATURE_EJS_AUTO_COMPILE=0
+        BLD_FEATURE_EJS_CROSS_COMPILER=0
+        BLD_FEATURE_EJS_DB=0
+        BLD_FEATURE_EJS_DOC=0
+        BLD_FEATURE_EJS_E4X=0
+        BLD_FEATURE_EJS_WEB=0
+        BLD_FEATURE_EGI=0
+        BLD_FEATURE_CONFIG_PARSE=1
+        BLD_FEATURE_FILE=1
+        BLD_FEATURE_HTTP=1
+        BLD_FEATURE_HTTP_CLIENT=0
+        BLD_FEATURE_LEGACY_API=0
+        BLD_FEATURE_LOG=0
+        BLD_FEATURE_MULTITHREAD=0
+        BLD_FEATURE_NET=1
+        BLD_FEATURE_NUM_TYPE=int
+        BLD_FEATURE_RANGE=0
+        BLD_FEATURE_ROMFS=0
+        BLD_FEATURE_RUN_AS_SERVICE=1
+        BLD_FEATURE_SAMPLES=0
+        BLD_FEATURE_SEND=1
+        BLD_FEATURE_TEST=0
+        BLD_FEATURE_UPLOAD=0
+        BLD_FEATURE_XML=0
+        ;;
+    disable-auth)
+        BLD_FEATURE_AUTH=0
+        BLD_FEATURE_AUTH_FILE=0
+        BLD_FEATURE_AUTH_PAM=0
+        BLD_FEATURE_AUTH_DIGEST=0
+        ;;
+    disable-auto-compile)
+        BLD_FEATURE_EJS_AUTO_COMPILE=0
+        ;;
+    disable-auth-file)
+        BLD_FEATURE_AUTH_FILE=0
+        ;;
+    disable-auth-pam)
+        BLD_FEATURE_AUTH_PAM=0
+        ;;
+    disable-cgi)
+        BLD_FEATURE_CGI=0
+        ;;
+    disable-chunk)
+        BLD_FEATURE_CHUNK=0
+        ;;
+    disable-http-client)
+        BLD_FEATURE_HTTP_CLIENT=0
+        ;;
+    disable-config-parse)
+        BLD_FEATURE_CONFIG_PARSE=0
+        ;;
+    disable-cmd)
+        BLD_FEATURE_CMD=0
+        ;;
+    disable-cross-compiler)
+        BLD_FEATURE_EJS_CROSS_COMPILER=0
+        ;;
+    disable-db)
+        BLD_FEATURE_EJS_DB=0
+        ;;
+    disable-digest-auth)
+        BLD_FEATURE_AUTH_DIGEST=0
+        ;;
+    disable-dir)
+        BLD_FEATURE_DIR=0
+        ;;
+    disable-e4x)
+        BLD_FEATURE_EJS_E4X=0
+        BLD_FEATURE_XML=0
+        ;;
+    disable-egi)
+        BLD_FEATURE_EGI=0
+        ;;
+    disable-file)
+        BLD_FEATURE_FILE=0
+        ;;
+    disable-range)
+        BLD_FEATURE_RANGE=0
+        ;;
+    disable-regex)
+        BLD_FEATURE_REGEXP=0
+        ;;
+    disable-send)
+        BLD_FEATURE_SEND=0
+        ;;
+    disable-upload)
+        BLD_FEATURE_UPLOAD=0
+        ;;
+    disable-xml)
+        BLD_FEATURE_XML=0
+        BLD_FEATURE_EJS_E4X=0
+        ;;
+    enable-access-log)
+        BLD_FEATURE_ACCESS_LOG=1
+        ;;
+    enable-all)
+        BLD_FEATURE_ACCESS_LOG=1
+        BLD_FEATURE_ANGEL=1
+        BLD_FEATURE_ASSERT=1
+        BLD_FEATURE_AUTH_DIGEST=1
+        BLD_FEATURE_AUTH=1
+        BLD_FEATURE_AUTH_FILE=1
+        BLD_FEATURE_CGI=1
+        BLD_FEATURE_CHUNK=1
+        BLD_FEATURE_CMD=1
+        BLD_FEATURE_DIR=1
+        BLD_FEATURE_DOC=1
+        BLD_FEATURE_EJS_ALL_IN_ONE=1
+        BLD_FEATURE_EJS_AUTO_COMPILE=0
+        BLD_FEATURE_EJS_CROSS_COMPILER=0
+        BLD_FEATURE_EJS_DB=1
+        BLD_FEATURE_EJS_DOC=1
+        BLD_FEATURE_EJS_E4X=1
+        BLD_FEATURE_EJS_WEB=1
+        BLD_FEATURE_EGI=1
+        BLD_FEATURE_FLOATING_POINT=1
+        BLD_FEATURE_CONFIG_PARSE=1
+        BLD_FEATURE_FILE=1
+        BLD_FEATURE_HTTP=1
+        BLD_FEATURE_HTTP_CLIENT=1
+        BLD_FEATURE_LEGACY_API=1
+        BLD_FEATURE_LOG=1
+        BLD_FEATURE_MULTITHREAD=0
+        BLD_FEATURE_NET=1
+        BLD_FEATURE_NUM_TYPE=double
+        BLD_FEATURE_RANGE=1
+        BLD_FEATURE_ROMFS=0
+        BLD_FEATURE_RUN_AS_SERVICE=1
+        BLD_FEATURE_SAMPLES=1
+        BLD_FEATURE_SEND=1
+        BLD_FEATURE_TEST=1
+        BLD_FEATURE_UPLOAD=1
+        BLD_FEATURE_XML=1
+        if [ "$BLD_HOST_OS" != WIN -a "$BLD_HOST_OS" != VXWORKS ] ; then
+            BLD_FEATURE_AUTH_PAM=1
+        else
+            BLD_FEATURE_AUTH_PAM=0
+        fi
+        ;;
+    enable-angel)
+        BLD_FEATURE_ANGEL=1
+        ;;
+    enable-auth)
+        BLD_FEATURE_AUTH=1
+        ;;
+    enable-auth-file)
+        BLD_FEATURE_AUTH_FILE=1
+        ;;
+    enable-auth-pam)
+        BLD_FEATURE_AUTH_PAM=1
+        ;;
+    enable-auto-compile)
+        BLD_FEATURE_EJS_AUTO_COMPILE=1
+        ;;
+    enable-cgi)
+        BLD_FEATURE_CGI=1
+        ;;
+    enable-chunk)
+        BLD_FEATURE_CHUNK=1
+        ;;
+    enable-cross-compiler)
+        BLD_FEATURE_EJS_CROSS_COMPILER=1
+        ;;
+    enable-http-client)
+        BLD_FEATURE_HTTP_CLIENT=1
+        ;;
+    enable-config-parse)
+        BLD_FEATURE_CONFIG_PARSE=1
+        ;;
+    enable-cmd)
+        BLD_FEATURE_CMD=1
+        ;;
+    enable-dir)
+        BLD_FEATURE_DIR=1
+        ;;
+    enable-db)
+        BLD_FEATURE_EJS_DB=1
+        ;;
+    enable-digest-auth)
+        BLD_FEATURE_AUTH_DIGEST=1
+        ;;
+    enable-e4x)
+        BLD_FEATURE_EJS_E4X=1
+        ;;
+    enable-egi)
+        BLD_FEATURE_EGI=1
+        ;;
+    enable-file)
+        BLD_FEATURE_FILE=1
+        ;;
+    enable-range)
+        BLD_FEATURE_RANGE=1
+        ;;
+    enable-regex)
+        BLD_FEATURE_REGEXP=1
+        ;;
+    enable-send)
+        BLD_FEATURE_SEND=1
+        ;;
+    enable-upload)
+        BLD_FEATURE_UPLOAD=1
+        ;;
+    enable-xml)
+        BLD_FEATURE_XML=1
+        ;;
+    number=*)
+        BLD_FEATURE_NUM_TYPE="${ARG}"
+        if [ "$ARG" != int -a "$ARG" != long -a "$ARG" != int64 -a "$ARG" != double ] ; then
+            echo "Unknown number type. Only supported types are: int, long, int64 and double"
+        fi
+        ;;
+    port=*)
+        BLD_HTTP_PORT=${ARG}
+        ;;
+    sslport=*)
+        BLD_SSL_PORT=${ARG}
+        ;;
+    *)  
+        return 1
+        ;;
+    esac
+    return 0
+}

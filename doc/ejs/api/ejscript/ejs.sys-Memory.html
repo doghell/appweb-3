@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <title>Class Memory</title>
+
+   <link rel="stylesheet" type="text/css" href="doc.css" />
+</head>
+
+<body>
+<div class='body'>
+
+<div class="content">
+
+<a name='top'></a>
+<h1 class='className'>Memory</h1>
+<div class='classBlock'>
+<table class='classHead' summary='Memory'>
+   <tr><td><strong>Module</strong></td><td>ejs.sys</td></tr>
+   <tr><td><strong>Definition</strong></td><td> class Memory</td></tr>
+   <tr><td><strong>Inheritance</strong></td><td>Memory <img src='images/inherit.gif' alt='inherit'/> <a href='intrinsic-Object.html'>Object</a><tr><td><strong>Specified</strong></td><td>ejscript-1.0</td></tr>
+<tr><td><strong>Stability</strong></td><td>Evolving.</td></tr>
+       </td></tr>
+</table>
+
+<p class='classBrief'>Singleton class to monitor and report on memory allocation and usage.</p>
+
+<p class='classDescription'></p>
+
+</div>
+
+
+<hr />
+<a name='Properties'></a>
+<h2 class='classSection'>Properties</h2>
+<table class='itemTable' summary='properties'>
+   <tr><th>Qualifiers</th><th>Property</th><th>Type</th><th width='95%'>Description</th></tr>
+<a name='allocated'></a>
+   <tr><td nowrap align='left'>public static get  set</td><td>allocated</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Total heap memory currently allocated by the application in bytes. This includes memory currently in use and 
+also memory that has been freed but is still retained by the application for future use. It does not include 
+code, static data or stack memory. If you require these, use the <a href='#resident'>resident</a> call.</td></tr>
+<a name='maximum'></a>
+   <tr><td nowrap align='left'>public static get  set</td><td>maximum</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Maximum amount of heap memory the application may use in bytes. This defines the upper limit for heap memory usage 
+by the entire hosting application. If this limit is reached, subsequent memory allocations will fail and 
+a <a href='intrinsic-MemoryError.html'>MemoryError</a> exception will be thrown. Setting it to zero will allow unlimited memory allocations up 
+to the system imposed maximum. If <a href='#redline'>redline</a> is defined and non-zero, the redline callback will be invoked 
+when the <a href='#redline'>redline</a> is exceeded.</td></tr>
+<a name='peak'></a>
+   <tr><td nowrap align='left'>public static get </td><td>peak</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Peak memory ever used by the application in bytes. This statistic is the maximum value ever attained by 
+<a href='#allocated'>allocated</a>. </td></tr>
+<a name='redline'></a>
+   <tr><td nowrap align='left'>public static get  set</td><td>redline</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Memory redline value in bytes. When the memory redline limit is exceeded, the redline <a href='#callback'>callback</a> will be invoked. 
+If no callback is defined, a MemoryError exception is thrown. The redline limit enables the application detect 
+low memory conditions before they become critical and to recover by freeing memory or to gracefully exit. 
+Note: the redline applies to the entire hosting application.</td></tr>
+<a name='resident'></a>
+   <tr><td nowrap align='left'>public static get </td><td>resident</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Application's current resident set in bytes. This is the total memory used to host the application and includes 
+all the the application code, data and heap. It is measured by the O/S.</td></tr>
+<a name='stack'></a>
+   <tr><td nowrap align='left'>public static get </td><td>stack</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Peak stack size ever used by the application in bytes. </td></tr>
+<a name='system'></a>
+   <tr><td nowrap align='left'>public static get </td><td>system</td><td><a href='intrinsic-Number.html'>Number</a></td><td>System RAM. This is the total amount of RAM installed in the system in bytes.</td></tr>
+</table>
+
+<p class='inheritedLink'><a href='intrinsic-Object.html#Properties'><i>Inherited Properties</i></a></p>
+
+<hr />
+<a name='Methods'></a>
+<h2 class='classSection'>Memory Methods</h2>
+<table class='apiIndex' summary='methods'>
+   <tr><th>Qualifiers</th><th width='95%'>Method</th></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#stats'><b>stats</b></a>(): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Prints memory statistics to stdout.</td></tr>
+</table>
+
+<p class='inheritedLink'><a href='intrinsic-Object.html#Methods'><i>Inherited Methods</i></a></p>
+
+<hr />
+<h2>Method Detail</h2>
+<a name='stats'></a>
+<div class='api'>
+<div class='apiSig'>static   public  stats(): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Prints memory statistics to stdout.</p>
+<dl><dt>Description</dt><dd>This is primarily used during development for performance measurement.</dd></dl>
+</div>
+</div>
+<hr />
+<div class="terms">
+   <p class="terms">
+       <a href="http://www.embedthis.com/">       Embedthis Software LLC, 2003-2010. All rights reserved. Embedthis is a trademark of Embedthis Software LLC.</a>
+   </p>
+</div></div>
+</div>
+</body>
+</html>

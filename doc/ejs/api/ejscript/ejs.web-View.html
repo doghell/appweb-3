@@ -1,0 +1,761 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <title>Class View</title>
+
+   <link rel="stylesheet" type="text/css" href="doc.css" />
+</head>
+
+<body>
+<div class='body'>
+
+<div class="content">
+
+<a name='top'></a>
+<h1 class='className'>View</h1>
+<div class='classBlock'>
+<table class='classHead' summary='View'>
+   <tr><td><strong>Module</strong></td><td>ejs.web</td></tr>
+   <tr><td><strong>Definition</strong></td><td>dynamic  class View</td></tr>
+   <tr><td><strong>Inheritance</strong></td><td>View <img src='images/inherit.gif' alt='inherit'/> <a href='intrinsic-Object.html'>Object</a><tr><td><strong>Specified</strong></td><td>ejscript-1.0</td></tr>
+<tr><td><strong>Stability</strong></td><td>Prototype.</td></tr>
+       </td></tr>
+</table>
+
+<p class='classBrief'>Base class for web framework views.</p>
+
+<p class='classDescription'>This class provides the core functionality for all Ejscript view web pages.
+Ejscript web pages are compiled to create a new View class which extends the View base class. In addition to
+the properties defined by this class, user view classes will inherit at runtime all public properites of the
+current controller object. View objects are not instantiated manually by users but are created internally 
+by the web framework.</p>
+
+</div>
+
+
+<hr />
+<a name='Properties'></a>
+<h2 class='classSection'>Properties</h2>
+<table class='itemTable' summary='properties'>
+   <tr><th>Qualifiers</th><th>Property</th><th>Type</th><th width='95%'>Description</th></tr>
+<a name='controller'></a>
+   <tr><td nowrap align='left'>ejs.web </td><td>controller</td><td><a href='ejs.web-Controller.html'>Controller</a></td><td>Current controller. </td></tr>
+</table>
+
+<p class='inheritedLink'><a href='intrinsic-Object.html#Properties'><i>Inherited Properties</i></a></p>
+
+<hr />
+<a name='Methods'></a>
+<h2 class='classSection'>View Methods</h2>
+<table class='apiIndex' summary='methods'>
+   <tr><th>Qualifiers</th><th width='95%'>Method</th></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#aform'><b>aform</b></a>(action: <a href='intrinsic-String.html'>String</a>, record: <a href='intrinsic-Object.html'>Object</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render an asynchronous (ajax) form.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#alink'><b>alink</b></a>(text: <a href='intrinsic-String.html'>String</a>, action: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit an asynchronous (ajax) link to an action.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#button'><b>button</b></a>(value: <a href='intrinsic-String.html'>String</a>, buttonName: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a form button.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#buttonLink'><b>buttonLink</b></a>(text: <a href='intrinsic-String.html'>String</a>, action: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a link button.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#chart'><b>chart</b></a>(initialData: <a href='intrinsic-Array.html'>Array</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a chart.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#checkbox'><b>checkbox</b></a>(field: <a href='intrinsic-String.html'>String</a>, choice: <a href='intrinsic-String.html'>String</a> = true , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render an input checkbox.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#createSession'><b>createSession</b></a>(timeout: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Enable session control.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#d'><b>d</b></a>(args: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Dump objects for debugging.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#destroySession'><b>destroySession</b></a>(): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Destroy a session.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#endform'><b>endform</b></a>(): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>End an input form.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#extlink'><b>extlink</b></a>(text: <a href='intrinsic-String.html'>String</a>, url: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit an application relative link.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#flash'><b>flash</b></a>(kinds = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit a flash message area.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#form'><b>form</b></a>(action: <a href='intrinsic-String.html'>String</a>, record: <a href='intrinsic-Object.html'>Object</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a form.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#getOptions'><b>getOptions</b></a>(options: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Map options to a HTML attribute string.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#html'><b>html</b></a>(args: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>HTML encode the arguments.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#image'><b>image</b></a>(src: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render an image control.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#imageLink'><b>imageLink</b></a>(image: <a href='intrinsic-String.html'>String</a>, action: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a clickable image.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#input'><b>input</b></a>(field: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render an input field as part of a form.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#label'><b>label</b></a>(text: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a text label field.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#link'><b>link</b></a>(text: <a href='intrinsic-String.html'>String</a>, action: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit a link to an action.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#list'><b>list</b></a>(field: <a href='intrinsic-String.html'>String</a>, choices: <a href='intrinsic-Object.html'>Object</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit a selection list.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#mail'><b>mail</b></a>(nameText: <a href='intrinsic-String.html'>String</a>, address: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit a mail link.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#makeUrl'><b>makeUrl</b></a>(action: <a href='intrinsic-String.html'>String</a>, id: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Make a URL suitable for invoking actions.param id.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#radio'><b>radio</b></a>(field: <a href='intrinsic-String.html'>String</a>, choices: <a href='intrinsic-Object.html'>Object</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit a radio autton.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#redirect'><b>redirect</b></a>(action: <a href='intrinsic-String.html'>String</a>, id: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Redirect to the given action.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#redirectUrl'><b>redirectUrl</b></a>(url: <a href='intrinsic-String.html'>String</a>, code: <a href='intrinsic-Number.html'>Number</a> = 302): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Redirect the client to a new URL.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#render'><b>render</b></a>(): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Process and emit a view to the client.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#script'><b>script</b></a>(url: <a href='intrinsic-Object.html'>Object</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit a script link.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#setHeader'><b>setHeader</b></a>(key: <a href='intrinsic-String.html'>String</a>, value: <a href='intrinsic-String.html'>String</a>, allowMultiple: <a href='intrinsic-Boolean.html'>Boolean</a> = false): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Of the format "keyword: value".</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#setHttpCode'><b>setHttpCode</b></a>(code: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the HTTP response status code.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#setMimeType'><b>setMimeType</b></a>(format: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the response body mime type.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#stylesheet'><b>stylesheet</b></a>(url: <a href='intrinsic-Object.html'>Object</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Emit a style sheet link.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#table'><b>table</b></a>(data, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a table.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#tabs'><b>tabs</b></a>(initialData: <a href='intrinsic-Array.html'>Array</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a tab control.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#text'><b>text</b></a>(field: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a text input field as part of a form.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#textarea'><b>textarea</b></a>(field: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Render a text area.</td></tr>
+   <tr class='apiDef'><td class='apiType'> </td><td><a href='#View'><b>View</b></a>(controller: <a href='ejs.web-Controller.html'>Controller</a>)</tr><tr class='apiBrief'><td>&nbsp;</td><td>Constructor method to initialize a new View.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#write'><b>write</b></a>(args: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Write text to the client.</td></tr>
+   <tr class='apiDef'><td class='apiType'></td><td><a href='#writeHtml'><b>writeHtml</b></a>(args: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Write HTML escaped text to the client.</td></tr>
+</table>
+
+<p class='inheritedLink'><a href='intrinsic-Object.html#Methods'><i>Inherited Methods</i></a></p>
+
+<hr />
+<h2>Method Detail</h2>
+<a name='aform'></a>
+<div class='api'>
+<div class='apiSig'> aform(action: <a href='intrinsic-String.html'>String</a>, record: <a href='intrinsic-Object.html'>Object</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render an asynchronous (ajax) form.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>action: <a href='intrinsic-String.html'>String</a> </td><td>Action to invoke when the form is submitted. Defaults to "create" or "update" depending on  whether the field has been previously saved.</td></tr><tr class='param'><td class='param'>record: <a href='intrinsic-Object.html'>Object</a> </td><td>Model record to edit. [default: null ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>url</td><td>String Use a URL rather than action and controller for the target url.</td></tr>
+</table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='alink'></a>
+<div class='api'>
+<div class='apiSig'> alink(text: <a href='intrinsic-String.html'>String</a>, action: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit an asynchronous (ajax) link to an action.</p>
+<dl><dt>Description</dt><dd>The URL is constructed from the given action and the 
+current controller. The controller may be overridden by setting the controller option.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>text: <a href='intrinsic-String.html'>String</a> </td><td>Link text to display.</td></tr><tr class='param'><td class='param'>action: <a href='intrinsic-String.html'>String</a> </td><td>Action to invoke when the link is clicked. [default: null ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>controller</td><td>String Name of the target controller for the given action.</td></tr>
+<td class='param'>url</td><td>String Use a URL rather than action and controller for the target url.</td></tr>
+</table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='button'></a>
+<div class='api'>
+<div class='apiSig'> button(value: <a href='intrinsic-String.html'>String</a>, buttonName: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a form button.</p>
+<dl><dt>Description</dt><dd>This creates a button suitable for use inside an input form. When the button is clicked,
+the input form will be submitted.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>value: <a href='intrinsic-String.html'>String</a> </td><td>Text to display in the button.</td></tr></td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. Examples: button("Click Me", "OK"). [default: expression]</td></tr><tr class='param'><td class='param'>buttonName: <a href='intrinsic-String.html'>String</a> </td><td> [default: null ]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='buttonLink'></a>
+<div class='api'>
+<div class='apiSig'> buttonLink(text: <a href='intrinsic-String.html'>String</a>, action: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a link button.</p>
+<dl><dt>Description</dt><dd>This creates a button suitable for use outside an input form. When the button is clicked,
+the associated URL will be invoked.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>text: <a href='intrinsic-String.html'>String</a> </td><td>Text to display in the button.</td></tr><tr class='param'><td class='param'>action: <a href='intrinsic-String.html'>String</a> </td><td>Target action to invoke when the button is clicked.</td></tr></td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='chart'></a>
+<div class='api'>
+<div class='apiSig'> chart(initialData: <a href='intrinsic-Array.html'>Array</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a chart.</p>
+<dl><dt>Description</dt><dd>The chart control can display static or dynamic tabular data. The client chart control manages
+sorting by column, dynamic data refreshes, pagination and clicking on rows.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>initialData: <a href='intrinsic-Array.html'>Array</a> </td><td>Optional initial data for the control. The data option may be used with the refresh option to  dynamically refresh the data.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Object Optional extra options. See also <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>columns</td><td>Object hash of column entries. Each column entry is in-turn an object hash of options. If unset,  all columns are displayed using defaults.</td></tr>
+<td class='param'>kind</td><td>String Type of chart. Select from: piechart, table, linechart, annotatedtimeline, guage, map,  motionchart, areachart, intensitymap, imageareachart, barchart, imagebarchart, bioheatmap, columnchart,  linechart, imagelinechart, imagepiechart, scatterchart (and more).</td></tr>
+<td class='param'>onClick</td><td>String Action or URL to invoke when a chart element  is clicked.</td></tr>
+</table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>&lt;% chart(null, { data: "getData", refresh: 2" }) %&gt;
+&lt;% chart(data, { onClick: "action" }) %&gt;
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='checkbox'></a>
+<div class='api'>
+<div class='apiSig'> checkbox(field: <a href='intrinsic-String.html'>String</a>, choice: <a href='intrinsic-String.html'>String</a> = true , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render an input checkbox.</p>
+<dl><dt>Description</dt><dd>This creates a checkbox suitable for use within an input form.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>field: <a href='intrinsic-String.html'>String</a> </td><td>Name of the field to display. This is used to create a HTML "name" and "id" attribute for the  input element. If used inside a model form, it is the field name in the model containing the checkbox value to display. If used without a model, the value to display should be passed via options.value.</td></tr><tr class='param'><td class='param'>choice: <a href='intrinsic-String.html'>String</a> </td><td>Value to submit if checked. Defaults to "true". [default: true ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='createSession'></a>
+<div class='api'>
+<div class='apiSig'> createSession(timeout: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Enable session control.</p>
+<dl><dt>Description</dt><dd>This enables session state management for this request and other requests from 
+the browser. If a session has not already been created, this call creates a session and sets the <a href='#sessionID'>sessionID</a> 
+property in the request object. If a session already exists, this call has no effect. A cookie containing a 
+session ID is automatically created and sent to the client on the first response after creating the session. 
+If SessionAutoCreate is defined in the configuration file, then sessions will automatically be created for 
+every web request and your Ejscript web pages do not need to call createSession. Multiple requests may be 
+sent from a client's browser at the same time.  Ejscript will ensure that accesses to the sesssion object 
+are correctly serialized.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>timeout: <a href='intrinsic-Number.html'>Number</a> </td><td>Optional timeout for the session in seconds. If ommitted the default timeout is used. [default: 0]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='d'></a>
+<div class='api'>
+<div class='apiSig'> d(args: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Dump objects for debugging.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>args: <a href='intrinsic-Array.html'>Array</a> </td><td>List of arguments to print.</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='destroySession'></a>
+<div class='api'>
+<div class='apiSig'> destroySession(): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Destroy a session.</p>
+<dl><dt>Description</dt><dd>This call destroys the session state store that is being used for the current client. If no 
+session exists, this call has no effect.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='endform'></a>
+<div class='api'>
+<div class='apiSig'> endform(): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>End an input form.</p>
+<dl><dt>Description</dt><dd>This closes an input form initiated by calling the <a href='#form'>form</a> method.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='extlink'></a>
+<div class='api'>
+<div class='apiSig'> extlink(text: <a href='intrinsic-String.html'>String</a>, url: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit an application relative link.</p>
+<dl><dt>Description</dt><dd>If invoking an action, it is safer to use a action.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>text: <a href='intrinsic-String.html'>String</a> </td><td>Link text to display.</td></tr><tr class='param'><td class='param'>url: <a href='intrinsic-String.html'>String</a> </td><td>Action or URL to invoke when the link is clicked.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='flash'></a>
+<div class='api'>
+<div class='apiSig'> flash(kinds = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit a flash message area.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>kinds </td><td>Kinds of flash messages to display. May be a single string  ("error", "inform", "message", "warning"), an array of strings or null. If set to null (or omitted),  then all flash messages will be displayed. [default: null ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>retain</td><td>Number. Number of seconds to retain the message. If <= 0, the message is retained until another message is displayed. Default is 0.</td></tr>
+</table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>&lt;% flash("status") %&gt;
+&lt;% flash() %&gt;
+&lt;% flash(["error", "warning"]) %&gt;
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='form'></a>
+<div class='api'>
+<div class='apiSig'> form(action: <a href='intrinsic-String.html'>String</a>, record: <a href='intrinsic-Object.html'>Object</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a form.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>action: <a href='intrinsic-String.html'>String</a> </td><td>Action to invoke when the form is submitted. Defaults to "create" or "update" depending on  whether the field has been previously saved.</td></tr><tr class='param'><td class='param'>record: <a href='intrinsic-Object.html'>Object</a> </td><td>Model record to edit. [default: null ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>url</td><td>String Use a URL rather than action and controller for the target url.</td></tr>
+</table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='getOptions'></a>
+<div class='api'>
+<div class='apiSig'> getOptions(options: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-String.html'>String</a>
+</div>
+<div class='apiDetail'>
+<p>Map options to a HTML attribute string.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options.</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>background</td><td>String Background color. This is a CSS RGB color specification. For example "FF0000" for red.</td></tr>
+<td class='param'>color</td><td>String Foreground color. This is a CSS RGB color specification. For example "FF0000" for red.</td></tr>
+<td class='param'>data</td><td>String URL or action to get live data. The refresh option specifies how often to invoke fetch the data.</td></tr>
+<td class='param'>id</td><td>String Browser element ID for the control.</td></tr>
+<td class='param'>escape</td><td>Boolean Escape the text before rendering. This converts HTML reserved tags and delimiters into an encoded form.</td></tr>
+<td class='param'>height</td><td>(Number|String) Height of the table. Can be a number of pixels or a percentage string.  Defaults to unlimited.</td></tr>
+<td class='param'>method</td><td>String HTTP method to invoke. May be: GET, POST, PUT or DELETE.</td></tr>
+<td class='param'>refresh</td><td>If set, this defines the data refresh period in milliseconds. Only valid if the data option  is defined.</td></tr>
+<td class='param'>size</td><td>(Number|String) Size of the element.</td></tr>
+<td class='param'>style</td><td>String CSS Style to use for the table.</td></tr>
+<td class='param'>value</td><td>Default data value to use for the control if not supplied by other means.</td></tr>
+<td class='param'>visible</td><td>Boolean Make the control visible. Defaults to true.</td></tr>
+<td class='param'>width</td><td>(Number|String) Width of the table or column. Can be a number of pixels or a percentage string.</td></tr>
+</table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>A string containing the HTML attributes to emit.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='html'></a>
+<div class='api'>
+<div class='apiSig'> html(args: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-String.html'>String</a>
+</div>
+<div class='apiDetail'>
+<p>HTML encode the arguments.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>args: <a href='intrinsic-Array.html'>Array</a> </td><td>Variable arguments that will be converted to safe html.</td></tr></table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>A string containing the encoded arguments catenated together.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='image'></a>
+<div class='api'>
+<div class='apiSig'> image(src: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render an image control.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>src: <a href='intrinsic-String.html'>String</a> </td><td>Optional initial source name for the image. The data option may be used with the refresh option to  dynamically refresh the data.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>&lt;% image("myPic.gif") %&gt;
+&lt;% image("myPic.gif", { data: "getData", refresh: 2, style: "myStyle" }) %&gt;
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='imageLink'></a>
+<div class='api'>
+<div class='apiSig'> imageLink(image: <a href='intrinsic-String.html'>String</a>, action: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a clickable image.</p>
+<dl><dt>Description</dt><dd>This creates an clickable image suitable for use outside an input form. 
+When the image is clicked, the associated URL will be invoked.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>image: <a href='intrinsic-String.html'>String</a> </td><td>Optional initial source name for the image. The data option may be used with the refresh option to  dynamically refresh the data.</td></tr><tr class='param'><td class='param'>action: <a href='intrinsic-String.html'>String</a> </td><td>Target action to invoke when the image is clicked.</td></tr></td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='input'></a>
+<div class='api'>
+<div class='apiSig'> input(field: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render an input field as part of a form.</p>
+<dl><dt>Description</dt><dd>This is a smart input control that will call the appropriate
+input control based on the model field data type.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>field: <a href='intrinsic-String.html'>String</a> </td><td>Model field name containing the text data for the control.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>&lt;% input(modelFieldName) %&gt;
+&lt;% input(null, { options }) %&gt;
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='label'></a>
+<div class='api'>
+<div class='apiSig'> label(text: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a text label field.</p>
+<dl><dt>Description</dt><dd>This renders an output-only text field. Use text() for input fields.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>text: <a href='intrinsic-String.html'>String</a> </td><td>Optional initial data for the control. The data option may be used with the refresh option to  dynamically refresh the data.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>&lt;% label("Hello World") %&gt;
+&lt;% label(null, { data: "getData", refresh: 2, style: "myStyle" }) %&gt;
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='link'></a>
+<div class='api'>
+<div class='apiSig'> link(text: <a href='intrinsic-String.html'>String</a>, action: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit a link to an action.</p>
+<dl><dt>Description</dt><dd>The URL is constructed from the given action and the current controller. The controller
+may be overridden by setting the controller option.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>text: <a href='intrinsic-String.html'>String</a> </td><td>Link text to display.</td></tr><tr class='param'><td class='param'>action: <a href='intrinsic-String.html'>String</a> </td><td>Action to invoke when the link is clicked. [default: null ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>controller</td><td>String Name of the target controller for the given action.</td></tr>
+<td class='param'>url</td><td>String Use a URL rather than action and controller for the target url.</td></tr>
+</table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='list'></a>
+<div class='api'>
+<div class='apiSig'> list(field: <a href='intrinsic-String.html'>String</a>, choices: <a href='intrinsic-Object.html'>Object</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit a selection list.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>field: <a href='intrinsic-String.html'>String</a> </td><td>Name of the field to display. This is used to create a HTML "name" and "id" attribute for the  input element. If used inside a model form, it is the field name in the model containing the list item to select. If used without a model, the value to select should be passed via options.value.</td></tr><tr class='param'><td class='param'>choices: <a href='intrinsic-Object.html'>Object</a> </td><td>Choices to select from. This can be an array list where each element is displayed and the value  returned is an element index (origin zero). It can also be an array of array tuples where the first  tuple entry is the value to display and the second is the value to send to the app. Or it can be an  array of objects such as those returned from a table lookup. If choices is null, the <a href='#field'>field</a> value is  used to construct a model class name to use to return a data grid containing an array of row objects.  The first non-id field is used as the value to display. [default: null ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Extra options Examples: list("stockId", Stock.stockList)  list("low", ["low", "med", "high"]) list("low", [["low", "3"], ["med", "5"], ["high", "9"]]) list("low", [{low: 3{, {med: 5}, {high: 9}]) list("Stock Type")                          Will invoke StockType.findAll() to do a table lookup. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='mail'></a>
+<div class='api'>
+<div class='apiSig'> mail(nameText: <a href='intrinsic-String.html'>String</a>, address: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit a mail link.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>nameText: <a href='intrinsic-String.html'>String</a> </td><td>Recipient name to display.</td></tr><tr class='param'><td class='param'>address: <a href='intrinsic-String.html'>String</a> </td><td>Mail recipient address.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='makeUrl'></a>
+<div class='api'>
+<div class='apiSig'> makeUrl(action: <a href='intrinsic-String.html'>String</a>, id: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-String.html'>String</a>
+</div>
+<div class='apiDetail'>
+<p>Make a URL suitable for invoking actions.param id.</p>
+<dl><dt>Description</dt><dd>This routine will construct a URL Based on a supplied action name, 
+model id and options that may contain an optional controller name. This is a convenience routine remove from 
+applications the burden of building URLs that correctly use action and controller names.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>action: <a href='intrinsic-String.html'>String</a> </td><td>The action name to invoke in the URL. If the name starts with "." or "/", it is assumed to be  a controller name and it is used by itself.</td></tr><tr class='param'><td class='param'>id: <a href='intrinsic-String.html'>String</a> </td><td>The model record ID to select via the URL. Defaults to null. [default: null ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>The options string. [default: expression]</td></tr></td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td> [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>url</td><td>An override url to use. All other args are ignored.</td></tr>
+<td class='param'>query</td><td>Query string to append to the URL. Overridden by the query arg.</td></tr>
+<td class='param'>controller</td><td>The name of the controller to use in the URL.</td></tr>
+</table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>A string URL.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='radio'></a>
+<div class='api'>
+<div class='apiSig'> radio(field: <a href='intrinsic-String.html'>String</a>, choices: <a href='intrinsic-Object.html'>Object</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit a radio autton.</p>
+<dl><dt>Description</dt><dd>The URL is constructed from the given action and the current controller. The controller
+may be overridden by setting the controller option.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>field: <a href='intrinsic-String.html'>String</a> </td><td>Name of the field to display. This is used to create a HTML "name" and "id" attribute for the  input element. If used inside a model form, it is the field name in the model containing the radio data to display. If used without a model, the value to display should be passed via options.value.</td></tr><tr class='param'><td class='param'>choices: <a href='intrinsic-Object.html'>Object</a> </td><td>Array or object containing the option values. If array, each element is a radio option. If an  object hash, then they property name is the radio text to display and the property value is what is returned.</td></tr></td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>controller</td><td>String Name of the target controller for the given action.</td></tr>
+<td class='param'>value</td><td>String Name of the option to select by default.</td></tr>
+</table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>radio("priority", ["low", "med", "high"])
+radio("priority", {low: 0, med: 1, high: 2})
+radio(priority, Message.priorities)
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='redirect'></a>
+<div class='api'>
+<div class='apiSig'> redirect(action: <a href='intrinsic-String.html'>String</a>, id: <a href='intrinsic-String.html'>String</a> = null , options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Redirect to the given action.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>action: <a href='intrinsic-String.html'>String</a> </td><td>Action URL to redirect to.</td></tr><tr class='param'><td class='param'>id: <a href='intrinsic-String.html'>String</a> </td><td>Query ID value. [default: null ]</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Extra options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>id</td><td>Controller.</td></tr>
+</table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='redirectUrl'></a>
+<div class='api'>
+<div class='apiSig'> redirectUrl(url: <a href='intrinsic-String.html'>String</a>, code: <a href='intrinsic-Number.html'>Number</a> = 302): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Redirect the client to a new URL.</p>
+<dl><dt>Description</dt><dd>This call redirects the client's browser to a new location specified by 
+the.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>url: <a href='intrinsic-String.html'>String</a> </td><td>Url to redirect the client to.</td></tr><tr class='param'><td class='param'>code: <a href='intrinsic-Number.html'>Number</a> </td><td>Optional HTTP redirection code. [default: 302]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='render'></a>
+<div class='api'>
+<div class='apiSig'>  public  render(): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Process and emit a view to the client.</p>
+<dl><dt>Description</dt><dd>Overridden by the views invoked by controllers.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='script'></a>
+<div class='api'>
+<div class='apiSig'> script(url: <a href='intrinsic-Object.html'>Object</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit a script link.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>url: <a href='intrinsic-Object.html'>Object</a> </td><td>URL for the script to load.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='setHeader'></a>
+<div class='api'>
+<div class='apiSig'> setHeader(key: <a href='intrinsic-String.html'>String</a>, value: <a href='intrinsic-String.html'>String</a>, allowMultiple: <a href='intrinsic-Boolean.html'>Boolean</a> = false): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Of the format "keyword: value".</p>
+<dl><dt>Description</dt><dd>If a header has already been defined and a allowMultiple is false, 
+the header will be overwritten. If a allowMultiple is true, the new header will be appended to the 
+response headers and the existing header will also be output. NOTE: case does not matter in the header keyword.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>key: <a href='intrinsic-String.html'>String</a> </td><td>Header key string.</td></tr><tr class='param'><td class='param'>value: <a href='intrinsic-String.html'>String</a> </td><td>Header value string.</td></tr><tr class='param'><td class='param'>allowMultiple: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>If false, overwrite existing headers with the same keyword. If true, all headers are output. [default: false]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='setHttpCode'></a>
+<div class='api'>
+<div class='apiSig'> setHttpCode(code: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Set the HTTP response status code.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>code: <a href='intrinsic-Number.html'>Number</a> </td><td>HTTP response code to define.</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='setMimeType'></a>
+<div class='api'>
+<div class='apiSig'> setMimeType(format: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Set the response body mime type.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>format: <a href='intrinsic-String.html'>String</a> </td><td>Mime type for the response. For example "text/plain".</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='stylesheet'></a>
+<div class='api'>
+<div class='apiSig'> stylesheet(url: <a href='intrinsic-Object.html'>Object</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Emit a style sheet link.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>url: <a href='intrinsic-Object.html'>Object</a> </td><td>Stylesheet url or array of stylesheets.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='table'></a>
+<div class='api'>
+<div class='apiSig'> table(data, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a table.</p>
+<dl><dt>Description</dt><dd>The table control can display static or dynamic tabular data. The client table control manages
+sorting by column, dynamic data refreshes, pagination and clicking on rows. If the table supplies a URL
+or action for the data parameter, the table data is retrieved asynchronously using Ajax requests on that
+action/URL value. The action routine should call the table() control to render the data and must set the
+ajax option to true.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>data </td><td>Data for the control or URL/action to supply data. If data is a String, it is interpreted as a URL or action that will be invoked to supply HTML for the table. In this case, the refresh option defines  how frequently to refresh the table data. The data parameter can also be a grid of data, ie. an Array of  objects where each object represents the data for a row. The column names are the object property names  and the cell text is the object property values. The data parameter can also be a model instance.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>ajax</td><td>Set to true if the table control is being invoked as part of an Ajax data refresh.</td></tr>
+<td class='param'>click</td><td>String Action or URL to invoke an element in the table is clicked. The click arg can be is  a String to apply to all cells, a single-dimension array of strings for per-row URLs, and a  two-dimension array for per cell URLs (order is row/column).</td></tr>
+<td class='param'>columns</td><td>Object hash of column entries. Each column entry is in-turn an object hash of options. If unset,  all columns are displayed using defaults. Column options: align, formatter, header, render, sort, sortOrder,  style, width.</td></tr>
+<td class='param'>pageSize</td><td>Number Number of rows to display per page. Omit or set to <= 0 for unlimited.  Defaults to unlimited.</td></tr>
+<td class='param'>pivot</td><td>Boolean Pivot the table by swaping rows for columns and vice-versa.</td></tr>
+<td class='param'>query</td><td>URL query string to add to click URLs. Can be a single-dimension array for per-row query  strings or a two-dimensional array for per cell (order is row/column).</td></tr>
+<td class='param'>showHeader</td><td>Boolean Control if column headings are displayed.</td></tr>
+<td class='param'>showId</td><td>Boolean If a columns option is not provided, the id column is normally hidden.  To display, set showId to be true.</td></tr>
+<td class='param'>sort</td><td>String Enable row sorting and define the column to sort by.</td></tr>
+<td class='param'>sortOrder</td><td>String Default sort order. Set to "ascending" or "descending".Defaults to ascending.</td></tr>
+<td class='param'>style</td><td>String CSS style to use for the table.</td></tr>
+<td class='param'>styleColumns</td><td>Array of styles to use for the table body columns. Can also use the style option in the columns option.</td></tr>
+<td class='param'>styleBody</td><td>String CSS style to use for the table body cells.</td></tr>
+<td class='param'>styleHeader</td><td>String CSS style to use for the table header.</td></tr>
+<td class='param'>styleRows</td><td>Array of styles to use for the table body rows.</td></tr>
+<td class='param'>styleOddRow</td><td>String CSS style to use for odd data rows in the table.</td></tr>
+<td class='param'>styleEvenRow</td><td>String CSS style to use for even data rows in the table.</td></tr>
+<td class='param'>title</td><td>String Table title   Column options: <ul> <li>align</li> <li>format</li> <li>formatter</li> <li>header</li> <li>render</li> <li>sort String Define the column to sort by and the sort order. Set to "ascending" or "descending".  Defaults to ascending.</li> <li>style</li> </ul></td></tr>
+</table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>&lt;% table("getData", { refresh: 2, pivot: true" }) %&gt;
+&lt;% table(gridData, { click: "edit" }) %&gt;
+&lt;% table(Table.findAll()) %&gt;
+&lt;% table(gridData, {
+    click: "edit",
+    sort: "Product",
+    columns: {
+        product:    { header: "Product", width: "20%" }
+        date:       { format: date('%m-%d-%y) }
+    }
+ }) %&gt;
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='tabs'></a>
+<div class='api'>
+<div class='apiSig'> tabs(initialData: <a href='intrinsic-Array.html'>Array</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a tab control.</p>
+<dl><dt>Description</dt><dd>The tab control can display static or dynamic tree data.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>initialData: <a href='intrinsic-Array.html'>Array</a> </td><td>Optional initial data for the control. The data option may be used with the refresh option to  dynamically refresh the data. Tab data is an array of objects -- one per tab. For example: [{"Tab One Label", "action1"}, {"Tab Two Label", "action2"}].</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='text'></a>
+<div class='api'>
+<div class='apiSig'> text(field: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a text input field as part of a form.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>field: <a href='intrinsic-String.html'>String</a> </td><td>Name of the field to display. This is used to create a HTML "name" and "id" attribute for the  input element. If used inside a model form, it is the field name in the model containing the text data to display. If used without a model, the value to display should be passed via options.value.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>escape</td><td>Boolean Escape the text before rendering. This converts HTML reserved tags and delimiters into an encoded form.</td></tr>
+<td class='param'>style</td><td>String CSS Style to use for the control.</td></tr>
+<td class='param'>visible</td><td>Boolean Make the control visible. Defaults to true.</td></tr>
+</table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>&lt;% text("name") %&gt;
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='textarea'></a>
+<div class='api'>
+<div class='apiSig'> textarea(field: <a href='intrinsic-String.html'>String</a>, options: <a href='intrinsic-Object.html'>Object</a> = expression): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Render a text area.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>field: <a href='intrinsic-String.html'>String</a> </td><td>Name of the field to display. This is used to create a HTML "name" and "id" attribute for the  input element. If used inside a model form, it is the field name in the model containing the text data to display. If used without a model, the value to display should be passed via options.value.</td></tr><tr class='param'><td class='param'>options: <a href='intrinsic-Object.html'>Object</a> </td><td>Optional extra options. See <a href='#getOptions'>getOptions</a> for a list of the standard options. [default: expression]</td></tr></table></dd>
+</dl><dl><dt>Options</dt>
+<dd><table class='parameters' summary ='options'>
+<td class='param'>Boolean</td><td>Escape Escape the text before rendering. This converts HTML reserved tags and delimiters into an encoded form.</td></tr>
+<td class='param'>data</td><td>String URL or action to get data.</td></tr>
+<td class='param'>numCols</td><td>Number number of text columns.</td></tr>
+<td class='param'>numRows</td><td>Number number of text rows.</td></tr>
+<td class='param'>style</td><td>String CSS Style to use for the control.</td></tr>
+<td class='param'>visible</td><td>Boolean Make the control visible. Defaults to true.</td></tr>
+</table></dd>
+</dl><dl><dt>Example</dt>
+<dd><pre>&lt;% textarea("name") %&gt;
+</pre></dd></dl>
+</div>
+</div>
+<hr />
+<a name='View'></a>
+<div class='api'>
+<div class='apiSig'>  public  View(controller: <a href='ejs.web-Controller.html'>Controller</a>)
+</div>
+<div class='apiDetail'>
+<p>Constructor method to initialize a new View.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>controller: <a href='ejs.web-Controller.html'>Controller</a> </td><td>Controller to manage this view.</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='write'></a>
+<div class='api'>
+<div class='apiSig'> write(args: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Write text to the client.</p>
+<dl><dt>Description</dt><dd>This call writes the arguments back to the client's browser. The arguments 
+are converted to strings before writing back to the client. Text written using write, will be buffered 
+up to a configurable maximum. This allows text to be written prior to setting HTTP headers with setHeader.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>args: <a href='intrinsic-Array.html'>Array</a> </td><td>Text or objects to write to the client.</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='writeHtml'></a>
+<div class='api'>
+<div class='apiSig'> writeHtml(args: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Write HTML escaped text to the client.</p>
+<dl><dt>Description</dt><dd>This call writes the arguments back to the client's browser after mapping
+all HTML control sequences into safe alternatives. The arguments are converted to strings before writing back to 
+the client and then escaped. The text, written using write, will be buffered up to a configurable maximum. This 
+allows text to be written prior to setting HTTP headers with setHeader.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>args: <a href='intrinsic-Array.html'>Array</a> </td><td>Text or objects to write to the client.</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<div class="terms">
+   <p class="terms">
+       <a href="http://www.embedthis.com/">       Embedthis Software LLC, 2003-2010. All rights reserved. Embedthis is a trademark of Embedthis Software LLC.</a>
+   </p>
+</div></div>
+</div>
+</body>
+</html>

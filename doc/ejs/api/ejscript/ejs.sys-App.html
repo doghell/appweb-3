@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <title>Class App</title>
+
+   <link rel="stylesheet" type="text/css" href="doc.css" />
+</head>
+
+<body>
+<div class='body'>
+
+<div class="content">
+
+<a name='top'></a>
+<h1 class='className'>App</h1>
+<div class='classBlock'>
+<table class='classHead' summary='App'>
+   <tr><td><strong>Module</strong></td><td>ejs.sys</td></tr>
+   <tr><td><strong>Definition</strong></td><td> class App</td></tr>
+   <tr><td><strong>Inheritance</strong></td><td>App <img src='images/inherit.gif' alt='inherit'/> <a href='intrinsic-Object.html'>Object</a><tr><td><strong>Specified</strong></td><td>ejscript-1.0</td></tr>
+<tr><td><strong>Stability</strong></td><td>Evolving.</td></tr>
+       </td></tr>
+</table>
+
+<p class='classBrief'>Application configuration state.</p>
+
+<p class='classDescription'>The App class is a singleton class object. The App class is accessed via
+the App global type object. It provides  methods to interrogate and control the applications environment including
+the current working directory, application command line arguments, path to the application's executable and
+input and output streams.</p>
+
+</div>
+
+
+<hr />
+<a name='Properties'></a>
+<h2 class='classSection'>Properties</h2>
+<table class='itemTable' summary='properties'>
+   <tr><th>Qualifiers</th><th>Property</th><th>Type</th><th width='95%'>Description</th></tr>
+<a name='args'></a>
+   <tr><td nowrap align='left'>public static get </td><td>args</td><td><a href='intrinsic-Array.html'>Array</a></td><td>Application command line arguments. Set to an array containing each of the arguments. If the ejs command is 
+invoked as "ejs script arg1 arg2", then args[0] will be "script", args[1] will be "arg1" etc.</td></tr>
+<a name='dir'></a>
+   <tr><td nowrap align='left'>public static get </td><td>dir</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The application's current directory. </td></tr>
+<a name='errorStream'></a>
+   <tr><td nowrap align='left'>public static get </td><td>errorStream</td><td><a href='intrinsic-Stream.html'>Stream</a></td><td>The application's standard error file stream. </td></tr>
+<a name='exeDir'></a>
+   <tr><td nowrap align='left'>public static get </td><td>exeDir</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The directory containing the application executable. </td></tr>
+<a name='exePath'></a>
+   <tr><td nowrap align='left'>public static get </td><td>exePath</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The application executable path. </td></tr>
+<a name='inputStream'></a>
+   <tr><td nowrap align='left'>public static get </td><td>inputStream</td><td><a href='intrinsic-Stream.html'>Stream</a></td><td>The application's standard input file stream. </td></tr>
+<a name='name'></a>
+   <tr><td nowrap align='left'>public static get </td><td>name</td><td><a href='intrinsic-String.html'>String</a></td><td>Application name. Set to a single word, lower case name for the application.</td></tr>
+<a name='outputStream'></a>
+   <tr><td nowrap align='left'>public static get </td><td>outputStream</td><td><a href='intrinsic-Stream.html'>Stream</a></td><td>The application's standard output file stream. </td></tr>
+<a name='searchPath'></a>
+   <tr><td nowrap align='left'>public static get  set</td><td>searchPath</td><td><a href='intrinsic-String.html'>String</a></td><td>The current module search path. Set to a delimited searchPath string. Warning: This will be changed to an
+array of paths in a future release.</td></tr>
+<a name='title'></a>
+   <tr><td nowrap align='left'>public static get </td><td>title</td><td><a href='intrinsic-String.html'>String</a></td><td>Application title name. Multi-word, Camel Case name for the application suitable for display.</td></tr>
+<a name='version'></a>
+   <tr><td nowrap align='left'>public static get </td><td>version</td><td><a href='intrinsic-String.html'>String</a></td><td>Application version string. Set to a version string of the format Major.Minor.Patch-Build. For example: 1.1.2-3.</td></tr>
+</table>
+
+<p class='inheritedLink'><a href='intrinsic-Object.html#Properties'><i>Inherited Properties</i></a></p>
+
+<hr />
+<a name='Methods'></a>
+<h2 class='classSection'>App Methods</h2>
+<table class='apiIndex' summary='methods'>
+   <tr><th>Qualifiers</th><th width='95%'>Method</th></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#chdir'><b>chdir</b></a>(value: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Change the application's Working directory.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#exit'><b>exit</b></a>(status: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Stop the program and exit.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#getenv'><b>getenv</b></a>(name: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get an environment variable.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#noexit'><b>noexit</b></a>(exit: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Control whether an application will exit when global scripts have completed.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#putenv'><b>putenv</b></a>(name: <a href='intrinsic-String.html'>String</a>, value: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Update an environment variable.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#serviceEvents'><b>serviceEvents</b></a>(count: <a href='intrinsic-Number.html'>Number</a> = -1 , timeout: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Service events.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#sleep'><b>sleep</b></a>(delay: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Sleep the application for the given number of milliseconds.</td></tr>
+</table>
+
+<p class='inheritedLink'><a href='intrinsic-Object.html#Methods'><i>Inherited Methods</i></a></p>
+
+<hr />
+<h2>Method Detail</h2>
+<a name='chdir'></a>
+<div class='api'>
+<div class='apiSig'>static   public  chdir(value: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Change the application's Working directory.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>value: <a href='intrinsic-Object.html'>Object</a> </td><td>The path to the new working directory.</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='exit'></a>
+<div class='api'>
+<div class='apiSig'>static   public  exit(status: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Stop the program and exit.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>status: <a href='intrinsic-Number.html'>Number</a> </td><td>The optional exit code to provide the environment. If running inside the ejs command program, the status is used as process exit status. [default: 0]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='getenv'></a>
+<div class='api'>
+<div class='apiSig'>static   public  getenv(name: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-String.html'>String</a>
+</div>
+<div class='apiDetail'>
+<p>Get an environment variable.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>name: <a href='intrinsic-String.html'>String</a> </td><td>The name of the environment variable to retrieve.</td></tr></table></dd>
+</dl><dl><dt>Returns</dt>
+<dd>The value of the environment variable or null if not found.</dd></dl>
+</div>
+</div>
+<hr />
+<a name='noexit'></a>
+<div class='api'>
+<div class='apiSig'>static   public  noexit(exit: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Control whether an application will exit when global scripts have completed.</p>
+<dl><dt>Description</dt><dd>Setting this to true will cause
+the application to continue servicing events until the <a href='#exit'>exit</a> method is explicitly called. The default 
+application setting of noexit is false.</dd></dl>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>exit: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>If true, the application will exit when the last script completes. [default: true]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='putenv'></a>
+<div class='api'>
+<div class='apiSig'>static   public  putenv(name: <a href='intrinsic-String.html'>String</a>, value: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Update an environment variable.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>name: <a href='intrinsic-String.html'>String</a> </td><td>The name of the environment variable to retrieve.</td></tr><tr class='param'><td class='param'>value: <a href='intrinsic-String.html'>String</a> </td><td>The new value to define for the variable.</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='serviceEvents'></a>
+<div class='api'>
+<div class='apiSig'>static   public  serviceEvents(count: <a href='intrinsic-Number.html'>Number</a> = -1 , timeout: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Service events.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>count: <a href='intrinsic-Number.html'>Number</a> </td><td>Count of events to service. Defaults to unlimited. [default: -1 ]</td></tr><tr class='param'><td class='param'>timeout: <a href='intrinsic-Number.html'>Number</a> </td><td>Timeout to block waiting for an event in milliseconds before returning. If an event occurs, the call returns immediately. [default: -1]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<a name='sleep'></a>
+<div class='api'>
+<div class='apiSig'>static   public  sleep(delay: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-Void.html'>Void</a>
+</div>
+<div class='apiDetail'>
+<p>Sleep the application for the given number of milliseconds.</p>
+<dl><dt>Parameters</dt>
+<dd><table class='parameters' summary ='parameters'>
+<tr class='param'><td class='param'>delay: <a href='intrinsic-Number.html'>Number</a> </td><td>Time in milliseconds to sleep. Set to -1 to sleep forever. [default: -1]</td></tr></table></dd>
+</dl></div>
+</div>
+<hr />
+<div class="terms">
+   <p class="terms">
+       <a href="http://www.embedthis.com/">       Embedthis Software LLC, 2003-2010. All rights reserved. Embedthis is a trademark of Embedthis Software LLC.</a>
+   </p>
+</div></div>
+</div>
+</body>
+</html>

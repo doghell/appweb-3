@@ -1,0 +1,9 @@
+<% 	
+    if (params.code) {
+        response.code = params.code
+    } else if (params.redirect) {
+        redirect(params.redirect)
+    }
+    write(serialize(controller))
+%>
+

@@ -1,0 +1,27 @@
+FILES.TXT for the HTTP filters directory
+--------------------------------------------------------------------------------
+
+This document describes the important files in this directory. The optional
+modules for the Appweb HTTP server are here. 
+
+The key files are:
+
+File                 Purpose
+----------------------------
+authFilter.c       - Authorization filter. Handles basic and digest authentication.
+
+--------------------------------------------------------------------------------
+
+Other important files to read:
+
+README.TXT -- Description of the HTTP server.
+
+--------------------------------------------------------------------------------
+
+Copyright (c) 2003-2010 Embedthis Software, LLC. All Rights Reserved.
+Embedthis and Appweb are trademarks of Embedthis Software, LLC. Other 
+brands and their products are trademarks of their respective holders.
+
+See LICENSE.TXT for software license details.
+
+--------------------------------------------------------------------------------

@@ -1,0 +1,7 @@
+
+if (test.config["http_client"] != 1 || !session["main"]) {
+    test.skip("Http client not enabled")
+
+} else if (test.depth == 1) {
+    test.skip("Stress tests run at depth 2 or greater")
+}
