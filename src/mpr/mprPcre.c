@@ -508,7 +508,7 @@ extern "C" {
 #define BLD_HAS_UNNAMED_UNIONS 1
 #endif
 
-#if BLD_WIN_LIKE || LINUX
+#if BLD_WIN_LIKE || LINUX || VXWORKS
     #define  VA_NULL    {0}
 #else
     #define  VA_NULL    {{0}}
@@ -1282,7 +1282,9 @@ extern "C" {
 #define MPR_MAX_IP_NAME         128             /**< Maximum size of a host name string */
 #define MPR_MAX_IP_ADDR         128             /**< Maximum size of an IP address */
 #define MPR_MAX_IP_PORT         8               /**< MMaximum size of a port number */
-#define MPR_MAX_IP_ADDR_PORT    (MPR_MAX_IP_ADDR + NI_MAXSERV)  /**< Maximum size of an IP address with port number */
+
+/**< Maximum size of an IP address with port number */
+#define MPR_MAX_IP_ADDR_PORT    (MPR_MAX_IP_ADDR + MPR_MAX_IP_PORT + 1) 
 
 /*
  *  Signal sent on Unix to break out of a select call.

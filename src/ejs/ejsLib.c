@@ -7569,7 +7569,7 @@ static EjsVar *math_random(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
 #if WIN
         uint seed = (uint) time(0);
         srand(seed);
-#elif !MACOSX
+#elif !MACOSX && !VXWORKS
         srandom(time(0));
 #endif
         initialized = 1;
@@ -7582,7 +7582,7 @@ static EjsVar *math_random(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
 }
 #elif LINUX
     uvalue = random();
-#elif MACOSX
+#elif MACOSX 
     uvalue = arc4random();
 #else
 {
@@ -8252,6 +8252,7 @@ void ejsConfigureNullType(Ejs *ejs)
 #define fixed(n) (n)
 #endif
 
+#if UNUSED
 #if BLD_WIN_LIKE || VXWORKS
 static double localRint(double num)
 {
@@ -8261,6 +8262,8 @@ static double localRint(double num)
 }
 #define rint localRint
 #endif
+#endif
+
 /*
     Cast the operand to the specified type
  */
@@ -25785,7 +25788,9 @@ static void *opcodeJump[] = {
          */
         CASE (EJS_OP_POP):
             ejs->result = pop(ejs);
+#if MACOSX || UNUSED
             mprAssert(ejs->result != (void*) 0xf7f7f7f7f7f7f7f7);
+#endif
             mprAssert(ejs->exception || ejs->result);
             BREAK;
 
@@ -32576,6 +32581,25 @@ static MprNumber parseNumber(Ejs *ejs, cchar *str)
         return (MprNumber) (0 - num);
     }
     return (MprNumber) num;
+}
+
+
+int _ejsIs(struct EjsVar *vp, int slot)
+{
+    EjsType     *tp;
+
+    if (vp == 0) {
+        return 0;
+    }
+    if (vp->type->id == slot) {
+        return 1;
+    }
+    for (tp = ((EjsVar*) vp)->type->baseType; tp; tp = tp->baseType) {
+        if (tp->id == slot) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /*

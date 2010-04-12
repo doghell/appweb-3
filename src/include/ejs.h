@@ -1658,6 +1658,8 @@ typedef BLD_FEATURE_NUM_TYPE MprNumber;
  */
 #define ejsIs(vp, slot)             _ejsIs((EjsVar*) vp, slot)
 
+extern int _ejsIs(struct EjsVar *vp, int slot);
+
 /**
  *  List type
  *  @description    The EjsList is a dynamic growable array suitable for storing pointers to arbitrary objects.
@@ -4021,24 +4023,6 @@ extern EjsVar   *ejsServiceEvents(Ejs *ejs, int count, int timeout, int flags);
 extern void     ejsSetSqliteMemCtx(MprThreadLocal *tls, MprCtx ctx);
 extern void     ejsSetSqliteTls(MprThreadLocal *tls);
 
-
-inline static int _ejsIs(struct EjsVar *vp, int slot)
-{
-    EjsType     *tp;
-
-    if (vp == 0) {
-        return 0;
-    }
-    if (vp->type->id == slot) {
-        return 1;
-    }
-    for (tp = ((EjsVar*) vp)->type->baseType; tp; tp = tp->baseType) {
-        if (tp->id == slot) {
-            return 1;
-        }
-    }
-    return 0;
-}
 
 #ifdef __cplusplus
 }
