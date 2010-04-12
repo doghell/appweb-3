@@ -55,3 +55,4 @@ bin/httpPassword
 lib/appweb.conf
 lib/default-web
 lib/mime.types
+*.tmp
