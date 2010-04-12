@@ -867,7 +867,8 @@ typedef struct EcCodeGen {
     MprList     *jumps;                 /* Break/continues to patch for this code block */
     MprList     *exceptions;            /* Exception handlers for this code block */
     int         jumpKinds;              /* Kinds of jumps allowed */
-    int         stackCount;             /* Stack item counter */
+    int         breakMark;              /* Stack item counter for the target for break/continue stmts */
+    int         stackCount;             /* Current stack item counter */
 } EcCodeGen;
 
 
@@ -888,7 +889,6 @@ typedef struct EcState {
     int             blockIsMethod;          /* Current function is a method */
     int             inHashExpression;       /* Inside a # expression */
     int             inSettings;             /* Inside constructor settings */
-    int             stackBase;              /* Stack depth on entering this state */
 
     /*
      *  These are used when parsing

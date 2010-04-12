@@ -4579,7 +4579,7 @@ static void     badNode(EcCompiler *cp, EcNode *np);
 static void     copyCodeBuffer(EcCompiler *cp, EcCodeGen *dest, EcCodeGen *code);
 static void     createInitializer(EcCompiler *cp, EjsModule *mp);
 static void     emitNamespace(EcCompiler *cp, EjsNamespace *nsp);
-static void     emptyStack(EcCompiler *cp, int preserve);
+static void     discardStackItems(EcCompiler *cp, int preserve);
 static int      flushModule(MprFile *file, EcCodeGen *code);
 static void     genBinaryOp(EcCompiler *cp, EcNode *np);
 static void     genBlock(EcCompiler *cp, EcNode *np);
@@ -4590,7 +4590,7 @@ static void     genCatchArg(EcCompiler *cp, EcNode *np);
 static void     genClass(EcCompiler *cp, EcNode *child);
 static void     genClassName(EcCompiler *cp, EjsType *type);
 static void     genContinue(EcCompiler *cp, EcNode *np);
-static void     genDirectives(EcCompiler *cp, EcNode *np, bool resetStack);
+static void     genDirectives(EcCompiler *cp, EcNode *np, bool saveResult);
 static void     genDo(EcCompiler *cp, EcNode *np);
 static void     genDot(EcCompiler *cp, EcNode *np, EcNode **rightMost);
 static void     genError(EcCompiler *cp, EcNode *np, char *fmt, ...);
@@ -4652,12 +4652,7 @@ void ecGenConditionalCode(EcCompiler *cp, EcNode *np, EjsModule *mp)
     mprAssert(state);
 
     addModule(cp, mp);
-    genDirectives(cp, np, 0);
-
-    /*
-     *  Save the expression result from the stack into ejs->frame->returnValue
-     */
-    ecEncodeOpcode(cp, EJS_OP_SAVE_RESULT);
+    genDirectives(cp, np, 1);
 
     if (cp->errorCount > 0) {
         ecRemoveModule(cp, mp);
@@ -4881,7 +4876,6 @@ static void genBreak(EcCompiler *cp, EcNode *np)
     EcState     *state;
 
     ENTER(cp);
-
     state = cp->state;
 
     if (state->captureBreak) {
@@ -4890,11 +4884,7 @@ static void genBreak(EcCompiler *cp, EcNode *np)
     if (state->code->jumps == 0 || !(state->code->jumpKinds & EC_JUMP_BREAK)) {
         genError(cp, np, "Illegal break statement");
     } else {
-#if FUTURE
-        emptyStack(cp, state->stackBase);
-#else
-        emptyStack(cp, 0);
-#endif
+        discardStackItems(cp, state->code->breakMark);
         ecEncodeOpcode(cp, EJS_OP_GOTO);
         addJump(cp, np, EC_JUMP_BREAK);
         ecEncodeWord(cp, 0);
@@ -4989,7 +4979,6 @@ static void genContinue(EcCompiler *cp, EcNode *np)
     }
     if (cp->state->code->jumps == 0 || !(cp->state->code->jumpKinds & EC_JUMP_CONTINUE)) {
         genError(cp, np, "Illegal continue statement");
-
     } else {
         ecEncodeOpcode(cp, EJS_OP_GOTO);
         addJump(cp, np, EC_JUMP_CONTINUE);
@@ -5857,30 +5846,28 @@ static void genClass(EcCompiler *cp, EcNode *np)
 }
 
 
-static void genDirectives(EcCompiler *cp, EcNode *np, bool resetStack)
+static void genDirectives(EcCompiler *cp, EcNode *np, bool saveResult)
 {
     EcState     *lastDirectiveState;
     EcNode      *child;
-    int         next, lastKind, stackCount;
+    int         next, lastKind, mark;
 
     ENTER(cp);
 
     lastDirectiveState = cp->directiveState;
-    stackCount = getStackCount(cp);
     lastKind = -1;
     next = 0;
+    mark = getStackCount(cp);
     while ((child = getNextNode(cp, np, &next)) && !cp->error) {
-
         lastKind = child->kind;
         cp->directiveState = cp->state;
         processNode(cp, child);
-        if (resetStack) {
-#if FUTURE
-            emptyStack(cp, stackCount);
-#else
-            emptyStack(cp, 0);
-#endif
+        if (!saveResult) {
+            discardStackItems(cp, mark);
         }
+    }
+    if (saveResult) {
+        ecEncodeOpcode(cp, EJS_OP_SAVE_RESULT);
     }
     cp->directiveState = lastDirectiveState;
     LEAVE(cp);
@@ -6059,13 +6046,12 @@ static void genDo(EcCompiler *cp, EcNode *np)
 {
     EcCodeGen   *outerBlock, *code;
     EcState     *state;
-    int         condLen, bodyLen, len, condShortJump, continueLabel, breakLabel;
+    int         condLen, bodyLen, len, condShortJump, continueLabel, breakLabel, mark;
 
     ENTER(cp);
 
     state = cp->state;
     state->captureBreak = 0;
-    state->stackBase = getStackCount(cp);
 
     mprAssert(np->kind == N_DO);
 
@@ -6076,15 +6062,16 @@ static void genDo(EcCompiler *cp, EcNode *np)
 
     if (np->forLoop.body) {
         np->forLoop.bodyCode = state->code = allocCodeBuffer(cp);
-        setStack(cp, 0);
+        mark = getStackCount(cp);
         processNode(cp, np->forLoop.body);
-        emptyStack(cp, 0);
+        discardStackItems(cp, mark);
     }
 
     if (np->forLoop.cond) {
         np->forLoop.condCode = state->code = allocCodeBuffer(cp);
         processNode(cp, np->forLoop.cond);
         /* Leaves one item on the stack */
+        mprAssert(state->code->stackCount == 1);
     }
 
     /*
@@ -6108,13 +6095,15 @@ static void genDo(EcCompiler *cp, EcNode *np)
         if (len < 0x7f && cp->optimizeLevel > 0) {
             condShortJump = 1;
             condLen += 2;
-
         } else {
             condLen += 5;
         }
     }
 
     setCodeBuffer(cp, code);
+    if (np->forLoop.cond) {
+        pushStack(cp, 1);
+    }
     continueLabel = mprGetBufLength(cp->state->code->buf);
 
     /*
@@ -6130,7 +6119,6 @@ static void genDo(EcCompiler *cp, EcNode *np)
      */
     if (np->forLoop.condCode) {
         copyCodeBuffer(cp, state->code, np->forLoop.condCode);
-        setStack(cp, 1);
         len = bodyLen + condLen;
         if (condShortJump) {
             ecEncodeOpcode(cp, EJS_OP_BRANCH_TRUE_8);
@@ -6173,24 +6161,26 @@ static void genFor(EcCompiler *cp, EcNode *np)
 {
     EcCodeGen   *outerBlock, *code;
     EcState     *state;
-    int         condLen, bodyLen, perLoopLen, len, condShortJump, perLoopShortJump, continueLabel, breakLabel;
+    int         condLen, bodyLen, perLoopLen, len, condShortJump, perLoopShortJump, continueLabel, breakLabel, mark;
+    int         startMark;
 
     ENTER(cp);
 
     mprAssert(np->kind == N_FOR);
 
     state = cp->state;
-    state->stackBase = getStackCount(cp);
     outerBlock = state->code;
     code = state->code = allocCodeBuffer(cp);
+    startMark = getStackCount(cp);
     state->captureBreak = 0;
 
     /*
      *  initializer is outside the loop
      */
     if (np->forLoop.initializer) {
+        mark = getStackCount(cp);
         processNode(cp, np->forLoop.initializer);
-        emptyStack(cp, 0);
+        discardStackItems(cp, mark);
     }
 
     /*
@@ -6204,13 +6194,14 @@ static void genFor(EcCompiler *cp, EcNode *np)
         processNode(cp, np->forLoop.cond);
         /* Leaves one item on the stack */
         state->needsValue = 0;
+        mprAssert(cp->state->code->stackCount >= 1);
     }
 
     if (np->forLoop.body) {
+        mark = getStackCount(cp);
         np->forLoop.bodyCode = state->code = allocCodeBuffer(cp);
-        setStack(cp, 0);
         processNode(cp, np->forLoop.body);
-        emptyStack(cp, 0);
+        discardStackItems(cp, mark);
     }
 
     /*
@@ -6218,8 +6209,9 @@ static void genFor(EcCompiler *cp, EcNode *np)
      */
     if (np->forLoop.perLoop) {
         np->forLoop.perLoopCode = state->code = allocCodeBuffer(cp);
+        mark = getStackCount(cp);
         processNode(cp, np->forLoop.perLoop);
-        emptyStack(cp, 0);
+        discardStackItems(cp, mark);
     }
 
     /*
@@ -6272,8 +6264,9 @@ static void genFor(EcCompiler *cp, EcNode *np)
      */
     setCodeBuffer(cp, code);
     if (np->forLoop.condCode) {
+        mprAssert(np->forLoop.condCode->stackCount >= 1);
+        setStack(cp, np->forLoop.condCode->stackCount);
         copyCodeBuffer(cp, state->code, np->forLoop.condCode);
-        setStack(cp, 1);
         len = bodyLen + perLoopLen;
         if (condShortJump) {
             ecEncodeOpcode(cp, EJS_OP_BRANCH_FALSE_8);
@@ -6307,9 +6300,8 @@ static void genFor(EcCompiler *cp, EcNode *np)
         ecEncodeOpcode(cp, EJS_OP_GOTO);
         ecEncodeWord(cp, -len);
     }
-
     breakLabel = mprGetBufLength(state->code->buf);
-    emptyStack(cp, 0);
+    discardStackItems(cp, startMark);
 
     patchJumps(cp, EC_JUMP_BREAK, breakLabel);
     patchJumps(cp, EC_JUMP_CONTINUE, continueLabel);
@@ -6326,7 +6318,7 @@ static void genForIn(EcCompiler *cp, EcNode *np)
 {
     EcCodeGen   *outerBlock, *code;
     EcState     *state;
-    int         len, breakLabel, tryStart, tryEnd, handlerStart;
+    int         len, breakLabel, tryStart, tryEnd, handlerStart, mark, startMark;
 
     ENTER(cp);
 
@@ -6334,9 +6326,9 @@ static void genForIn(EcCompiler *cp, EcNode *np)
     mprAssert(np->kind == N_FOR_IN);
 
     state = cp->state;
-    state->stackBase = getStackCount(cp);
     outerBlock = state->code;
     code = state->code = allocCodeBuffer(cp);
+    startMark = getStackCount(cp);
     state->captureBreak = 0;
 
     ecStartBreakableStatement(cp, EC_JUMP_BREAK | EC_JUMP_CONTINUE);
@@ -6379,11 +6371,6 @@ static void genForIn(EcCompiler *cp, EcNode *np)
     ecEncodeNumber(cp, 0);
     popStack(cp, 1);
     
-    if (np->forInLoop.each) {
-        /*
-         *  getObjName
-         */
-    }
     tryEnd = getCodeLength(cp, np->forInLoop.bodyCode);
 
     /*
@@ -6401,18 +6388,11 @@ static void genForIn(EcCompiler *cp, EcNode *np)
     /*
      *  Now the loop body. Must hide the pushed iterator on the stack as genDirectives will clear the stack.
      */
+    mark = getStackCount(cp);
     if (np->forInLoop.body) {
-#if FUTURE
-        int count = getStackCount(cp);
         processNode(cp, np->forInLoop.body);
-        mprAssert(count == getStackCount(cp));
-#else
-        state->code->stackCount--;
-        processNode(cp, np->forInLoop.body);
-        state->code->stackCount++;
-#endif
+        discardStackItems(cp, mark);
     }
-    emptyStack(cp, 1);
 
     len = getCodeLength(cp, np->forInLoop.bodyCode);
     if (len < (0x7f - 5)) {
@@ -6430,14 +6410,14 @@ static void genForIn(EcCompiler *cp, EcNode *np)
      *  Note: we have a zero length handler (noop)
      */
     handlerStart = ecGetCodeOffset(cp);
-    addException(cp, tryStart, tryEnd, cp->ejs->stopIterationType, handlerStart, handlerStart, 0, 0,
+    addException(cp, tryStart, tryEnd, cp->ejs->stopIterationType, handlerStart, handlerStart, 0, startMark,
         EJS_EX_CATCH | EJS_EX_ITERATION);
 
     /*
      *  Patch break/continue statements
      */
     breakLabel = mprGetBufLength(state->code->buf);
-    emptyStack(cp, 0);
+    discardStackItems(cp, startMark);
 
     patchJumps(cp, EC_JUMP_BREAK, breakLabel);
     patchJumps(cp, EC_JUMP_CONTINUE, 0);
@@ -6602,7 +6582,7 @@ static void genFunction(EcCompiler *cp, EcNode *np)
     }
 
     if (np->function.constructorSettings) {
-        genDirectives(cp, np->function.constructorSettings, 1);
+        genDirectives(cp, np->function.constructorSettings, 0);
     }
 
     state->letBlock = (EjsVar*) fun;
@@ -6683,7 +6663,7 @@ static void genIf(EcCompiler *cp, EcNode *np)
 {
     EcCodeGen   *saveCode;
     EcState     *state;
-    int         thenLen, elseLen;
+    int         thenLen, elseLen, mark;
 
     ENTER(cp);
 
@@ -6693,8 +6673,7 @@ static void genIf(EcCompiler *cp, EcNode *np)
     saveCode = state->code;
 
     /*
-     *  Process the conditional. Put the popStack for the branch here so the stack is correct for the "then" and 
-     *  "else" blocks.
+     *  Process the conditional. 
      */
     state->needsValue = 1;
     processNode(cp, np->tenary.cond);
@@ -6705,16 +6684,19 @@ static void genIf(EcCompiler *cp, EcNode *np)
      *  Process the "then" block.
      */
     np->tenary.thenCode = state->code = allocCodeBuffer(cp);
-    setStack(cp, 0);
+    mark = getStackCount(cp);
     processNode(cp, np->tenary.thenBlock);
     if (state->prev->needsValue) {
         /* Part of a tenary expression */
-        if (state->code->stackCount != 1) {
+        if (state->code->stackCount != (mark + 1)) {
             genError(cp, np, "Then expression does not evaluate to a value. Check if operands are void");
         }
-        emptyStack(cp, 1);
+        discardStackItems(cp, mark + 1);
+        if (np->tenary.elseBlock) {
+            setStack(cp, mark);
+        }
     } else {
-        emptyStack(cp, 0);
+        discardStackItems(cp, mark);
     }
 
     /*
@@ -6722,17 +6704,16 @@ static void genIf(EcCompiler *cp, EcNode *np)
      */
     if (np->tenary.elseBlock) {
         np->tenary.elseCode = state->code = allocCodeBuffer(cp);
-        setStack(cp, 0);
         state->needsValue = state->prev->needsValue;
         processNode(cp, np->tenary.elseBlock);
         state->needsValue = 0;
         if (state->prev->needsValue) {
-            if (state->code->stackCount < 1) {
+            if (state->code->stackCount != (mark + 1)) {
                 genError(cp, np, "Else expression does not evaluate to a value. Check if operands are void");
             }
-            emptyStack(cp, 1);
+            discardStackItems(cp, mark + 1);
         } else {
-            emptyStack(cp, 0);
+            discardStackItems(cp, mark);
         }
     }
 
@@ -6777,6 +6758,7 @@ static void genIf(EcCompiler *cp, EcNode *np)
         copyCodeBuffer(cp, state->code, np->tenary.elseCode);
     }
     if (state->prev->needsValue) {
+        /* setCodeBuffer above will have reset the stack to what it was before this function */
         pushStack(cp, 1);
     }
     LEAVE(cp);
@@ -7058,7 +7040,7 @@ static void genProgram(EcCompiler *cp, EcNode *np)
             break;
 
         case N_DIRECTIVES:
-            genDirectives(cp, child, 1);
+            genDirectives(cp, child, 0);
             break;
 
         default:
@@ -7115,7 +7097,6 @@ static void genReturn(EcCompiler *cp, EcNode *np)
          */
         ecEncodeOpcode(cp, EJS_OP_RETURN);
     }
-    emptyStack(cp, 0);
     LEAVE(cp);
 }
 
@@ -7152,24 +7133,23 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
     EcNode      *caseItem, *elements;
     EcCodeGen   *code, *outerBlock;
     EcState     *state;
-    int         next, len, nextCaseLen, nextCodeLen, totalLen;
+    int         next, len, nextCaseLen, nextCodeLen, totalLen, mark;
 
     ENTER(cp);
 
     state = cp->state;
     state->captureBreak = 0;
-    state->stackBase = getStackCount(cp);
 
     outerBlock = state->code;
     code = state->code = allocCodeBuffer(cp);
-
-    ecStartBreakableStatement(cp, EC_JUMP_BREAK);
 
     /*
      *  Generate code for the switch (expression)
      */
     processNode(cp, np->left);
 
+    ecStartBreakableStatement(cp, EC_JUMP_BREAK);
+    
     /*
      *  Generate the code for each case label expression and case statements.
      *  next set to one to skip the switch expression.
@@ -7179,10 +7159,10 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
 
     next = 0;
     while ((caseItem = getNextNode(cp, elements, &next)) && !cp->error) {
-
         /*
          *  Allocate a buffer for the case expression and generate that code
          */
+        mark = getStackCount(cp);
         mprAssert(caseItem->kind == N_CASE_LABEL);
         if (caseItem->caseLabel.kind == EC_SWITCH_KIND_CASE) {
             caseItem->caseLabel.expressionCode = state->code = allocCodeBuffer(cp);
@@ -7192,11 +7172,9 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
              */
             addDebugInstructions(cp, caseItem->caseLabel.expression);
             ecEncodeOpcode(cp, EJS_OP_DUP);
-
-            setStack(cp, 0);
-
             mprAssert(caseItem->caseLabel.expression);
             processNode(cp, caseItem->caseLabel.expression);
+            popStack(cp, 1);
         }
 
         /*
@@ -7204,9 +7182,8 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
          */
         caseItem->code = state->code = allocCodeBuffer(cp);
         mprAssert(caseItem->left->kind == N_DIRECTIVES);
-
-        setStack(cp, 0);
         processNode(cp, caseItem->left);
+        setStack(cp, mark);
     }
 
     /*
@@ -7222,7 +7199,6 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
         if (caseItem->kind != N_CASE_LABEL) {
             break;
         }
-
         /*
          *  CODE jump
          *  Jump to the code block of the next case. In the last block, we just fall out the bottom.
@@ -7276,14 +7252,11 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
         if (caseItem->caseLabel.expressionCode) {
             copyCodeBuffer(cp, state->code, caseItem->caseLabel.expressionCode);
         }
-
         /*
          *  Encode the jump to the next case
          */
         if (caseItem->caseLabel.kind == EC_SWITCH_KIND_CASE) {
-            setStack(cp, 2);
             ecEncodeOpcode(cp, EJS_OP_COMPARE_STRICTLY_EQ);
-            popStack(cp, 2);
 
             if (caseItem->jumpLength < 0x7f && cp->optimizeLevel > 0) {
                 ecEncodeOpcode(cp, EJS_OP_BRANCH_FALSE_8);
@@ -7293,7 +7266,6 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
                 ecEncodeWord(cp, caseItem->jumpLength);
             }
         }
-
         mprAssert(caseItem->code);
         copyCodeBuffer(cp, state->code, caseItem->code);
 
@@ -7310,6 +7282,7 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
             }
         }
     }
+    popStack(cp, 1);
 
     totalLen = mprGetBufLength(state->code->buf);
     patchJumps(cp, EC_JUMP_BREAK, totalLen);
@@ -7395,7 +7368,7 @@ static void genTry(EcCompiler *cp, EcNode *np)
     /*
      *  Switch to a new code buffer for the try block
      */
-    numStack = state->code->stackCount;
+    numStack = getStackCount(cp);
     saveCode = state->code;
     mprAssert(saveCode);
     np->exception.tryBlock->code = state->code = allocCodeBuffer(cp);
@@ -7428,8 +7401,11 @@ static void genTry(EcCompiler *cp, EcNode *np)
 
     if (np->exception.finallyBlock) {
         np->exception.finallyBlock->code = state->code = allocCodeBuffer(cp);
+        /* Finally pushes the original PC */
+        pushStack(cp, 1);
         processNode(cp, np->exception.finallyBlock);
         ecEncodeOpcode(cp, EJS_OP_END_EXCEPTION);
+        popStack(cp, 1);
     }
 
     /*
@@ -7982,6 +7958,7 @@ static EcCodeGen *allocCodeBuffer(EcCompiler *cp)
     if (state->code) {
         code->jumpKinds = state->code->jumpKinds;
         code->stackCount = state->code->stackCount;
+        code->breakMark = state->code->breakMark;
     }
     return code;
 }
@@ -8325,9 +8302,7 @@ static void processNode(EcCompiler *cp, EcNode *np)
     if (np->kind != N_TRY && np->kind != N_END_FUNCTION && np->kind != N_HASH) {
         addDebugInstructions(cp, np);
     }
-
     switch (np->kind) {
-
     case N_ARGS:
         state->needsValue = 1;
         genArgs(cp, np);
@@ -8370,7 +8345,7 @@ static void processNode(EcCompiler *cp, EcNode *np)
         break;
 
     case N_DIRECTIVES:
-        genDirectives(cp, np, 1);
+        genDirectives(cp, np, 0);
         break;
 
     case N_DO:
@@ -8502,7 +8477,6 @@ static void processNode(EcCompiler *cp, EcNode *np)
         mprAssert(0);
         badNode(cp, np);
     }
-
     mprAssert(state == cp->state);
     LEAVE(cp);
 }
@@ -8625,7 +8599,8 @@ static void addModule(EcCompiler *cp, EjsModule *mp)
 }
 
 
-static int level = 8;
+//  8
+static int level = 2;
 
 static void pushStack(EcCompiler *cp, int count)
 {
@@ -8651,10 +8626,8 @@ static void popStack(EcCompiler *cp, int count)
 
     mprAssert(code);
     mprAssert(code->stackCount >= 0);
-
     code->stackCount -= count;
     mprAssert(code->stackCount >= 0);
-
     mprLog(cp, level, "Stack %d, after pop %d", code->stackCount, count);
 }
 
@@ -8675,7 +8648,7 @@ static int getStackCount(EcCompiler *cp)
 }
 
 
-static void emptyStack(EcCompiler *cp, int preserve)
+static void discardStackItems(EcCompiler *cp, int preserve)
 {
     EcCodeGen       *code;
     int             count;
@@ -8684,7 +8657,6 @@ static void emptyStack(EcCompiler *cp, int preserve)
 
     mprAssert(code);
     count = code->stackCount - preserve;
-    mprAssert(count >= 0);
 
     if (count <= 0) {
         return;
@@ -8695,10 +8667,9 @@ static void emptyStack(EcCompiler *cp, int preserve)
         ecEncodeOpcode(cp, EJS_OP_POP_ITEMS);
         ecEncodeByte(cp, count);
     }
-    code->stackCount = 0;
-
-    mprLog(cp, level, "Stack %d, after empty\n", code->stackCount);
-
+    code->stackCount -= count;
+    mprAssert(code->stackCount >= 0);
+    mprLog(cp, level, "Stack %d, after discard\n", code->stackCount);
 }
 
 
@@ -8806,6 +8777,7 @@ void ecStartBreakableStatement(EcCompiler *cp, int kinds)
     state = cp->state;
     state->code->jumpKinds |= kinds;
     state->breakState = state;
+    state->code->breakMark = state->code->stackCount;
 }
 
 /*
@@ -21006,7 +20978,6 @@ int ecPushState(EcCompiler *cp, EcState *newState)
         newState->defaultNamespace = prev->defaultNamespace;
         newState->breakState = prev->breakState;
         newState->inInterface = prev->inInterface;
-        newState->stackBase = prev->stackBase;
 
     } else {
         newState->lang = cp->lang;
