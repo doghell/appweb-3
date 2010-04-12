@@ -4552,13 +4552,18 @@ extern EjsDoc       *ejsCreateDoc(struct Ejs *ejs, EjsBlock *block, int slotNum,
 
 
 #if BLD_APPWEB_PRODUCT
+    #define EJS_EJS             "ajs"       /* Ejscript interpreter */
     #define EJS_EJSWEB          "ajsweb"    /* Ejscript framework generator */
 #else
+    #define EJS_EJS             "ejs"       /* Ejscript interpreter */
     #define EJS_EJSWEB          "ejsweb"    /* Ejscript framework generator */
 #endif
 
+#define EJS_EJS_EXE             EJS_EJS BLD_EXE
+#define EJS_EJS_MOD             EJS_EJS EJS_MODULE_EXT
 #define EJS_EJSWEB_EXE          EJS_EJSWEB BLD_EXE
 #define EJS_EJSWEB_MOD          EJS_EJSWEB EJS_MODULE_EXT
+
 #define EJS_WEB_EXT             ".ejs"      /* Web page extension */
 #define EJS_SESSION             "-ejs-session-"
 #define EJS_SERVER_NAME         "Embedthis-Ejscript/" BLD_VERSION

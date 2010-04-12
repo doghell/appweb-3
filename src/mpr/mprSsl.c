@@ -507,7 +507,7 @@ extern "C" {
 #define BLD_HAS_UNNAMED_UNIONS 1
 #endif
 
-#if BLD_WIN_LIKE
+#if BLD_WIN_LIKE || LINUX
     #define  VA_NULL    {0}
 #else
     #define  VA_NULL    {{0}}

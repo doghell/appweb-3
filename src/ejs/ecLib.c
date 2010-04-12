@@ -4082,8 +4082,8 @@ static EcCodeGen *allocCodeBuffer(EcCompiler *cp);
 static void     badNode(EcCompiler *cp, EcNode *np);
 static void     copyCodeBuffer(EcCompiler *cp, EcCodeGen *dest, EcCodeGen *code);
 static void     createInitializer(EcCompiler *cp, EjsModule *mp);
-static void     emitNamespace(EcCompiler *cp, EjsNamespace *nsp);
 static void     discardStackItems(EcCompiler *cp, int preserve);
+static void     emitNamespace(EcCompiler *cp, EjsNamespace *nsp);
 static int      flushModule(MprFile *file, EcCodeGen *code);
 static void     genBinaryOp(EcCompiler *cp, EcNode *np);
 static void     genBlock(EcCompiler *cp, EcNode *np);
@@ -5696,9 +5696,10 @@ static void genFor(EcCompiler *cp, EcNode *np)
         np->forLoop.condCode = state->code = allocCodeBuffer(cp);
         state->needsValue = 1;
         processNode(cp, np->forLoop.cond);
-        /* Leaves one item on the stack */
         state->needsValue = 0;
-        mprAssert(cp->state->code->stackCount >= 1);
+        /* Leaves one item on the stack. But this will be cleared when compared */
+        mprAssert(state->code->stackCount >= 1);
+        popStack(cp, 1);
     }
 
     if (np->forLoop.body) {
@@ -5768,8 +5769,6 @@ static void genFor(EcCompiler *cp, EcNode *np)
      */
     setCodeBuffer(cp, code);
     if (np->forLoop.condCode) {
-        mprAssert(np->forLoop.condCode->stackCount >= 1);
-        setStack(cp, np->forLoop.condCode->stackCount);
         copyCodeBuffer(cp, state->code, np->forLoop.condCode);
         len = bodyLen + perLoopLen;
         if (condShortJump) {
@@ -5779,7 +5778,6 @@ static void genFor(EcCompiler *cp, EcNode *np)
             ecEncodeOpcode(cp, EJS_OP_BRANCH_FALSE);
             ecEncodeWord(cp, len);
         }
-        popStack(cp, 1);
     }
 
     /*
@@ -5918,10 +5916,10 @@ static void genForIn(EcCompiler *cp, EcNode *np)
         EJS_EX_CATCH | EJS_EX_ITERATION);
 
     /*
-     *  Patch break/continue statements
+     *  Patch break/continue statements.
      */
-    breakLabel = mprGetBufLength(state->code->buf);
     discardStackItems(cp, startMark);
+    breakLabel = mprGetBufLength(state->code->buf);
 
     patchJumps(cp, EC_JUMP_BREAK, breakLabel);
     patchJumps(cp, EC_JUMP_CONTINUE, 0);
@@ -6761,7 +6759,6 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
          */
         if (caseItem->caseLabel.kind == EC_SWITCH_KIND_CASE) {
             ecEncodeOpcode(cp, EJS_OP_COMPARE_STRICTLY_EQ);
-
             if (caseItem->jumpLength < 0x7f && cp->optimizeLevel > 0) {
                 ecEncodeOpcode(cp, EJS_OP_BRANCH_FALSE_8);
                 ecEncodeByte(cp, caseItem->jumpLength);
@@ -6863,7 +6860,6 @@ static void genTry(EcCompiler *cp, EcNode *np)
     int         next, len, numStack;
 
     ENTER(cp);
-
 
     state = cp->state;
     fun = state->currentFunction;
@@ -8103,8 +8099,7 @@ static void addModule(EcCompiler *cp, EjsModule *mp)
 }
 
 
-//  8
-static int level = 2;
+static int level = 8;
 
 static void pushStack(EcCompiler *cp, int count)
 {

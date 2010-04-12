@@ -25785,6 +25785,7 @@ static void *opcodeJump[] = {
          */
         CASE (EJS_OP_POP):
             ejs->result = pop(ejs);
+            mprAssert(ejs->result != (void*) 0xf7f7f7f7f7f7f7f7);
             mprAssert(ejs->exception || ejs->result);
             BREAK;
 
@@ -33773,8 +33774,8 @@ static EjsWebControl *webControl;
 #endif
 
 #if AUTO_COMPILE
-static int  compile(EjsWeb *web, cchar *compiler, cchar *kind, cchar *name);
-static char *locateCompiler(EjsWeb *web);
+static int  compile(EjsWeb *web, cchar *shell, cchar *kind, cchar *name);
+static char *locateShell(EjsWeb *web);
 #endif
 
 static void createCookie(Ejs *ejs, EjsVar *cookies, cchar *name, cchar *value, cchar *domain, cchar *path);
@@ -34238,11 +34239,11 @@ static int loadComponent(EjsWeb *web, cchar *kind, cchar *name, cchar *sourceExt
 
 #if AUTO_COMPILE
 /*
- *  Find the ejsweb program
+ *  Find the ejs program
  */
-static char *locateCompiler(EjsWeb *web)
+static char *locateShell(EjsWeb *web)
 {
-    return mprSearchPath(web, EJS_EJSWEB_EXE, MPR_SEARCH_EXE, 
+    return mprSearchPath(web, EJS_EJS_EXE, MPR_SEARCH_EXE, 
         mprGetAppDir(web),      //  Search in same dir as application (or override module path) (Windows)
 #if BLD_DEBUG && !WIN
         BLD_ABS_BIN_DIR,
@@ -34258,25 +34259,27 @@ static char *locateCompiler(EjsWeb *web)
 /*
  *  Compile a component into a loadable module. Return true if the compile succeeded.
  */
-static int compile(EjsWeb *web, cchar *compiler, cchar *kind, cchar *name)
+static int compile(EjsWeb *web, cchar *shell, cchar *kind, cchar *name)
 {
     Ejs         *ejs;
     MprCmd      *cmd;
-    char        *commandLine, *err;
+    char        *commandLine, *err, *dir, *ejsweb;
     int         status;
 
     cmd = mprCreateCmd(web);
     mprSetCmdDir(cmd, web->appDir);
 
+    dir = mprGetPathDir(web, shell);
+    ejsweb = mprJoinPath(web, dir, EJS_EJSWEB_EXE);
+
     if (strcmp(kind, "view") == 0) {
         name = mprJoinPath(cmd, "views", name);
     }
     if (strcmp(kind, "app") == 0) {
-        commandLine = mprAsprintf(web, -1, "\"%s\" --quiet compile app", compiler);
+        commandLine = mprAsprintf(web, -1, "\"%s\" \"%s\"--quiet compile app", shell, ejsweb);
     } else {
-        commandLine = mprAsprintf(web, -1, "\"%s\" --quiet compile %s \"%s\"", compiler, kind, name);
+        commandLine = mprAsprintf(web, -1, "\"%s\" \"%s\"--quiet compile %s \"%s\"", shell, ejsweb, kind, name);
     }
-
     ejs = (web->ejs->master) ? web->ejs->master : web->ejs;
 
     /*
@@ -34311,7 +34314,7 @@ static int build(EjsWeb *web, cchar *kind, cchar *name, cchar *module, cchar *so
 #if AUTO_COMPILE
 {
     MprPath     sourceInfo;
-    char        *source, *compiler;
+    char        *source, *shell;
 
     if (strcmp(kind, "app") == 0) {
         source = mprJoinPath(web, web->appDir, "src/App.es");
@@ -34335,15 +34338,15 @@ static int build(EjsWeb *web, cchar *kind, cchar *name, cchar *module, cchar *so
 
     } else {
         /* Either module out of date or not present with source present or forced rebuild */
-        if ((compiler = locateCompiler(web)) == 0) {
+        if ((shell = locateShell(web)) == 0) {
             if (!moduleInfo.valid) {
-                mprError(web, "Can't find compiler: %s to compile %s", EJS_EJSWEB_EXE, source);
+                mprError(web, "Can't find shell: %s to compile %s", EJS_EJSWEB_EXE, source);
                 return MPR_ERR_CANT_ACCESS;
             }
-            mprLog(web, 5, "Using module %s - missing compiler", module);
-            /* Use existing module even though out of date -- no compiler */
+            mprLog(web, 5, "Using module %s - missing shell", module);
+            /* Use existing module even though out of date -- no shell */
 
-        } else if (compile(web, compiler, kind, name) != 0) {
+        } else if (compile(web, shell, kind, name) != 0) {
             rc = MPR_ERR_BAD_STATE;
         }
     }
