@@ -6138,6 +6138,7 @@ typedef struct MprUri {
     int         port;                   /**< Port number */
     char        *url;                   /**< Url path name (without scheme, host, query or fragements) */
     char        *ext;                   /**< Document extension */
+    char        *reference;             /**< Reference fragment */
     char        *query;                 /**< Query string */
     bool        secure;                 /**< Using https */
 } MprUri;
