@@ -24,7 +24,7 @@
 /**
  *  ejsweb.c - Ejs Web Framework Application Manager and Generator
  *
- *  This is provided for windows to make it easier to run the ejsweb.es script.
+ *  This command is now deprecated. Windows uses ejs.cmd.
  *
  *  Copyright (c) All Rights Reserved. See details at the end of the file.
  */

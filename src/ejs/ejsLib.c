@@ -34294,15 +34294,15 @@ static int compile(EjsWeb *web, cchar *shell, cchar *kind, cchar *name)
     mprSetCmdDir(cmd, web->appDir);
 
     dir = mprGetPathDir(web, shell);
-    ejsweb = mprJoinPath(web, dir, EJS_EJSWEB_EXE);
+    ejsweb = mprJoinPath(web, dir, EJS_EJSWEB);
 
     if (strcmp(kind, "view") == 0) {
         name = mprJoinPath(cmd, "views", name);
     }
     if (strcmp(kind, "app") == 0) {
-        commandLine = mprAsprintf(web, -1, "\"%s\" \"%s\"--quiet compile app", shell, ejsweb);
+        commandLine = mprAsprintf(web, -1, "\"%s\" \"%s\" --quiet compile app", shell, ejsweb);
     } else {
-        commandLine = mprAsprintf(web, -1, "\"%s\" \"%s\"--quiet compile %s \"%s\"", shell, ejsweb, kind, name);
+        commandLine = mprAsprintf(web, -1, "\"%s\" \"%s\" --quiet compile %s \"%s\"", shell, ejsweb, kind, name);
     }
     ejs = (web->ejs->master) ? web->ejs->master : web->ejs;
 
