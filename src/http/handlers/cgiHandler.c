@@ -712,12 +712,12 @@ static void buildArgs(MaConn *conn, MprCmd *cmd, int *argcp, char ***argvp)
         actionProgram = maGetMimeActionProgram(req->host, req->mimeType);
         if (actionProgram != 0) {
             argc++;
-            /*
-             *  This is an Apache compatible hack
-             */
-            mprItoa(status, sizeof(status), MPR_HTTP_CODE_MOVED_TEMPORARILY, 10);
-            mprAddHash(req->headers, "REDIRECT_STATUS", status);
         }
+        /*
+         *  This is an Apache compatible hack for PHP 5.3
+         */
+        mprItoa(status, sizeof(status), MPR_HTTP_CODE_MOVED_TEMPORARILY, 10);
+        mprAddHash(req->headers, "REDIRECT_STATUS", status);
     }
 
     /*
