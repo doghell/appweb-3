@@ -1,44 +1,0 @@
-Tejs.mod
-v7
-r0
-t292868214.440062
-cCheck dependencies
-cPhaseScriptExecution "Run Script" /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejs.mod.build/Script-C97623860FD06C9E009C78E1.sh
-
-N/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/../../../src/ejs/ejs.es
-c000000004BBF97CB000000000008F8B2
-t1270847435
-s587954
-
-N/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod
-t1271175205
-s251035
-
-N/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejs.mod.build/Script-C97623860FD06C9E009C78E1.sh
-c000000004BC498240000000000000177
-t1271175204
-s375
-
-CCheck dependencies
-r0
-lSLF07#2@18"Check dependencies292868214#292868214#0(0"0(0#1#0"4300885448#0"0#
-
-CPhaseScriptExecution "Run Script" /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejs.mod.build/Script-C97623860FD06C9E009C78E1.sh
-s292868004.940868
-e292868006.443768
-r1
-xPhaseScriptExecution
-xRun Script
-x/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejs.mod.build/Script-C97623860FD06C9E009C78E1.sh
-o+ export PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
-o+ PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
-o+ export DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:
-o+ DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:
-o+ cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/../../../src/ejs
-o+ FILES=ejs.es
-o+ TARGET=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod
-o+ ajsc --debug --optimize 9 --bind --empty --out /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod ejs.es
-o+ ajsmod --showDebug --empty --showBuiltin --listing --out ../include/ejs.slots.h /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod
-o+ set +x
-lSLF07#2@36"Run custom shell script 'Run Script'292868004#292868006#0(917"+ export PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin+ PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin+ export DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:+ DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:+ cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/../../../src/ejs+ FILES=ejs.es+ TARGET=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod+ ajsc --debug --optimize 9 --bind --empty --out /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod ejs.es+ ajsmod --showDebug --empty --showBuiltin --listing --out ../include/ejs.slots.h /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod+ set +x10(13@131"+ export PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin292868005#0#131#0(1@0"0(13@124"+ PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin292868005#131#124#0(1@0"0(13@96"+ export DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:292868005#255#96#0(1@0"0(13@89"+ DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:292868005#351#89#0(1@0"0(13@78"+ cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/../../../src/ejs292868005#440#78#0(1@0"0(13@15"+ FILES=ejs.es292868005#518#15#0(1@0"0(13@85"+ TARGET=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod292868005#533#85#0(1@0"0(13@132"+ ajsc --debug --optimize 9 --bind --empty --out /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod ejs.es292868005#618#132#0(1@0"0(13@158"+ ajsmod --showDebug --empty --showBuiltin --listing --out ../include/ejs.slots.h /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajs.mod292868005#750#158#0(1@0"0(13@9"+ set +x292868006#908#9#0(1@0"0(0#0#0"4300885448#212"    cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all    /bin/sh -c /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejs.mod.build/Script-C97623860FD06C9E009C78E1.sh0#
-

@@ -1,48 +1,0 @@
-Tejsweb.mod
-v7
-r0
-t292868214.515948
-cCheck dependencies
-cPhaseScriptExecution "Run Script" /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejsweb.mod.build/Script-C90A197A0FD6D866006A9E86.sh
-
-N/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/../../../src/ejs/ejsweb.es
-c000000004BC162870000000000010127
-t1270964871
-s65831
-
-N/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajsweb.mod
-t1271175212
-s81638
-
-N/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejsweb.mod.build/Script-C90A197A0FD6D866006A9E86.sh
-c000000004BC4982C00000000000001CE
-t1271175212
-s462
-
-CCheck dependencies
-r0
-lSLF07#2@18"Check dependencies292868214#292868214#0(0"0(0#1#0"4300885448#0"0#
-
-CPhaseScriptExecution "Run Script" /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejsweb.mod.build/Script-C90A197A0FD6D866006A9E86.sh
-s292868012.027720
-e292868012.743833
-r1
-xPhaseScriptExecution
-xRun Script
-x/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejsweb.mod.build/Script-C90A197A0FD6D866006A9E86.sh
-o+ export PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
-o+ PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
-o+ export DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:
-o+ DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:
-o+ cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/../../../src/ejs
-o+ FILES=ejsweb.es
-o+ TARGET=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajsweb.mod
-o+ ajsc --debug --optimize 9 --bind --out /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajsweb.mod ejsweb.es
-o+ mkdir -p ../../lib/default-web
-o+ chmod -R +w ../../lib/default-web
-o+ cp -r default-web/ejs.css default-web/favicon.ico default-web/images default-web/index.ejs default-web/js default-web/layout.css default-web/themes ../../lib/default-web
-o+ chmod -R +w ../../lib/default-web
-o+ cp appweb.conf mime.types ../../lib
-o+ set +x
-lSLF07#2@36"Run custom shell script 'Run Script'292868012#292868012#0(1078"+ export PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin+ PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin+ export DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:+ DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:+ cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/../../../src/ejs+ FILES=ejsweb.es+ TARGET=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajsweb.mod+ ajsc --debug --optimize 9 --bind --out /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajsweb.mod ejsweb.es+ mkdir -p ../../lib/default-web+ chmod -R +w ../../lib/default-web+ cp -r default-web/ejs.css default-web/favicon.ico default-web/images default-web/index.ejs default-web/js default-web/layout.css default-web/themes ../../lib/default-web+ chmod -R +w ../../lib/default-web+ cp appweb.conf mime.types ../../lib+ set +x14(13@131"+ export PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin292868012#0#131#0(1@0"0(13@124"+ PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin292868012#131#124#0(1@0"0(13@96"+ export DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:292868012#255#96#0(1@0"0(13@89"+ DYLD_LIBRARY_PATH=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug:292868012#351#89#0(1@0"0(13@78"+ cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/../../../src/ejs292868012#440#78#0(1@0"0(13@18"+ FILES=ejsweb.es292868012#518#18#0(1@0"0(13@88"+ TARGET=/Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajsweb.mod292868012#536#88#0(1@0"0(13@130"+ ajsc --debug --optimize 9 --bind --out /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/ajsweb.mod ejsweb.es292868012#624#130#0(1@0"0(13@33"+ mkdir -p ../../lib/default-web292868012#754#33#0(1@0"0(13@36"+ chmod -R +w ../../lib/default-web292868012#787#36#0(1@0"0(13@172"+ cp -r default-web/ejs.css default-web/favicon.ico default-web/images default-web/index.ejs default-web/js default-web/layout.css default-web/themes ../../lib/default-web292868012#823#172#0(1@0"0(13@36"+ chmod -R +w ../../lib/default-web292868012#995#36#0(1@0"0(13@38"+ cp appweb.conf mime.types ../../lib292868012#1031#38#0(1@0"0(13@9"+ set +x292868012#1069#9#0(1@0"0(0#0#0"4300885448#215"    cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all    /bin/sh -c /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/appweb-all.build/Debug/ejsweb.mod.build/Script-C90A197A0FD6D866006A9E86.sh0#
-
