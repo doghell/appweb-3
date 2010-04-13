@@ -1,24 +1,0 @@
-Tclean
-v7
-r0
-t292868214.523084
-cCheck dependencies
-cExternalBuildToolExecution clean
-
-N/bin/sh
-c0000000049FF47FF0000000000148C60
-t1241466879
-s1346656
-
-CCheck dependencies
-r0
-lSLF07#2@18"Check dependencies292868214#292868214#0(0"0(0#1#0"4300885448#0"0#
-
-CExternalBuildToolExecution clean
-s292868214.517030
-e292868214.523036
-r1
-xExternalBuildToolExecution
-xclean
-lSLF07#2@23"Run external build tool292868214#292868214#0(0"0(0#0#0"4300885448#204"    cd /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all    setenv ACTION     /bin/sh -c "[ \"\" = clean ] && rm -f /Users/mob/git/appweb.stable/projects/MACOSX/appweb-all/build/Debug/*mod; true"0#
-
