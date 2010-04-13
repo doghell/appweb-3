@@ -71,3 +71,4 @@ Prefix: !!ORIG_BLD_SRC_PREFIX!!
 Source code for !!ORIG_BLD_NAME!!
 
 %files src -f srcFiles.txt
+
