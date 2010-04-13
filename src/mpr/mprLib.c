@@ -26923,24 +26923,15 @@ MprUri *mprParseUri(MprCtx ctx, cchar *uri)
         tok = urlTok;
     }
 
-    /*
-     *  Split off the query string.
-     */
+    if ((cp = strchr(tok, '#')) != NULL) {
+        *cp++ = '\0';
+        up->reference = cp;
+        tok = cp;
+    }
     if ((cp = strchr(tok, '?')) != NULL) {
         *cp++ = '\0';
         up->query = cp;
-        up->url = tok;
         tok = up->query;
-    }
-
-    /*
-     *  Split off fragment identifier.
-     */
-    if ((cp = strchr(tok, '#')) != NULL) {
-        *cp++ = '\0';
-        if (up->query && *up->query == 0) {
-            up->url = tok;
-        }
     }
 
     if ((cp = strrchr(up->url, '.')) != NULL) {
