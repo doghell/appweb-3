@@ -56,3 +56,12 @@ lib/appweb.conf
 lib/default-web
 lib/mime.types
 *.tmp
+releases/*.gz
+releases/*.rpm
+releases/*.zip
+releases/*.txt
+*.so
+staging
+.rpmmacros
+all/*.c
+src/server/appweb.conf
