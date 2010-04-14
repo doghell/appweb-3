@@ -11,7 +11,6 @@ static EjsVar *countdown(Ejs *ejs, EjsVar *vp, int argc, EjsVar **argv)
 }
 
 
-
 MprModule *acmeModuleInit(Ejs *ejs)
 {
     MprModule   *module;
@@ -20,8 +19,7 @@ MprModule *acmeModuleInit(Ejs *ejs)
 
     mprBreakpoint();
     mprLog(ejs, 1, "Loading Acme module");
-    module = mprCreateModule(ejs, "acme", BLD_VERSION, 0, 0, 0);
-    if (module == 0) {
+    if ((module = mprCreateModule(ejs, "acme", BLD_VERSION, 0, 0, 0)) == 0) {
         return 0;
     }
     type = (EjsType*) ejsGetPropertyByName(ejs, ejs->global, ejsName(&qname, "Acme", "Rocket"));
