@@ -9136,6 +9136,12 @@ void mprSetCmdDir(MprCmd *cmd, cchar *dir)
  */
 static int sanitizeArgs(MprCmd *cmd, int argc, char **argv, char **env)
 {
+#if VXWORKS
+    cmd->argv = argv;
+    cmd->argc = argc;
+    cmd->env = 0;
+#endif
+
 #if BLD_UNIX_LIKE
     char    *cp;
     int     index, i, hasPath, hasLibPath;
@@ -17467,8 +17473,8 @@ char *mprGetNormalizedPath(MprCtx ctx, cchar *pathArg)
     char            *dupPath, *path, *sp, *dp, *mark, **segments;
     int             addSep, i, segmentCount, hasDot, len, last, sep;
 
-    if (pathArg == 0 || pathArg == '\0') {
-        return mprStrdup(ctx, ".");
+    if (pathArg == 0 || *pathArg == '\0') {
+        return mprStrdup(ctx, "");
     }
 
     fs = mprLookupFileSystem(ctx, pathArg);
