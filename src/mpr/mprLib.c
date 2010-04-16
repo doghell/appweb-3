@@ -17467,8 +17467,8 @@ char *mprGetNormalizedPath(MprCtx ctx, cchar *pathArg)
     char            *dupPath, *path, *sp, *dp, *mark, **segments;
     int             addSep, i, segmentCount, hasDot, len, last, sep;
 
-    if (pathArg == 0 || pathArg == '\0') {
-        return mprStrdup(ctx, ".");
+    if (pathArg == 0 || *pathArg == '\0') {
+        return mprStrdup(ctx, "");
     }
 
     fs = mprLookupFileSystem(ctx, pathArg);
