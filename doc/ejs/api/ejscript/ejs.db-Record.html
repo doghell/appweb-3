@@ -498,7 +498,7 @@ one of the <a href='#find'>find</a> methods.</dd></dl>
 <p>Run an SQL statement and return selected records.</p>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>cmd: <a href='intrinsic-String.html'>String</a> </td><td>SQL command to issue.</td></tr><tr class='param'><td class='param'>count: <a href='intrinsic-Number.html'>Number</a> </td><td> [default: null]</td></tr></table></dd>
+<tr class='param'><td class='param'>cmd: <a href='intrinsic-String.html'>String</a> </td><td>SQL command to issue. Note: "SELECT" is automatically prepended and ";" is appended for you.</td></tr><tr class='param'><td class='param'>count: <a href='intrinsic-Number.html'>Number</a> </td><td> [default: null]</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>An array of objects. Each object represents a matching row with fields for each column.</dd></dl>
 </div>

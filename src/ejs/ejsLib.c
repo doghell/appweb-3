@@ -5843,7 +5843,7 @@ static EjsName getFunctionPropertyName(Ejs *ejs, EjsFunction *fun, int slotNum)
 {
     EjsName     qname;
 
-    if ((ejs->flags & EJS_FLAG_COMPILER) || fun->loading || fun->isFrame) {
+    if ((ejs->flags & EJS_FLAG_COMPILER) || fun->loading || fun->isFrame || fun->properties == 0) {
         return (ejs->objectHelpers->getPropertyName)(ejs, (EjsVar*) fun, slotNum);
     } else {
         return (ejs->objectHelpers->getPropertyName)(ejs, (EjsVar*) fun->properties, slotNum);

@@ -114,7 +114,7 @@ determination failed.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#copy'><b>copy</b></a>(target: <a href='intrinsic-Object.html'>Object</a>, options: <a href='intrinsic-Object.html'>Object</a> = null): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Copy a file.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#endsWith'><b>endsWith</b></a>(suffix: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Return true if the path ends with the given suffix.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#files'><b>files</b></a>(enumDirs: <a href='intrinsic-Boolean.html'>Boolean</a> = false): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get a list of files in a directory.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#find'><b>find</b></a>(glob: <a href='intrinsic-String.html'>String</a> = null , recurse: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Find matching files.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#find'><b>find</b></a>(glob: <a href='intrinsic-String.html'>String</a> = * , recurse: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Find matching files.</td></tr>
    <tr class='apiDef'><td class='apiType'>iterator override </td><td><a href='#get'><b>get</b></a>(): <a href='iterator-Iterator.html'>Iterator</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get iterate over any files contained under this path (assuming it is a directory) "for (v in files)".</td></tr>
    <tr class='apiDef'><td class='apiType'>iterator override </td><td><a href='#getValues'><b>getValues</b></a>(): <a href='iterator-Iterator.html'>Iterator</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get an iterator for this file to be used by "for each (v in obj)".</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#join'><b>join</b></a>(other: <a href='intrinsic-Array.html'>Array</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Join paths.</td></tr>
@@ -221,14 +221,14 @@ use find().</dd></dl>
 <hr />
 <a name='find'></a>
 <div class='api'>
-<div class='apiSig'>  public  find(glob: <a href='intrinsic-String.html'>String</a> = null , recurse: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Array.html'>Array</a>
+<div class='apiSig'>  public  find(glob: <a href='intrinsic-String.html'>String</a> = * , recurse: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Array.html'>Array</a>
 </div>
 <div class='apiDetail'>
 <p>Find matching files.</p>
 <dl><dt>Description</dt><dd>Files are listed in depth first order.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>glob: <a href='intrinsic-String.html'>String</a> </td><td>Glob style Pattern that files must match. This is similar to a ls() style pattern. [default: null ]</td></tr><tr class='param'><td class='param'>recurse: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>Set to true to examine sub-directories. [default: true]</td></tr></table></dd>
+<tr class='param'><td class='param'>glob: <a href='intrinsic-String.html'>String</a> </td><td>Glob style Pattern that files must match. This is similar to a ls() style pattern. [default: * ]</td></tr><tr class='param'><td class='param'>recurse: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>Set to true to examine sub-directories. [default: true]</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>Return a list of matching files.</dd></dl>
 </div>
