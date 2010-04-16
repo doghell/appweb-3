@@ -1371,11 +1371,12 @@
 #define ES_XML__initializer__XML_initializer                           7
 #define ES_XML_load                                                    8
 #define ES_XML_save                                                    9
-#define ES_XML_attributes                                              10
-#define ES_XML_elements                                                11
-#define ES_XML_name                                                    12
-#define ES_XML_parent                                                  13
-#define ES_XML_NUM_CLASS_PROP                                          14
+#define ES_XML_attribute                                               10
+#define ES_XML_attributes                                              11
+#define ES_XML_elements                                                12
+#define ES_XML_name                                                    13
+#define ES_XML_parent                                                  14
+#define ES_XML_NUM_CLASS_PROP                                          15
 
 /**
  * Instance slots for "XML" type 
@@ -1389,7 +1390,7 @@
 #define ES_XML_XML_value                                               0
 #define ES_XML_load_filename                                           0
 #define ES_XML_save_filename                                           0
-#define ES_XML_attributes_name                                         0
+#define ES_XML_attribute_name                                          0
 #define ES_XML_elements_name                                           0
 
 
@@ -1398,15 +1399,26 @@
  */
 #define ES_XMLList__origin                                             6
 #define ES_XMLList_XMLList                                             6
-#define ES_XMLList_name                                                7
-#define ES_XMLList_NUM_CLASS_PROP                                      8
+#define ES_XMLList_attribute                                           7
+#define ES_XMLList_attributes                                          8
+#define ES_XMLList_elements                                            9
+#define ES_XMLList_name                                                10
+#define ES_XMLList_parent                                              11
+#define ES_XMLList_NUM_CLASS_PROP                                      12
 
 /**
  * Instance slots for "XMLList" type 
  */
 #define ES_XMLList_NUM_INSTANCE_PROP                                   0
 
-#define _ES_CHECKSUM_ejs 483929
+/**
+ * 
+ *    Local slots for methods in type XMLList 
+ */
+#define ES_XMLList_attribute_name                                      0
+#define ES_XMLList_elements_name                                       0
+
+#define _ES_CHECKSUM_ejs 489388
 
 #endif
 /*
@@ -2425,7 +2437,7 @@
 #define ES_ejs_io_Http_NotAuthoritative                                12
 #define ES_ejs_io_Http_NoContent                                       13
 #define ES_ejs_io_Http_Reset                                           14
-#define ES_ejs_io_Http_Partial                                         15
+#define ES_ejs_io_Http_PartialContent                                  15
 #define ES_ejs_io_Http_MultipleChoice                                  16
 #define ES_ejs_io_Http_MovedPermanently                                17
 #define ES_ejs_io_Http_MovedTemporarily                                18
@@ -2438,79 +2450,80 @@
 #define ES_ejs_io_Http_Forbidden                                       25
 #define ES_ejs_io_Http_NotFound                                        26
 #define ES_ejs_io_Http_BadMethod                                       27
-#define ES_ejs_io_Http_NotAccepted                                     28
-#define ES_ejs_io_Http_ProxyAuth                                       29
-#define ES_ejs_io_Http_ClientTimeout                                   30
+#define ES_ejs_io_Http_NotAcceptable                                   28
+#define ES_ejs_io_Http_ProxyAuthRequired                               29
+#define ES_ejs_io_Http_RequestTimeout                                  30
 #define ES_ejs_io_Http_Conflict                                        31
 #define ES_ejs_io_Http_Gone                                            32
 #define ES_ejs_io_Http_LengthRequired                                  33
 #define ES_ejs_io_Http_PrecondFailed                                   34
 #define ES_ejs_io_Http_EntityTooLarge                                  35
-#define ES_ejs_io_Http_ReqTooLong                                      36
-#define ES_ejs_io_Http_UnsupportedType                                 37
-#define ES_ejs_io_Http_ServerError                                     38
-#define ES_ejs_io_Http_NotImplemented                                  39
-#define ES_ejs_io_Http_BadGateway                                      40
-#define ES_ejs_io_Http_Unavailable                                     41
-#define ES_ejs_io_Http_GatewayTimeout                                  42
-#define ES_ejs_io_Http_Version                                         43
-#define ES_ejs_io_Http_Read                                            44
-#define ES_ejs_io_Http_Write                                           45
-#define ES_ejs_io_Http_addHeader                                       46
-#define ES_ejs_io_Http_available                                       47
-#define ES_ejs_io_Http_chunked                                         48
-#define ES_ejs_io_Http_set_chunked                                     49
-#define ES_ejs_io_Http_close                                           50
-#define ES_ejs_io_Http_connect                                         51
-#define ES_ejs_io_Http_certificate                                     52
-#define ES_ejs_io_Http_set_certificate                                 53
-#define ES_ejs_io_Http_code                                            54
-#define ES_ejs_io_Http_codeString                                      55
-#define ES_ejs_io_Http_contentEncoding                                 56
-#define ES_ejs_io_Http_contentLength                                   57
-#define ES_ejs_io_Http_set_contentLength                               58
-#define ES_ejs_io_Http_bodyLength                                      59
-#define ES_ejs_io_Http_set_bodyLength                                  60
-#define ES_ejs_io_Http_contentType                                     61
-#define ES_ejs_io_Http_date                                            62
-#define ES_ejs_io_Http_del                                             63
-#define ES_ejs_io_Http_expires                                         64
-#define ES_ejs_io_Http_flush                                           65
-#define ES_ejs_io_Http_followRedirects                                 66
-#define ES_ejs_io_Http_set_followRedirects                             67
-#define ES_ejs_io_Http_form                                            68
-#define ES_ejs_io_Http_get                                             69
-#define ES_ejs_io_Http_head                                            70
-#define ES_ejs_io_Http_header                                          71
-#define ES_ejs_io_Http_headers                                         72
-#define ES_ejs_io_Http_isSecure                                        73
-#define ES_ejs_io_Http_key                                             74
-#define ES_ejs_io_Http_set_key                                         75
-#define ES_ejs_io_Http_lastModified                                    76
-#define ES_ejs_io_Http_method                                          77
-#define ES_ejs_io_Http_set_method                                      78
-#define ES_ejs_io_Http_mimeType                                        79
-#define ES_ejs_io_Http_options                                         80
-#define ES_ejs_io_Http_post                                            81
-#define ES_ejs_io_Http_put                                             82
-#define ES_ejs_io_Http_read                                            83
-#define ES_ejs_io_Http_readString                                      84
-#define ES_ejs_io_Http_readLines                                       85
-#define ES_ejs_io_Http_readXml                                         86
-#define ES_ejs_io_Http_response                                        87
-#define ES_ejs_io_Http_retries                                         88
-#define ES_ejs_io_Http_set_retries                                     89
-#define ES_ejs_io_Http_setCallback                                     90
-#define ES_ejs_io_Http_setCredentials                                  91
-#define ES_ejs_io_Http_timeout                                         92
-#define ES_ejs_io_Http_set_timeout                                     93
-#define ES_ejs_io_Http_trace                                           94
-#define ES_ejs_io_Http_upload                                          95
-#define ES_ejs_io_Http_uri                                             96
-#define ES_ejs_io_Http_set_uri                                         97
-#define ES_ejs_io_Http_wait                                            98
-#define ES_ejs_io_Http_write                                           99
-#define ES_ejs_io_Http_NUM_CLASS_PROP                                  100
+#define ES_ejs_io_Http_UriTooLong                                      36
+#define ES_ejs_io_Http_UnsupportedMedia                                37
+#define ES_ejs_io_Http_BadRange                                        38
+#define ES_ejs_io_Http_ServerError                                     39
+#define ES_ejs_io_Http_NotImplemented                                  40
+#define ES_ejs_io_Http_BadGateway                                      41
+#define ES_ejs_io_Http_ServiceUnavailable                              42
+#define ES_ejs_io_Http_GatewayTimeout                                  43
+#define ES_ejs_io_Http_VersionNotSupported                             44
+#define ES_ejs_io_Http_Read                                            45
+#define ES_ejs_io_Http_Write                                           46
+#define ES_ejs_io_Http_addHeader                                       47
+#define ES_ejs_io_Http_available                                       48
+#define ES_ejs_io_Http_chunked                                         49
+#define ES_ejs_io_Http_set_chunked                                     50
+#define ES_ejs_io_Http_close                                           51
+#define ES_ejs_io_Http_connect                                         52
+#define ES_ejs_io_Http_certificate                                     53
+#define ES_ejs_io_Http_set_certificate                                 54
+#define ES_ejs_io_Http_code                                            55
+#define ES_ejs_io_Http_codeString                                      56
+#define ES_ejs_io_Http_contentEncoding                                 57
+#define ES_ejs_io_Http_contentLength                                   58
+#define ES_ejs_io_Http_set_contentLength                               59
+#define ES_ejs_io_Http_bodyLength                                      60
+#define ES_ejs_io_Http_set_bodyLength                                  61
+#define ES_ejs_io_Http_contentType                                     62
+#define ES_ejs_io_Http_date                                            63
+#define ES_ejs_io_Http_del                                             64
+#define ES_ejs_io_Http_expires                                         65
+#define ES_ejs_io_Http_flush                                           66
+#define ES_ejs_io_Http_followRedirects                                 67
+#define ES_ejs_io_Http_set_followRedirects                             68
+#define ES_ejs_io_Http_form                                            69
+#define ES_ejs_io_Http_get                                             70
+#define ES_ejs_io_Http_head                                            71
+#define ES_ejs_io_Http_header                                          72
+#define ES_ejs_io_Http_headers                                         73
+#define ES_ejs_io_Http_isSecure                                        74
+#define ES_ejs_io_Http_key                                             75
+#define ES_ejs_io_Http_set_key                                         76
+#define ES_ejs_io_Http_lastModified                                    77
+#define ES_ejs_io_Http_method                                          78
+#define ES_ejs_io_Http_set_method                                      79
+#define ES_ejs_io_Http_mimeType                                        80
+#define ES_ejs_io_Http_options                                         81
+#define ES_ejs_io_Http_post                                            82
+#define ES_ejs_io_Http_put                                             83
+#define ES_ejs_io_Http_read                                            84
+#define ES_ejs_io_Http_readString                                      85
+#define ES_ejs_io_Http_readLines                                       86
+#define ES_ejs_io_Http_readXml                                         87
+#define ES_ejs_io_Http_response                                        88
+#define ES_ejs_io_Http_retries                                         89
+#define ES_ejs_io_Http_set_retries                                     90
+#define ES_ejs_io_Http_setCallback                                     91
+#define ES_ejs_io_Http_setCredentials                                  92
+#define ES_ejs_io_Http_timeout                                         93
+#define ES_ejs_io_Http_set_timeout                                     94
+#define ES_ejs_io_Http_trace                                           95
+#define ES_ejs_io_Http_upload                                          96
+#define ES_ejs_io_Http_uri                                             97
+#define ES_ejs_io_Http_set_uri                                         98
+#define ES_ejs_io_Http_wait                                            99
+#define ES_ejs_io_Http_write                                           100
+#define ES_ejs_io_Http_NUM_CLASS_PROP                                  101
 
 /**
  * Instance slots for "Http" type 
@@ -2569,7 +2582,7 @@
 #define ES_ejs_io_Http_upload_boundary                                 3
 #define ES_ejs_io_Http_upload_buf                                      4
 #define ES_ejs_io_Http_upload_http                                     5
-#define ES_ejs_io_Http_upload___fun_12912__                            6
+#define ES_ejs_io_Http_upload___fun_12918__                            6
 #define ES_ejs_io_Http_upload__hoisted_7_key                           7
 #define ES_ejs_io_Http_upload__hoisted_8_key                           8
 #define ES_ejs_io_Http_set_uri_newUri                                  0
@@ -2837,7 +2850,7 @@
 #define ES_ejs_io_XMLHttp_callback_hp                                  1
 #define ES_ejs_io_XMLHttp_callback_count                               2
 
-#define _ES_CHECKSUM_ejs_io 349365
+#define _ES_CHECKSUM_ejs_io 354195
 
 #endif
 /*
@@ -3907,11 +3920,11 @@
 #define ES_ejs_web_View_ejs_web_getValue_fmt                           5
 #define ES_ejs_web_View_ejs_web_getValue__hoisted_6_part               6
 #define ES_ejs_web_View_ejs_web_date_fmt                               0
-#define ES_ejs_web_View_ejs_web_date___fun_26202__                     1
+#define ES_ejs_web_View_ejs_web_date___fun_26208__                     1
 #define ES_ejs_web_View_ejs_web_currency_fmt                           0
-#define ES_ejs_web_View_ejs_web_currency___fun_26236__                 1
+#define ES_ejs_web_View_ejs_web_currency___fun_26242__                 1
 #define ES_ejs_web_View_ejs_web_number_fmt                             0
-#define ES_ejs_web_View_ejs_web_number___fun_26266__                   1
+#define ES_ejs_web_View_ejs_web_number___fun_26272__                   1
 #define ES_ejs_web_View_ejs_web_getOptions_options                     0
 #define ES_ejs_web_View_ejs_web_getOptions_result                      1
 #define ES_ejs_web_View_ejs_web_getOptions__hoisted_2_option           2
