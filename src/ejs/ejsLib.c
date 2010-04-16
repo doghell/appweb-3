@@ -8533,7 +8533,7 @@ static EjsVar *nextNumber(Ejs *ejs, EjsIterator *ip, int argc, EjsVar **argv)
 
 
 /*
-    function integral(size: Number: 32): Number
+    function integral(size: Number = 32): Number
  */
 static EjsVar *integral(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
@@ -8544,7 +8544,8 @@ static EjsVar *integral(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 
     result = ((int64) np->value);
     if (size < 64) {
-        mask = (1 << size) - 1;
+        mask = 1;
+        mask = (mask << size) - 1;
         result &= mask;
     }
     return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) result);
