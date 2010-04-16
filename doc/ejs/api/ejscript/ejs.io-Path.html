@@ -85,7 +85,8 @@ value is not converted to an absolute path.</td></tr>
 <a name='parent'></a>
    <tr><td nowrap align='left'>public get </td><td>parent</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The parent directory of path. This may be an absolute path if there are no parent directories in the path.</td></tr>
 <a name='perms'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>perms</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The file permissions of a path. Set to the Posix style permissions mask or null if the file does not exist.</td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>perms</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The file permissions of a path. This number contains the Posix style permissions value or null if the file 
+does not exist. NOTE: this is not a string representation of an octal posix mask.</td></tr>
 <a name='portable'></a>
    <tr><td nowrap align='left'>public get </td><td>portable</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The path in a portable (like Unix) representation. This uses "/" separators. The value is is normalized and 
 the separators are mapped to "/".</td></tr>

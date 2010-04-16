@@ -3490,11 +3490,11 @@ module ejs {
         use default namespace public
 
         /**
-         *  Clone the array and all its elements.
+         *  Clone the object and all its elements.
          *  @param deep If true, do a deep copy where all object references are also copied, and so on, recursively.
          *  @spec ejs
          */
-        native function clone(deep: Boolean = true) : Array
+        native function clone(deep: Boolean = true): Object
 
         /**
          *  Get an iterator for this object to be used by "for (v in obj)"
@@ -7396,7 +7396,8 @@ module ejs.io {
          *      Options can be either a mode string or can be an options hash. 
          *  @options mode optional file access mode string. Use "r" for read, "w" for write, "a" for append to existing
          *      content, "+" never truncate. Defaults to "r".
-         *  @options permissions optional Posix permissions number mask. Defaults to 0664.
+         *  @options permissions Number containing the Posix permissions value. Note: this is a number and not a string
+         *      representation of an octal posix number.
          *  @return the File object. This permits method chaining.
          *  @throws IOError if the path or file cannot be created.
          */
@@ -7558,8 +7559,7 @@ module ejs.io {
         native function FileSystem(path: Object)
 
         /**
-         *  Do path names have drive specifications (C:).
-         *  @return True if the file path has a drive spec
+         *  Do path names on this file system support drive specifications.
          */
         native function get hasDrives(): Boolean 
 
@@ -7569,8 +7569,6 @@ module ejs.io {
         native function get newline(): String 
 
         /**
-         *  @duplicate FileSystem.newline
-         *  @param terminator the new line termination characters Usually "\n" or "\r\n"
          */
         native function set newline(terminator: String): Void
 
@@ -7585,8 +7583,6 @@ module ejs.io {
         native function get separators(): String 
 
         /**
-         *  @duplicate FileSystem.separators
-         *  @param sep the new path segment separators. Usually "/" or "/\\". The first characters is the default separator.
          */
         native function set separators(sep: String): Void 
     }
@@ -7654,47 +7650,195 @@ module ejs.io {
 
         use default namespace public
 
-        /** HTTP status code */     static const Continue           : Number    = 100
-        /** HTTP status code */     static const Ok                 : Number    = 200
-        /** HTTP status code */     static const Created            : Number    = 201
-        /** HTTP status code */     static const Accepted           : Number    = 202
-        /** HTTP status code */     static const NotAuthoritative   : Number    = 203
-        /** HTTP status code */     static const NoContent          : Number    = 204
-        /** HTTP status code */     static const Reset              : Number    = 205
-        /** HTTP status code */     static const Partial            : Number    = 206
-        /** HTTP status code */     static const MultipleChoice     : Number    = 300
-        /** HTTP status code */     static const MovedPermanently   : Number    = 301
-        /** HTTP status code */     static const MovedTemporarily   : Number    = 302
-        /** HTTP status code */     static const SeeOther           : Number    = 303
-        /** HTTP status code */     static const NotModified        : Number    = 304
-        /** HTTP status code */     static const UseProxy           : Number    = 305
-        /** HTTP status code */     static const BadRequest         : Number    = 400
-        /** HTTP status code */     static const Unauthorized       : Number    = 401
-        /** HTTP status code */     static const PaymentRequired    : Number    = 402
-        /** HTTP status code */     static const Forbidden          : Number    = 403
-        /** HTTP status code */     static const NotFound           : Number    = 404
-        /** HTTP status code */     static const BadMethod          : Number    = 405
-        /** HTTP status code */     static const NotAccepted        : Number    = 406
-        /** HTTP status code */     static const ProxyAuth          : Number    = 407
-        /** HTTP status code */     static const ClientTimeout      : Number    = 408
-        /** HTTP status code */     static const Conflict           : Number    = 409
-        /** HTTP status code */     static const Gone               : Number    = 410
-        /** HTTP status code */     static const LengthRequired     : Number    = 411
-        /** HTTP status code */     static const PrecondFailed      : Number    = 412
-        /** HTTP status code */     static const EntityTooLarge     : Number    = 413
-        /** HTTP status code */     static const ReqTooLong         : Number    = 414
-        /** HTTP status code */     static const UnsupportedType    : Number    = 415
-        /** HTTP status code */     static const ServerError        : Number    = 500
-        /** HTTP status code */     static const NotImplemented     : Number    = 501
-        /** HTTP status code */     static const BadGateway         : Number    = 502
-        /** HTTP status code */     static const Unavailable        : Number    = 503
-        /** HTTP status code */     static const GatewayTimeout     : Number    = 504
-        /** HTTP status code */     static const Version            : Number    = 505
+        /** 
+          HTTP Continue Status (100)
+         */     
+        static const Continue : Number   = 100
+
+        /** 
+            HTTP Success Status (200) 
+         */     
+        static const Ok : Number   = 200
+
+        /** 
+            HTTP Created Status (201) 
+         */     
+        static const Created : Number   = 201
+
+        /** 
+            HTTP Accepted Status (202) 
+         */     
+        static const Accepted : Number   = 202
+
+        /** 
+            HTTP Non-Authoritative Information Status (203) 
+         */     
+        static const NotAuthoritative : Number   = 203
+
+        /** 
+            HTTP No Content Status (204)  
+         */     
+        static const NoContent : Number   = 204
+
+        /** 
+            HTTP Reset Content Status (205) 
+         */     
+        static const Reset : Number   = 205
+
+        /** 
+            HTTP Partial Content Status (206) 
+         */     
+        static const PartialContent : Number   = 206
+
+        /** 
+            HTTP Multiple Choices Status (300) 
+         */     
+        static const MultipleChoice : Number   = 300
+
+        /** 
+            HTTP Moved Permanently Status (301) 
+         */     
+        static const MovedPermanently : Number   = 301
+
+        /** 
+            HTTP Found but Moved Temporily Status (302) 
+         */     
+        static const MovedTemporarily : Number   = 302
+
+        /** 
+            HTTP See Other Status (303) 
+         */     
+        static const SeeOther : Number   = 303
+
+        /** 
+            HTTP Not Modified Status (304)     
+         */
+        static const NotModified : Number   = 304
+
+        /** 
+            HTTP Use Proxy Status (305) 
+         */     
+        static const UseProxy : Number   = 305
+
+        /** 
+            HTTP Bad Request Status(400) 
+         */     
+        static const BadRequest : Number   = 400
+
+        /** 
+            HTTP Unauthorized Status (401) 
+         */     
+        static const Unauthorized : Number   = 401
+
+        /** 
+            HTTP Payment Required Status (402) 
+         */     
+        static const PaymentRequired : Number   = 402
+
+        /** 
+            HTTP Forbidden Status (403)  
+         */     
+        static const Forbidden : Number   = 403
+
+        /** 
+            HTTP Not Found Status (404) 
+         */     
+        static const NotFound : Number   = 404
+
+        /** 
+            HTTP Method Not Allowed Status (405) 
+         */     
+        static const BadMethod : Number   = 405
+
+        /** 
+            HTTP Not Acceptable Status (406) 
+         */     
+        static const NotAcceptable : Number   = 406
+
+        /** 
+            HTTP ProxyAuthentication Required Status (407) 
+         */     
+        static const ProxyAuthRequired : Number   = 407
+
+        /** 
+            HTTP Request Timeout Status (408) 
+         */     
+        static const RequestTimeout : Number   = 408
+
+        /** 
+            HTTP Conflict Status (409) 
+         */     
+        static const Conflict : Number   = 409
+
+        /** 
+            HTTP Gone Status (410) 
+         */     
+        static const Gone : Number   = 410
+
+        /** 
+            HTTP Length Required Status (411) 
+         */     
+        static const LengthRequired : Number   = 411
+        
+        /** 
+            HTTP Precondition Failed Status (412) 
+         */     
+        static const PrecondFailed : Number   = 412
+
+        /** 
+            HTTP Request Entity Too Large Status (413) 
+         */     
+        static const EntityTooLarge : Number   = 413
+
+        /** 
+            HTTP Request URI Too Long Status (414)  
+         */     
+        static const UriTooLong : Number   = 414
+
+        /** 
+            HTTP Unsupported Media Type (415) 
+         */     
+        static const UnsupportedMedia : Number   = 415
+
+        /** 
+            HTTP Requested Range Not Satisfiable (416) 
+         */     
+        static const BadRange : Number   = 416
+
+        /** 
+            HTTP Server Error Status (500) 
+         */     
+        static const ServerError : Number   = 500
+
+        /** 
+            HTTP Not Implemented Status (501) 
+         */     
+        static const NotImplemented : Number   = 501
+
+        /** 
+            HTTP Bad Gateway Status (502) 
+         */     
+        static const BadGateway : Number   = 502
+
+        /** 
+            HTTP Service Unavailable Status (503) 
+         */     
+        static const ServiceUnavailable : Number   = 503
+
+        /** 
+            HTTP Gateway Timeout Status (504) 
+         */     
+        static const GatewayTimeout : Number   = 504
+
+        /** 
+            HTTP Http Version Not Supported Status (505) 
+         */     
+        static const VersionNotSupported: Number   = 505
 
         /**
             Callback event mask for readable events
          */
-        static const Read: Number  = 2
+        static const Read: Number = 2
 
         /**
             Callback event mask for writeable events
@@ -8553,15 +8697,12 @@ module ejs.io {
         native function get parent(): Path
 
         /**
-            The file permissions of a path. Set to the Posix style permissions mask or null if the file does not exist.
+            The file permissions of a path. This number contains the Posix style permissions value or null if the file 
+            does not exist. NOTE: this is not a string representation of an octal posix mask. 
          */
         native function get perms(): Number
 
-        /**
-            @duplicate Path.perms
-            @param perms the new Posix style permissions mask
-            @throws IOError if the path does not exist as a file.
-         */
+        /** */
         native function set perms(perms: Number): Void
 
         /**
@@ -14525,15 +14666,15 @@ module ejs {
          *  @param name The name to search on.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attribute(name: String): XMLList
+        function attribute(name: String): XMLList
+            this["@" + name]
 
         /**
          *  Get an XMLList containing all of the attributes of this object.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attributes(): XMLList
+        function attributes(): XMLList
+            this.@*
         
         /**
          *  Get an XMLList containing the list of children (properties) in this XML object with the given name.
@@ -14605,8 +14746,8 @@ module ejs {
          *  @param name The (optional) name to search on.
          *  @return The list of elements.
          */
-        # FUTURE
-        native function elements(name: String = "*"): XMLList
+        function elements(name: String = "*"): XMLList
+            this[name]
 
         /**
          *  Get an iterator for this node to be used by "for (v in node)"
@@ -14714,7 +14855,6 @@ module ejs {
          *  Get the parent of this XML object.
          *  @return The parent.
          */
-        # FUTURE
         native function parent(): XML
 
         /**
@@ -14912,15 +15052,15 @@ module ejs {
          *  @param name The name to search on.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attribute(name: String): XMLList
+        function attribute(name: String): XMLList
+            this["@" + name]
 
         /**
          *  Get an XMLList containing all of the attributes of this object.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attributes(): XMLList
+        function attributes(): XMLList
+            this.@*
 
         /**
          *  Get an XMLList containing the list of children (properties) in this XML object with the given name.
@@ -14991,8 +15131,8 @@ module ejs {
          *  @param name The (optional) name to search on.
          *  @return The list of elements.
          */
-        # FUTURE
-        native function elements(name: String = "*"): XMLList
+        function elements(name: String = "*"): XMLList
+            this[name]
 
         /**
          *  Get an iterator for this node to be used by "for (v in node)"
@@ -15103,7 +15243,6 @@ module ejs {
          *  Get the parent of this XML object.
          *  @return The parent.
          */
-        # FUTURE
         native function parent(): XML
 
         /**

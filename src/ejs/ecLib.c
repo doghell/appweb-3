@@ -5570,12 +5570,9 @@ static void genDo(EcCompiler *cp, EcNode *np)
         processNode(cp, np->forLoop.body);
         discardStackItems(cp, mark);
     }
-
     if (np->forLoop.cond) {
         np->forLoop.condCode = state->code = allocCodeBuffer(cp);
         processNode(cp, np->forLoop.cond);
-        /* Leaves one item on the stack */
-        mprAssert(state->code->stackCount == 1);
     }
 
     /*
@@ -13381,9 +13378,13 @@ struct EcNode *parseXMLAttributes(EcCompiler *cp, EcNode *np)
             return LEAVE(cp, expected(cp, "}"));
         }
 
-    } else while (tid == T_COLON || tid == T_ID) {
-        np = parseXMLAttribute(cp, np);
-        tid = peekToken(cp);
+    } else {
+        while (tid != T_GT && tid != T_SLASH_GT) {
+            if ((np = parseXMLAttribute(cp, np)) == 0) {
+                break;
+            }
+            tid = peekToken(cp);
+        }
     }
     return LEAVE(cp, np);
 }
@@ -13834,6 +13835,7 @@ static EcNode *parsePropertyOperator(EcCompiler *cp)
         case T_ID:
         case T_STRING:
         case T_RESERVED_NAMESPACE:
+        case T_MUL:
             if (cp->token->groupMask & G_RESERVED) {
                 np = appendNode(np, parseIdentifier(cp));
             } else {

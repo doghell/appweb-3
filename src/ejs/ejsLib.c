@@ -5276,10 +5276,16 @@ static EjsVar *date_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 static EjsVar *date_set_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
+    MprNumber   value;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
     tm.tm_year = ejsGetNumber(argv[0]) - 1900;
-    dp->value = mprMakeTime(ejs, &tm);
+    value = mprMakeTime(ejs, &tm);
+    if (value == -1) {
+        ejsThrowArgError(ejs, "Invalid year");
+    } else {
+        dp->value = value;
+    }
     return 0;
 }
 
@@ -20571,23 +20577,7 @@ static EjsVar   *loadXml(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 static EjsVar   *saveXml(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 static EjsVar   *xmlToString(Ejs *ejs, EjsVar *vp, int argc, EjsVar **argv);
 
-#if KEEP
-static EjsVar   *valueOf(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *toXmlString(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *appendChild(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *attributes(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *child(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *comments(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *decendants(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildAfter(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildBefore(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *replace(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *setName(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *text(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-
-#endif
+static EjsVar   *xml_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 
 static bool allDigitsForXml(cchar *name);
 static bool deepCompare(EjsXML *lhs, EjsXML *rhs);
@@ -21125,6 +21115,64 @@ static int setXmlPropertyByName(Ejs *ejs, EjsXML *xml, EjsName *qname, EjsVar *v
 }
 
 
+#if UNUSED
+/*
+    function attributes(name: String = "*"): XMLList
+ */
+static EjsVar *xml_attributes(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    EjsXML  *result;
+    EjsXML  *item;
+    cchar   *name;
+    int     next;
+
+    name = argc > 0 ? ejsGetString(argv[0]) : "*";
+
+    result = ejsCreateXMLList(ejs, xml, &xml->targetProperty);
+    if (xml->attributes) {
+        for (next = 0; (item = mprGetNextItem(xml->attributes, &next)) != 0; ) {
+            if (name[0] == '*' || strcmp(item->qname.name, name) == 0) {
+                result = ejsAppendToXML(ejs, result, item);
+            }
+        }
+    }
+    return (EjsVar*) result;
+}
+
+
+/*
+    function elements(name: String = "*"): XMLList
+ */
+static EjsVar *xml_elements(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    EjsXML  *result;
+    EjsXML  *item;
+    cchar   *name;
+    int     next;
+
+    name = argc > 0 ? ejsGetString(argv[0]) : "*";
+
+    result = ejsCreateXMLList(ejs, xml, &xml->targetProperty);
+    if (xml->elements) {
+        for (next = 0; (item = mprGetNextItem(xml->elements, &next)) != 0; ) {
+            if (name[0] == '*' || strcmp(item->qname.name, name) == 0) {
+                result = ejsAppendToXML(ejs, result, item);
+            }
+        }
+    }
+    return (EjsVar*) result;
+}
+#endif
+
+
+/*
+    function parent(): XML
+ */
+static EjsVar *xml_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    return xml->parent ? (EjsVar*) xml->parent : (EjsVar*) ejs->nullValue;
+}
+
 /*
  *  Deep compare
  */
@@ -21173,17 +21221,24 @@ EjsXML *ejsXMLDescendants(Ejs *ejs, EjsXML *xml, EjsName *qname)
     if (result == 0) {
         return 0;
     }
-
-    if (qname->name[0] == '@') {
+    if (qname->name[0] == '.' && qname->name[1] == '@') {
         if (xml->attributes) {
             for (next = 0; (item = mprGetNextItem(xml->attributes, &next)) != 0; ) {
-                mprAssert(qname->name[0] == '@');
-                if (qname->name[1] == '*' || strcmp(item->qname.name, &qname->name[1]) == 0) {
+                if (qname->name[2] == '*' || strcmp(item->qname.name, &qname->name[2]) == 0) {
                     result = ejsAppendToXML(ejs, result, item);
+#if UNUSED
+                } else {
+                    result = ejsAppendToXML(ejs, result, ejsXMLDescendants(ejs, item, qname));
+#endif
                 }
             }
         }
-
+        if (xml->elements) {
+            for (next = 0; (item = mprGetNextItem(xml->elements, &next)) != 0; ) {
+                result = ejsAppendToXML(ejs, result, ejsXMLDescendants(ejs, item, qname));
+            }
+        }
+        
     } else {
         if (xml->elements) {
             for (next = 0; (item = mprGetNextItem(xml->elements, &next)) != 0; ) {
@@ -21712,6 +21767,8 @@ void ejsConfigureXMLType(Ejs *ejs)
     ejsBindMethod(ejs, type, ES_XML_save, (EjsNativeFunction) saveXml);
     ejsBindMethod(ejs, type, ES_XML_name, (EjsNativeFunction) getXmlNodeName);
 
+    ejsBindMethod(ejs, type, ES_XML_parent, (EjsNativeFunction) xml_parent);
+
     /*
      *  Override these methods
      */
@@ -21785,25 +21842,7 @@ void __ejsXMLDummy() {}
 /*
  *  XMLList methods
  */
-
-#if KEEP
-static EjsVar   *valueOf(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *xlLength(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *toXmlString(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *appendChild(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *attributes(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *child(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *comments(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *decendants(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildAfter(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildBefore(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *replace(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *setName(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *text(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-
-#endif
+static EjsVar *xl_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 
 static bool allDigitsForXmlList(cchar *name);
 static EjsXML *resolve(Ejs *ejs, EjsXML *obj);
@@ -21878,6 +21917,9 @@ static EjsVar *xlCast(Ejs *ejs, EjsXML *vp, EjsType *type)
             if (ejsXMLToString(ejs, buf, elt, -1) < 0) {
                 mprFree(buf);
                 return 0;
+            }
+            if (next < vp->elements->length) {
+                mprPutStringToBuf(buf, ", ");
             }
         }
         result = (EjsVar*) ejsCreateString(ejs, (char*) buf->start);
@@ -22425,6 +22467,14 @@ static EjsVar *xlLength(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
 }
 
 
+/*
+    function parent(): XML
+ */
+static EjsVar *xl_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    return xml->targetObject ? (EjsVar*) xml->targetObject : (EjsVar*) ejs->nullValue;
+}
+
 
 EjsXML *ejsCreateXMLList(Ejs *ejs, EjsXML *targetObject, EjsName *targetProperty)
 {
@@ -22507,6 +22557,8 @@ void ejsConfigureXMLListType(Ejs *ejs)
      */
     ejsBindMethod(ejs, type, ES_XMLList_XMLList, (EjsNativeFunction) xmlListConstructor);
     ejsBindMethod(ejs, type, ES_XMLList_name, (EjsNativeFunction) getXmlListNodeName);
+
+    ejsBindMethod(ejs, type, ES_XMLList_parent, (EjsNativeFunction) xl_parent);
 
     /*
      *  Override these methods

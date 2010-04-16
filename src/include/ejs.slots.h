@@ -1371,8 +1371,11 @@
 #define ES_XML__initializer__XML_initializer                           7
 #define ES_XML_load                                                    8
 #define ES_XML_save                                                    9
-#define ES_XML_name                                                    10
-#define ES_XML_NUM_CLASS_PROP                                          11
+#define ES_XML_attributes                                              10
+#define ES_XML_elements                                                11
+#define ES_XML_name                                                    12
+#define ES_XML_parent                                                  13
+#define ES_XML_NUM_CLASS_PROP                                          14
 
 /**
  * Instance slots for "XML" type 
@@ -1386,6 +1389,8 @@
 #define ES_XML_XML_value                                               0
 #define ES_XML_load_filename                                           0
 #define ES_XML_save_filename                                           0
+#define ES_XML_attributes_name                                         0
+#define ES_XML_elements_name                                           0
 
 
 /**
@@ -1401,7 +1406,7 @@
  */
 #define ES_XMLList_NUM_INSTANCE_PROP                                   0
 
-#define _ES_CHECKSUM_ejs 480448
+#define _ES_CHECKSUM_ejs 483929
 
 #endif
 /*
