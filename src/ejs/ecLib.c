@@ -5570,12 +5570,9 @@ static void genDo(EcCompiler *cp, EcNode *np)
         processNode(cp, np->forLoop.body);
         discardStackItems(cp, mark);
     }
-
     if (np->forLoop.cond) {
         np->forLoop.condCode = state->code = allocCodeBuffer(cp);
         processNode(cp, np->forLoop.cond);
-        /* Leaves one item on the stack */
-        mprAssert(state->code->stackCount == 1);
     }
 
     /*

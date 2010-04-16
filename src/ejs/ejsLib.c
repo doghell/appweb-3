@@ -5276,10 +5276,16 @@ static EjsVar *date_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 static EjsVar *date_set_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
+    MprNumber   value;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
     tm.tm_year = ejsGetNumber(argv[0]) - 1900;
-    dp->value = mprMakeTime(ejs, &tm);
+    value = mprMakeTime(ejs, &tm);
+    if (value == -1) {
+        ejsThrowArgError(ejs, "Invalid year");
+    } else {
+        dp->value = value;
+    }
     return 0;
 }
 
@@ -20571,23 +20577,9 @@ static EjsVar   *loadXml(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 static EjsVar   *saveXml(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 static EjsVar   *xmlToString(Ejs *ejs, EjsVar *vp, int argc, EjsVar **argv);
 
-#if KEEP
-static EjsVar   *valueOf(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *toXmlString(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *appendChild(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *attributes(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *child(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *comments(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *decendants(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildAfter(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildBefore(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *replace(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *setName(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *text(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-
-#endif
+static EjsVar   *xml_attributes(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
+static EjsVar   *xml_elements(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
+static EjsVar   *xml_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 
 static bool allDigitsForXml(cchar *name);
 static bool deepCompare(EjsXML *lhs, EjsXML *rhs);
@@ -21124,6 +21116,62 @@ static int setXmlPropertyByName(Ejs *ejs, EjsXML *xml, EjsName *qname, EjsVar *v
     return index;
 }
 
+
+/*
+    function attributes(name: String = "*"): XMLList
+ */
+static EjsVar *xml_attributes(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    EjsXML  *result;
+    EjsXML  *item;
+    cchar   *name;
+    int     next;
+
+    name = argc > 0 ? ejsGetString(argv[0]) : "*";
+
+    result = ejsCreateXMLList(ejs, xml, &xml->targetProperty);
+    if (xml->attributes) {
+        for (next = 0; (item = mprGetNextItem(xml->attributes, &next)) != 0; ) {
+            if (name[0] == '*' || strcmp(item->qname.name, name) == 0) {
+                result = ejsAppendToXML(ejs, result, item);
+            }
+        }
+    }
+    return (EjsVar*) result;
+}
+
+
+/*
+    function elements(name: String = "*"): XMLList
+ */
+static EjsVar *xml_elements(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    EjsXML  *result;
+    EjsXML  *item;
+    cchar   *name;
+    int     next;
+
+    name = argc > 0 ? ejsGetString(argv[0]) : "*";
+
+    result = ejsCreateXMLList(ejs, xml, &xml->targetProperty);
+    if (xml->elements) {
+        for (next = 0; (item = mprGetNextItem(xml->elements, &next)) != 0; ) {
+            if (name[0] == '*' || strcmp(item->qname.name, name) == 0) {
+                result = ejsAppendToXML(ejs, result, item);
+            }
+        }
+    }
+    return (EjsVar*) result;
+}
+
+
+/*
+    function parent(): XML
+ */
+static EjsVar *xml_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    return xml->parent ? (EjsVar*) xml->parent : (EjsVar*) ejs->nullValue;
+}
 
 /*
  *  Deep compare
@@ -21712,6 +21760,10 @@ void ejsConfigureXMLType(Ejs *ejs)
     ejsBindMethod(ejs, type, ES_XML_save, (EjsNativeFunction) saveXml);
     ejsBindMethod(ejs, type, ES_XML_name, (EjsNativeFunction) getXmlNodeName);
 
+    ejsBindMethod(ejs, type, ES_XML_attributes, (EjsNativeFunction) xml_attributes);
+    ejsBindMethod(ejs, type, ES_XML_elements, (EjsNativeFunction) xml_elements);
+    ejsBindMethod(ejs, type, ES_XML_parent, (EjsNativeFunction) xml_parent);
+
     /*
      *  Override these methods
      */
@@ -21878,6 +21930,9 @@ static EjsVar *xlCast(Ejs *ejs, EjsXML *vp, EjsType *type)
             if (ejsXMLToString(ejs, buf, elt, -1) < 0) {
                 mprFree(buf);
                 return 0;
+            }
+            if (next < vp->elements->length) {
+                mprPutStringToBuf(buf, ", ");
             }
         }
         result = (EjsVar*) ejsCreateString(ejs, (char*) buf->start);

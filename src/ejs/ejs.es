@@ -14532,13 +14532,13 @@ module ejs {
          *  Get an XMLList containing all of the attributes of this object.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attributes(): XMLList
+        native function attributes(name: String = "*"): XMLList
         
         /**
          *  Get an XMLList containing the list of children (properties) in this XML object with the given name.
          *  @param name The name to search on.
          *  @return An XMLList with all the children names (zero or more).
+         *  MOB -- merge with children
          */
         # FUTURE
         native function child(name: String): XMLList
@@ -14605,7 +14605,6 @@ module ejs {
          *  @param name The (optional) name to search on.
          *  @return The list of elements.
          */
-        # FUTURE
         native function elements(name: String = "*"): XMLList
 
         /**
@@ -14714,7 +14713,6 @@ module ejs {
          *  Get the parent of this XML object.
          *  @return The parent.
          */
-        # FUTURE
         native function parent(): XML
 
         /**
