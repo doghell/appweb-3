@@ -4827,7 +4827,9 @@ typedef void *Type;
  */
 extern void *mprAlloc(MprCtx ctx, uint size);
 
-extern MprBlk *mprAllocBlock(MprHeap *heap, MprBlk *parent, uint size);
+#if UNUSED
+extern MprBlk *mprAllocBlock(MprCtx ctx, MprHeap *heap, MprBlk *parent, uint size);
+#endif
 
 /**
  *  Allocate an object block of memory
@@ -5024,7 +5026,7 @@ extern cchar *mprGetName(void *ptr);
 #endif
 
 extern void *_mprAlloc(MprCtx ctx, uint size);
-extern MprBlk *_mprAllocBlock(MprHeap *heap, MprBlk *parent, uint size);
+extern MprBlk *_mprAllocBlock(MprCtx ctx, MprHeap *heap, MprBlk *parent, uint size);
 extern void *_mprAllocWithDestructor(MprCtx ctx, uint size, MprDestructor destructor);
 extern void *_mprAllocWithDestructorZeroed(MprCtx ctx, uint size, MprDestructor destructor);
 extern void *_mprAllocZeroed(MprCtx ctx, uint size);
@@ -5047,8 +5049,10 @@ extern char *_mprStrdup(MprCtx ctx, cchar *str);
 
 #define mprAlloc(ctx, size) \
     mprSetName(_mprAlloc(ctx, size), MPR_LOC)
+#if UNUSED
 #define mprAllocBlock(heap, parent, size) \
     mprSetName(_mprAllocBlock(heap, parent, size), MPR_LOC)
+#endif
 #define mprAllocWithDestructor(ctx, size, destructor) \
     mprSetName(_mprAllocWithDestructor(ctx, size, destructor), MPR_LOC)
 #define mprAllocWithDestructorZeroed(ctx, size, destructor) \
@@ -5233,7 +5237,7 @@ extern int64 mprGetUsedMemory(MprCtx ctx);
  *  @param size of virtual memory to map. This size will be rounded up to the nearest page boundary.
  *  @param mode Mask set to MPR_MAP_READ | MPR_MAP_WRITE
  */
-extern void *mprMapAlloc(uint size, int mode);
+extern void *mprMapAlloc(MprCtx ctx, uint size, int mode);
 
 /**
  *  Free (unpin) a mapped section of virtual memory
@@ -7277,6 +7281,7 @@ extern int mprWriteCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize);
 typedef struct Mpr {
     MprHeap         heap;                   /**< Top level memory pool */
     MprHeap         pageHeap;               /**< Heap for arenas and slabs. Always page oriented */
+    MprAlloc        alloc;                  /**< Memory allocation statistics */
 
     bool            debugMode;              /**< Run in debug mode (no timers) */
     int             logLevel;               /**< Log trace level */
@@ -7318,6 +7323,7 @@ typedef struct Mpr {
 #endif
 
     struct MprModuleService *moduleService; /**< Module service object */
+    void            *ejsService;            /**< Ejscript service */
 
 #if BLD_FEATURE_MULTITHREAD
     struct MprThreadService *threadService; /**< Thread service object */
@@ -7343,11 +7349,13 @@ typedef struct Mpr {
 } Mpr;
 
 
-#if !BLD_WIN_LIKE || DOXYGEN
-extern Mpr  *_globalMpr;                /* Mpr singleton */
-#define mprGetMpr(ctx) _globalMpr
+#if BLD_UNIX_LIKE
+#define BLD_HAS_GLOBAL_MPR 0
 #else
+#define BLD_HAS_GLOBAL_MPR 0
+#endif
 
+#if DOXYGEN || !BLD_HAS_GLOBAL_MPR || BLD_WIN_LIKE
 /**
  *  Return the MPR control instance.
  *  @description Return the MPR singleton control object. 
@@ -7357,6 +7365,10 @@ extern Mpr  *_globalMpr;                /* Mpr singleton */
  *  @ingroup Mpr
  */
 extern struct Mpr *mprGetMpr(MprCtx ctx);
+#else
+
+extern Mpr  *_globalMpr;                /* Mpr singleton */
+#define mprGetMpr(ctx) _globalMpr
 #endif
 
 /**

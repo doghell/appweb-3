@@ -33,7 +33,11 @@
 
 #if BLD_FEATURE_EJS_WEB
 
-MAIN(ejswebMain, int argc, char **argv)
+#if BLD_APPWEB_PRODUCT
+    MAIN(ajswebMain, int argc, char **argv)
+#else
+    MAIN(ejswebMain, int argc, char **argv)
+#endif
 {
     EjsService  *vm;
     EcCompiler  *cp;

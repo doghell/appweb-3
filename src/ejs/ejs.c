@@ -40,7 +40,11 @@ static int  interpretFiles(EcCompiler *cp, MprList *files, int argc, char **argv
 static int  preloadModules(EcCompiler *cp, MprList *modules);
 
 
-MAIN(ejsMain, int argc, char **argv)
+#if BLD_APPWEB_PRODUCT
+    MAIN(ejsMain, int argc, char **argv)
+#else
+    MAIN(ejsMain, int argc, char **argv)
+#endif
 {
     Mpr             *mpr;
     EcCompiler      *cp;

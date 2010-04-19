@@ -11630,10 +11630,8 @@ static EjsVar *charAt(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 
     index = ejsGetInt(argv[0]);
     if (index < 0 || index >= sp->length) {
-        ejsThrowOutOfBoundsError(ejs, "Bad string subscript");
-        return 0;
+        return (EjsVar*) ejs->emptyStringValue;
     }
-
     return (EjsVar*) ejsCreateStringWithLength(ejs, &sp->value[index], 1);
 }
 
@@ -11643,7 +11641,6 @@ static EjsVar *charAt(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
  *
  *  function charCodeAt(index: Number = 0): Number
  */
-
 static EjsVar *charCodeAt(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 {
     int     index;
@@ -11983,7 +11980,6 @@ static EjsVar *indexOf(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
     } else {
         start = 0;
     }
-
     index = indexof(&sp->value[start], sp->length - start, pattern, patternLength, 1);
     if (index < 0) {
         return (EjsVar*) ejs->minusOneValue;
@@ -12091,8 +12087,8 @@ static EjsVar *lastIndexOf(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
 
     if (argc == 2) {
         start = ejsGetInt(argv[1]);
-        if (start > sp->length) {
-            start = sp->length;
+        if (start >= sp->length) {
+            start = sp->length - 1;
         }
         if (start < 0) {
             start = 0;
@@ -12475,25 +12471,30 @@ static EjsVar *sliceString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     } else {
         step = 1;
     }
-
     if (start < 0) {
         start += sp->length;
+    }
+    if (start >= sp->length) {
+        start = sp->length - 1;
+    }
+    if (start < 0) {
+        start = 0;
     }
     if (end < 0) {
         end += sp->length;
     }
+    if (end > sp->length) {
+        end = sp->length;
+    }
+    if (end < 0) {
+        end = 0;
+    }
     if (step == 0) {
         step = 1;
     }
-    if (start < 0 || start >= sp->length) {
-        ejsThrowOutOfBoundsError(ejs, "Bad start subscript");
-        return 0;
+    if (end < start) {
+        end = start;
     }
-    if (end < 0 || end > sp->length) {
-        ejsThrowOutOfBoundsError(ejs, "Bad end subscript");
-        return 0;
-    }
-
     result = ejsCreateBareString(ejs, (end - start) / abs(step));
     if (result == 0) {
         return 0;
@@ -12508,10 +12509,8 @@ static EjsVar *sliceString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
             result->value[j++] = sp->value[i];
         }
     }
-
     result->value[j] = '\0';
     result->length = j;
-
     return (EjsVar*) result;
 }
 
@@ -12590,7 +12589,6 @@ static EjsVar *split(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
         return (EjsVar*) results;
 #endif
     }
-
     ejsThrowTypeError(ejs, "Wrong argument type");
     return 0;
 }
@@ -12630,7 +12628,6 @@ static EjsVar *substring(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     } else {
         end = sp->length;
     }
-
     if (start < 0) {
         start = 0;
     }
@@ -12643,7 +12640,6 @@ static EjsVar *substring(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     if (end > sp->length) {
         end = sp->length;
     }
-
     /*
      *  Swap if start is bigger than end
      */
@@ -12652,7 +12648,6 @@ static EjsVar *substring(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
         start = end;
         end = tmp;
     }
-
     return (EjsVar*) ejsCreateStringWithLength(ejs, &sp->value[start], end - start);
 }
 
@@ -12889,7 +12884,6 @@ static EjsVar *trimString(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
         }
         end = mark + patternLength;
     }
-
     return (EjsVar*) ejsCreateStringWithLength(ejs, start, (int) (end - start));
 }
 
@@ -27493,7 +27487,7 @@ int ejsInitStack(Ejs *ejs)
     /*
      *  This will allocate memory virtually for systems with virutal memory. Otherwise, it will just use malloc.
      */
-    state->stackBase = mprMapAlloc(state->stackSize, MPR_MAP_READ | MPR_MAP_WRITE);
+    state->stackBase = mprMapAlloc(ejs, state->stackSize, MPR_MAP_READ | MPR_MAP_WRITE);
     if (state->stackBase == 0) {
         mprSetAllocError(ejs);
         return EJS_ERR;
@@ -30741,11 +30735,6 @@ static int configureWebModule(Ejs *ejs, EjsModule *mp, cchar *path);
 #endif
 
 /*
- *  Global singleton for the Ejs service
- */
-EjsService *_globalEjsService;
-
-/*
  *  Initialize the EJS subsystem
  */
 EjsService *ejsCreateService(MprCtx ctx)
@@ -30756,7 +30745,7 @@ EjsService *ejsCreateService(MprCtx ctx)
     if (sp == 0) {
         return 0;
     }
-    _globalEjsService = sp;
+    mprGetMpr(ctx)->ejsService = sp;
     sp->nativeModules = mprCreateHash(sp, 0);
 
     /*
@@ -30792,7 +30781,7 @@ Ejs *ejsCreate(MprCtx ctx, Ejs *master, cchar *searchPath, int flags)
         return 0;
     }
     mprSetAllocNotifier(ejs, (MprAllocNotifier) allocNotifier);
-    ejs->service = _globalEjsService;
+    ejs->service = mprGetMpr(ctx)->ejsService;
 
     /*
      *  Probably not necessary, but it keeps the objects in one place
@@ -31093,7 +31082,10 @@ static int configureWebModule(Ejs *ejs, EjsModule *mp, cchar *path)
  */
 int ejsAddNativeModule(MprCtx ctx, char *name, EjsNativeCallback callback)
 {
-    if (mprAddHash(_globalEjsService->nativeModules, name, callback) == 0) {
+    EjsService  *sp;
+
+    sp = mprGetMpr(ctx)->ejsService;
+    if (mprAddHash(sp->nativeModules, name, callback) == 0) {
         return EJS_ERR;
     }
     return 0;
