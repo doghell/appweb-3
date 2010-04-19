@@ -65,3 +65,4 @@ staging
 .rpmmacros
 all/*.c
 src/server/appweb.conf
+lib/*.so

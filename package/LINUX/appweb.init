@@ -73,7 +73,7 @@ stop() {
 		${APPWEB_CMD} --stop
 	fi
     if type start-stop-daemon >/dev/null 2>&1 ; then
-        echo -n $"Stopping ${APPWEB_NAME}: "
+        echo -n "Stopping ${APPWEB_NAME}: "
         if [ -f /etc/SuSE-release ] ; then
             start-stop-daemon --stop --quiet --oknodo --exec "${APPWEB_CMD}"
         else 
