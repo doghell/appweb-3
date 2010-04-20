@@ -704,7 +704,6 @@ convertSearchPath()
             else
                 eval ls -d1 "$x" 2>/dev/null | sort
             fi
-            eval ls -d1 "$x" 2>/dev/null | sort
         done | grep -v '^$' | tr '\n' : | sed 's/:$//'
     fi
 }
@@ -1069,7 +1068,6 @@ probe()
             [ "$trace" != 0 -a "$found" != "" ] && echo "    probe: found $name at $found" 1>&2
         fi
     fi
-
     if [ "$found" = "" ] ; then
         #
         #   Fast search using "type". Works for executables only.
@@ -2227,7 +2225,8 @@ setSystemConfiguration
 [ $quiet = 0 ] && echo -e "  # Prepare search path ..."
 . build/search.config
 BUILD_SEARCH_PATH=`convertSearchPath "$BUILD_SEARCH_PATH"`:$PATH
-HOST_SEARCH_PATH=`convertSearchPath "$HOST_SEARCH_PATH"`
+HOST_SEARCH_PATH=`convertSearchPath "$HOST_SEARCH_PATH"`:$PATH
+
 if [ "$ENV_BUILD_SEARCH_PATH" != "" ] ; then
     BUILD_SEARCH_PATH=`convertSearchPath "$ENV_BUILD_SEARCH_PATH"`:"$BUILD_SEARCH_PATH"
 fi
