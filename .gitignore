@@ -66,3 +66,12 @@ staging
 all/*.c
 src/server/appweb.conf
 lib/*.so
+*.pdb
+*.obj
+*.exp
+bin/*.def
+bin/appweb.conf
+bin/*.ico
+*.res
+bin/default-web
+bin/mime.types
