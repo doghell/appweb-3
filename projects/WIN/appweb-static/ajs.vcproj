@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="ajs"
-    ProjectGUID="394f0af4-6bc8-4644-b331-3fc627577d10"
+    ProjectGUID="89f40556-2d6e-48b5-af13-2a730829ea36"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -75,7 +75,7 @@
                 StringPooling="true"
                 MinimalRebuild="true"
                 AdditionalIncludeDirectories="../../..;../../../src/include"
-                PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;STATIC_OVERRIDE=1;_REENTRANT;_MT"
+                PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;_REENTRANT;_MT"
                 Optimization="1"
                 FavorSizeOrSpeed="1"
                 RuntimeLibrary="2"
@@ -154,7 +154,7 @@
                 StringPooling="true"
                 MinimalRebuild="true"
                 AdditionalIncludeDirectories="../../..;../../../src/include"
-                PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;STATIC_OVERRIDE=1;_REENTRANT;_MT"
+                PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;_REENTRANT;_MT"
                 Optimization="0"
                 FavorSizeOrSpeed="1"
                 BasicRuntimeChecks="3"
@@ -178,7 +178,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{4e64c3ed-93e2-479a-af15-6e5474dc3163}"
+            UniqueIdentifier="{4f9371a2-4283-473b-8959-56329f1089e7}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -208,7 +208,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{168f4035-9988-418d-8eff-4c833e89d1f0}"
+            UniqueIdentifier="{658036a8-8a93-4705-97e8-3cd4a20b5950}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ejsLib.c"
