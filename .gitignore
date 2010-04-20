@@ -78,3 +78,7 @@ bin/mime.types
 .port.log
 src/server/conf/
 *.dmg
+*.user
+*.ncb
+*.suo
+projects/WIN/*/Win32
