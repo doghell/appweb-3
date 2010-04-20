@@ -5002,7 +5002,7 @@ Mpr *mprCreateAllocService(MprAllocNotifier cback, MprDestructor destructor)
     mpr->alloc.maxMemory = INT_MAX;
     mpr->alloc.redLine = INT_MAX / 100 * 99;
 
-#if BLD_HAS_GLOBAL_MPR
+#if BLD_HAS_GLOBAL_MPR || BLD_WIN_LIKE
     _globalMpr = mpr;
 #endif
 
@@ -6195,8 +6195,6 @@ int mprIsValid(MprCtx ptr)
  */
 Mpr *mprGetMpr(MprCtx ctx)
 {
-    mprAssert(ctx);
-
 #if BLD_WIN_LIKE
     /*  Windows can use globalMpr but must have a function to solve linkage issues */
     return (Mpr*) _globalMpr;
