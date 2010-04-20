@@ -1106,6 +1106,8 @@ class EjsWeb {
             data = data.replace(/NEXT_ACTION/, actionData + "NEXT_ACTION")
         }
         data = data.replace(/NEXT_ACTION/, "")
+        data = data.replace(/\${MODEL}/g, name.toPascal())
+        data = data.replace(/\${LOWER_MODEL}/g, name.toLower())
         makeFile(path, data, "Controller")
     }
 
