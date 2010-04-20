@@ -11728,7 +11728,6 @@ module ejs.web {
          *  @option url String Use a URL rather than action and controller for the target url.
          */
 		function form(record: Object, url: String, options: Object): Void {
-print("HTML: " + getOptions(options))
             write('<form method="post" action="' + url + '"' + getOptions(options) + ' xonsubmit="ejs.fixCheckboxes();">')
 //          write('<input name="id" type="hidden" value="' + record.id + '" />')
         }
