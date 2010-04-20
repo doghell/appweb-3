@@ -3,7 +3,7 @@ EXPORTS
 
   __dummyEjsDebug
   __dummyEjsLog
-  __dummySocket
+  _ejsIs
   addHeader
   deserialize
   ejsAddException
