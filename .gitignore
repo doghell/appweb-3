@@ -77,3 +77,4 @@ bin/default-web
 bin/mime.types
 .port.log
 src/server/conf/
+*.dmg

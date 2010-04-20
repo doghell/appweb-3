@@ -60,11 +60,11 @@ start() {
         RETVAL=$?
         [ ${RETVAL} = 0 ] && touch /var/lock/$APPWEB
     fi
-#    if [ ${RETVAL} = 0 ] ; then
-#        echo "OK"
-#    else
-#        echo "FAILED"
-#    fi
+    if [ ${RETVAL} = 0 ] ; then
+        echo "OK"
+    else
+        echo "FAILED"
+    fi
     return ${RETVAL}
 }
 
@@ -88,11 +88,11 @@ stop() {
         RETVAL=$?
         [ ${RETVAL} = 0 ] && rm -f /var/lock/subsys/$APPWEB
     fi
-#    if [ ${RETVAL} = 0 ] ; then
-#        echo "OK"
-#    else
-#        echo "FAILED"
-#    fi
+    if [ ${RETVAL} = 0 ] ; then
+        echo "OK"
+    else
+        echo "FAILED"
+    fi
 }
 
 
