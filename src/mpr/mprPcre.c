@@ -7351,7 +7351,7 @@ typedef struct Mpr {
 
 
 #if BLD_UNIX_LIKE
-#define BLD_HAS_GLOBAL_MPR 0
+#define BLD_HAS_GLOBAL_MPR 1
 #else
 #define BLD_HAS_GLOBAL_MPR 0
 #endif
