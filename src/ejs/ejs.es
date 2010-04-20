@@ -11728,6 +11728,7 @@ module ejs.web {
          *  @option url String Use a URL rather than action and controller for the target url.
          */
 		function form(record: Object, url: String, options: Object): Void {
+print("HTML: " + getOptions(options))
             write('<form method="post" action="' + url + '"' + getOptions(options) + ' xonsubmit="ejs.fixCheckboxes();">')
 //          write('<input name="id" type="hidden" value="' + record.id + '" />')
         }
@@ -11984,6 +11985,14 @@ module ejs.web {
             let sort = options.sort
             if (sort == undefined) sort = true
 
+            let attributes = ""
+            if (options["data-remote"]) {
+                attributes += ' data-remote="' + options["data-remote"] + '"'
+            }
+            if (options["data-apply"]) {
+                attributes += ' data-apply="' + options["data-apply"] + '"'
+            }
+
             if (!options.ajax) {
                 let url = (data is String) ? data : null
                 url ||= options.data
@@ -11995,14 +12004,15 @@ module ejs.web {
                     '  </script>\r\n')
                 if (data is String) {
                     /* Data is an action method */
-                    write('<table id="' + tableId + '" class="-ejs-table"></table>\r\n')
+                    write('<table id="' + tableId + '" class="-ejs-table"' + attributes + '></table>\r\n')
                     return
                 }
             } else {
                 write('  <script type="text/javascript">$("#' + tableId + '").eTableSetOptions({ refresh: ' + refresh +
                     ', sort: "' + sort + '", sortOrder: "' + sortOrder + '"})' + ';</script>\r\n')
             }
-			write('  <table id="' + tableId + '" class="-ejs-table ' + (options.styleTable || "" ) + '">\r\n')
+			write('  <table id="' + tableId + '" class="-ejs-table ' + (options.styleTable || "" ) + '"' + 
+                attributes + '>\r\n')
 
             /*
              *  Table title and column headings
@@ -13687,11 +13697,6 @@ module ejs.web {
             @option url String Use a URL rather than action and controller for the target url.
          */
         function form(action: String, record: Object = null, options: Object = {}): Void {
-            /*
-            if (record == null) {
-                record = new LocalModel
-            }
-            */
             currentModel = record
             formErrors(record)
             options = setOptions("form", options)
@@ -13986,7 +13991,7 @@ module ejs.web {
             @option styleOddRow String CSS style to use for odd data rows in the table
             @option styleEvenRow String CSS style to use for even data rows in the table
             @option title String Table title
-         *
+         
             Column options:
             <ul>
             <li>align</li>
@@ -13998,7 +14003,7 @@ module ejs.web {
                 Defaults to ascending.</li>
             <li>style</li>
             </ul>
-         *
+        
             @example
                 <% table("getData", { refresh: 2, pivot: true" }) %>
                 <% table(gridData, { click: "edit" }) %>
@@ -14439,6 +14444,7 @@ module ejs.web {
         private static const htmlOptions: Object = { 
             background: "", color: "", id: "", height: "", method: "", size: "", 
             style: "class", visible: "", width: "",
+            "remote": "data-remote",
         }
 
         /**
@@ -14476,6 +14482,9 @@ module ejs.web {
                         mapped = option
                     }
                     result += ' ' +  mapped + '="' + options[option] + '"'
+
+                } else if (option.startsWith("data-")) {
+                    result += ' ' +  option + '="' + options[option] + '"'
                 }
             }
             return result + " "

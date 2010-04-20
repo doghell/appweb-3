@@ -3369,23 +3369,24 @@
 #define ES_ejs_web_HtmlConnector_ejs_web_table_refresh                 5
 #define ES_ejs_web_HtmlConnector_ejs_web_table_sortOrder               6
 #define ES_ejs_web_HtmlConnector_ejs_web_table_sort                    7
-#define ES_ejs_web_HtmlConnector_ejs_web_table_styleBody               8
-#define ES_ejs_web_HtmlConnector_ejs_web_table_row                     9
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_10_url         10
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_11_name        11
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_12_header      12
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_13_width       13
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_14_r           14
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_15_url         15
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_16_urlOptions  16
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_17_odd         17
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_18_even        18
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_19_col         19
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_20_name        20
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_21_column      21
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_22_styleCell   22
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_23_align       23
-#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_24_cellUrl     24
+#define ES_ejs_web_HtmlConnector_ejs_web_table_attributes              8
+#define ES_ejs_web_HtmlConnector_ejs_web_table_styleBody               9
+#define ES_ejs_web_HtmlConnector_ejs_web_table_row                     10
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_11_url         11
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_12_name        12
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_13_header      13
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_14_width       14
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_15_r           15
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_16_url         16
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_17_urlOptions  17
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_18_odd         18
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_19_even        19
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_20_col         20
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_21_name        21
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_22_column      22
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_23_styleCell   23
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_24_align       24
+#define ES_ejs_web_HtmlConnector_ejs_web_table__hoisted_25_cellUrl     25
 #define ES_ejs_web_HtmlConnector_ejs_web_text_name                     0
 #define ES_ejs_web_HtmlConnector_ejs_web_text_value                    1
 #define ES_ejs_web_HtmlConnector_ejs_web_text_options                  2
@@ -3920,11 +3921,11 @@
 #define ES_ejs_web_View_ejs_web_getValue_fmt                           5
 #define ES_ejs_web_View_ejs_web_getValue__hoisted_6_part               6
 #define ES_ejs_web_View_ejs_web_date_fmt                               0
-#define ES_ejs_web_View_ejs_web_date___fun_26218__                     1
+#define ES_ejs_web_View_ejs_web_date___fun_26280__                     1
 #define ES_ejs_web_View_ejs_web_currency_fmt                           0
-#define ES_ejs_web_View_ejs_web_currency___fun_26252__                 1
+#define ES_ejs_web_View_ejs_web_currency___fun_26314__                 1
 #define ES_ejs_web_View_ejs_web_number_fmt                             0
-#define ES_ejs_web_View_ejs_web_number___fun_26282__                   1
+#define ES_ejs_web_View_ejs_web_number___fun_26344__                   1
 #define ES_ejs_web_View_ejs_web_getOptions_options                     0
 #define ES_ejs_web_View_ejs_web_getOptions_result                      1
 #define ES_ejs_web_View_ejs_web_getOptions__hoisted_2_option           2
@@ -4201,6 +4202,6 @@
 #define ES_LocalModel_ejs_db_constructor_fields                        0
 #define ES_LocalModel_LocalModel_fields                                0
 
-#define _ES_CHECKSUM_ejs_web 451916
+#define _ES_CHECKSUM_ejs_web 453034
 
 #endif
