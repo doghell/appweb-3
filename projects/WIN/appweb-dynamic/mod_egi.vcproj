@@ -187,7 +187,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{cec000c1-4b7b-49df-83c1-e946a13a6c5f}"
+			UniqueIdentifier="{d2db7913-beb8-44d4-92fc-567718f76092}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -217,7 +217,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{599db9b0-e64e-4b86-8779-1acaacc05fef}"
+			UniqueIdentifier="{7c5ec301-aa65-48ef-b9c3-48a0d1cd7ff0}"
 			>
 			<File
 				RelativePath="..\..\..\src\http\handlers\egiHandler.c"

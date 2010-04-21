@@ -185,7 +185,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{f8ed06e2-77d8-431b-b38b-9a41bed509c0}"
+			UniqueIdentifier="{869bf2df-725b-4f8f-9e73-481c4f33b363}"
 			>
 			<File
 				RelativePath="..\..\..\src\include\appweb.h"
@@ -211,7 +211,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{7b9c20fc-cb0c-4a97-9e57-1e478660b1a5}"
+			UniqueIdentifier="{fe2b9c3e-0b97-4b59-9efc-b30131d8b687}"
 			>
 			<File
 				RelativePath="..\..\..\src\server\WIN\angel.c"

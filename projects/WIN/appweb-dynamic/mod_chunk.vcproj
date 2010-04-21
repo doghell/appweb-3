@@ -187,7 +187,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{397f828c-2fa7-4d1c-97d3-2ff482a98199}"
+			UniqueIdentifier="{9769667f-6b46-47e1-965c-2fffeb089cd1}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -217,7 +217,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{a356eee9-318f-4385-9af6-3e809e97717f}"
+			UniqueIdentifier="{f3d35c63-657b-4f5c-8899-8f057ccd83e5}"
 			>
 			<File
 				RelativePath="..\..\..\src\http\filters\chunkFilter.c"

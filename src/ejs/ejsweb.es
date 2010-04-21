@@ -418,14 +418,14 @@ class EjsWeb {
 
         default:
             for each (f in args) {
-                compileItem(Path(f).relative)
+                compileItem(Path(f).relative.normalize)
             }
         }
     }
 
     function compileItem(file: Path) {
         if (file.isDir) {
-            for each (f in file.files(true)) {
+            for each (f in file.normalize.files(true)) {
                 compileItem(f)
             }
         } else {
@@ -495,7 +495,7 @@ class EjsWeb {
     }
 
     function buildWebPage(file: Path, compile: Boolean = true, isView: Boolean = false): String {
-        file = file.portable
+        // file = file.portable
         let ext = file.extension
         if (ext == "") {
             file = file.joinExt("ejs")

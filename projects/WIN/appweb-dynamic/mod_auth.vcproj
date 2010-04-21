@@ -187,7 +187,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{3070653d-8703-435b-bbba-f19c73244cd8}"
+			UniqueIdentifier="{a26113b2-5197-4af8-bfc9-1c7aeaa862a1}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -217,7 +217,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{2856573e-73d5-4941-8b70-14c0405538c7}"
+			UniqueIdentifier="{3e218640-790e-4c9a-a2d0-763cf1920630}"
 			>
 			<File
 				RelativePath="..\..\..\src\http\filters\authFilter.c"

@@ -27,7 +27,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Build Ejscript Modules"
-				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)/ajs.mod $(ProjectDir)/../../../src/ejs/ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)/../../../src/include/ejs.slots.h $(IntDir)/ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)/ajsweb.mod $(ProjectDir)/../../../src/ejs/ejsweb.es&#x0D;&#x0A;"
+				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)\ajs.mod $(ProjectDir)\..\..\..\src\ejs/ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)\..\..\..\src\include\ejs.slots.h $(IntDir)\ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)\ajsweb.mod $(ProjectDir)\..\..\..\src\ejs/ejsweb.es&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.cmd echo Copying ajsweb.cmd &amp; copy $(ProjectDir)\..\..\..\src\ejs\ajsweb.cmd $(IntDir)\ajsweb.cmd&#x0D;&#x0A;if not exist $(IntDir)\ajsweb echo Copying ajsweb &amp; copy $(ProjectDir)\..\..\..\src\ejs\ejsweb.es $(IntDir)\ajsweb&#x0D;&#x0A;"
 				Outputs="$(IntDir)/ajs.mod"
 			/>
 			<Tool
@@ -113,7 +113,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Build Ejscript Modules"
-				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)/ajs.mod $(ProjectDir)/../../../src/ejs/ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)/../../../src/include/ejs.slots.h $(IntDir)/ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)/ajsweb.mod $(ProjectDir)/../../../src/ejs/ejsweb.es&#x0D;&#x0A;"
+				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)\ajs.mod $(ProjectDir)\..\..\..\src\ejs/ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)\..\..\..\src\include\ejs.slots.h $(IntDir)\ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)\ajsweb.mod $(ProjectDir)\..\..\..\src\ejs/ejsweb.es&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.cmd echo Copying ajsweb.cmd &amp; copy $(ProjectDir)\..\..\..\src\ejs\ajsweb.cmd $(IntDir)\ajsweb.cmd&#x0D;&#x0A;if not exist $(IntDir)\ajsweb echo Copying ajsweb &amp; copy $(ProjectDir)\..\..\..\src\ejs\ejsweb.es $(IntDir)\ajsweb&#x0D;&#x0A;"
 				Outputs="$(IntDir)/ajs.mod"
 			/>
 			<Tool
@@ -191,7 +191,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{35fd6231-1df9-4e29-82e6-32df2187c2ff}"
+			UniqueIdentifier="{21199ee1-5f7d-4da7-aa23-dbd19435acc4}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -225,7 +225,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{6efa80d5-78e0-4502-b34f-590b65a2c939}"
+			UniqueIdentifier="{478ee866-7f4c-440d-97c7-98659f4bf768}"
 			>
 			<File
 				RelativePath="..\..\..\src\ejs\ecLib.c"

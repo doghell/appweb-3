@@ -185,7 +185,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{1fea3283-948b-4518-bd37-a535e1eb6dd1}"
+			UniqueIdentifier="{783778a1-0504-44b9-8738-826e89c8cd66}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -203,7 +203,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{11d34a70-0607-485c-918d-f6a0eea2b8b6}"
+			UniqueIdentifier="{5a842cf7-4bad-4240-800f-7fc8e277862a}"
 			>
 			<File
 				RelativePath="..\..\..\src\ejs\ejssql.c"

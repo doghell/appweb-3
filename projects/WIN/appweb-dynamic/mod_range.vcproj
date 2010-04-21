@@ -187,7 +187,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{bfa9aec9-1af8-40e5-a3bc-eff81e6f0ef7}"
+			UniqueIdentifier="{65308934-5eae-4818-8045-ec8a4aa43de0}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -217,7 +217,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{e0e7caf1-80f1-4c7a-bcda-3895cd441130}"
+			UniqueIdentifier="{95abf22a-a607-44e1-a06b-e653a8fde1d3}"
 			>
 			<File
 				RelativePath="..\..\..\src\http\filters\rangeFilter.c"

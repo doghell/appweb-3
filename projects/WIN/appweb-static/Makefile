@@ -19,7 +19,7 @@ EC_SRC 		= $(SRC)/ejs/ecLib.c
 APPWEB_SRC 	= $(shell find $(SRC)/http -name '*.c' | egrep -v 'XXXXX.c')
 LIBS		= ws2_32.lib
 PROJECTS	= appweb.vcproj angel.vcproj appwebMonitor.vcproj ajsmod.vcproj ajsc.vcproj ajs.vcproj ajssql.vcproj \
-				ajsweb.vcproj http.vcproj httpPassword.vcproj
+				http.vcproj httpPassword.vcproj
 
 MAKE_DFLAGS	+= -DSTATIC_OVERRIDE=1
 
@@ -56,11 +56,6 @@ ajsc.vcproj: Makefile buildConfig.override
 ajssql.vcproj: Makefile buildConfig.override
 	@makeVsProj --project ajssql.vcproj --exe ajssql.exe --search "$(BLD_MPR_LIBPATHS)" --dflags "$(DFLAGS)" \
 		--libs "$(LIBS)" $(MPR_HDR) $(MPR_SRC) $(SRC)/ejs/ejssql.c $(SRC)/ejs/sqlite3.c
-
-ajsweb.vcproj: Makefile buildConfig.override
-	@makeVsProj --project ajsweb.vcproj --exe ajsweb.exe --search "$(BLD_MPR_LIBPATHS)" --dflags "$(DFLAGS)" \
-		--libs "$(LIBS)" $(MPR_HDR) $(EJS_HDR) $(EC_HDR) $(EC_SRC) $(EJS_SRC) $(MPR_SRC) \
-		$(SRC)/ejs/ejsweb.c
 
 http.vcproj: Makefile buildConfig.override
 	@makeVsProj --project http.vcproj --exe http.exe --search "$(BLD_MPR_LIBPATHS)" --dflags "$(DFLAGS)" \

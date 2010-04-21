@@ -185,7 +185,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{ef5314b4-fc27-4867-b392-936bef49a9d7}"
+			UniqueIdentifier="{7ddebd92-e3c8-4fd0-9f7c-a9ef07a70b9a}"
 			>
 			<File
 				RelativePath="..\..\..\src\include\appweb.h"
@@ -223,7 +223,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{e2d2a8db-81dd-4768-b4af-b57239afa5d9}"
+			UniqueIdentifier="{90965481-c9ee-4c7e-8f3f-0b57a38de0f3}"
 			>
 			<File
 				RelativePath="..\..\..\src\server\appweb.c"

@@ -151,8 +151,8 @@ $(BLD_BIN_DIR)/ajsweb: ejsweb.es
 	cat ejsweb.es | sed 's^#!/usr/bin/env ejs^#!/usr/bin/env ajs^' >$(BLD_BIN_DIR)/ajsweb
 	chmod 755 $(BLD_BIN_DIR)/ajsweb
 
-$(BLD_BIN_DIR)/ajsweb.cmd: ejsweb.cmd
-	cat ejsweb.es | sed 's^ejsweb^ajsweb^' >$(BLD_BIN_DIR)/ajsweb.cmd
+$(BLD_BIN_DIR)/ajsweb.cmd: ajsweb.cmd
+	cat ajsweb.cmd | sed 's^ejsweb^ajsweb^' >$(BLD_BIN_DIR)/ajsweb.cmd
 	chmod 755 $(BLD_BIN_DIR)/ajsweb.cmd
 
 $(BLD_MOD_DIR)/ajsweb.mod: ejsweb.es $(BLD_MOD_DIR)/ajs.mod

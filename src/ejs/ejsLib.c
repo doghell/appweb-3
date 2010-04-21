@@ -34282,7 +34282,7 @@ static int loadComponent(EjsWeb *web, cchar *kind, cchar *name, cchar *sourceExt
              *  Solo web pages
              */
             module = mprJoinPathExt(web, mprJoinPath(web, web->appDir, name), EJS_MODULE_EXT);
-            soloPage = mprJoinPathExt(web, name, sourceExtension);
+            soloPage = mprJoinPathExt(web, mprGetNativePath(web, name), sourceExtension);
             rc = build(web, kind, soloPage, module, sourceExtension, retry);
             mprFree(soloPage);
         }

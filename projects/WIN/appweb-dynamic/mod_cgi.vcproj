@@ -187,7 +187,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{2e237142-38ca-450b-9131-16c104257153}"
+			UniqueIdentifier="{3814706e-1f17-4f9d-b8ba-957ac0a45c50}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -217,7 +217,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{7232d0c7-57ed-4725-ace3-ab568ca87b9f}"
+			UniqueIdentifier="{fd468630-8548-4066-b92a-ec95bad0ad88}"
 			>
 			<File
 				RelativePath="..\..\..\src\http\handlers\cgiHandler.c"
