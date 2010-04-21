@@ -42,7 +42,7 @@ appwebMonitor.vcproj: Makefile buildConfig.override
 
 ajs.vcproj: Makefile buildConfig.override
 	@makeVsProj --project ajs.vcproj --exe ajs.exe --search "$(BLD_EJS_LIBPATHS)" --dflags "$(DFLAGS)" \
-		--libs "$(LIBS)" $(MPR_HDR) $(EJS_HDR) $(EJS_SRC) $(MPR_SRC) $(SRC)/ejs/ejs.c
+		--libs "$(LIBS)" $(MPR_HDR) $(EJS_HDR) $(EC_SRC) $(EJS_SRC) $(MPR_SRC) $(SRC)/ejs/ejs.c
 
 ajsmod.vcproj: Makefile buildConfig.override
 	@makeVsProj --project ajsmod.vcproj --exe ajsmod.exe --search "$(BLD_EJS_LIBPATHS)" --dflags "$(DFLAGS)" \

@@ -32,6 +32,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "httpPassword", "httpPasswor
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ajsmod", "ajsmod.vcproj", "{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ajs", "ajs.vcproj", "{99534262-92CB-4B39-A02C-085D29CDA78B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -70,6 +72,10 @@ Global
 		{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}.Debug|Win32.Build.0 = Debug|Win32
 		{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}.Release|Win32.ActiveCfg = Release|Win32
 		{904EAE23-75E5-4EEC-9FC8-69DD1B4D9A1E}.Release|Win32.Build.0 = Release|Win32
+		{99534262-92CB-4B39-A02C-085D29CDA78B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{99534262-92CB-4B39-A02C-085D29CDA78B}.Debug|Win32.Build.0 = Debug|Win32
+		{99534262-92CB-4B39-A02C-085D29CDA78B}.Release|Win32.ActiveCfg = Release|Win32
+		{99534262-92CB-4B39-A02C-085D29CDA78B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
