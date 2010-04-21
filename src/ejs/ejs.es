@@ -4632,18 +4632,16 @@ module ejs.db {
          */
         function Database(adapter: String, connectionString: String) {
             if (adapter == "sqlite3") adapter = "sqlite"
-            try {
-                _name = basename(connectionString)
-                _connection = connectionString
-                let adapterClass = adapter.toPascal()
-                if (global."ejs.db"::[adapterClass] == undefined) {
-                    load("ejs.db." + adapter + ".mod")
-                }
-                _adapter = new global."ejs.db"::[adapterClass](connectionString)
-            } catch (e) {
-                print(e)
+            _name = basename(connectionString)
+            _connection = connectionString
+            let adapterClass = adapter.toPascal()
+            if (global."ejs.db"::[adapterClass] == undefined) {
+                load("ejs.db." + adapter + ".mod")
+            }
+            if (!global."ejs.db"::[adapterClass]) {
                 throw "Can't find database connector for " + adapter
             }
+            _adapter = new global."ejs.db"::[adapterClass](connectionString)
         }
 
         /**
@@ -5411,6 +5409,7 @@ module ejs.db {
          */
         function error(field: String, msg: String): Void {
             field ||= ""
+            _errors ||= {}
             _errors[field] = msg
         }
 
@@ -12070,7 +12069,8 @@ module ejs.web {
                     write('    <tr class="' + styleRow + 
                         '" onclick="window.location=\'' + url + '\';">\r\n')
                 } else {
-                    write('    <tr class="' + styleRow + '">\r\n')
+                let dataId = (options["data-remote"] && r.id) ? (' data-id="' + r.id + '"') : ''
+                    write('    <tr class="' + styleRow + '"' + dataId + '>\r\n')
                 }
 
                 let col = 0
@@ -12211,6 +12211,9 @@ module ejs.web {
             }
             if (options["data-apply"]) {
                 attributes += ' data-apply="' + options["data-apply"] + '"'
+            }
+            if (options["data-id"]) {
+                attributes += ' data-id="' + options["data-id"] + '"'
             }
             return attributes
         }

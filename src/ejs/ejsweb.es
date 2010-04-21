@@ -495,7 +495,10 @@ class EjsWeb {
     }
 
     function buildWebPage(file: Path, compile: Boolean = true, isView: Boolean = false): String {
-        // file = file.portable
+        /*
+            CHANGE - not for windows
+            file = file.portable
+         */
         let ext = file.extension
         if (ext == "") {
             file = file.joinExt("ejs")
