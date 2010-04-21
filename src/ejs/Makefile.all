@@ -48,10 +48,11 @@ ifeq ($(BLD_EJS_DIR),)
 
 	ifeq ($(BUILD_COMPILER),1)
 		TARGETS		+= $(BLD_BIN_DIR)/ajsc$(BLD_EXE)
-		ifeq ($(BLD_FEATURE_EJS_WEB),1)
-			TARGETS	+= $(BLD_BIN_DIR)/ajsweb$(BLD_EXE)
-		endif
 		TOOLS		+= $(BLD_BIN_DIR)/ajsc$(BLD_EXE)
+		TARGETS		+= $(BLD_BIN_DIR)/ajsweb
+		ifeq ($(BLD_OS),WIN)
+			TARGETS	+= $(BLD_BIN_DIR)/ajsweb.cmd
+		endif
 	endif
 
 	TARGETS			+= $(BLD_BIN_DIR)/ajs$(BLD_EXE)
@@ -146,14 +147,13 @@ $(BLD_BIN_DIR)/ajs$(BLD_EXE): $(OBJECTS) $(call dep, mpr ajs)
 $(BLD_BIN_DIR)/ajsmod$(BLD_EXE): $(OBJECTS) $(call dep, mpr ajs)
 	bld --exe $(BLD_BIN_DIR)/ajsmod$(BLD_EXE) --search "$(BLD_EJS_LIBPATHS)" --libs "$(BLD_EJS_LIBS)" ejsmod$(BLD_OBJ)
 
-ifeq ($(BLD_EXE),)
 $(BLD_BIN_DIR)/ajsweb: ejsweb.es
 	cat ejsweb.es | sed 's^#!/usr/bin/env ejs^#!/usr/bin/env ajs^' >$(BLD_BIN_DIR)/ajsweb
 	chmod 755 $(BLD_BIN_DIR)/ajsweb
-else
-$(BLD_BIN_DIR)/ajsweb$(BLD_EXE): $(OBJECTS) $(call dep, mpr)
-	bld --exe $(BLD_BIN_DIR)/ajsweb$(BLD_EXE) --search "$(BLD_EJS_LIBPATHS)" --libs "ac $(BLD_EJS_LIBS)" ejsweb$(BLD_OBJ)
-endif
+
+$(BLD_BIN_DIR)/ajsweb.cmd: ejsweb.cmd
+	cat ejsweb.es | sed 's^ejsweb^ajsweb^' >$(BLD_BIN_DIR)/ajsweb.cmd
+	chmod 755 $(BLD_BIN_DIR)/ajsweb.cmd
 
 $(BLD_MOD_DIR)/ajsweb.mod: ejsweb.es $(BLD_MOD_DIR)/ajs.mod
 	$(call log) "[Generate]" ajsweb.mod
