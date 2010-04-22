@@ -10,10 +10,12 @@ BLD_NAME="!!BLD_NAME!!"
 BLD_CFG_PREFIX=!!ORIG_BLD_CFG_PREFIX!!
 BLD_MOD_PREFIX=!!ORIG_BLD_MOD_PREFIX!!
 BLD_LIB_PREFIX=!!ORIG_BLD_LIB_PREFIX!!
+BLD_BIN_PREFIX=!!ORIG_BLD_BIN_PREFIX!!
 
 remove() {
 	local cdir=`pwd`
 
+    "$BLD_BIN_PREFIX/linkup" Remove
 	if [ -x $BLD_CFG_PREFIX ] ; then
 		cd $BLD_CFG_PREFIX
 		removeIntermediateFiles access.log error.log '*.log.old' .dummy $BLD_PRODUCT.conf .*.log make.log

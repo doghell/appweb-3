@@ -7,6 +7,7 @@
 
 BLD_PRODUCT=!!BLD_PRODUCT!!
 BLD_NAME="!!BLD_NAME!!"
+BLD_BIN_PREFIX="!!ORIG_BLD_BIN_PREFIX!!"
 BLD_LIB_PREFIX="!!ORIG_BLD_LIB_PREFIX!!"
 BLD_MOD_PREFIX="!!ORIG_BLD_MOD_PREFIX!!"
 
@@ -69,6 +70,7 @@ configureService() {
 		;;
 
 	install)
+        "$BLD_BIN_PREFIX/linkup" Install
         if which ldconfig >/dev/null 2>&1 ; then
             ldconfig -n $BLD_LIB_PREFIX
             ldconfig -n $BLD_MOD_PREFIX
