@@ -84,3 +84,6 @@ src/server/conf/
 projects/WIN/*/Win32
 *.deb
 test/cgi-bin/cgi Program
+*.mode1v3
+*.pbxuser
+*.perspectivev3
