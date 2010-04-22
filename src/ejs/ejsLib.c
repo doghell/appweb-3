@@ -28442,7 +28442,6 @@ static char *makeModuleName(MprCtx ctx, cchar *name);
 static int  readNumber(Ejs *ejs, MprFile *file, int *number);
 static int  readWord(Ejs *ejs, MprFile *file, int *number);
 static char *search(Ejs *ejs, char *filename, int minVersion, int maxVersion);
-static int  swapShort(Ejs *ejs, int word);
 static int  swapWord(Ejs *ejs, int word);
 static char *tokenToString(EjsModule *mp, int   token);
 
@@ -29480,8 +29479,7 @@ static int loadScriptModule(Ejs *ejs, MprFile *file, cchar *path, int flags)
         ejsThrowIOError(ejs, "Error reading module file %s, corrupt header", path);
         return EJS_ERR;
     }
-
-    if ((int) swapShort(ejs, hdr.magic) != EJS_MODULE_MAGIC) {
+    if ((int) swapWord(ejs, hdr.magic) != EJS_MODULE_MAGIC) {
         ejsThrowIOError(ejs, "Bad module file format in %s", path);
         return EJS_ERR;
     }
@@ -30240,6 +30238,7 @@ EjsDoc *ejsCreateDoc(Ejs *ejs, EjsBlock *block, int slotNum, cchar *docString)
 #endif
 
 
+#if UNUSED && KEEP
 static int swapShort(Ejs *ejs, int word)
 {
     if (mprGetEndian(ejs) == MPR_LITTLE_ENDIAN) {
@@ -30248,7 +30247,7 @@ static int swapShort(Ejs *ejs, int word)
     word = ((word & 0xFFFF) << 16) | ((word & 0xFFFF0000) >> 16);
     return ((word & 0xFF) << 8) | ((word & 0xFF00) >> 8);
 }
-
+#endif
 
 static int swapWord(Ejs *ejs, int word)
 {

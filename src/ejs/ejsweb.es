@@ -2053,7 +2053,7 @@ class EjsParser {
 
         if (layoutPage != undefined && layoutPage != file) {
             let layoutText: String = new EjsParser().parse(layoutPage, appBaseDir, layoutPage)
-            return layoutText.replace(ContentPattern, out.toString())
+            return layoutText.replace(ContentPattern, out.toString().replace(/\$/g, "$$$$"))
         }
         return out.toString()
     }

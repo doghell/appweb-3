@@ -9824,6 +9824,7 @@ static int  createSection(EcCompiler *cp, EjsVar *block, int slotNum);
 static int  reserveRoom(EcCompiler *cp, int room);
 static int  sum(cchar *name, int value);
 static int  swapShort(EcCompiler *cp, int word);
+static int  swapWord(EcCompiler *cp, int word);
 
 #if BLD_FEATURE_EJS_DOC
 static int  createDocSection(EcCompiler *cp, EjsVar *block, int slotNum, EjsTrait *trait);
@@ -9838,7 +9839,7 @@ int ecCreateModuleHeader(EcCompiler *cp)
 
     memset(&hdr, 0, sizeof(hdr));
     hdr.magic = swapShort(cp, EJS_MODULE_MAGIC);
-    hdr.fileVersion = EJS_MODULE_VERSION;
+    hdr.fileVersion = swapWord(cp, EJS_MODULE_VERSION);
 
     if (cp->empty) {
         hdr.flags |= EJS_MODULE_INTERP_EMPTY;
@@ -10960,7 +10961,6 @@ static int swapShort(EcCompiler *cp, int word)
 }
 
 
-#if UNUSED
 static int swapWord(EcCompiler *cp, int word)
 {
     if (mprGetEndian(cp) == MPR_LITTLE_ENDIAN) {
@@ -10968,7 +10968,6 @@ static int swapWord(EcCompiler *cp, int word)
     }
     return ((word & 0xFF000000) >> 24) | ((word & 0xFF0000) >> 8) | ((word & 0xFF00) << 8) | ((word & 0xFF) << 24);
 }
-#endif
 
 /*
  *  Simple checksum of name and slots. Not meant to be rigorous.
