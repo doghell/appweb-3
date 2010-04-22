@@ -82,3 +82,5 @@ src/server/conf/
 *.ncb
 *.suo
 projects/WIN/*/Win32
+*.deb
+test/cgi-bin/cgi Program
