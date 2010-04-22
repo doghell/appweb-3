@@ -9823,7 +9823,6 @@ static int  createPropertySection(EcCompiler *cp, EjsVar *block, int slotNum, Ej
 static int  createSection(EcCompiler *cp, EjsVar *block, int slotNum);
 static int  reserveRoom(EcCompiler *cp, int room);
 static int  sum(cchar *name, int value);
-static int  swapShort(EcCompiler *cp, int word);
 static int  swapWord(EcCompiler *cp, int word);
 
 #if BLD_FEATURE_EJS_DOC
@@ -9838,7 +9837,7 @@ int ecCreateModuleHeader(EcCompiler *cp)
     EjsModuleHdr    hdr;
 
     memset(&hdr, 0, sizeof(hdr));
-    hdr.magic = swapShort(cp, EJS_MODULE_MAGIC);
+    hdr.magic = swapWord(cp, EJS_MODULE_MAGIC);
     hdr.fileVersion = swapWord(cp, EJS_MODULE_VERSION);
 
     if (cp->empty) {
@@ -10951,6 +10950,7 @@ void ecAdjustCodeLength(EcCompiler *cp, int adj)
 }
 
 
+#if UNUSED
 static int swapShort(EcCompiler *cp, int word)
 {
     if (mprGetEndian(cp) == MPR_LITTLE_ENDIAN) {
@@ -10959,7 +10959,7 @@ static int swapShort(EcCompiler *cp, int word)
     word = ((word & 0xFFFF) << 16) | ((word & 0xFFFF0000) >> 16);
     return ((word & 0xFF) << 8) | ((word & 0xFF00) >> 8);
 }
-
+#endif
 
 static int swapWord(EcCompiler *cp, int word)
 {
