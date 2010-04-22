@@ -2245,9 +2245,9 @@ while [ "${1#--}" != "$1" ] ; do
 
     SW=`echo ${1#--} | tr '[A-Z]' '[a-z]'`
     case ${SW} in
-#    bindir=*)
-#       BLD_BIN_PREFIX=`canonPath "${ARG}"`
-#        ;;
+#   bindir=*)
+#      BLD_BIN_PREFIX=`canonPath "${ARG}"`
+#       ;;
     buildNumber=*)
         BLD_NUMBER="${ARG}"
         ;;
@@ -2468,6 +2468,8 @@ while [ "${1#--}" != "$1" ] ; do
     #
     #   Ignored but provided for compatibility with autoconf
     #
+    bindir=*|libdir=*|libexecdir=*|moddir=*)
+        ;;
     disable-nls|enable-nls)
         ;;
     exec-prefix=*|sbindir=*|sharedstatedir=*|localstatedir=*)
