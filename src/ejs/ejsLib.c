@@ -8571,7 +8571,11 @@ static EjsVar *isFinite(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
  */
 static EjsVar *isNaN(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
+#if BLD_FEATURE_NUM_TYPE_DOUBLE
     return (EjsVar*) (mprIsNan(np->value) ? ejs->trueValue : ejs->falseValue);
+#else
+    return (EjsVar*) ejs->falseValue;
+#endif
 }
 
 
@@ -8581,12 +8585,18 @@ static EjsVar *isNaN(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
  */
 static EjsVar *toExponential(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
+#if BLD_FEATURE_NUM_TYPE_DOUBLE
     char    *result;
     int     ndigits;
     
     ndigits = (argc > 0) ? ejsGetInt(argv[0]): 0;
     result = mprDtoa(np, np->value, ndigits, MPR_DTOA_N_DIGITS, MPR_DTOA_EXPONENT_FORM);
     return (EjsVar*) ejsCreateStringAndFree(ejs, result);
+#else
+    char    numBuf[32];
+    mprItoa(numBuf, sizeof(numBuf), (int) np->value, 10);
+    return (EjsVar*) ejsCreateString(ejs, numBuf);
+#endif
 }
 
 
@@ -8597,12 +8607,18 @@ static EjsVar *toExponential(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
  */
 static EjsVar *toFixed(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
+#if BLD_FEATURE_NUM_TYPE_DOUBLE
     char    *result;
     int     ndigits;
     
     ndigits = (argc > 0) ? ejsGetInt(argv[0]) : 0;
     result = mprDtoa(np, np->value, ndigits, MPR_DTOA_N_FRACTION_DIGITS, MPR_DTOA_FIXED_FORM);
     return (EjsVar*) ejsCreateStringAndFree(ejs, result);
+#else
+    char    numBuf[32];
+    mprItoa(numBuf, sizeof(numBuf), (int) np->value, 10);
+    return (EjsVar*) ejsCreateString(ejs, numBuf);
+#endif
 }
 
 
@@ -8612,12 +8628,18 @@ static EjsVar *toFixed(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
  */
 static EjsVar *toPrecision(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
+#if BLD_FEATURE_NUM_TYPE_DOUBLE
     char    *result;
     int     ndigits;
     
     ndigits = (argc > 0) ? ejsGetInt(argv[0]) : 0;
     result = mprDtoa(np, np->value, ndigits, MPR_DTOA_N_DIGITS, 0);
     return (EjsVar*) ejsCreateStringAndFree(ejs, result);
+#else
+    char    numBuf[32];
+    mprItoa(numBuf, sizeof(numBuf), (int) np->value, 10);
+    return (EjsVar*) ejsCreateString(ejs, numBuf);
+#endif
 }
 
 
@@ -32538,8 +32560,6 @@ static bool parseBoolean(Ejs *ejs, cchar *s)
  */
 static MprNumber parseNumber(Ejs *ejs, cchar *str)
 {
-    MprNumber   n;
-    cchar       *cp;
     int64       num;
     int         radix, c, negative;
 
@@ -32561,9 +32581,11 @@ static MprNumber parseNumber(Ejs *ejs, cchar *str)
     }
 
     /*
-        Floatng format: [DIGITS].[DIGITS][(e|E)[+|-]DIGITS]
+        Floating format: [DIGITS].[DIGITS][(e|E)[+|-]DIGITS]
      */
     if (!(*str == '0' && tolower((int) str[1]) == 'x')) {
+        MprNumber   n;
+        cchar       *cp;
         for (cp = str; *cp; cp++) {
             if (*cp == '.' || tolower((int) *cp) == 'e') {
                 n = atof(str);
