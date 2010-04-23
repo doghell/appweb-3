@@ -2491,6 +2491,7 @@ module ejs {
      *  Print variables for debugging.
      *  @param args Variables to print
      *  @spec ejs
+     *  @hide 
      */
     native function printv(...args): void
 
@@ -7652,167 +7653,167 @@ module ejs.io {
         /** 
           HTTP Continue Status (100)
          */     
-        static const Continue : Number   = 100
+        static const Continue : Number = 100
 
         /** 
             HTTP Success Status (200) 
          */     
-        static const Ok : Number   = 200
+        static const Ok : Number = 200
 
         /** 
             HTTP Created Status (201) 
          */     
-        static const Created : Number   = 201
+        static const Created : Number = 201
 
         /** 
             HTTP Accepted Status (202) 
          */     
-        static const Accepted : Number   = 202
+        static const Accepted : Number = 202
 
         /** 
             HTTP Non-Authoritative Information Status (203) 
          */     
-        static const NotAuthoritative : Number   = 203
+        static const NotAuthoritative : Number = 203
 
         /** 
             HTTP No Content Status (204)  
          */     
-        static const NoContent : Number   = 204
+        static const NoContent : Number = 204
 
         /** 
             HTTP Reset Content Status (205) 
          */     
-        static const Reset : Number   = 205
+        static const Reset : Number = 205
 
         /** 
             HTTP Partial Content Status (206) 
          */     
-        static const PartialContent : Number   = 206
+        static const PartialContent : Number = 206
 
         /** 
             HTTP Multiple Choices Status (300) 
          */     
-        static const MultipleChoice : Number   = 300
+        static const MultipleChoice : Number = 300
 
         /** 
             HTTP Moved Permanently Status (301) 
          */     
-        static const MovedPermanently : Number   = 301
+        static const MovedPermanently : Number = 301
 
         /** 
             HTTP Found but Moved Temporily Status (302) 
          */     
-        static const MovedTemporarily : Number   = 302
+        static const MovedTemporarily : Number = 302
 
         /** 
             HTTP See Other Status (303) 
          */     
-        static const SeeOther : Number   = 303
+        static const SeeOther : Number = 303
 
         /** 
             HTTP Not Modified Status (304)     
          */
-        static const NotModified : Number   = 304
+        static const NotModified : Number = 304
 
         /** 
             HTTP Use Proxy Status (305) 
          */     
-        static const UseProxy : Number   = 305
+        static const UseProxy : Number = 305
 
         /** 
             HTTP Bad Request Status(400) 
          */     
-        static const BadRequest : Number   = 400
+        static const BadRequest : Number = 400
 
         /** 
             HTTP Unauthorized Status (401) 
          */     
-        static const Unauthorized : Number   = 401
+        static const Unauthorized : Number = 401
 
         /** 
             HTTP Payment Required Status (402) 
          */     
-        static const PaymentRequired : Number   = 402
+        static const PaymentRequired : Number = 402
 
         /** 
             HTTP Forbidden Status (403)  
          */     
-        static const Forbidden : Number   = 403
+        static const Forbidden : Number = 403
 
         /** 
             HTTP Not Found Status (404) 
          */     
-        static const NotFound : Number   = 404
+        static const NotFound : Number = 404
 
         /** 
             HTTP Method Not Allowed Status (405) 
          */     
-        static const BadMethod : Number   = 405
+        static const BadMethod : Number = 405
 
         /** 
             HTTP Not Acceptable Status (406) 
          */     
-        static const NotAcceptable : Number   = 406
+        static const NotAcceptable : Number = 406
 
         /** 
             HTTP ProxyAuthentication Required Status (407) 
          */     
-        static const ProxyAuthRequired : Number   = 407
+        static const ProxyAuthRequired : Number = 407
 
         /** 
             HTTP Request Timeout Status (408) 
          */     
-        static const RequestTimeout : Number   = 408
+        static const RequestTimeout : Number = 408
 
         /** 
             HTTP Conflict Status (409) 
          */     
-        static const Conflict : Number   = 409
+        static const Conflict : Number = 409
 
         /** 
             HTTP Gone Status (410) 
          */     
-        static const Gone : Number   = 410
+        static const Gone : Number = 410
 
         /** 
             HTTP Length Required Status (411) 
          */     
-        static const LengthRequired : Number   = 411
+        static const LengthRequired : Number = 411
         
         /** 
             HTTP Precondition Failed Status (412) 
          */     
-        static const PrecondFailed : Number   = 412
+        static const PrecondFailed : Number = 412
 
         /** 
             HTTP Request Entity Too Large Status (413) 
          */     
-        static const EntityTooLarge : Number   = 413
+        static const EntityTooLarge : Number = 413
 
         /** 
             HTTP Request URI Too Long Status (414)  
          */     
-        static const UriTooLong : Number   = 414
+        static const UriTooLong : Number = 414
 
         /** 
             HTTP Unsupported Media Type (415) 
          */     
-        static const UnsupportedMedia : Number   = 415
+        static const UnsupportedMedia : Number = 415
 
         /** 
             HTTP Requested Range Not Satisfiable (416) 
          */     
-        static const BadRange : Number   = 416
+        static const BadRange : Number = 416
 
         /** 
             HTTP Server Error Status (500) 
          */     
-        static const ServerError : Number   = 500
+        static const ServerError : Number = 500
 
         /** 
             HTTP Not Implemented Status (501) 
          */     
-        static const NotImplemented : Number   = 501
+        static const NotImplemented : Number = 501
 
         /** 
             HTTP Bad Gateway Status (502) 
@@ -7822,17 +7823,17 @@ module ejs.io {
         /** 
             HTTP Service Unavailable Status (503) 
          */     
-        static const ServiceUnavailable : Number   = 503
+        static const ServiceUnavailable : Number = 503
 
         /** 
             HTTP Gateway Timeout Status (504) 
          */     
-        static const GatewayTimeout : Number   = 504
+        static const GatewayTimeout : Number = 504
 
         /** 
             HTTP Http Version Not Supported Status (505) 
          */     
-        static const VersionNotSupported: Number   = 505
+        static const VersionNotSupported: Number = 505
 
         /**
             Callback event mask for readable events
@@ -13174,6 +13175,7 @@ module ejs.web {
 
         /**
          *  Authentication access control list
+         *  @hide
          */
         native var authAcl: String
 
@@ -13250,8 +13252,7 @@ module ejs.web {
         native var mimeType: String
 
         /**
-         *  The portion of the path after the script name if extra path processing is being used. See the ExtraPath 
-         *  directive.
+         *  The portion of the path after the script name if extra path processing is being used.
          */
         native var pathInfo: String
 
