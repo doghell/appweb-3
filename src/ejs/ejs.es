@@ -4394,9 +4394,8 @@ module ejs {
                 "Arg1 %d, arg2 %d" % [1, 2]
             @spec ejs
          */
-        function % (arg: Object): String {
-            return format(arg)
-        }
+        function % (arg: Object): String
+            format(arg)
     }
 }
 

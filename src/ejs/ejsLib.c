@@ -11822,16 +11822,19 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 
             buf = 0;
             switch (kind) {
+            case 'e': case 'g': case 'f':
+#if BLD_FEATURE_FLOATING_POINT
+                value = (EjsVar*) ejsToNumber(ejs, value);
+                buf = mprAsprintf(ejs, -1, fmt, (double) ejsGetNumber(value));
+                break;
+#else
+                //   Fall through to normal number case
+#endif
             case 'd': case 'i': case 'o': case 'u':
                 value = (EjsVar*) ejsToNumber(ejs, value);
                 buf = mprAsprintf(ejs, -1, fmt, (int64) ejsGetNumber(value));
                 break;
-#if BLD_FEATURE_FLOATING_POINT
-            case 'e': case 'g': case 'f':
-                value = (EjsVar*) ejsToNumber(ejs, value);
-                buf = mprAsprintf(ejs, -1, fmt, (double) ejsGetNumber(value));
-                break;
-#endif
+
             case 's':
                 value = (EjsVar*) ejsToString(ejs, value);
                 buf = mprAsprintf(ejs, -1, fmt, ejsGetString(value));
