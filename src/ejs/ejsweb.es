@@ -75,7 +75,7 @@ class EjsWeb {
             config = {}
         }
         ejsweb = basename(App.args[0]).trimEnd(".exe").toString()
-        if (ejsweb == "ejsweb") {
+        if (ejsweb == "ejsweb" || ejsweb == "ejsweb.mod") {
             compiler = "ejsc"
         } else {
             compiler = "ajsc"
@@ -93,7 +93,7 @@ class EjsWeb {
              *  Be smart and map ajsc/ejsc to the right program for use by Appweb or Ejscript
              *  Just do for debug
              */
-            if (ejsweb == "ejsweb") {
+            if (ejsweb == "ejsweb" || ejsweb == "ejsweb.mod") {
                 config.compiler["debug"].command = config.compiler["debug"].command.replace(/ajsc/, "ejsc")
             } else {
                 config.compiler["debug"].command = config.compiler["debug"].command.replace(/ejsc/, "ajsc")
