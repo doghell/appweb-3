@@ -3535,8 +3535,8 @@
 #define ES_ejs_web_Controller_ejs_web_renderFile__hoisted_2_e          2
 #define ES_ejs_web_Controller_ejs_web_renderRaw_args                   0
 #define ES_ejs_web_Controller_ejs_web_renderView_viewName              0
-#define ES_ejs_web_Controller_ejs_web_renderView__hoisted_1_name       1
-#define ES_ejs_web_Controller_ejs_web_renderView__hoisted_2_viewClass  2
+#define ES_ejs_web_Controller_ejs_web_renderView_viewClass             1
+#define ES_ejs_web_Controller_ejs_web_renderView__hoisted_2_name       2
 #define ES_ejs_web_Controller_ejs_web_renderView__hoisted_3_e          3
 #define ES_ejs_web_Controller_ejs_web_renderView__hoisted_4_n          4
 #define ES_ejs_web_Controller_ejs_web_renderView__hoisted_5_e          5
@@ -3925,11 +3925,11 @@
 #define ES_ejs_web_View_ejs_web_getValue_fmt                           5
 #define ES_ejs_web_View_ejs_web_getValue__hoisted_6_part               6
 #define ES_ejs_web_View_ejs_web_date_fmt                               0
-#define ES_ejs_web_View_ejs_web_date___fun_26391__                     1
+#define ES_ejs_web_View_ejs_web_date___fun_26393__                     1
 #define ES_ejs_web_View_ejs_web_currency_fmt                           0
-#define ES_ejs_web_View_ejs_web_currency___fun_26425__                 1
+#define ES_ejs_web_View_ejs_web_currency___fun_26427__                 1
 #define ES_ejs_web_View_ejs_web_number_fmt                             0
-#define ES_ejs_web_View_ejs_web_number___fun_26455__                   1
+#define ES_ejs_web_View_ejs_web_number___fun_26457__                   1
 #define ES_ejs_web_View_ejs_web_getOptions_options                     0
 #define ES_ejs_web_View_ejs_web_getOptions_result                      1
 #define ES_ejs_web_View_ejs_web_getOptions__hoisted_2_option           2
@@ -4206,6 +4206,6 @@
 #define ES_LocalModel_ejs_db_constructor_fields                        0
 #define ES_LocalModel_LocalModel_fields                                0
 
-#define _ES_CHECKSUM_ejs_web 458428
+#define _ES_CHECKSUM_ejs_web 458434
 
 #endif

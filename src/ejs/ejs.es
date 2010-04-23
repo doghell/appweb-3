@@ -12800,9 +12800,10 @@ module ejs.web {
                 viewName = actionName
             }
             
+            let viewClass: String
             try {
                 let name = Reflect(this).name
-                let viewClass: String = name.trim("Controller") + "_" + viewName + "View"
+                viewClass = name.trim("Controller") + "_" + viewName + "View"
                 if (global[viewClass] == undefined) {
                     loadView(viewName)
                 }
