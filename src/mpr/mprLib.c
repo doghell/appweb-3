@@ -18167,7 +18167,7 @@ char *mprGetAppDir(MprCtx ctx)
 
 static void getWaitFds(MprWaitService *ws);
 static void growFds(MprWaitService *ws);
-static void serviceIO(MprWaitService *ws);
+static void serviceIO(MprWaitService *ws, struct pollfd *stableFds, int count);
 
 
 int mprInitSelectWait(MprWaitService *ws)
@@ -18252,7 +18252,8 @@ static void serviceRecall(MprWaitService *ws)
  */
 int mprWaitForIO(MprWaitService *ws, int timeout)
 {
-    int     rc;
+    struct pollfd   *fds;
+    int             rc, count;
 
     /*
      *  No locking. If the masks are updated after this test, the breakout pipe will wake us up soon.
@@ -18271,21 +18272,20 @@ int mprWaitForIO(MprWaitService *ws, int timeout)
 #endif
 
     mprLock(ws->mutex);
-    ws->stableFdsCount = ws->fdsCount;
-    if ((ws->stableFds = mprMemdup(ws, ws->fds, ws->stableFdsCount * sizeof(struct pollfd))) == 0) {
+    count = ws->fdsCount;
+    if ((fds = mprMemdup(ws, ws->fds, count * sizeof(struct pollfd))) == 0) {
         mprUnlock(ws->mutex);
         return MPR_ERR_NO_MEMORY;
     }
     mprUnlock(ws->mutex);
 
-    rc = poll(ws->stableFds, ws->stableFdsCount, timeout);
+    rc = poll(fds, count, timeout);
     if (rc < 0) {
         mprLog(ws, 2, "Poll returned %d, errno %d", rc, mprGetOsError());
     } else if (rc > 0) {
-        serviceIO(ws);
+        serviceIO(ws, fds, count);
     }
-    mprFree(ws->stableFds);
-    ws->stableFds = 0;
+    mprFree(fds);
     return rc;
 }
 
@@ -18353,10 +18353,10 @@ static void getWaitFds(MprWaitService *ws)
 /*
  *  Service I/O events
  */
-static void serviceIO(MprWaitService *ws)
+static void serviceIO(MprWaitService *ws, struct pollfd *fds, int count)
 {
     MprWaitHandler      *wp;
-    struct pollfd       *fds;
+    struct pollfd       *fp;
     int                 i, mask, index, start;
 
     /*
@@ -18371,7 +18371,7 @@ static void serviceIO(MprWaitService *ws)
     /*
      *  Service the breakout pipe first
      */
-    if (ws->stableFds[0].revents & POLLIN) {
+    if (fds[0].revents & POLLIN) {
         char    buf[128];
         if (read(ws->breakPipe[MPR_READ_PIPE], buf, sizeof(buf)) < 0) {
             /* Ignore */
@@ -18384,9 +18384,9 @@ static void serviceIO(MprWaitService *ws)
     /*
      *  Now service all IO wait handlers. Processing must be aborted if an active fd is removed.
      */
-    for (i = start; i < ws->stableFdsCount; ) {
-        fds = &ws->stableFds[i++];
-        if (fds->revents == 0) {
+    for (i = start; i < count; ) {
+        fp = &fds[i++];
+        if (fp->revents == 0) {
             continue;
         }
 
@@ -18395,20 +18395,20 @@ static void serviceIO(MprWaitService *ws)
          */
         for (index = -1; (wp = (MprWaitHandler*) mprGetPrevItem(ws->handlers, &index)) != 0; ) {
             mprAssert(wp->fd >= 0);
-            if (wp->fd != fds->fd) {
+            if (wp->fd != fp->fd) {
                 continue;
             }
             /*
              *  Present mask is only cleared after the io handler callback has completed
              */
             mask = 0;
-            if ((wp->desiredMask & MPR_READABLE) && fds->revents & (POLLIN | POLLHUP | POLLERR | POLLNVAL)) {
+            if ((wp->desiredMask & MPR_READABLE) && fp->revents & (POLLIN | POLLHUP | POLLERR | POLLNVAL)) {
                 mask |= MPR_READABLE;
-                fds->revents &= ~(POLLIN | POLLHUP | POLLERR | POLLNVAL);
+                fp->revents &= ~(POLLIN | POLLHUP | POLLERR | POLLNVAL);
             }
-            if ((wp->desiredMask & MPR_WRITABLE) && fds->revents & POLLOUT) {
+            if ((wp->desiredMask & MPR_WRITABLE) && fp->revents & POLLOUT) {
                 mask |= MPR_WRITABLE;
-                fds->revents &= ~POLLOUT;
+                fp->revents &= ~POLLOUT;
             }
             if (wp->flags & MPR_WAIT_RECALL_HANDLER) {
                 if (wp->desiredMask & wp->disableMask) {
@@ -18443,7 +18443,7 @@ static void serviceIO(MprWaitService *ws)
             }
             break;
         }
-        fds->revents = 0;
+        fp->revents = 0;
     }
     mprUnlock(ws->mutex);
 }

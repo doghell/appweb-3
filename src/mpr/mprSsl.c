@@ -5292,9 +5292,11 @@ typedef struct MprWaitService {
 
 #if LINUX || MACOSX
     struct pollfd   *fds;                   /* File descriptors to poll on */
-    struct pollfd   *stableFds;             /* Stable list used while actually polling */
     int             fdsCount;               /* Count of fds */
+#if UNUSED
+    struct pollfd   *stableFds;             /* Stable list used while actually polling */
     int             stableFdsCount;         /* Count of stableFds */
+#endif
     int             fdsSize;                /* Size of fds array */
     int             breakPipe[2];           /* Pipe to wakeup select when multithreaded */
 
