@@ -18924,7 +18924,7 @@ void ejsConfigureConfigType(Ejs *ejs)
         BLD_FEATURE_MULTITHREAD ? (EjsVar*) ejs->trueValue: (EjsVar*) ejs->falseValue);
 
     ejsSetProperty(ejs, vp, ES_ejs_sys_Config_NumberType, 
-        (EjsVar*) ejsCreateString(ejs, MPR_STRINGIFY(BLD_FEATURE_NUM_TYPE)));
+        (EjsVar*) ejsCreateString(ejs, BLD_FEATURE_NUM_TYPE_STRING));
 
     ejsSetProperty(ejs, vp, ES_ejs_sys_Config_OS, (EjsVar*) ejsCreateString(ejs, BLD_OS));
     ejsSetProperty(ejs, vp, ES_ejs_sys_Config_Product, (EjsVar*) ejsCreateString(ejs, BLD_PRODUCT));
