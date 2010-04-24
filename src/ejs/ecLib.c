@@ -6326,7 +6326,6 @@ static void genLiteral(EcCompiler *cp, EcNode *np)
          */
         ip = (EjsNumber*) np->literal.var;
 #if BLD_FEATURE_FLOATING_POINT
-        n = (int64) floor(ip->value);
         if (ip->value != floor(ip->value) || ip->value <= -MAXINT || ip->value >= MAXINT) {
             ecEncodeOpcode(cp, EJS_OP_LOAD_DOUBLE);
             ecEncodeDouble(cp, ip->value);
