@@ -65,10 +65,23 @@ server:
 	$(BLD_BIN_DIR)/appweb --log stdout:1
 
 first:
+	iterations=4000 ; \
+	set -e ; while : ; \
+	do \
+		set -x ; \
+		utest -2 -v -i 9999999 --threads 1 ; \
+		set +x ; \
+	done
 	utest -n -v -i 9999999 --threads 8 ; \
 
 second:
-	utest -2 -v -i 9999999 --threads 8 ; \
+	iterations=4000 ; \
+	set -e ; while : ; \
+	do \
+		set -x ; \
+		utest -2 -v -i 9999999 --threads 8 ; \
+		set +x ; \
+	done
 
 third:
 	iterations=4000 ; \
