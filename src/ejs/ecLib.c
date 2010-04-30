@@ -4,7 +4,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.0.
+ *  Embedthis Ejscript 1.0.1.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -4944,7 +4944,13 @@ static void genCallSequence(EcCompiler *cp, EcNode *np)
             popStack(cp, 1);
             
         } else {
+#if POSSIBLE_BUG || 1
             ecEncodeOpcode(cp, EJS_OP_LOAD_GLOBAL);
+#else
+            //  See master branch for fix
+            processNodeGetValue(cp, left);
+            ecEncodeOpcode(cp, EJS_OP_DUP);
+#endif
             pushStack(cp, 1);
             processNodeGetValue(cp, left);
             argc = genCallArgs(cp, right);
