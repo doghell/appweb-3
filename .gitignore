@@ -87,3 +87,7 @@ test/cgi-bin/cgi Program
 *.mode1v3
 *.pbxuser
 *.perspectivev3
+lib/lib*
+releases/tmp
+test/.appweb.pid
+test/t.es
