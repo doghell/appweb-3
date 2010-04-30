@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="ajsc"
-    ProjectGUID="316db78f-d036-4588-94bb-9cf847c3eadc"
+    ProjectGUID="1871e1b9-db72-4d88-8579-33ac80e6e378"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -32,27 +32,6 @@
 				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)\ajs.mod $(ProjectDir)\..\..\..\src\ejs\ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)\..\..\..\src\include\ejs.slots.h $(IntDir)\ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)\ajsweb.mod $(ProjectDir)\..\..\..\src\ejs\ejsweb.es&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.cmd echo Copying ajsweb.cmd &amp; copy $(ProjectDir)\..\..\..\src\ejs\ajsweb.cmd $(IntDir)\ajsweb.cmd&#x0D;&#x0A;if not exist $(IntDir)\ajsweb echo Copying ajsweb &amp; copy $(ProjectDir)\..\..\..\src\ejs\ejsweb.es $(IntDir)\ajsweb&#x0D;&#x0A;"
 				Outputs="$(IntDir)\ajs.mod"
 			/>
-            <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
             <Tool
                 Name="VCManifestTool"
             />
@@ -117,27 +96,6 @@
 				Outputs="$(IntDir)\ajs.mod"
 			/>
             <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
-            <Tool
                 Name="VCManifestTool"
             />
             <Tool
@@ -188,7 +146,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{55c57029-34ce-4d26-8170-d609bfc6566f}"
+            UniqueIdentifier="{e69952f3-8225-46b1-9d13-f789d4d64eba}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -222,7 +180,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{cce21e58-f69e-4872-bb1a-6d833080c39c}"
+            UniqueIdentifier="{1795b56d-f87b-47b9-8f23-46a182486dd8}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ejsc.c"

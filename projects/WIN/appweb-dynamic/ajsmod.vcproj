@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="ajsmod"
-    ProjectGUID="d070a3d2-80c9-49c5-b951-18007dc2814b"
+    ProjectGUID="ced7516c-8426-41b5-a9bd-f524cd7b7270"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -27,27 +27,6 @@
                 Name="VCPreBuildEventTool"
             />
 <Tool Name="VCCustomBuildTool" />
-            <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
             <Tool
                 Name="VCManifestTool"
             />
@@ -107,27 +86,6 @@
             />
 <Tool Name="VCCustomBuildTool" />
             <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
-            <Tool
                 Name="VCManifestTool"
             />
             <Tool
@@ -178,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{2833e3a2-6501-4b75-b99c-38e23e2b41a5}"
+            UniqueIdentifier="{d9811082-c819-4d4e-9379-c68ee2fd119d}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -212,7 +170,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{9d6fd72c-d8e4-4dc8-8c39-cd7643d6e566}"
+            UniqueIdentifier="{b22e06cb-d693-4a31-9ae2-e8c89f3c68b1}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ejsmod.c"

@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_upload"
-    ProjectGUID="16d546d6-f202-4101-b94d-32da18bc6cbb"
+    ProjectGUID="45be7df4-080d-4dd4-be48-7e9a038d9c81"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -27,27 +27,6 @@
                 Name="VCPreBuildEventTool"
             />
 <Tool Name="VCCustomBuildTool" />
-            <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
             <Tool
                 Name="VCManifestTool"
             />
@@ -108,27 +87,6 @@
             />
 <Tool Name="VCCustomBuildTool" />
             <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
-            <Tool
                 Name="VCManifestTool"
             />
             <Tool
@@ -180,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{dad72799-60fe-448c-abc4-f461f864c89e}"
+            UniqueIdentifier="{123afa8c-ae6c-45fa-8e3e-46f21a18bd9d}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -210,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{46e5e373-b095-46c4-b74f-52c5765a1533}"
+            UniqueIdentifier="{edea32bb-10d1-40d3-9fde-814866066d8a}"
             >
             <File
                 RelativePath="..\..\..\src\http\filters\uploadFilter.c"

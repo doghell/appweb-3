@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="angel"
-    ProjectGUID="c159c8b0-81bc-4bbd-b839-b14179894f66"
+    ProjectGUID="5bcde64e-0369-45b6-badd-32e45323276a"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -27,27 +27,6 @@
                 Name="VCPreBuildEventTool"
             />
 <Tool Name="VCCustomBuildTool" />
-            <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
             <Tool
                 Name="VCManifestTool"
             />
@@ -107,27 +86,6 @@
             />
 <Tool Name="VCCustomBuildTool" />
             <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
-            <Tool
                 Name="VCManifestTool"
             />
             <Tool
@@ -178,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{9d21d228-9171-48c5-94d9-608d5ffeea0a}"
+            UniqueIdentifier="{f2ef16d3-e6a3-4be5-9526-544879f370d1}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -204,7 +162,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{c325580c-436f-4808-b580-36744049bfe4}"
+            UniqueIdentifier="{a31b2d7d-30b4-413d-9615-4949b739e707}"
             >
             <File
                 RelativePath="..\..\..\src\mpr\mprLib.c"
