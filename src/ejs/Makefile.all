@@ -110,7 +110,9 @@ $(BLD_MOD_DIR)/ajs.mod: $(BLD_INC_DIR)/ejs.slots.h *.es $(TOOLS)
 		chmod +w $(BLD_INC_DIR)/ejs.slots.h ; \
 		cp .ejs.slots.h $(BLD_INC_DIR)/ejs.slots.h ; \
 		touch .ejs.slots.h ; \
-		make compile; [ $$? != 0 ] && exit 255 ; true ; \
+		if [ "$(RETRY)" = "" ] ; then \
+			make RETRY=1 compile; [ $$? != 0 ] && exit 255 ; true ; \
+		fi ; \
 	else true ; \
 	fi
 
@@ -131,7 +133,7 @@ $(BLD_LIB_DIR)/libejs$(BLD_LIB): $(OBJECTS) $(call dep, mpr ajs)
 		ejsAppweb$(BLD_OBJ)
 
 $(BLD_LIB_DIR)/libsqlite3$(BLD_LIB): $(OBJECTS) $(call dep, mpr)
-	bld --library $(BLD_LIB_DIR)/libsqlite3 --search "$(BLD_SQLITE_WITHLIBS)" --libs "$(BLD_SQLITE_WITHLIBS)" \
+	bld --library $(BLD_LIB_DIR)/libsqlite3 --search "$(BLD_SQLITE_WITHPATHS)" --libs "$(BLD_SQLITE_WITHLIBS)" \
 		sqlite3$(BLD_OBJ)
 
 $(BLD_BIN_DIR)/ajssql$(BLD_EXE): $(OBJECTS) $(call dep, mpr)
