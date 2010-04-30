@@ -135,7 +135,7 @@ void maCreatePipeline(MaConn *conn)
         mprAddItem(resp->outputPipeline, resp->handler);
         for (next = 0; (filter = mprGetNextItem(location->outputStages, &next)) != 0; ) {
             if (filter->stage == http->authFilter) {
-                if (req->auth->type == 0 && req->auth->type == 0) {
+                if (req->auth->type == 0) {
                     continue;
                 }
             }
