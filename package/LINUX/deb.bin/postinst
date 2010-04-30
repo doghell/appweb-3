@@ -1,4 +1,4 @@
-#
+#!/bin/sh
 # 	postinst -- Post installation script for appweb
 #
 #	Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
@@ -104,7 +104,8 @@ case $action in
 	configure)							# when new
 		oldVersion=$2
 		install
-		echo -e "\n$BLD_NAME installation successful."
+		echo
+		echo "$BLD_NAME installation successful."
 		;;
 	abort-upgrade)						# when old
 		;;
