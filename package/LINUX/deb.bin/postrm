@@ -1,4 +1,3 @@
-#!/bin/sh -e
 #
 # 	postrm -- Post removal script for appweb
 #
