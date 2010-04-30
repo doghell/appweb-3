@@ -1,4 +1,3 @@
-#!/bin/sh -e
 #
 # 	prerm -- Pre removal script for appweb-src
 #

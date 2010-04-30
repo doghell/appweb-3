@@ -1,4 +1,3 @@
-#!/bin/sh -e
 #
 # 	preinst -- Pre install script for appweb
 #

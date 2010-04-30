@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="ajsc"
-    ProjectGUID="ca781723-6174-477e-97ca-5a0599cc6104"
+    ProjectGUID="7a19fd04-b7fb-4885-84c5-dfa7f0930595"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -33,27 +33,6 @@
 				Outputs="$(IntDir)/ajs.mod"
 			/>
 
-            <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
             <Tool
                 Name="VCManifestTool"
             />
@@ -119,27 +98,6 @@
 			/>
 
             <Tool
-                Name="VCXMLDataGeneratorTool"
-            />
-            <Tool
-                Name="VCWebServiceProxyGeneratorTool"
-            />
-            <Tool
-                Name="VCMIDLTool"
-            />
-            <Tool
-                Name="VCManagedResourceCompilerTool"
-            />
-            <Tool
-                Name="VCResourceCompilerTool"
-            />
-            <Tool
-                Name="VCPreLinkEventTool"
-            />
-            <Tool
-                Name="VCALinkTool"
-            />
-            <Tool
                 Name="VCManifestTool"
             />
             <Tool
@@ -190,7 +148,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{c5cece7a-26a6-48d8-bb00-6dad01c1ad1e}"
+            UniqueIdentifier="{6ea329ed-686e-4249-a7b4-21dd3efe67c7}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -224,7 +182,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{16051c83-f209-4867-bc7b-c4ca42c2e1a5}"
+            UniqueIdentifier="{30e22073-4206-4bfa-9361-b5fb4a884943}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ecLib.c"
