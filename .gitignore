@@ -87,3 +87,5 @@ test/cgi-bin/cgi Program
 *.mode1v3
 *.pbxuser
 *.perspectivev3
+projects/MACOSX/*/build
+test/web/bug.ejs
