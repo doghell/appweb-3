@@ -18258,10 +18258,12 @@ int mprWaitForIO(MprWaitService *ws, int timeout)
     /*
      *  No locking. If the masks are updated after this test, the breakout pipe will wake us up soon.
      */
+    mprLock(ws->mutex);
     if (ws->lastMaskGeneration != ws->maskGeneration) {
         getWaitFds(ws);
     }
     if (ws->flags & MPR_NEED_RECALL) {
+        mprUnlock(ws->mutex);
         serviceRecall(ws);
         return 1;
     } else
@@ -18270,8 +18272,6 @@ int mprWaitForIO(MprWaitService *ws, int timeout)
         timeout = 30000;
     }
 #endif
-
-    mprLock(ws->mutex);
     count = ws->fdsCount;
     if ((fds = mprMemdup(ws, ws->fds, count * sizeof(struct pollfd))) == 0) {
         mprUnlock(ws->mutex);
@@ -23813,9 +23813,7 @@ MprThread *mprGetCurrentThread(MprCtx ctx)
     int                 i;
 
     ts = mprGetMpr(ctx)->threadService;
-
     mprLock(ts->mutex);
-
     id = mprGetCurrentOsThread();
     for (i = 0; i < ts->threads->length; i++) {
         tp = (MprThread*) mprGetItem(ts->threads, i);
@@ -24059,9 +24057,7 @@ void mprSetThreadPriority(MprThread *tp, int newPriority)
 #else
     setpriority(PRIO_PROCESS, tp->pid, osPri);
 #endif
-
     tp->priority = newPriority;
-
     mprUnlock(tp->mutex);
 }
 
@@ -24265,9 +24261,7 @@ MprWorkerService *mprCreateWorkerService(MprCtx ctx)
     if (ws == 0) {
         return 0;
     }
-
     ws->mutex = mprCreateLock(ws);
-    
     ws->minThreads = MPR_DEFAULT_MIN_THREADS;
     ws->maxThreads = MPR_DEFAULT_MAX_THREADS;
 
@@ -24279,7 +24273,6 @@ MprWorkerService *mprCreateWorkerService(MprCtx ctx)
 
     ws->busyThreads = mprCreateList(ws);
     mprSetListLimits(ws->busyThreads, ws->maxThreads, -1);
-
     return ws;
 }
 
@@ -24346,7 +24339,6 @@ void mprSetMinWorkers(MprCtx ctx, int n)
     mprLock(ws->mutex);
 
     ws->minThreads = n; 
-    
     while (ws->numThreads < ws->minThreads) {
         worker = createWorker(ws, ws->stackSize);
         ws->numThreads++;
