@@ -1231,13 +1231,13 @@ extern EjsService *ejsCreateService(MprCtx ctx);
 extern Ejs *ejsCreate(MprCtx ctx, struct Ejs *master, cchar *searchPath, int flags);
 
 /**
- *  Prepend to the module search path
- *  @description Prepend a path to the ejs module search path.
+ *  Append to the module search path
+ *  @description Append a path to the ejs module search path.
  *  @param ejs Ejs interpreter
  *  @param ejsPath Search path. This is a colon (or semicolon on Windows) separated string of directories.
  *  @ingroup Ejs
  */
-extern void ejsPrependSearchPath(Ejs *ejs, cchar *ejsPath);
+extern void ejsAppendSearchPath(Ejs *ejs, cchar *ejsPath);
 
 /**
  *  Set the module search path

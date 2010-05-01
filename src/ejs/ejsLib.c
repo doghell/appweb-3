@@ -30830,15 +30830,15 @@ Ejs *ejsCreate(MprCtx ctx, Ejs *master, cchar *searchPath, int flags)
     
     /*
      *  The search path consists of:
-     *      searchPath : EJSPATH : APP_EXE_DIR : MOD_DIR : .
+     *      EJSPATH : APP_EXE_DIR : MOD_DIR : . : searchPath
      */
     setDefaultSearchPath(ejs);
     env = getenv("EJSPATH");
     if (env && *env) {
-        ejsPrependSearchPath(ejs, env);
+        ejsAppendSearchPath(ejs, env);
     }
     if (searchPath) {
-        ejsPrependSearchPath(ejs, searchPath);
+        ejsAppendSearchPath(ejs, searchPath);
     }
     ejsSetGeneration(ejs, EJS_GEN_ETERNAL);
 
@@ -31330,16 +31330,16 @@ void ejsSetSearchPath(Ejs *ejs, cchar *searchPath)
     mprAssert(searchPath && searchPath);
 
     setDefaultSearchPath(ejs);
-    ejsPrependSearchPath(ejs, searchPath);
+    ejsAppendSearchPath(ejs, searchPath);
 
     mprLog(ejs, 4, "ejs: Set search path to %s", ejs->ejsPath);
 }
 
 
 /*
- *  Prepend a search path to the system defaults
+ *  Append a search path to the system defaults
  */
-void ejsPrependSearchPath(Ejs *ejs, cchar *searchPath)
+void ejsAppendSearchPath(Ejs *ejs, cchar *searchPath)
 {
     char    *oldPath;
 
@@ -31349,7 +31349,7 @@ void ejsPrependSearchPath(Ejs *ejs, cchar *searchPath)
 
     oldPath = ejs->ejsPath;
     mprAssert(oldPath);
-    ejs->ejsPath = mprAsprintf(ejs, -1, "%s" MPR_SEARCH_SEP "%s", searchPath, oldPath);
+    ejs->ejsPath = mprAsprintf(ejs, -1, "%s" MPR_SEARCH_SEP "%s", oldPath, searchPath);
     mprFree(oldPath);
     mprLog(ejs, 3, "ejs: set search path to %s", ejs->ejsPath);
 }
