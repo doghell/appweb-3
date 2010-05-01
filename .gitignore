@@ -97,3 +97,5 @@ test/.appweb.pid
 test/t.es
 >>>>>>> cf63435f7b70e87ceb7d638b88b4e92a74f96d51
 test/regress/tcp
+bin/x86*
+lib/x86*
