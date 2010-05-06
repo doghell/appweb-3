@@ -74,6 +74,7 @@
     #define BLD_FEATURE_LEGACY_API 0
     #define BLD_FEATURE_MULTITHREAD 1
     #define BLD_FEATURE_NUM_TYPE double
+    #define BLD_FEATURE_NUM_TYPE_STRING "double"
     #define BLD_FEATURE_POLL 1
     #define BLD_FEATURE_SAMPLES 1
     #define BLD_FEATURE_TEST 1
