@@ -27383,7 +27383,7 @@ static void createExceptionBlock(Ejs *ejs, EjsEx *ex, int flags)
         for (i = 0; i < count; i++) {
             ejsPopBlock(ejs);
         }
-        count = (state->stack - fp->stackReturn + 1) - ex->numStack;
+        count = (state->stack - fp->stackReturn);
         state->stack -= (count - ex->numStack);
     }
     
@@ -27858,7 +27858,7 @@ static EjsOpCode traceCode(Ejs *ejs, EjsOpCode opcode)
         }
         optable = ejsGetOptable(ejs);
         mprLog(ejs, 7, "%04d: [%d] %02x: %-35s # %s:%d %s",
-            (uint) (fp->pc - fp->function.body.code.byteCode) - 1, (int) (state->stack - fp->stackReturn + 1),
+            (uint) (fp->pc - fp->function.body.code.byteCode) - 1, (int) (state->stack - fp->stackReturn),
             (uchar) opcode, optable[opcode].name, fp->filename, fp->lineNumber, fp->currentLine);
         if (stop && once++ == 0) {
             mprSleep(ejs, 0);
