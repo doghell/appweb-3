@@ -4,7 +4,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.1.
+ *  Embedthis Ejscript 1.0.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -8728,7 +8728,7 @@ void ejsCreateNumberType(Ejs *ejs)
     EjsType     *type;
     EjsName     qname;
 #if BLD_FEATURE_NUM_TYPE_DOUBLE
-    static int  zero = 0;
+    static double zero = 0.0;
 #endif
 
     type = ejsCreateCoreType(ejs, ejsName(&qname, EJS_INTRINSIC_NAMESPACE, "Number"), ejs->objectType, sizeof(EjsNumber),
@@ -27383,6 +27383,8 @@ static void createExceptionBlock(Ejs *ejs, EjsEx *ex, int flags)
         for (i = 0; i < count; i++) {
             ejsPopBlock(ejs);
         }
+        count = (state->stack - fp->stackReturn + 1) - ex->numStack;
+        state->stack -= (count - ex->numStack);
     }
     
     /*
