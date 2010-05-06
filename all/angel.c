@@ -3,7 +3,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Appweb 3.2.1.
+ *  Embedthis Appweb 3.2.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
