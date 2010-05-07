@@ -11810,7 +11810,7 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
          *  Find the end of the format specifier and determine the format type (kind)
          */
         start = i++;
-        i += (int) strspn(&sp->value[i], "-+ #,0*123456789.hlL");
+        i += (int) strspn(&sp->value[i], "-+ #,0*123456789.");
         kind = sp->value[i];
 
         if (strchr("cdefginopsSuxX", kind)) {
@@ -11825,14 +11825,14 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
             case 'e': case 'g': case 'f':
 #if BLD_FEATURE_FLOATING_POINT
                 value = (EjsVar*) ejsToNumber(ejs, value);
-                buf = mprAsprintf(ejs, -1, fmt, (double) ejsGetNumber(value));
+                buf = mprAsprintf(ejs, -1, fmt, ejsGetNumber(value));
                 break;
 #else
                 //   Fall through to normal number case
 #endif
             case 'd': case 'i': case 'o': case 'u':
                 value = (EjsVar*) ejsToNumber(ejs, value);
-                buf = mprAsprintf(ejs, -1, fmt, (int64) ejsGetNumber(value));
+                buf = mprAsprintf(ejs, -1, fmt, (int) ejsGetNumber(value));
                 break;
 
             case 's':
@@ -11841,7 +11841,7 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
                 break;
 
             case 'X': case 'x':
-                buf = mprAsprintf(ejs, -1, fmt, (int64) ejsGetNumber(value));
+                buf = mprAsprintf(ejs, -1, fmt, (int) ejsGetNumber(value));
                 break;
 
             case 'n':
