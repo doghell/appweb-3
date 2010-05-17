@@ -489,7 +489,8 @@ and replace it with the replace text. If the pattern is a string, only the first
 </div>
 <div class='apiDetail'>
 <p>Extract a substring.</p>
-<dl><dt>Description</dt><dd>Similar to slice but only allows positive indicies.</dd></dl>
+<dl><dt>Description</dt><dd>Similar to slice but only allows positive indicies.
+If the end index is larger than start, then the effect of substring is as if the two arguments were swapped.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>startIndex: <a href='intrinsic-Number.html'>Number</a> </td><td>Integer location to start copying.</td></tr><tr class='param'><td class='param'>end: <a href='intrinsic-Number.html'>Number</a> </td><td>Postitive index of one past the last character to extract. [default: -1]</td></tr></table></dd>

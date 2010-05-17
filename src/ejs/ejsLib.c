@@ -926,7 +926,9 @@ static EjsVar *insertArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
         pos = ap->length;
     }
     args = (EjsArray*) argv[1];
-
+    if (args->length <= 0) {
+        return (EjsVar*) ap;
+    }
     oldLen = ap->length;
     if (growArray(ejs, ap, ap->length + args->length) < 0) {
         return 0;
@@ -986,7 +988,7 @@ static EjsVar *joinArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
  *  the end of the array for the specified element.
  *  @return Returns the items index into the array if found, otherwise -1.
  *
- *  function lastIndexOf(element: Object, fromIndex: Number = 0): Number
+ *  function lastIndexOf(element: Object, fromIndex: Number = -1): Number
  */
 static EjsVar *lastArrayIndexOf(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
 {
@@ -1044,7 +1046,9 @@ static EjsVar *setArrayLength(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
     mprAssert(ejsIsArray(ap));
 
     length = (int) ((EjsNumber*) argv[0])->value;
-
+    if (length < 0) {
+        length = 0;
+    }
     if (length > ap->length) {
         if (growArray(ejs, ap, length) < 0) {
             return 0;
@@ -1466,6 +1470,40 @@ static EjsVar *uniqueArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
 }
 
 
+/*
+ *  function unshift(...args): Array
+ */
+static EjsVar *unshiftArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
+{
+    EjsArray    *args;
+    EjsVar      **src, **dest;
+    int         i, delta, oldLen, endInsert;
+
+    mprAssert(argc == 1 && ejsIsArray(argv[0]));
+
+    args = (EjsArray*) argv[0];
+    if (args->length <= 0) {
+        return (EjsVar*) ap;
+    }
+    oldLen = ap->length;
+    if (growArray(ejs, ap, ap->length + args->length) < 0) {
+        return 0;
+    }
+    delta = args->length;
+    dest = ap->data;
+    src = args->data;
+
+    endInsert = delta;
+    for (i = ap->length - 1; i >= endInsert; i--) {
+        dest[i] = dest[i - delta];
+    }
+    for (i = 0; i < delta; i++) {
+        dest[i] = src[i];
+    }
+    return (EjsVar*) ap;
+}
+
+
 
 static int growArray(Ejs *ejs, EjsArray *ap, int len)
 {
@@ -1476,7 +1514,6 @@ static int growArray(Ejs *ejs, EjsArray *ap, int len)
     if (len <= 0) {
         return 0;
     }
-
     if (len <= ap->length) {
         return EJS_ERR;
     }
@@ -1515,7 +1552,6 @@ static int growArray(Ejs *ejs, EjsArray *ap, int len)
         }
     }
     ap->length = len;
-
     return 0;
 }
 
@@ -1610,6 +1646,7 @@ void ejsConfigureArrayType(Ejs *ejs)
     ejsBindMethod(ejs, type, ES_Array_sort, (EjsNativeFunction) sortArray);
     ejsBindMethod(ejs, type, ES_Array_splice, (EjsNativeFunction) spliceArray);
     ejsBindMethod(ejs, type, ES_Array_unique, (EjsNativeFunction) uniqueArray);
+    ejsBindMethod(ejs, type, ES_Array_unshift, (EjsNativeFunction) unshiftArray);
 }
 
 
@@ -12666,7 +12703,7 @@ static EjsVar *substring(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
         end = sp->length;
     }
     /*
-     *  Swap if start is bigger than end
+        Swap if start is bigger than end
      */
     if (start > end) {
         tmp = start;

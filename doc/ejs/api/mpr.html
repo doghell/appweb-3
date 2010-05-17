@@ -36,18 +36,18 @@
             &gt; <b>Mpr</b> 
         </div>
     </div>
+
     <div class="content">
         <div class="contentRight">
             
-            
-<!-- BeginDsi "dsi/see.html" -->
-				<h2>See Also</h2>
-				<ul>
-					<li><a href="../ref/ejs/index.html">Programmers Reference</a></li>
-					<li><a href="../api/ejscript/index.html" target="new">Script Library</a></li>
-					<li><a href="../api/native.html">Native APIs</a></li>
-				</ul>
-<!-- EndDsi -->
+            <!-- BeginDsi "dsi/see.html" -->
+            <h2>See Also</h2>
+            <ul>
+                <li><a href="../ref/ejs/index.html">Programmers Reference</a></li>
+                <li><a href="../api/ejscript/index.html" target="new">Script Library</a></li>
+                <li><a href="../api/native.html">Native APIs</a></li>
+            </ul>
+            <!-- EndDsi -->
             <h2>Quick Nav</h2>
             <ul>
                 <li><a href="#Components">Components</a></li>
@@ -78,6 +78,9 @@
 <tr class="apiDef">
 <td class="apiName"><a href="#group___mpr_date" class="nameRef">MprDate</a></td>
 <td class="apiBrief">Date and Time Service.</td></tr>
+<tr class="apiDef">
+<td class="apiName"><a href="#group___mpr_file" class="nameRef">MprFile</a></td>
+<td class="apiBrief">File I/O Module.</td></tr>
 <tr class="apiDef">
 <td class="apiName"><a href="#group___mpr_hash" class="nameRef">MprHash</a></td>
 <td class="apiBrief">Hash table entry structure.</td></tr>
@@ -112,7 +115,7 @@
 <td class="apiType"><a href="#mpr_8h_192a47ab0e245f0ae4d01c38a64b6c427" class="ref">int64</a></td><td><a href="#mpr_8h_1b2b1ebf1965beac947ab9b77970f49c5" class="nameRef">mprAtoi</a>(<a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar</a> *str,  int radix)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Convert a string to an integer.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#struct_mpr_file" class="ref">MprFile*</a></td><td><a href="#group___mpr_file_1ge05c883c658aef3c2e9da52e82e2a39b" class="nameRef">mprAttachFd</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  int fd,  cchar *name,  int omode)</td></tr>
+<td class="apiType"><a href="#group___mpr_file" class="ref">MprFile*</a></td><td><a href="#group___mpr_file_1ge05c883c658aef3c2e9da52e82e2a39b" class="nameRef">mprAttachFd</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  int fd,  cchar *name,  int omode)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Attach to an existing file descriptor.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_1gc5203b2138474e781207b39ac4726c1b" class="nameRef">mprBreakpoint</a>()</td></tr>
@@ -166,7 +169,7 @@
 <td class="apiType"><a href="#struct_mpr_hash_table" class="ref">MprHashTable*</a></td><td><a href="#group___mpr_hash_1gf653f8353d355f27d6fc00883daa82d9" class="nameRef">mprCreateHash</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  int hashSize)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Create a hash table.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#struct_mpr_http" class="ref">MprHttp*</a></td><td><a href="#group___mpr_http_1g1ebc9a3f942c6e1a28332711d0580ff0" class="nameRef">mprCreateHttp</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType">MprHttp*</td><td><a href="#group___mpr_http_1g1ebc9a3f942c6e1a28332711d0580ff0" class="nameRef">mprCreateHttp</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Create a Http connection object.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_http_1ga57524255ac271f1b80022a6f34769f0" class="nameRef">mprCreateHttpSecret</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
@@ -220,7 +223,7 @@
 <td class="apiType">void</td><td><a href="#group___mpr_cmd_1g66cccaaaa550e9d2cf381ff8854c2d7a" class="nameRef">mprDisableCmdEvents</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd,  int channel)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Disable command I/O events.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="nameRef">mprDisableFileBuffering</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="nameRef">mprDisableFileBuffering</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Disable file buffering.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#mpr_8h_140585bcce880703910e75ff4599529da" class="nameRef">mprDisableSocketEvents</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
@@ -232,7 +235,7 @@
 <td class="apiType">void</td><td><a href="#group___mpr_cmd_1g7562126cafba57260cd73634f1ee4aed" class="nameRef">mprDisconnectCmd</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Disconnect a command its underlying I/O channels.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1gc6b02fbdc35a608cae613959f0437bd7" class="nameRef">mprDisconnectHttp</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1gc6b02fbdc35a608cae613959f0437bd7" class="nameRef">mprDisconnectHttp</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Disconnect a Http connection.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#mpr_8h_15f9301dbcddf9d1a62b40c69bc67fe40" class="nameRef">mprDisconnectSocket</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
@@ -241,16 +244,19 @@
 <td class="apiType">void</td><td><a href="#mpr_8h_1f686014b506519ce12839c3747b271f7" class="nameRef">mprDisconnectWaitHandler</a>(<a href="#group___mpr_wait_handler" class="ref">MprWaitHandler</a> *wp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Disconnect a wait handler from its underlying file descriptor.</td></tr>
 <tr class="apiDef">
+<td class="apiType">char*</td><td><a href="#mpr_8h_1176d0ea8501110003ec63c0e3ecf24f8" class="nameRef">mprDtoa</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  double value,  int ndigits,  int mode,  int flags)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Convert a double to ascii.</td></tr>
+<tr class="apiDef">
 <td class="apiType"><a href="#struct_mpr_list" class="ref">MprList*</a></td><td><a href="#group___mpr_list_1gc6512c8fa92c1d91cf99f4e3ad6af2f1" class="nameRef">mprDupList</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  MprList *src)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Duplicate a list.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_cmd_1g2fd38e2aaf8e7c2a1aed39aa1005155e" class="nameRef">mprEnableCmdEvents</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd,  int channel)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Enable command I/O events.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="nameRef">mprEnableFileBuffering</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  int size,  int maxSize)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="nameRef">mprEnableFileBuffering</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  int size,  int maxSize)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Enable file buffering.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1gcac5d248c89b69fcbcb6efa739291842" class="nameRef">mprEnableHttpUpload</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1gcac5d248c89b69fcbcb6efa739291842" class="nameRef">mprEnableHttpUpload</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Enable Multipart-Mime file upload for this request.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#mpr_8h_1a2b9f1eb8ccbe19f2ca1c277e9e714e2" class="nameRef">mprEnableSocketEvents</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
@@ -274,10 +280,10 @@
 <td class="apiType">void</td><td><a href="#group___mpr_log_1g44e05f9b1cb74a3abd9271d140f5d66d" class="nameRef">mprFatalError</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *fmt, ...)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Log a fatal error message and exit.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g8eab11ea50f525db00c73e201243896a" class="nameRef">mprFinalizeHttpWriting</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g8eab11ea50f525db00c73e201243896a" class="nameRef">mprFinalizeHttpWriting</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Finalize writing Http data.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="nameRef">mprFlush</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="nameRef">mprFlush</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Flush any buffered write data.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_buf_1g453b62a6659fc9fa4d041165dad7461e" class="nameRef">mprFlushBuf</a>(<a href="#group___mpr_buf" class="ref">MprBuf</a> *buf)</td></tr>
@@ -340,7 +346,7 @@
 <td class="apiType">char*</td><td><a href="#group___mpr_buf_1gc982291efef3d49cce4bc2ecec6566e5" class="nameRef">mprGetBufStart</a>(<a href="#group___mpr_buf" class="ref">MprBuf</a> *buf)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the start of the buffer contents.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="nameRef">mprGetc</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="nameRef">mprGetc</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Read a character from the file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_buf_1gf128b71005bdd12507110e1f21b483d4" class="nameRef">mprGetCharFromBuf</a>(<a href="#group___mpr_buf" class="ref">MprBuf</a> *buf)</td></tr>
@@ -364,7 +370,7 @@
 <td class="apiType"><a href="#group___mpr_thread" class="ref">MprThread*</a></td><td><a href="#group___mpr_thread_1gf7be9fb3ab99388b3e83093a78a74265" class="nameRef">mprGetCurrentThread</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the currently executing thread.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_1g1392efc11ff7ec56f8cb2e3b6fa1168c" class="nameRef">mprGetDebugMode</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_1g1392efc11ff7ec56f8cb2e3b6fa1168c" class="nameRef">mprGetDebugMode</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the debug mode.</td></tr>
 <tr class="apiDef">
 <td class="apiType"><a href="#group___mpr_date_1gdd377cb2c4ec9c665b99de02f87f768b" class="ref">MprTime</a></td><td><a href="#mpr_8h_1ebad4782acd4f2cd541ce68737f98471" class="nameRef">mprGetElapsedTime</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  MprTime mark)</td></tr>
@@ -373,10 +379,10 @@
 <td class="apiType">int</td><td><a href="#group___mpr_1gf184a06275222c97f80e0a8d807418ac" class="nameRef">mprGetError</a>()</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return the error code for the most recent system or library operation.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_1df47206cbe2d15ed83ac7c3a2b8a1c9d" class="ref">MprOffset</a></td><td><a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="nameRef">mprGetFilePosition</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<td class="apiType"><a href="#mpr_8h_1df47206cbe2d15ed83ac7c3a2b8a1c9d" class="ref">MprOffset</a></td><td><a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="nameRef">mprGetFilePosition</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return the current file position.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_1df47206cbe2d15ed83ac7c3a2b8a1c9d" class="ref">MprOffset</a></td><td><a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="nameRef">mprGetFileSize</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<td class="apiType"><a href="#mpr_8h_1df47206cbe2d15ed83ac7c3a2b8a1c9d" class="ref">MprOffset</a></td><td><a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="nameRef">mprGetFileSize</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the size of the file.</td></tr>
 <tr class="apiDef">
 <td class="apiType"><a href="#group___mpr_hash" class="ref">MprHash*</a></td><td><a href="#group___mpr_hash_1g56c37e6def80582b297fa3c27cd5a15e" class="nameRef">mprGetFirstHash</a>(<a href="#struct_mpr_hash_table" class="ref">MprHashTable</a> *table)</td></tr>
@@ -388,43 +394,43 @@
 <td class="apiType">int</td><td><a href="#group___mpr_hash_1gb18f7a0015706d7c7ded172357978875" class="nameRef">mprGetHashCount</a>(<a href="#struct_mpr_hash_table" class="ref">MprHashTable</a> *table)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return the count of symbols in a symbol entry.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g0d1a39bf8e53f52891217d242593e7d1" class="nameRef">mprGetHttpChunked</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g0d1a39bf8e53f52891217d242593e7d1" class="nameRef">mprGetHttpChunked</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return whether transfer chunked encoding will be used on this request.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g795d52ea876d202d76f02d5245598072" class="nameRef">mprGetHttpCode</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g795d52ea876d202d76f02d5245598072" class="nameRef">mprGetHttpCode</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the Http response code.</td></tr>
 <tr class="apiDef">
 <td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1ga60d6ebe5548b81758ee3e80d52a6b7a" class="nameRef">mprGetHttpCodeString</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  int code)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the Http reponse code as a string.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g0c7e249372acd69331f9af988cded233" class="nameRef">mprGetHttpContentLength</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g0c7e249372acd69331f9af988cded233" class="nameRef">mprGetHttpContentLength</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the response content length.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1g9e3a812fd146cae0ecb341f0ff59806e" class="nameRef">mprGetHttpDefaultHost</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1g9e3a812fd146cae0ecb341f0ff59806e" class="nameRef">mprGetHttpDefaultHost</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the default host.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g15a20f949f1646e3623c7894cab9ca12" class="nameRef">mprGetHttpDefaultPort</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g15a20f949f1646e3623c7894cab9ca12" class="nameRef">mprGetHttpDefaultPort</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the default port.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1g53f082a6fe35df41ff109768e14839f1" class="nameRef">mprGetHttpError</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1g53f082a6fe35df41ff109768e14839f1" class="nameRef">mprGetHttpError</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the Http error message.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g901299c009eed8f9050a7da61ae44c47" class="nameRef">mprGetHttpFlags</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g901299c009eed8f9050a7da61ae44c47" class="nameRef">mprGetHttpFlags</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return the http flags.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1gb9df6656ce41a767935124365d1a93d4" class="nameRef">mprGetHttpHeader</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *key)</td></tr>
+<td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1gb9df6656ce41a767935124365d1a93d4" class="nameRef">mprGetHttpHeader</a>(MprHttp *http,  cchar *key)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get a http response header.</td></tr>
 <tr class="apiDef">
-<td class="apiType">char*</td><td><a href="#group___mpr_http_1ge2f32257648d75877e8e4d1ca08b2e03" class="nameRef">mprGetHttpHeaders</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">char*</td><td><a href="#group___mpr_http_1ge2f32257648d75877e8e4d1ca08b2e03" class="nameRef">mprGetHttpHeaders</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get all the http response headers.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#struct_mpr_hash_table" class="ref">MprHashTable*</a></td><td><a href="#group___mpr_http_1g5065aa0f467d0c35c935b9d04076a22c" class="nameRef">mprGetHttpHeadersHash</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType"><a href="#struct_mpr_hash_table" class="ref">MprHashTable*</a></td><td><a href="#group___mpr_http_1g5065aa0f467d0c35c935b9d04076a22c" class="nameRef">mprGetHttpHeadersHash</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the hash table of response Http headers.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1g03303ed6b396a0698f87e4218454ab1a" class="nameRef">mprGetHttpMessage</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_http_1g03303ed6b396a0698f87e4218454ab1a" class="nameRef">mprGetHttpMessage</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the Http response message.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1gd161d91f435a697c5c9968be2b894f28" class="nameRef">mprGetHttpState</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1gd161d91f435a697c5c9968be2b894f28" class="nameRef">mprGetHttpState</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the http state.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void*</td><td><a href="#group___mpr_list_1g4535837cc644f208063b1ca3e2ae46c2" class="nameRef">mprGetItem</a>(<a href="#struct_mpr_list" class="ref">MprList</a> *list,  int index)</td></tr>
@@ -484,6 +490,9 @@
 <td class="apiType">int</td><td><a href="#group___mpr_path_1g57c6c3e051b4c39dc2f320adbb27df9d" class="nameRef">mprGetPathInfo</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path,  MprPath *info)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return information about a file represented by a path.</td></tr>
 <tr class="apiDef">
+<td class="apiType">char*</td><td><a href="#group___mpr_path_1g26f147fc963941fd8de7e21f76ccba71" class="nameRef">mprGetPathLink</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Get the target of a symbolic link.</td></tr>
+<tr class="apiDef">
 <td class="apiType"><a href="#mpr_8h_10f128c3e0c83721af0220c00554e9c4e" class="ref">cchar*</a></td><td><a href="#group___mpr_path_1g85a7b4f2de356310207f30d416e4b64e" class="nameRef">mprGetPathNewline</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the file newline character string for a given path.</td></tr>
 <tr class="apiDef">
@@ -505,10 +514,10 @@
 <td class="apiType"><a href="#group___mpr_date_1gdd377cb2c4ec9c665b99de02f87f768b" class="ref">MprTime</a></td><td><a href="#group___mpr_date_1gc0334d0cee72fb5d5bd9a5dd63b62b03" class="nameRef">mprGetRemainingTime</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  MprTime mark,  uint timeout)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return the time remaining until a timeout has elapsed.</td></tr>
 <tr class="apiDef">
-<td class="apiType">char*</td><td><a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="nameRef">mprGets</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  char *buf,  uint size)</td></tr>
+<td class="apiType">char*</td><td><a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="nameRef">mprGets</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  char *buf,  uint size)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Read a line from the file.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_socket_1g8240b2dc5540ae928d19410447c2bab0" class="nameRef">mprGetSocketBlockingMode</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_socket_1g8240b2dc5540ae928d19410447c2bab0" class="nameRef">mprGetSocketBlockingMode</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the socket blocking mode.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1g64ccf4250b432690a73bb66f0a639f7a" class="nameRef">mprGetSocketError</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
@@ -520,13 +529,13 @@
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1ga4d2f67f80f168a4be7e5f3b96541bab" class="nameRef">mprGetSocketPort</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the port used by a socket.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#struct_mpr_file" class="ref">MprFile*</a></td><td><a href="#mpr_8h_17084bfea78dcf720c82e7163b9dbc4da" class="nameRef">mprGetStderr</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType"><a href="#group___mpr_file" class="ref">MprFile*</a></td><td><a href="#mpr_8h_17084bfea78dcf720c82e7163b9dbc4da" class="nameRef">mprGetStderr</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return a file object for the Stderr I/O channel.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#struct_mpr_file" class="ref">MprFile*</a></td><td><a href="#mpr_8h_1f260b8f2c8c000a6f4ec1ac7569e8416" class="nameRef">mprGetStdin</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType"><a href="#group___mpr_file" class="ref">MprFile*</a></td><td><a href="#mpr_8h_1f260b8f2c8c000a6f4ec1ac7569e8416" class="nameRef">mprGetStdin</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return a file object for the Stdin I/O channel.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#struct_mpr_file" class="ref">MprFile*</a></td><td><a href="#mpr_8h_129ffea058d6f735313ee8a81fd3334dd" class="nameRef">mprGetStdout</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType"><a href="#group___mpr_file" class="ref">MprFile*</a></td><td><a href="#mpr_8h_129ffea058d6f735313ee8a81fd3334dd" class="nameRef">mprGetStdout</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return a file object for the Stdout I/O channel.</td></tr>
 <tr class="apiDef">
 <td class="apiType">char*</td><td><a href="#group___mpr_path_1g5539f40a5da3f48b5b2db3ea90e28221" class="nameRef">mprGetTempPath</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *tmpDir)</td></tr>
@@ -559,13 +568,13 @@
 <td class="apiType">int</td><td><a href="#group___mpr_buf_1g6c40bdb62af47cbae761c6bfdc7da11b" class="nameRef">mprGrowBuf</a>(<a href="#group___mpr_buf" class="ref">MprBuf</a> *buf,  int count)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Grow the buffer.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_mem_1g46b725c5e3a7818e3051401b016f7902" class="nameRef">mprHasAllocError</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_mem_1g46b725c5e3a7818e3051401b016f7902" class="nameRef">mprHasAllocError</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Determine if the MPR has encountered memory allocation errors.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_socket_1g9ba5a2637bcf166c5b3f4289e590bb39" class="nameRef">mprHasSocketPendingData</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_socket_1g9ba5a2637bcf166c5b3f4289e590bb39" class="nameRef">mprHasSocketPendingData</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if the socket has buffered read data.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g98857b5e7d553f30ae656d78962c97c3" class="nameRef">mprHttpRequest</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *method,  cchar *uri)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g98857b5e7d553f30ae656d78962c97c3" class="nameRef">mprHttpRequest</a>(MprHttp *http,  cchar *method,  cchar *uri)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Issue a new Http request and wait for completion.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_list_1gc1b1433c9a3b963c78572f53cf2a6fd8" class="nameRef">mprInitList</a>(<a href="#struct_mpr_list" class="ref">MprList</a> *list)</td></tr>
@@ -586,25 +595,25 @@
 <td class="apiType">void</td><td><a href="#mpr_8h_14651ddcb6bc19677554a126a07dab06f" class="nameRef">mprInvokeWaitCallback</a>(<a href="#group___mpr_wait_handler" class="ref">MprWaitHandler</a> *wp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Invoke the wait handler callback.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_path_1g081cac7e87fa8a3800d0cdd3112d5c08" class="nameRef">mprIsAbsPath</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_path_1g081cac7e87fa8a3800d0cdd3112d5c08" class="nameRef">mprIsAbsPath</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Determine if a path is absolute.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_cmd_1g5ac545e5959e115b2cd633004f5d949b" class="nameRef">mprIsCmdRunning</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_cmd_1g5ac545e5959e115b2cd633004f5d949b" class="nameRef">mprIsCmdRunning</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if the command is still running.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_1g1dfe792f44331fa47bb8e8cb8c04a2c7" class="nameRef">mprIsExiting</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_1g1dfe792f44331fa47bb8e8cb8c04a2c7" class="nameRef">mprIsExiting</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Determine if the MPR should exit.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_http_1g4dc11c5991c1f778a0854967cce5986f" class="nameRef">mprIsHttpComplete</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_http_1g4dc11c5991c1f778a0854967cce5986f" class="nameRef">mprIsHttpComplete</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if the Http request is complete.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_path_1ge2e81ff8178627822dcac584dc719326" class="nameRef">mprIsRelPath</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_path_1ge2e81ff8178627822dcac584dc719326" class="nameRef">mprIsRelPath</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Determine if a path is relative.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_socket_1g122966f272c5d7d00bab8f66d569d362" class="nameRef">mprIsSocketEof</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_socket_1g122966f272c5d7d00bab8f66d569d362" class="nameRef">mprIsSocketEof</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if the other end of the socket has been closed.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_socket_1gbeeb5c489632e55d36e2139f8ac0f423" class="nameRef">mprIsSocketSecure</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_socket_1gbeeb5c489632e55d36e2139f8ac0f423" class="nameRef">mprIsSocketSecure</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Determine if the socket is secure.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#mpr_8h_1eb1d9013dbfca5d9080b881e0fde2cde" class="nameRef">mprIsValid</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
@@ -658,6 +667,9 @@
 <td class="apiType">int</td><td><a href="#group___mpr_path_1g3b396266e71364659d4d0fe25c41c052" class="nameRef">mprMakeDir</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path,  int perms,  bool makeMissing)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Make a directory.</td></tr>
 <tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_path_1g57f1475cf58f4c14129541cc0ab38464" class="nameRef">mprMakeLink</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path,  cchar *target,  bool hard)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Make a link.</td></tr>
+<tr class="apiDef">
 <td class="apiType">void*</td><td><a href="#mpr_8h_16d8444f927dac1b01ccb48450c2cb0d1" class="nameRef">mprMapAlloc</a>(<a href="#mpr_8h_191ad9478d81a7aaf2593e8d9c3d06a14" class="ref">uint</a> size,  int mode)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Memory virtual memory into the applications address space.</td></tr>
 <tr class="apiDef">
@@ -676,10 +688,10 @@
 <td class="apiType">void</td><td><a href="#group___mpr_log_1g53e8e5ceb47594177a2db18c5acc5f65" class="nameRef">mprMemoryError</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *fmt, ...)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Log a memory error message.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#mpr_8h_1e61aebfc7042e6daab67783587b51d55" class="nameRef">mprNeedHttpRetry</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  char **url)</td></tr>
+<td class="apiType">bool</td><td><a href="#mpr_8h_1e61aebfc7042e6daab67783587b51d55" class="nameRef">mprNeedHttpRetry</a>(MprHttp *http,  char **url)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if the request needs a transparent retry to implement authentication or redirection.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#struct_mpr_file" class="ref">MprFile*</a></td><td><a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="nameRef">mprOpen</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *filename,  int omode,  int perms)</td></tr>
+<td class="apiType"><a href="#group___mpr_file" class="ref">MprFile*</a></td><td><a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="nameRef">mprOpen</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *filename,  int omode,  int perms)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Open a file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1g52aa9a1c6e3f411df5f4cdd9e787ed16" class="nameRef">mprOpenClientSocket</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp,  cchar *hostName,  int port,  int flags)</td></tr>
@@ -694,10 +706,10 @@
 <td class="apiType"><a href="#struct_mpr_uri" class="ref">MprUri*</a></td><td><a href="#group___mpr_uri_1g57b6d44710828ae46b11e1f6e79b91e4" class="nameRef">mprParseUri</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *uri)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Parse a URI.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_path_1gbdd09f63c16165c91f22a479d29c6ffe" class="nameRef">mprPathExists</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path,  int omode)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_path_1gbdd09f63c16165c91f22a479d29c6ffe" class="nameRef">mprPathExists</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path,  int omode)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Determine if a file exists for a path name and can be accessed.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="nameRef">mprPeekc</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="nameRef">mprPeekc</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Non-destructively read a character from the file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_cmd_1g9aee91a4b53a03ea5dcf603b3c2437b8" class="nameRef">mprPollCmdPipes</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd,  int timeout)</td></tr>
@@ -712,7 +724,7 @@
 <td class="apiType">int</td><td><a href="#group___mpr_buf_1g3a8934d430c8345cd1e19b42173b1336" class="nameRef">mprPutBlockToBuf</a>(<a href="#group___mpr_buf" class="ref">MprBuf</a> *buf,  cchar *ptr,  int size)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Put a block to the buffer.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="nameRef">mprPutc</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  int c)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="nameRef">mprPutc</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  int c)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write a character to the file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_buf_1g5ab66b5d96db8b33e3bb0c3bbb9c90e2" class="nameRef">mprPutCharToBuf</a>(<a href="#group___mpr_buf" class="ref">MprBuf</a> *buf,  int c)</td></tr>
@@ -724,7 +736,7 @@
 <td class="apiType">int</td><td><a href="#group___mpr_buf_1g117b7d1d0a1b08b7395a2ad67a1a5ccc" class="nameRef">mprPutIntToBuf</a>(<a href="#group___mpr_buf" class="ref">MprBuf</a> *buf,  int i)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Put an integer to the buffer.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="nameRef">mprPuts</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  cchar *str)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="nameRef">mprPuts</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  cchar *str)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write a string to the file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_buf_1g482c21dd3356edd53d804b14c5c9f253" class="nameRef">mprPutStringToBuf</a>(<a href="#group___mpr_buf" class="ref">MprBuf</a> *buf,  cchar *str)</td></tr>
@@ -733,16 +745,16 @@
 <td class="apiType">void</td><td><a href="#group___mpr_log_1g54e411388517de37fddd5537b0339e07" class="nameRef">mprRawLog</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  int level,  cchar *fmt, ...)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write a raw log message to the diagnostic log file.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="nameRef">mprRead</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  void *buf,  uint size)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="nameRef">mprRead</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  void *buf,  uint size)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Read data from a file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_cmd_1g4a9036d982e301eb389e36b3b6a2bee7" class="nameRef">mprReadCmdPipe</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd,  int channel,  char *buf,  int bufsize)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Make the I/O channels to send and receive data to and from the command.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1geac51e02bbcb655fd05eba1e77011af3" class="nameRef">mprReadHttp</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  char *buffer,  int size)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1geac51e02bbcb655fd05eba1e77011af3" class="nameRef">mprReadHttp</a>(MprHttp *http,  char *buffer,  int size)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Read Http response data.</td></tr>
 <tr class="apiDef">
-<td class="apiType">char*</td><td><a href="#group___mpr_http_1g245ab5d004ec4a901dd598de4722f7fc" class="nameRef">mprReadHttpString</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">char*</td><td><a href="#group___mpr_http_1g245ab5d004ec4a901dd598de4722f7fc" class="nameRef">mprReadHttpString</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Read response data as a string.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1gbff8106d1e1a3b5aa108542d3241f0b5" class="nameRef">mprReadSocket</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp,  void *buf,  int size)</td></tr>
@@ -799,7 +811,7 @@
 <td class="apiType">void</td><td><a href="#mpr_8h_13db47bdecb58c2c52197d625377cf71b" class="nameRef">mprResetCond</a>(<a href="#struct_mpr_cond" class="ref">MprCond</a> *cond)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Reset a condition variable.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1g72f9e637b718cc5414a898731324a131" class="nameRef">mprResetHttpCredentials</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1g72f9e637b718cc5414a898731324a131" class="nameRef">mprResetHttpCredentials</a>(MprHttp *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Reset Http credentials.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_event_1g6fa51ab06c56baaad50f1b4df7efc1d4" class="nameRef">mprRestartContinuousEvent</a>(MprEvent *event)</td></tr>
@@ -823,7 +835,7 @@
 <td class="apiType">char*</td><td><a href="#group___mpr_path_1g158aef4d8a9c0162832198421198f6e8" class="nameRef">mprSearchPath</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path,  int flags,  cchar *search, ...)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Search for a path.</td></tr>
 <tr class="apiDef">
-<td class="apiType">long</td><td><a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="nameRef">mprSeek</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  int seekType,  long distance)</td></tr>
+<td class="apiType">long</td><td><a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="nameRef">mprSeek</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  int seekType,  long distance)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Seek the I/O pointer to a new location in the file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_event_1g6df082453b8e06d2a3a370dce2a7d68f" class="nameRef">mprServiceEvents</a>(<a href="#struct_mpr_dispatcher" class="ref">MprDispatcher</a> *dispatcher,  int delay,  int flags)</td></tr>
@@ -832,7 +844,7 @@
 <td class="apiType">void</td><td><a href="#mpr_8h_15afb03370eb13fda6f023dc6d928b477" class="nameRef">mprSetAllocError</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Set an memory allocation error condition on a memory context.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_mem_1g1aba81525e6f3570db267f1a71c96d1d" class="nameRef">mprSetAllocLimits</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  uint redline,  uint maxMemory)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_mem_1g45b2cebd39803e433375a7a40f3f6461" class="nameRef">mprSetAllocLimits</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  int redline,  int maxMemory)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Configure the application memory limits.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#mpr_8h_17e77eb84ba0cafd84b73bcc10a95376e" class="nameRef">mprSetAppName</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *name,  cchar *title,  cchar *version)</td></tr>
@@ -865,52 +877,52 @@
 <td class="apiType">void</td><td><a href="#group___mpr_mem_1gdeb570e7b9f2ee67eef01e574baaecb4" class="nameRef">mprSetDestructor</a>(void *ptr,  MprDestructor destructor)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Update the destructor for a block of memory.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1gc61efb638a3209fdff6ffdcb25fbf690" class="nameRef">mprSetFormattedHttpHeader</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  bool overwrite,  cchar *key,  cchar *fmt, ...)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1gc61efb638a3209fdff6ffdcb25fbf690" class="nameRef">mprSetFormattedHttpHeader</a>(MprHttp *http,  bool overwrite,  cchar *key,  cchar *fmt, ...)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Add a request header using a format string.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g3dc1f2ab05c8a10172b2755995d7972a" class="nameRef">mprSetHttpBody</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *body,  int len)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g3dc1f2ab05c8a10172b2755995d7972a" class="nameRef">mprSetHttpBody</a>(MprHttp *http,  cchar *body,  int len)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Set the http request body content.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1g64c192cc1d87ce95dfbd3a0cdff6f6af" class="nameRef">mprSetHttpBufferSize</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  int initialSize,  int maxSize)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1g64c192cc1d87ce95dfbd3a0cdff6f6af" class="nameRef">mprSetHttpBufferSize</a>(MprHttp *http,  int initialSize,  int maxSize)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Set the Http buffer size.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1gef68a252c9c1fba396ab277abc34d6ca" class="nameRef">mprSetHttpCallback</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  MprHttpProc fn,  void *arg,  int mask)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1gef68a252c9c1fba396ab277abc34d6ca" class="nameRef">mprSetHttpCallback</a>(MprHttp *http,  MprHttpProc fn,  void *arg,  int mask)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Define a Http callback.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#mpr_8h_12d909d3b41a368e1d1adfbae98df0d7e" class="nameRef">mprSetHttpChunked</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  int enable)</td></tr>
+<td class="apiType">int</td><td><a href="#mpr_8h_12d909d3b41a368e1d1adfbae98df0d7e" class="nameRef">mprSetHttpChunked</a>(MprHttp *http,  int enable)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Set whether transfer chunked encoding will be used on this request.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1g85b354b018499bad86b35ad7850c1d20" class="nameRef">mprSetHttpContentLength</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  int length)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1g85b354b018499bad86b35ad7850c1d20" class="nameRef">mprSetHttpContentLength</a>(MprHttp *http,  int length)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Define a request content length.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1g551afae07e4a8ff0afe2cc149d2fdc04" class="nameRef">mprSetHttpCredentials</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *username,  cchar *password)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1g551afae07e4a8ff0afe2cc149d2fdc04" class="nameRef">mprSetHttpCredentials</a>(MprHttp *http,  cchar *username,  cchar *password)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Set the Http credentials.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1ga59dfda0eab87f8cb469aed943053e80" class="nameRef">mprSetHttpDefaultHost</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *host)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1ga59dfda0eab87f8cb469aed943053e80" class="nameRef">mprSetHttpDefaultHost</a>(MprHttp *http,  cchar *host)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Define a default host.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1g5552304a37f036a1b27833e6fa7b0430" class="nameRef">mprSetHttpDefaultPort</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  int port)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1g5552304a37f036a1b27833e6fa7b0430" class="nameRef">mprSetHttpDefaultPort</a>(MprHttp *http,  int port)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Define a default port.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1gfd033192662f0287edb4401c53306ce6" class="nameRef">mprSetHttpFollowRedirects</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  bool follow)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1gfd033192662f0287edb4401c53306ce6" class="nameRef">mprSetHttpFollowRedirects</a>(MprHttp *http,  bool follow)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Follow redirctions.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g1d42bd333c8cdcd9900778483cd2552f" class="nameRef">mprSetHttpHeader</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  bool overwrite,  cchar *key,  cchar *value)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g1d42bd333c8cdcd9900778483cd2552f" class="nameRef">mprSetHttpHeader</a>(MprHttp *http,  bool overwrite,  cchar *key,  cchar *value)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Add a request header.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1g119ad9ee1f43299c2c5baf1d3a2e0729" class="nameRef">mprSetHttpKeepAlive</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  bool on)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1g119ad9ee1f43299c2c5baf1d3a2e0729" class="nameRef">mprSetHttpKeepAlive</a>(MprHttp *http,  bool on)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Control Http Keep-Alive.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1g290c65bdd2e80446f59e9771d1035e35" class="nameRef">mprSetHttpProtocol</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *protocol)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1g290c65bdd2e80446f59e9771d1035e35" class="nameRef">mprSetHttpProtocol</a>(MprHttp *http,  cchar *protocol)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Set the Http protocol variant.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1gde8d38b93956cf3ce83ef73421e028f0" class="nameRef">mprSetHttpProxy</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *host,  int port)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1gde8d38b93956cf3ce83ef73421e028f0" class="nameRef">mprSetHttpProxy</a>(MprHttp *http,  cchar *host,  int port)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Define a Http proxy host.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___mpr_http_1g921c8d9f24fcf6dda6b5753f08cfd5d8" class="nameRef">mprSetHttpRetries</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  int retries)</td></tr>
+<td class="apiType">void</td><td><a href="#group___mpr_http_1g921c8d9f24fcf6dda6b5753f08cfd5d8" class="nameRef">mprSetHttpRetries</a>(MprHttp *http,  int retries)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Set the Http retry count.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g180f2b115fec2c2e546c8d1b6e451f10" class="nameRef">mprSetHttpTimeout</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  int timeout)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g180f2b115fec2c2e546c8d1b6e451f10" class="nameRef">mprSetHttpTimeout</a>(MprHttp *http,  int timeout)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Set the Http inactivity timeout.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void*</td><td><a href="#group___mpr_list_1g20dffb6f04ddb568db844dd1a83025f7" class="nameRef">mprSetItem</a>(<a href="#struct_mpr_list" class="ref">MprList</a> *list,  int index,  cvoid *item)</td></tr>
@@ -982,7 +994,7 @@
 <td class="apiType">char*</td><td><a href="#mpr_8h_16cedd059c2f7ea313fbf7bc136ab2909" class="nameRef">mprSprintf</a>(char *buf,  int maxSize,  cchar *fmt, ...)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Format a string into a statically allocated buffer.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#mpr_8h_1efdcc565b19075801a65604d388715d0" class="nameRef">mprStackCheck</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType">bool</td><td><a href="#mpr_8h_1efdcc565b19075801a65604d388715d0" class="nameRef">mprStackCheck</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Monitory stack usage and check if the stack has grown since last monitoring.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#mpr_8h_1721856d6348713ef443f924013c42349" class="nameRef">mprStart</a>(<a href="#group___mpr" class="ref">Mpr</a> *mpr,  int startEventsThread)</td></tr>
@@ -991,7 +1003,7 @@
 <td class="apiType">int</td><td><a href="#group___mpr_cmd_1g63558463aa20f047dbd03cae5b6dab7b" class="nameRef">mprStartCmd</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd,  int argc,  char **argv,  char **envp,  int flags)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Start the command.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g7d0f09f4d9c367d630a03f69199a2624" class="nameRef">mprStartHttpRequest</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *method,  cchar *uri)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g7d0f09f4d9c367d630a03f69199a2624" class="nameRef">mprStartHttpRequest</a>(MprHttp *http,  cchar *method,  cchar *uri)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Start a new Http request.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_thread_1g35c53df918c2f52e2e1f6961e35ee8d1" class="nameRef">mprStartThread</a>(<a href="#group___mpr_thread" class="ref">MprThread</a> *thread)</td></tr>
@@ -1075,10 +1087,10 @@
 <td class="apiType">int</td><td><a href="#group___mpr_path_1g5d652358240a8e968114cfa718b420ab" class="nameRef">mprTruncatePath</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *path,  int size)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Truncate a path.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_synch_1g2b3b8e824b92499192ea48512e31c26d" class="nameRef">mprTryLock</a>(<a href="#struct_mpr_mutex" class="ref">MprMutex</a> *lock)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_synch_1g2b3b8e824b92499192ea48512e31c26d" class="nameRef">mprTryLock</a>(<a href="#struct_mpr_mutex" class="ref">MprMutex</a> *lock)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Attempt to lock access.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_synch_1gc257b932fcc7140852e6830640d2301b" class="nameRef">mprTrySpinLock</a>(<a href="#struct_mpr_spin" class="ref">MprSpin</a> *lock)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_synch_1gc257b932fcc7140852e6830640d2301b" class="nameRef">mprTrySpinLock</a>(<a href="#struct_mpr_spin" class="ref">MprSpin</a> *lock)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Attempt to lock access on a spin lock.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_module_1g7850e66f8a93866bbf3c149a65f33172" class="nameRef">mprUnloadModule</a>(<a href="#group___mpr_module" class="ref">MprModule</a> *mp)</td></tr>
@@ -1117,25 +1129,25 @@
 <td class="apiType">int</td><td><a href="#group___mpr_synch_1g4ce11896445416406d85d4d7a18bac7e" class="nameRef">mprWaitForCondWithService</a>(<a href="#struct_mpr_cond" class="ref">MprCond</a> *cond,  int timeout)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Wait for a condition lock variable and pump events while waiting.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g4e5c60b21beceecfd2065b2ecedf8a47" class="nameRef">mprWaitForHttp</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  int state,  int timeout)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g4e5c60b21beceecfd2065b2ecedf8a47" class="nameRef">mprWaitForHttp</a>(MprHttp *http,  int state,  int timeout)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Wait for http response data to drive the Http request/response to the requested state.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1gee31f33a71f9fe9325dc60f00b35db9d" class="nameRef">mprWaitForHttpResponse</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  int timeout)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1gee31f33a71f9fe9325dc60f00b35db9d" class="nameRef">mprWaitForHttpResponse</a>(MprHttp *http,  int timeout)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Wait for a http response to the request.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="nameRef">mprWrite</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  cvoid *buf,  uint count)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="nameRef">mprWrite</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  cvoid *buf,  uint count)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write data to a file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_cmd_1gc69adc9b03e41150d6d79512c0895c12" class="nameRef">mprWriteCmdPipe</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd,  int channel,  char *buf,  int bufsize)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write data to an I/O channel.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="nameRef">mprWriteFormat</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  cchar *fmt, ...)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="nameRef">mprWriteFormat</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  cchar *fmt, ...)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write formatted data to a file.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1g880aa2c8b858028523ca97420fe3f215" class="nameRef">mprWriteHttp</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  cchar *buf,  int len)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1g880aa2c8b858028523ca97420fe3f215" class="nameRef">mprWriteHttp</a>(MprHttp *http,  cchar *buf,  int len)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write Http request body data.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_http_1ge17159c806a98357851570e18adae247" class="nameRef">mprWriteHttpUploadData</a>(<a href="#struct_mpr_http" class="ref">MprHttp</a> *http,  MprList *formData,  MprList *fileData)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_http_1ge17159c806a98357851570e18adae247" class="nameRef">mprWriteHttpUploadData</a>(MprHttp *http,  MprList *formData,  MprList *fileData)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write Http upload body data.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1gbd2ae7ff08fb05f45d78f728a3af93a1" class="nameRef">mprWriteSocket</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp,  void *buf,  int len)</td></tr>
@@ -1147,7 +1159,7 @@
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1g50a28b5aac234b66ad03d0e3a8e38038" class="nameRef">mprWriteSocketVector</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp,  MprIOVec *iovec,  int count)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write a vector to a socket.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="nameRef">mprWriteString</a>(<a href="#struct_mpr_file" class="ref">MprFile</a> *file,  cchar *str)</td></tr>
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="nameRef">mprWriteString</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  cchar *str)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Write a string to a file.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_1gc5203b2138474e781207b39ac4726c1b" class="nameRef">mprBreakpoint</a>()</td></tr>
@@ -1159,7 +1171,7 @@
 <td class="apiType"><a href="#group___mpr" class="ref">Mpr*</a></td><td><a href="#group___mpr_1gc57539d42b47b7d3a218e89912a168f1" class="nameRef">mprCreateEx</a>(int argc,  char **argv,  MprAllocNotifier cback,  void *shell)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Create an instance of the MPR.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_1g1392efc11ff7ec56f8cb2e3b6fa1168c" class="nameRef">mprGetDebugMode</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_1g1392efc11ff7ec56f8cb2e3b6fa1168c" class="nameRef">mprGetDebugMode</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the debug mode.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_1gf184a06275222c97f80e0a8d807418ac" class="nameRef">mprGetError</a>()</td></tr>
@@ -1168,7 +1180,7 @@
 <td class="apiType">int</td><td><a href="#group___mpr_1gd2fa15bdd6890ff1df432ae25f4c981c" class="nameRef">mprGetOsError</a>()</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Return the O/S error code.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_1g1dfe792f44331fa47bb8e8cb8c04a2c7" class="nameRef">mprIsExiting</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_1g1dfe792f44331fa47bb8e8cb8c04a2c7" class="nameRef">mprIsExiting</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Determine if the MPR should exit.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_1gf86c5f0e03d6476670810091ba6a8d3c" class="nameRef">mprSignalExit</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
@@ -1291,7 +1303,7 @@
 <td class="apiType">int</td><td><a href="#group___mpr_cmd_1gb286ce3b057579a16b84ec56997ae63f" class="nameRef">mprGetCmdFd</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd,  int channel)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the underlying file descriptor for an I/O channel.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_cmd_1g5ac545e5959e115b2cd633004f5d949b" class="nameRef">mprIsCmdRunning</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_cmd_1g5ac545e5959e115b2cd633004f5d949b" class="nameRef">mprIsCmdRunning</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if the command is still running.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_cmd_1g79b9d648fb26331b46aab5d8d6b0bce4" class="nameRef">mprMakeCmdIO</a>(<a href="#group___mpr_cmd" class="ref">MprCmd</a> *cmd)</td></tr>
@@ -1350,6 +1362,57 @@
 <tr class="apiDef">
 <td class="apiType"><a href="#group___mpr_date_1gdd377cb2c4ec9c665b99de02f87f768b" class="ref">MprTime</a></td><td><a href="#group___mpr_date_1gedc887ffd106e62ff9f4e69044910c92" class="nameRef">mprGetTime</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the system time.</td></tr>
+<tr class="apiDef">
+<td class="apiType"><a href="#group___mpr_file" class="ref">MprFile*</a></td><td><a href="#group___mpr_file_1ge05c883c658aef3c2e9da52e82e2a39b" class="nameRef">mprAttachFd</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  int fd,  cchar *name,  int omode)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Attach to an existing file descriptor.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="nameRef">mprDisableFileBuffering</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Disable file buffering.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="nameRef">mprEnableFileBuffering</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  int size,  int maxSize)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Enable file buffering.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="nameRef">mprFlush</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Flush any buffered write data.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="nameRef">mprGetc</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Read a character from the file.</td></tr>
+<tr class="apiDef">
+<td class="apiType"><a href="#mpr_8h_1df47206cbe2d15ed83ac7c3a2b8a1c9d" class="ref">MprOffset</a></td><td><a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="nameRef">mprGetFilePosition</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Return the current file position.</td></tr>
+<tr class="apiDef">
+<td class="apiType"><a href="#mpr_8h_1df47206cbe2d15ed83ac7c3a2b8a1c9d" class="ref">MprOffset</a></td><td><a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="nameRef">mprGetFileSize</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Get the size of the file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">char*</td><td><a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="nameRef">mprGets</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  char *buf,  uint size)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Read a line from the file.</td></tr>
+<tr class="apiDef">
+<td class="apiType"><a href="#group___mpr_file" class="ref">MprFile*</a></td><td><a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="nameRef">mprOpen</a>(<a href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f" class="ref">MprCtx</a> ctx,  cchar *filename,  int omode,  int perms)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Open a file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="nameRef">mprPeekc</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Non-destructively read a character from the file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="nameRef">mprPutc</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  int c)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Write a character to the file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="nameRef">mprPuts</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  cchar *str)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Write a string to the file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="nameRef">mprRead</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  void *buf,  uint size)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Read data from a file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">long</td><td><a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="nameRef">mprSeek</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  int seekType,  long distance)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Seek the I/O pointer to a new location in the file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="nameRef">mprWrite</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  cvoid *buf,  uint count)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Write data to a file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="nameRef">mprWriteFormat</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  cchar *fmt, ...)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Write formatted data to a file.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="nameRef">mprWriteString</a>(<a href="#group___mpr_file" class="ref">MprFile</a> *file,  cchar *str)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Write a string to a file.</td></tr>
 <tr class="apiDef">
 <td class="apiType"><a href="#group___mpr_hash" class="ref">MprHash*</a></td><td><a href="#group___mpr_hash_1g6cac9e79143bfdc2c884590446e5edaf" class="nameRef">mprAddDuplicateHash</a>(<a href="#struct_mpr_hash_table" class="ref">MprHashTable</a> *table,  cchar *key,  cvoid *ptr)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Add a duplicate symbol value into the hash table.</td></tr>
@@ -1441,7 +1504,7 @@
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1g1e94b295effb81620c20b7ecf6e0e1d0" class="nameRef">mprFlushSocket</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Flush a socket.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_socket_1g8240b2dc5540ae928d19410447c2bab0" class="nameRef">mprGetSocketBlockingMode</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_socket_1g8240b2dc5540ae928d19410447c2bab0" class="nameRef">mprGetSocketBlockingMode</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the socket blocking mode.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1g64ccf4250b432690a73bb66f0a639f7a" class="nameRef">mprGetSocketError</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
@@ -1453,13 +1516,13 @@
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1ga4d2f67f80f168a4be7e5f3b96541bab" class="nameRef">mprGetSocketPort</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Get the port used by a socket.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_socket_1g9ba5a2637bcf166c5b3f4289e590bb39" class="nameRef">mprHasSocketPendingData</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_socket_1g9ba5a2637bcf166c5b3f4289e590bb39" class="nameRef">mprHasSocketPendingData</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if the socket has buffered read data.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_socket_1g122966f272c5d7d00bab8f66d569d362" class="nameRef">mprIsSocketEof</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_socket_1g122966f272c5d7d00bab8f66d569d362" class="nameRef">mprIsSocketEof</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if the other end of the socket has been closed.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_socket_1gbeeb5c489632e55d36e2139f8ac0f423" class="nameRef">mprIsSocketSecure</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_socket_1gbeeb5c489632e55d36e2139f8ac0f423" class="nameRef">mprIsSocketSecure</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Determine if the socket is secure.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___mpr_socket_1g52aa9a1c6e3f411df5f4cdd9e787ed16" class="nameRef">mprOpenClientSocket</a>(<a href="#group___mpr_socket" class="ref">MprSocket</a> *sp,  cchar *hostName,  int port,  int flags)</td></tr>
@@ -1525,10 +1588,10 @@
 <td class="apiType">void</td><td><a href="#group___mpr_synch_1geb11c8a1f0c2c3f905967a932626121e" class="nameRef">mprSpinUnlock</a>(<a href="#struct_mpr_spin" class="ref">MprSpin</a> *lock)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Unlock a spinlock.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_synch_1g2b3b8e824b92499192ea48512e31c26d" class="nameRef">mprTryLock</a>(<a href="#struct_mpr_mutex" class="ref">MprMutex</a> *lock)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_synch_1g2b3b8e824b92499192ea48512e31c26d" class="nameRef">mprTryLock</a>(<a href="#struct_mpr_mutex" class="ref">MprMutex</a> *lock)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Attempt to lock access.</td></tr>
 <tr class="apiDef">
-<td class="apiType"><a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a></td><td><a href="#group___mpr_synch_1gc257b932fcc7140852e6830640d2301b" class="nameRef">mprTrySpinLock</a>(<a href="#struct_mpr_spin" class="ref">MprSpin</a> *lock)</td></tr>
+<td class="apiType">bool</td><td><a href="#group___mpr_synch_1gc257b932fcc7140852e6830640d2301b" class="nameRef">mprTrySpinLock</a>(<a href="#struct_mpr_spin" class="ref">MprSpin</a> *lock)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Attempt to lock access on a spin lock.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___mpr_synch_1g40a516fe58b4b2998852cd0c853027ad" class="nameRef">mprUnlock</a>(<a href="#struct_mpr_mutex" class="ref">MprMutex</a> *lock)</td></tr>
@@ -1659,6 +1722,9 @@
 <tr class="apiDef">
 <td class="apiName"><a href="#struct_mpr_dir_entry" class="nameRef">MprDirEntry</a></td>
 <td class="apiBrief">Directory entry description.</td></tr>
+<tr class="apiDef">
+<td class="apiName"><a href="#struct_mpr_file_system" class="nameRef">MprFileSystem</a></td>
+<td class="apiBrief">File system service.</td></tr>
 <tr class="apiDef">
 <td class="apiName"><a href="#struct_mpr_hash_table" class="nameRef">MprHashTable</a></td>
 <td class="apiBrief">Hash table control structure.</td></tr>
@@ -1931,6 +1997,10 @@
 </tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Pending buffered read data.</td></tr>
 <tr class="apiDef">
+<td>#define</td><td><a href="#mpr_8h_15095ed8234fd9f7342145c340d0dc598" class="nameRef">MPR_SOCKET_RUNNING</a>&nbsp;&nbsp;&nbsp;0x2000</td>
+</tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Socket is running callback.</td></tr>
+<tr class="apiDef">
 <td>#define</td><td><a href="#mpr_8h_1f3d6547888a1ecdcb880bccfc8511dd0" class="nameRef">MPR_SOCKET_THREAD</a>&nbsp;&nbsp;&nbsp;0x400</td>
 </tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Process callbacks on a worker thread.</td></tr>
@@ -2007,142 +2077,6 @@
     <a href="#group___mpr_1gc5203b2138474e781207b39ac4726c1b" class="ref">mprBreakpoint</a>, <a href="#group___mpr_1gc57539d42b47b7d3a218e89912a168f1" class="ref">mprCreateEx</a>, <a href="#group___mpr_1gf184a06275222c97f80e0a8d807418ac" class="ref">mprGetError</a>, <a href="#group___mpr_1gd2fa15bdd6890ff1df432ae25f4c981c" class="ref">mprGetOsError</a>, <a href="#group___mpr_1g1dfe792f44331fa47bb8e8cb8c04a2c7" class="ref">mprIsExiting</a>, <a href="#mpr_8h_1a0451f6be62ac9d8c4c9d57df6a4acfb" class="ref">mprSetDebugMode</a>, <a href="#group___mpr_1gf86c5f0e03d6476670810091ba6a8d3c" class="ref">mprSignalExit</a>, <a href="#group___mpr_1gedafb2bdaadd9bccf0938e8e6e31f539" class="ref">mprTerminate</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">char *</td><td><td>appDir</td><td>
-Path of directory containing app executable.
-</td>
-    <tr><td class="param">long</td><td><td>appInstance</td><td>
-Application instance (windows).
-</td>
-    <tr><td class="param">char *</td><td><td>appPath</td><td>
-Path name of application executable.
-</td>
-    <tr><td class="param">int</td><td><td>argc</td><td>
-Count of command line args.
-</td>
-    <tr><td class="param">char *</td><td><td>args</td><td>
-Command line args.
-</td>
-    <tr><td class="param">char **</td><td><td>argv</td><td>
-Application command line args.
-</td>
-    <tr><td class="param">uint</td><td><td>classId</td><td>
-Brew class ID.
-</td>
-    <tr><td class="param">struct MprCmdService *</td><td><td>cmdService</td><td>
-Command service object.
-</td>
-    <tr><td class="param">bool</td><td><td>debugMode</td><td>
-Run in debug mode (no timers).
-</td>
-    <tr><td class="param">struct MprDispatcher *</td><td><td>dispatcher</td><td>
-Event service object.
-</td>
-    <tr><td class="param">IDisplay *</td><td><td>display</td><td>
-Brew display object.
-</td>
-    <tr><td class="param">int</td><td><td>displayHeight</td><td>
-Display height.
-</td>
-    <tr><td class="param">int</td><td><td>displayWidth</td><td>
-Display width.
-</td>
-    <tr><td class="param">char *</td><td><td>domainName</td><td>
-Domain portion.
-</td>
-    <tr><td class="param">struct <a class="ref" href="#struct_mpr_file_system">MprFileSystem</a> *</td><td><td>fileSystem</td><td>
-File system service object.
-</td>
-    <tr><td class="param">int</td><td><td>flags</td><td>
-Processing state.
-</td>
-    <tr><td class="param">int</td><td><td>hasDedicatedService</td><td>
-Running a dedicated events thread.
-</td>
-    <tr><td class="param">MprHeap</td><td><td>heap</td><td>
-Top level memory pool.
-</td>
-    <tr><td class="param">char *</td><td><td>hostName</td><td>
-Host name (fully qualified name).
-</td>
-    <tr><td class="param">struct MprHttpService *</td><td><td>httpService</td><td>
-HTTP service object.
-</td>
-    <tr><td class="param">char *</td><td><td>ipAddr</td><td>
-Public IP Address.
-</td>
-    <tr><td class="param"><a class="ref" href="#group___mpr_log_1g8ca7894a05a04dc473d942ffc7cd1689">MprLogHandler</a></td><td><td>logHandler</td><td>
-Current log handler callback.
-</td>
-    <tr><td class="param">void *</td><td><td>logHandlerData</td><td>
-Handle data for log handler.
-</td>
-    <tr><td class="param">int</td><td><td>logLevel</td><td>
-Log trace level.
-</td>
-    <tr><td class="param">MprOsThread</td><td><td>mainOsThread</td><td>
-Main OS thread ID.
-</td>
-    <tr><td class="param"><a class="ref" href="#struct_mpr_hash_table">MprHashTable</a> *</td><td><td>mimeTypes</td><td>
-Date/Time parsing tokens.
-</td>
-    <tr><td class="param">struct MprModuleService *</td><td><td>moduleService</td><td>
-Module service object.
-</td>
-    <tr><td class="param">int</td><td><td>multiThread</td><td>
-Is running multi-threaded.
-</td>
-    <tr><td class="param"><a class="ref" href="#struct_mpr_mutex">MprMutex</a> *</td><td><td>mutex</td><td>
-Thread synchronization.
-</td>
-    <tr><td class="param">char *</td><td><td>name</td><td>
-Product name.
-</td>
-    <tr><td class="param">struct MprOsService *</td><td><td>osService</td><td>
-O/S service object.
-</td>
-    <tr><td class="param">MprHeap</td><td><td>pageHeap</td><td>
-Heap for arenas and slabs. 
-Always page oriented.
-</td>
-    <tr><td class="param">char *</td><td><td>serverName</td><td>
-Server name portion (no domain).
-</td>
-    <tr><td class="param">MprOsThread</td><td><td>serviceThread</td><td>
-Service OS.
-</td>
-    <tr><td class="param">IShell *</td><td><td>shell</td><td>
-Brew shell object.
-</td>
-    <tr><td class="param">struct MprSocketService *</td><td><td>socketService</td><td>
-Socket service object.
-</td>
-    <tr><td class="param"><a class="ref" href="#struct_mpr_spin">MprSpin</a> *</td><td><td>spin</td><td>
-Quick thread synchronization.
-</td>
-    <tr><td class="param">ITAPI *</td><td><td>tapi</td><td>
-TAPI object.
-</td>
-    <tr><td class="param">struct MprThreadService *</td><td><td>threadService</td><td>
-Thread service object.
-</td>
-    <tr><td class="param"><a class="ref" href="#struct_mpr_hash_table">MprHashTable</a> *</td><td><td>timeTokens</td><td>
-Date/Time parsing tokens.
-</td>
-    <tr><td class="param">int</td><td><td>timezone</td><td>
-Minutes west of Greenwich.
-</td>
-    <tr><td class="param">char *</td><td><td>title</td><td>
-Product title.
-</td>
-    <tr><td class="param">char *</td><td><td>version</td><td>
-Product version.
-</td>
-    <tr><td class="param">struct MprWaitService *</td><td><td>waitService</td><td>
-IO Waiting service object.
-</td>
-    <tr><td class="param">struct MprWorkerService *</td><td><td>workerService</td><td>
-Worker service object.
-</td>
     </table></dd></dl>
   </div>
 </div>
@@ -2208,7 +2142,7 @@ Worker service object.
 <a name="group___mpr_1g1392efc11ff7ec56f8cb2e3b6fa1168c"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprGetDebugMode
 (<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx)
   </div>
@@ -2260,7 +2194,7 @@ Worker service object.
 <a name="group___mpr_1g1dfe792f44331fa47bb8e8cb8c04a2c7"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprIsExiting
 (<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx)
   </div>
@@ -2317,6 +2251,21 @@ Worker service object.
   </div>
 </div>
 <h1>MprBuf</h1>
+<a name="group___mpr_buf"></a>
+<div class="api">
+  <div class="prototype">MprBuf</div>
+  <div class="apiDetail">
+<p>Dynamic Buffer Module.</p>
+    <dl><dt><b>Description</b>:</dt><dd>MprBuf is a flexible, dynamic growable buffer structure. It has start and end pointers to the data buffer which act as read/write pointers. Routines are provided to get and put data into and out of the buffer and automatically advance the appropriate start/end pointer. By definition, the buffer is empty when the start pointer == the end pointer. Buffers can be created with a fixed size or can grow dynamically as more data is added to the buffer. <br/><br/>
+ For performance, the specification of MprBuf is deliberately exposed. All members of MprBuf are implicitly public. However, it is still recommended that wherever possible, you use the accessor routines provided.</dd></dl>
+    <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_buf_1ga0f2f003728ef5bb244fdabe2edc56f7" class="ref">MprBufProc</a>, <a href="#group___mpr_buf_1g61c8f33c54c45ad4d6bf33d8d72543c1" class="ref">mprAdjustBufEnd</a>, <a href="#group___mpr_buf_1g1fbe536bbdd8bc3f68a5246f69305994" class="ref">mprAdjustBufStart</a>, <a href="#group___mpr_buf_1ga2d850779c9881637028fcf54a1ebe30" class="ref">mprCreateBuf</a>, <a href="#group___mpr_buf_1g453b62a6659fc9fa4d041165dad7461e" class="ref">mprFlushBuf</a>, <a href="#group___mpr_mem_1g6d2fdfc4a34dc8ef4e7172fbcf977045" class="ref">mprFree</a>, <a href="#group___mpr_buf_1g3a1388925b9ab4a209b0610cd674139f" class="ref">mprGetBlockFromBuf</a>, <a href="#group___mpr_buf_1gbd1fae7a41a8c38220de4f06e6d0e053" class="ref">mprGetBufEnd</a>, <a href="#group___mpr_buf_1g4d39e8467818e491ecec68a4db8df054" class="ref">mprGetBufLength</a>, <a href="#group___mpr_buf_1g962aeff07a87ab52da3bcd1973fe801b" class="ref">mprGetBufOrigin</a>, <a href="#group___mpr_buf_1g2791daeb72ae2e3f455250dfba72aa67" class="ref">mprGetBufRefillProc</a>, <a href="#group___mpr_buf_1ga609f1dc4e3f8315949c4cf93e27aff1" class="ref">mprGetBufSize</a>, <a href="#group___mpr_buf_1g6c6646d8f5933dfbf31983a374b491e7" class="ref">mprGetBufSpace</a>, <a href="#group___mpr_buf_1gf128b71005bdd12507110e1f21b483d4" class="ref">mprGetCharFromBuf</a>, <a href="#group___mpr_buf_1g6c40bdb62af47cbae761c6bfdc7da11b" class="ref">mprGrowBuf</a>, <a href="#group___mpr_buf_1g6f91b177cd36508c9d470636b04fa7b5" class="ref">mprInsertCharToBuf</a>, <a href="#group___mpr_buf_1g9ae5abc2e8c8b3359ca450e505564359" class="ref">mprLookAtLastCharInBuf</a>, <a href="#group___mpr_buf_1gbe01ab970d735db5a92cea5f9456de5e" class="ref">mprLookAtNextCharInBuf</a>, <a href="#group___mpr_buf_1g3a8934d430c8345cd1e19b42173b1336" class="ref">mprPutBlockToBuf</a>, <a href="#group___mpr_buf_1g5ab66b5d96db8b33e3bb0c3bbb9c90e2" class="ref">mprPutCharToBuf</a>, <a href="#group___mpr_buf_1g87bc8fae31c0dc3ffae2c7d4fb4aa49b" class="ref">mprPutFmtToBuf</a>, <a href="#group___mpr_buf_1g117b7d1d0a1b08b7395a2ad67a1a5ccc" class="ref">mprPutIntToBuf</a>, <a href="#group___mpr_buf_1g482c21dd3356edd53d804b14c5c9f253" class="ref">mprPutStringToBuf</a>, <a href="#group___mpr_buf_1g9e7451ec61507706a06c6c8149bebc52" class="ref">mprRefillBuf</a>, <a href="#group___mpr_buf_1ge6f9d70c3aab3eb2d9235a1c2a8f63a8" class="ref">mprResetBufIfEmpty</a>, <a href="#group___mpr_buf_1gea06aa1b68fc99c1038e07066136fee3" class="ref">mprSetBufMax</a>, <a href="#group___mpr_buf_1g7f74f8c3d5af9db8c064b365f39cae2c" class="ref">mprSetBufRefillProc</a>, <a href="#group___mpr_buf_1gb66fa4b1cc3c02e8808811b027d54898" class="ref">mprSetBufSize</a>, <a href="#group___mpr_buf_1g5800cbdbb6bac03b54fba8af893603b0" class="ref">mprStealBuf</a></dd></dl>
+    <dl><dt>Fields:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    </table></dd></dl>
+  </div>
+</div>
 <a name="group___mpr_buf_1g159c096de4aec192e25b275f1f5e031d"></a>
 <div class="api">
   <div class="prototype">
@@ -2912,15 +2861,6 @@ Worker service object.
     <a href="#group___mpr_cmd_1gc48a59b1bfc4f3944a88e152863c3d32" class="ref">mprCloseCmdFd</a>, <a href="#group___mpr_cmd_1gbc453ad9cdcd6046373ebfce72ce1fd6" class="ref">mprCreateCmd</a>, <a href="#group___mpr_cmd_1g66cccaaaa550e9d2cf381ff8854c2d7a" class="ref">mprDisableCmdEvents</a>, <a href="#group___mpr_cmd_1g7562126cafba57260cd73634f1ee4aed" class="ref">mprDisconnectCmd</a>, <a href="#group___mpr_cmd_1g2fd38e2aaf8e7c2a1aed39aa1005155e" class="ref">mprEnableCmdEvents</a>, <a href="#group___mpr_cmd_1g68cf4226027c07ba3f3e5b30ecd48590" class="ref">mprGetCmdBuf</a>, <a href="#group___mpr_cmd_1g4dcefa4a65ff85b78c9b6580abac0a62" class="ref">mprGetCmdExitStatus</a>, <a href="#group___mpr_cmd_1gb286ce3b057579a16b84ec56997ae63f" class="ref">mprGetCmdFd</a>, <a href="#group___mpr_cmd_1g5ac545e5959e115b2cd633004f5d949b" class="ref">mprIsCmdRunning</a>, <a href="#group___mpr_cmd_1g79b9d648fb26331b46aab5d8d6b0bce4" class="ref">mprMakeCmdIO</a>, <a href="#group___mpr_cmd_1g9aee91a4b53a03ea5dcf603b3c2437b8" class="ref">mprPollCmdPipes</a>, <a href="#group___mpr_cmd_1g4a9036d982e301eb389e36b3b6a2bee7" class="ref">mprReadCmdPipe</a>, <a href="#group___mpr_cmd_1g5644e84254f86b9f85374e90d081f0fc" class="ref">mprReapCmd</a>, <a href="#group___mpr_cmd_1g7f80cf889cf937a284d78552298667b3" class="ref">mprRunCmd</a>, <a href="#group___mpr_cmd_1gfcea6f14d60761368a0644eb0c0de2aa" class="ref">mprRunCmdV</a>, <a href="#group___mpr_cmd_1g8288e08dc7387c14e0536d214eba6049" class="ref">mprSetCmdCallback</a>, <a href="#group___mpr_cmd_1ga0e753a2136410b79e480713aaf97b89" class="ref">mprSetCmdDir</a>, <a href="#group___mpr_cmd_1g731bf3b3b53862f42249d5a771107363" class="ref">mprSetCmdEnv</a>, <a href="#group___mpr_cmd_1g63558463aa20f047dbd03cae5b6dab7b" class="ref">mprStartCmd</a>, <a href="#group___mpr_cmd_1g73dbe983174ac25e4af6a1fea4d8f966" class="ref">mprStopCmd</a>, <a href="#group___mpr_cmd_1g86f4815eb5e4cdd4695ecfd17f8eb360" class="ref">mprWaitForCmd</a>, <a href="#group___mpr_cmd_1gc69adc9b03e41150d6d79512c0895c12" class="ref">mprWriteCmdPipe</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">int</td><td><td>timedout</td><td>
-Request has timedout.
-</td>
-    <tr><td class="param">int</td><td><td>timeoutPeriod</td><td>
-Timeout value.
-</td>
-    <tr><td class="param"><a class="ref" href="#group___mpr_date_1gdd377cb2c4ec9c665b99de02f87f768b">MprTime</a></td><td><td>timestamp</td><td>
-Timeout timestamp for last I/O.
-</td>
     </table></dd></dl>
   </div>
 </div>
@@ -3075,7 +3015,7 @@ This enables events on a given channel
 <a name="group___mpr_cmd_1g5ac545e5959e115b2cd633004f5d949b"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprIsCmdRunning
 (MprCmd *cmd)
   </div>
@@ -3490,6 +3430,362 @@ The command is immediately killed
     <a href="#group___mpr_date_1gdd377cb2c4ec9c665b99de02f87f768b" class="ref">MprTime</a>, <a href="#group___mpr_date_1g1fe29b0b5a726295afe36d28ab027270" class="ref">mprDecodeLocalTime</a>, <a href="#group___mpr_date_1g4437f3ff3a58a9cf9d4d7d9e763fcc1a" class="ref">mprDecodeUniversalTime</a>, <a href="#group___mpr_date_1g70e43deb465cef84d2387800ae07a194" class="ref">mprFormatLocalTime</a>, <a href="#group___mpr_date_1g315d7591e179c57cd2072796a8dce0c5" class="ref">mprFormatTime</a></dd></dl>
   </div>
 </div>
+<h1>MprFile</h1>
+<a name="group___mpr_file"></a>
+<div class="api">
+  <div class="prototype">MprFile</div>
+  <div class="apiDetail">
+<p>File I/O Module.</p>
+    <dl><dt><b>Description</b>:</dt><dd>MprFile is the cross platform File I/O abstraction control structure. An instance will be created when a file is created or opened via <a class="ref" href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9">mprOpen</a>.</dd></dl>
+    <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+    <dl><dt>Fields:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    </table></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1ge05c883c658aef3c2e9da52e82e2a39b"></a>
+<div class="api">
+  <div class="prototype">
+    <a href="#group___mpr_file" class="ref">MprFile</a> *
+    mprAttachFd
+(<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx, int fd, cchar *name, int omode)
+  </div>
+  <div class="apiDetail">
+<p>Attach to an existing file descriptor.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Attach a file to an open file decriptor and return a file object.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">ctx</td><td>Any memory context allocated by the MPR.</td>
+    <tr><td class="param">fd</td><td>File descriptor to attach to.</td>
+    <tr><td class="param">name</td><td>Descriptive name for the file.</td>
+    <tr><td class="param">omode</td><td>Posix style file open mode mask. The open mode may contain the following mask values ored together: <ul><li>O_RDONLY Open read only </li><li>O_WRONLY Open write only </li><li>O_RDWR Open for read and write </li><li>O_CREAT Create or re-create </li><li>O_TRUNC Truncate </li><li>O_BINARY Open for binary data </li><li>O_TEXT Open for text data </li><li>O_EXCL Open with an exclusive lock </li><li>O_APPEND Open to append </li></ul>.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>Returns an MprFile object to use in other file operations.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g457be50126337e42f1df6c30af9db510"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    mprDisableFileBuffering
+(MprFile *file)
+  </div>
+  <div class="apiDetail">
+<p>Disable file buffering.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Disable any buffering of data when using the buffer.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>File instance returned from <a class="ref" href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9">mprOpen</a>.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g1912be708fa60f6afde7e174413507bc"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprEnableFileBuffering
+(MprFile *file, int size, int maxSize)
+  </div>
+  <div class="apiDetail">
+<p>Enable file buffering.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Enable data buffering when using the buffer.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>File instance returned from <a class="ref" href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9">mprOpen</a>.</td>
+    <tr><td class="param">size</td><td>Size to allocate for the buffer.</td>
+    <tr><td class="param">maxSize</td><td>Maximum size the data buffer can grow to.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprFlush
+(MprFile *file)
+  </div>
+  <div class="apiDetail">
+<p>Flush any buffered write data.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Write buffered write data and then reset the internal buffers.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>Zero if successful, otherwise a negative MPR error code.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprGetc
+(MprFile *file)
+  </div>
+  <div class="apiDetail">
+<p>Read a character from the file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Read a single character from the file and advance the read position.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>If successful, return the character just read. Otherwise return a negative MPR error code. End of file is signified by reading 0.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c"></a>
+<div class="api">
+  <div class="prototype">
+    <a href="#mpr_8h_1df47206cbe2d15ed83ac7c3a2b8a1c9d" class="ref">MprOffset</a>
+    mprGetFilePosition
+(MprFile *file)
+  </div>
+  <div class="apiDetail">
+<p>Return the current file position.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Return the current read/write file position.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>A file object returned from <a class="ref" href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9">mprOpen</a>.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The current file offset position if successful. Returns a negative MPR error code on errors.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7"></a>
+<div class="api">
+  <div class="prototype">
+    <a href="#mpr_8h_1df47206cbe2d15ed83ac7c3a2b8a1c9d" class="ref">MprOffset</a>
+    mprGetFileSize
+(MprFile *file)
+  </div>
+  <div class="apiDetail">
+<p>Get the size of the file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Return the current file size.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>A file object returned from <a class="ref" href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9">mprOpen</a>.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The current file size if successful. Returns a negative MPR error code on errors.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358"></a>
+<div class="api">
+  <div class="prototype">
+    char *
+    mprGets
+(MprFile *file, char *buf, uint size)
+  </div>
+  <div class="apiDetail">
+<p>Read a line from the file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Read a single line from the file and advance the read position. Lines are delimited by the newline character. The newline is not included in the returned buffer.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    <tr><td class="param">buf</td><td>Pre-allocated buffer to contain the line of data.</td>
+    <tr><td class="param">size</td><td>Size of buf.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The number of characters read into buf.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9"></a>
+<div class="api">
+  <div class="prototype">
+    <a href="#group___mpr_file" class="ref">MprFile</a> *
+    mprOpen
+(<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx, cchar *filename, int omode, int perms)
+  </div>
+  <div class="apiDetail">
+<p>Open a file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Open a file and return a file object.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">ctx</td><td>Any memory context allocated by the MPR.</td>
+    <tr><td class="param">filename</td><td>String containing the filename to open or create.</td>
+    <tr><td class="param">omode</td><td>Posix style file open mode mask. The open mode may contain the following mask values ored together: <ul><li>O_RDONLY Open read only </li><li>O_WRONLY Open write only </li><li>O_RDWR Open for read and write </li><li>O_CREAT Create or re-create </li><li>O_TRUNC Truncate </li><li>O_BINARY Open for binary data </li><li>O_TEXT Open for text data </li><li>O_EXCL Open with an exclusive lock </li><li>O_APPEND Open to append </li></ul>.</td>
+    <tr><td class="param">perms</td><td>Posix style file permissions mask.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>Returns an MprFile object to use in other file operations.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprPeekc
+(MprFile *file)
+  </div>
+  <div class="apiDetail">
+<p>Non-destructively read a character from the file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Read a single character from the file without advancing the read position.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>If successful, return the character just read. Otherwise return a negative MPR error code. End of file is signified by reading 0.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprPutc
+(MprFile *file, int c)
+  </div>
+  <div class="apiDetail">
+<p>Write a character to the file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Writes a single character to the file. Output is buffered and is flushed as required or when mprClose is called.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    <tr><td class="param">c</td><td>Character to write.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>One if successful, otherwise returns a negative MPR error code on errors.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprPuts
+(MprFile *file, cchar *str)
+  </div>
+  <div class="apiDetail">
+<p>Write a string to the file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Writes a string to the file. Output is buffered and is flushed as required or when mprClose is called.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    <tr><td class="param">str</td><td>String to write.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The number of characters written to the file. Returns a negative MPR error code on errors.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprRead
+(MprFile *file, void *buf, uint size)
+  </div>
+  <div class="apiDetail">
+<p>Read data from a file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Reads data from a file.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    <tr><td class="param">buf</td><td>Buffer to contain the read data.</td>
+    <tr><td class="param">size</td><td>Size of buf in characters.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The number of characters read from the file. Returns a negative MPR error code on errors.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g6510f5de249f68beee6bbbe880549793"></a>
+<div class="api">
+  <div class="prototype">
+    long
+    mprSeek
+(MprFile *file, int seekType, long distance)
+  </div>
+  <div class="apiDetail">
+<p>Seek the I/O pointer to a new location in the file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Move the position in the file to/from which I/O will be performed in the file. Seeking prior to a read or write will cause the next I/O to occur at that location.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    <tr><td class="param">seekType</td><td>Seek type may be one of the following three values: <ul><li>SEEK_SET Seek to a position relative to the start of the file </li><li>SEEK_CUR Seek relative to the current position </li><li>SEEK_END Seek relative to the end of the file </li></ul>.</td>
+    <tr><td class="param">distance</td><td>A positive or negative byte offset.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The new file position if successful otherwise a negative MPR error code is returned.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprWrite
+(MprFile *file, cvoid *buf, uint count)
+  </div>
+  <div class="apiDetail">
+<p>Write data to a file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Writes data to a file.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    <tr><td class="param">buf</td><td>Buffer containing the data to write.</td>
+    <tr><td class="param">count</td><td>Cound of characters in buf to write.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The number of characters actually written to the file. Returns a negative MPR error code on errors.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprWriteFormat
+(MprFile *file, cchar *fmt, ...)
+  </div>
+  <div class="apiDetail">
+<p>Write formatted data to a file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Writes a formatted string to a file.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    <tr><td class="param">fmt</td><td>Format string.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The number of characters actually written to the file. Returns a negative MPR error code on errors.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148" class="ref">mprWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___mpr_file_1g3874c994f9f5b1c4c4fd57100a656148"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    mprWriteString
+(MprFile *file, cchar *str)
+  </div>
+  <div class="apiDetail">
+<p>Write a string to a file.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Writes a string to a file.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">file</td><td>Pointer to an MprFile object returned via MprOpen.</td>
+    <tr><td class="param">str</td><td>String to write.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The number of characters actually written to the file. Returns a negative MPR error code on errors.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file" class="ref">MprFile</a>, <a href="#group___mpr_file_1g457be50126337e42f1df6c30af9db510" class="ref">mprDisableFileBuffering</a>, <a href="#group___mpr_file_1g1912be708fa60f6afde7e174413507bc" class="ref">mprEnableFileBuffering</a>, <a href="#group___mpr_file_1g91dff182995e9e7f443373a5b27da4f4" class="ref">mprFlush</a>, <a href="#group___mpr_file_1g96273fe03aa3e5e1de8820e8aaba7e5c" class="ref">mprGetFilePosition</a>, <a href="#group___mpr_file_1gb1ae4e8c4128773497a609e444dbe8c7" class="ref">mprGetFileSize</a>, <a href="#group___mpr_file_1g33e438e507e4e5effcddb2cc103e5c26" class="ref">mprGetc</a>, <a href="#group___mpr_file_1g15a5b5e70b74166eb1aea7d278d11358" class="ref">mprGets</a>, <a href="#group___mpr_file_1g4f97953317f303fe033be11fcbcec4e9" class="ref">mprOpen</a>, <a href="#group___mpr_file_1gb50f74711c89a6eb57363aee8090b6bb" class="ref">mprPeekc</a>, <a href="#group___mpr_file_1gda34b4c0fbd1cd04fd636ab49e7dcb71" class="ref">mprPutc</a>, <a href="#group___mpr_file_1ge172b6c82656af8d7a4f82bdff01977c" class="ref">mprPuts</a>, <a href="#group___mpr_file_1ge3052b9893259fb2f245d5e08310d9c5" class="ref">mprRead</a>, <a href="#group___mpr_file_1g6510f5de249f68beee6bbbe880549793" class="ref">mprSeek</a>, <a href="#group___mpr_file_1g1ccf3d98a34232049c0e97384fca88c3" class="ref">mprWrite</a>, <a href="#group___mpr_file_1g7acf925a7a7f34a50f45e72e34ccc2c7" class="ref">mprWriteFormat</a></dd></dl>
+  </div>
+</div>
 <h1>MprHash</h1>
 <a name="group___mpr_hash"></a>
 <div class="api">
@@ -3502,18 +3798,6 @@ The command is immediately killed
     <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">int</td><td><td>bucket</td><td>
-Hash bucket index.
-</td>
-    <tr><td class="param">cvoid *</td><td><td>data</td><td>
-Pointer to symbol data.
-</td>
-    <tr><td class="param">char *</td><td><td>key</td><td>
-Hash key.
-</td>
-    <tr><td class="param">struct MprHash *</td><td><td>next</td><td>
-Next symbol in hash chain.
-</td>
     </table></dd></dl>
   </div>
 </div>
@@ -3967,24 +4251,6 @@ Useful for log messages from within the memory allocator
     <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">void *</td><td><td>handle</td><td>
-O/S shared library load handle.
-</td>
-    <tr><td class="param">void *</td><td><td>moduleData</td><td>
-Module specific data.
-</td>
-    <tr><td class="param">char *</td><td><td>name</td><td>
-Unique module name.
-</td>
-    <tr><td class="param"><a class="ref" href="#mpr_8h_11d9d70fd98eb69a8c870f2202bee22eb">MprModuleProc</a></td><td><td>start</td><td>
-Start the module service.
-</td>
-    <tr><td class="param"><a class="ref" href="#mpr_8h_11d9d70fd98eb69a8c870f2202bee22eb">MprModuleProc</a></td><td><td>stop</td><td>
-Stop the module service.
-</td>
-    <tr><td class="param">char *</td><td><td>version</td><td>
-Module version.
-</td>
     </table></dd></dl>
   </div>
 </div>
@@ -4123,73 +4389,6 @@ Module version.
     <a href="#group___mpr_socket_1g5bd6e40cb8a29c92a8f5e1ce9529b726" class="ref">mprCloseSocket</a>, <a href="#group___mpr_socket_1g2889978d5c1a2e1990eb3198379cdeb9" class="ref">mprCreateSocket</a>, <a href="#group___mpr_socket_1g1e94b295effb81620c20b7ecf6e0e1d0" class="ref">mprFlushSocket</a>, <a href="#group___mpr_mem_1g6d2fdfc4a34dc8ef4e7172fbcf977045" class="ref">mprFree</a>, <a href="#group___mpr_socket_1g8240b2dc5540ae928d19410447c2bab0" class="ref">mprGetSocketBlockingMode</a>, <a href="#group___mpr_socket_1g8240b2dc5540ae928d19410447c2bab0" class="ref">mprGetSocketBlockingMode</a>, <a href="#group___mpr_socket_1g64ccf4250b432690a73bb66f0a639f7a" class="ref">mprGetSocketError</a>, <a href="#group___mpr_socket_1g4ed3619958eac42ab4e8136464ae00c3" class="ref">mprGetSocketFd</a>, <a href="#group___mpr_socket_1ga4d2f67f80f168a4be7e5f3b96541bab" class="ref">mprGetSocketPort</a>, <a href="#group___mpr_socket_1g122966f272c5d7d00bab8f66d569d362" class="ref">mprIsSocketEof</a>, <a href="#group___mpr_socket_1gbeeb5c489632e55d36e2139f8ac0f423" class="ref">mprIsSocketSecure</a>, <a href="#group___mpr_socket_1g52aa9a1c6e3f411df5f4cdd9e787ed16" class="ref">mprOpenClientSocket</a>, <a href="#group___mpr_socket_1ga0036d6d04bec09cc8c34607191971f9" class="ref">mprOpenServerSocket</a>, <a href="#mpr_8h_1343cf83a0fd1d10213cee7dd73fa3bd1" class="ref">mprParseIp</a>, <a href="#group___mpr_socket_1gbff8106d1e1a3b5aa108542d3241f0b5" class="ref">mprReadSocket</a>, <a href="#group___mpr_socket_1g2f6a628a7ad96ff96e7f44b6dd85fd32" class="ref">mprSetSocketCallback</a>, <a href="#mpr_8h_127866b4c10d6e45ffd96604b221cf314" class="ref">mprSetSocketEof</a>, <a href="#group___mpr_socket_1g0ad0c0197bb36064b315ac2df340d947" class="ref">mprSetSocketEventMask</a>, <a href="#group___mpr_socket_1g51594bafaa2003511990ffd804189a31" class="ref">mprSetSocketNoDelay</a>, <a href="#group___mpr_socket_1gbd2ae7ff08fb05f45d78f728a3af93a1" class="ref">mprWriteSocket</a>, <a href="#group___mpr_socket_1gbf3c8418ff828a0301005b26ae06df92" class="ref">mprWriteSocketString</a>, <a href="#group___mpr_socket_1g50a28b5aac234b66ad03d0e3a8e38038" class="ref">mprWriteSocketVector</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param"><a class="ref" href="#mpr_8h_1bac2acd99a65ebf353755a7aca444214">MprSocketAcceptProc</a></td><td><td>acceptCallback</td><td>
-Accept callback.
-</td>
-    <tr><td class="param">void *</td><td><td>acceptData</td><td>
-User accept callback data.
-</td>
-    <tr><td class="param">char *</td><td><td>clientIpAddr</td><td>
-Client side ip address.
-</td>
-    <tr><td class="param">int</td><td><td>currentEvents</td><td>
-Mask of ready events (FD_x).
-</td>
-    <tr><td class="param">int</td><td><td>error</td><td>
-Last error.
-</td>
-    <tr><td class="param">int</td><td><td>fd</td><td>
-Actual socket file handle.
-</td>
-    <tr><td class="param">int</td><td><td>flags</td><td>
-Current state flags.
-</td>
-    <tr><td class="param">MprWaitHandler *</td><td><td>handler</td><td>
-Wait handler.
-</td>
-    <tr><td class="param">int</td><td><td>handlerMask</td><td>
-Handler events of interest.
-</td>
-    <tr><td class="param">int</td><td><td>handlerPriority</td><td>
-Handler priority.
-</td>
-    <tr><td class="param">int</td><td><td>interestEvents</td><td>
-Mask of events to watch for.
-</td>
-    <tr><td class="param"><a class="ref" href="#mpr_8h_186674106f5fcb47ba730f66375407e0a">MprSocketProc</a></td><td><td>ioCallback</td><td>
-User I/O callback.
-</td>
-    <tr><td class="param">void *</td><td><td>ioData</td><td>
-User io callback data.
-</td>
-    <tr><td class="param">char *</td><td><td>ipAddr</td><td>
-Server side ip address.
-</td>
-    <tr><td class="param">struct MprSocket *</td><td><td>listenSock</td><td>
-Listening socket.
-</td>
-    <tr><td class="param"><a class="ref" href="#struct_mpr_mutex">MprMutex</a> *</td><td><td>mutex</td><td>
-Multi-thread sync.
-</td>
-    <tr><td class="param">int</td><td><td>port</td><td>
-Port to listen on.
-</td>
-    <tr><td class="param">MprSocketProvider *</td><td><td>provider</td><td>
-Socket implementation provider.
-</td>
-    <tr><td class="param">MprSocketService *</td><td><td>service</td><td>
-Socket service.
-</td>
-    <tr><td class="param">struct MprSsl *</td><td><td>ssl</td><td>
-SSL configuration.
-</td>
-    <tr><td class="param">struct MprSslSocket *</td><td><td>sslSocket</td><td>
-Extended ssl socket state. 
-If set, then using ssl.
-</td>
-    <tr><td class="param">int</td><td><td>waitForEvents</td><td>
-Events being waited on.
-</td>
     </table></dd></dl>
   </div>
 </div>
@@ -4254,7 +4453,7 @@ Events being waited on.
 <a name="group___mpr_socket_1g8240b2dc5540ae928d19410447c2bab0"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprGetSocketBlockingMode
 (MprSocket *sp)
   </div>
@@ -4330,7 +4529,7 @@ Events being waited on.
 <a name="group___mpr_socket_1g9ba5a2637bcf166c5b3f4289e590bb39"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprHasSocketPendingData
 (MprSocket *sp)
   </div>
@@ -4349,7 +4548,7 @@ Events being waited on.
 <a name="group___mpr_socket_1g122966f272c5d7d00bab8f66d569d362"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprIsSocketEof
 (MprSocket *sp)
   </div>
@@ -4368,7 +4567,7 @@ Events being waited on.
 <a name="group___mpr_socket_1gbeeb5c489632e55d36e2139f8ac0f423"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprIsSocketSecure
 (MprSocket *sp)
   </div>
@@ -4801,7 +5000,7 @@ Events being waited on.
 <a name="group___mpr_synch_1g2b3b8e824b92499192ea48512e31c26d"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprTryLock
 (<a class="ref" href="#struct_mpr_mutex">MprMutex</a> *lock)
   </div>
@@ -4816,7 +5015,7 @@ Events being waited on.
 <a name="group___mpr_synch_1gc257b932fcc7140852e6830640d2301b"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprTrySpinLock
 (<a class="ref" href="#struct_mpr_spin">MprSpin</a> *lock)
   </div>
@@ -4894,36 +5093,6 @@ Events being waited on.
     <a href="#group___mpr_thread_1g6f765707f81d6e27d9f0bb7e4b294d6f" class="ref">mprCreateThread</a>, <a href="#group___mpr_thread_1ga499ec9a691d9b74753edeac24afbcdc" class="ref">mprGetCurrentOsThread</a>, <a href="#group___mpr_thread_1gf7be9fb3ab99388b3e83093a78a74265" class="ref">mprGetCurrentThread</a>, <a href="#group___mpr_thread_1gc98816057bf8f47f8d15131e68ae12f7" class="ref">mprGetThreadName</a>, <a href="#group___mpr_thread_1g0edd7ee5a80c5566dbcd079293280b1a" class="ref">mprGetThreadPriority</a>, <a href="#group___mpr_thread_1g60bd7071428f6043d834c48ee8914560" class="ref">mprSetThreadPriority</a>, <a href="#group___mpr_thread_1g60bd7071428f6043d834c48ee8914560" class="ref">mprSetThreadPriority</a>, <a href="#group___mpr_thread_1g35c53df918c2f52e2e1f6961e35ee8d1" class="ref">mprStartThread</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">void *</td><td><td>data</td><td>
-Data argument.
-</td>
-    <tr><td class="param">MprThreadProc</td><td><td>entry</td><td>
-Users thread entry point.
-</td>
-    <tr><td class="param">int</td><td><td>isMain</td><td>
-Is the main thread.
-</td>
-    <tr><td class="param"><a class="ref" href="#struct_mpr_mutex">MprMutex</a> *</td><td><td>mutex</td><td>
-Multi-thread synchronization.
-</td>
-    <tr><td class="param">char *</td><td><td>name</td><td>
-Name of thead for trace.
-</td>
-    <tr><td class="param">MprOsThread</td><td><td>osThread</td><td>
-O/S thread id.
-</td>
-    <tr><td class="param">ulong</td><td><td>pid</td><td>
-Owning process id.
-</td>
-    <tr><td class="param">int</td><td><td>priority</td><td>
-Current priority.
-</td>
-    <tr><td class="param">int</td><td><td>stackSize</td><td>
-Only VxWorks implements.
-</td>
-    <tr><td class="param">handle</td><td><td>threadHandle</td><td>
-Threads OS handle for WIN.
-</td>
     </table></dd></dl>
   </div>
 </div>
@@ -5084,6 +5253,19 @@ Threads OS handle for WIN.
   </div>
 </div>
 <h1>MprWaitHandler</h1>
+<a name="group___mpr_wait_handler"></a>
+<div class="api">
+  <div class="prototype">MprWaitHandler</div>
+  <div class="apiDetail">
+<p>Wait Handler Service.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Wait handlers provide callbacks for when I/O events occur. They provide a wait to service many I/O file descriptors without requiring a thread per descriptor.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    MprEvent, <a href="#group___mpr_event_1g4296d7d020478eb3d1a1106f6ac766e9" class="ref">mprCreateEvent</a>, <a href="#group___mpr_wait_handler_1gdb816527b96de477a69bb9e99098c9cf" class="ref">mprDisableWaitEvents</a>, <a href="#group___mpr_wait_handler_1gf51b8932453ddbceaa213b2071054fe0" class="ref">mprEnableWaitEvents</a>, <a href="#group___mpr_wait_handler_1g82f81798dcccf075cc6fc272a4abcffc" class="ref">mprRecallWaitHandler</a>, <a href="#group___mpr_event_1g6df082453b8e06d2a3a370dce2a7d68f" class="ref">mprServiceEvents</a>, <a href="#group___mpr_wait_handler_1g7a037957c9ee35d81a1ca5b9391d5c7e" class="ref">mprSetWaitCallback</a>, <a href="#group___mpr_wait_handler_1gbabefeb193e733393a08077f87c601c2" class="ref">mprSetWaitEvents</a></dd></dl>
+    <dl><dt>Fields:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    </table></dd></dl>
+  </div>
+</div>
 <a name="group___mpr_wait_handler_1g2a88009b90961ebe90f9f3448096d4bc"></a>
 <div class="api">
   <div class="prototype">
@@ -5460,6 +5642,25 @@ This is used to prevent further I/O wait events while still preserving the wait 
     </table></dd></dl>
   </div>
 </div>
+<a name="mpr_8h_1176d0ea8501110003ec63c0e3ecf24f8"></a>
+<div class="api">
+  <div class="prototype">
+    char *
+    mprDtoa
+(<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx, double value, int ndigits, int mode, int flags)
+  </div>
+  <div class="apiDetail">
+<p>Convert a double to ascii.</p>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">ctx</td><td>Any memory context allocated by the MPR.</td>
+    <tr><td class="param">value</td><td>Value to convert.</td>
+    <tr><td class="param">mode.</td><td>Modes are: 0 Shortest string, 1 Like 0, but with Steele &amp; White stopping rule, 2 Return ndigits of result, 3 Number of digits applies after the decimal point.</td>
+    <tr><td class="param">ndigits</td><td>Number of digits to render.</td>
+    <tr><td class="param">flags</td><td>Format flags.</td>
+    </table></dd></dl>
+  </div>
+</div>
 <a name="mpr_8h_1a2b9f1eb8ccbe19f2ca1c277e9e714e2"></a>
 <div class="api">
   <div class="prototype">
@@ -5608,7 +5809,7 @@ mprGetTime()
 <a name="mpr_8h_17084bfea78dcf720c82e7163b9dbc4da"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#struct_mpr_file" class="ref">MprFile</a> *
+    <a href="#group___mpr_file" class="ref">MprFile</a> *
     mprGetStderr
 (<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx)
   </div>
@@ -5624,7 +5825,7 @@ mprGetTime()
 <a name="mpr_8h_1f260b8f2c8c000a6f4ec1ac7569e8416"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#struct_mpr_file" class="ref">MprFile</a> *
+    <a href="#group___mpr_file" class="ref">MprFile</a> *
     mprGetStdin
 (<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx)
   </div>
@@ -5640,7 +5841,7 @@ mprGetTime()
 <a name="mpr_8h_129ffea058d6f735313ee8a81fd3334dd"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#struct_mpr_file" class="ref">MprFile</a> *
+    <a href="#group___mpr_file" class="ref">MprFile</a> *
     mprGetStdout
 (<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx)
   </div>
@@ -5851,7 +6052,7 @@ This call will return the mime type from a limited internal set of mime types fo
 <a name="mpr_8h_1e61aebfc7042e6daab67783587b51d55"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprNeedHttpRetry
 (MprHttp *http, char **url)
   </div>
@@ -6152,7 +6353,7 @@ If enabled, a &quot;Transfer-Encoding: Chunked&quot; will be added to the reques
 <a name="mpr_8h_1efdcc565b19075801a65604d388715d0"></a>
 <div class="api">
   <div class="prototype">
-    <a href="#mpr_8h_11062901a7428fdd9c7f180f5e01ea056" class="ref">bool</a>
+    bool
     mprStackCheck
 (<a class="ref" href="#group___mpr_mem_1g1413d66bb5356730c6fa08ca0af6bc0f">MprCtx</a> ctx)
   </div>
@@ -6699,6 +6900,9 @@ Value of the condition.
     <tr><td class="param">bool</td><td><td>isDir</td><td>
 True if the file is a directory.
 </td>
+    <tr><td class="param">bool</td><td><td>isLink</td><td>
+True if the file symbolic link.
+</td>
     <tr><td class="param"><a class="ref" href="#group___mpr_date_1gdd377cb2c4ec9c665b99de02f87f768b">MprTime</a></td><td><td>lastModified</td><td>
 Time the file was last modified.
 </td>
@@ -6707,6 +6911,81 @@ Name of the file.
 </td>
     <tr><td class="param">MprOffset</td><td><td>size</td><td>
 Size of the file.
+</td>
+    </table></dd></dl>
+  </div>
+</div>
+<a name="struct_mpr_file_system"></a>
+<div class="api">
+  <div class="prototype">MprFileSystem</div>
+  <div class="apiDetail">
+<p>File system service.</p>
+    <dl><dt><b>Description</b>:</dt><dd>The MPR provides a file system abstraction to support non-disk based file access such as flash or other ROM based file systems. The <a class="ref" href="#struct_mpr_file_system">MprFileSystem</a> structure defines a virtual file system interface that will be invoked by the various MPR file routines.</dd></dl>
+    <dl><dt>Fields:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">MprAccessFileProc</td><td><td>accessPath</td><td>
+Virtual access file routine.
+</td>
+    <tr><td class="param">bool</td><td><td>caseSensitive</td><td>
+Path comparisons are case sensitive.
+</td>
+    <tr><td class="param">MprCloseFileProc</td><td><td>closeFile</td><td>
+Virtual close file routine.
+</td>
+    <tr><td class="param">char *</td><td><td>cygdrive</td><td>
+Cygwin drive root.
+</td>
+    <tr><td class="param">MprDeleteFileProc</td><td><td>deletePath</td><td>
+Virtual delete file routine.
+</td>
+    <tr><td class="param">MprGetPathInfoProc</td><td><td>getPathInfo</td><td>
+Virtual get file information routine.
+</td>
+    <tr><td class="param">MprGetPathLinkProc</td><td><td>getPathLink</td><td>
+Virtual get the symbolic link target.
+</td>
+    <tr><td class="param">bool</td><td><td>hasDriveSpecs</td><td>
+Paths can have drive specifications.
+</td>
+    <tr><td class="param">MprMakeDirProc</td><td><td>makeDir</td><td>
+Virtual make link routine.
+</td>
+    <tr><td class="param">MprMakeLinkProc</td><td><td>makeLink</td><td>
+Virtual make directory routine.
+</td>
+    <tr><td class="param">char *</td><td><td>newline</td><td>
+Newline for text files.
+</td>
+    <tr><td class="param">MprOpenFileProc</td><td><td>openFile</td><td>
+Virtual open file routine.
+</td>
+    <tr><td class="param">MprReadFileProc</td><td><td>readFile</td><td>
+Virtual read file routine.
+</td>
+    <tr><td class="param">cchar *</td><td><td>root</td><td>
+Root file path.
+</td>
+    <tr><td class="param">MprSeekFileProc</td><td><td>seekFile</td><td>
+Virtual seek file routine.
+</td>
+    <tr><td class="param">char *</td><td><td>separators</td><td>
+Filename path separators. 
+First separator is the preferred separator.
+</td>
+    <tr><td class="param">MprSetBufferedProc</td><td><td>setBuffered</td><td>
+Virtual set buffered I/O routine.
+</td>
+    <tr><td class="param">struct MprFile *</td><td><td>stdError</td><td>
+Standard error file.
+</td>
+    <tr><td class="param">struct MprFile *</td><td><td>stdInput</td><td>
+Standard input file.
+</td>
+    <tr><td class="param">struct MprFile *</td><td><td>stdOutput</td><td>
+Standard output file.
+</td>
+    <tr><td class="param">MprWriteFileProc</td><td><td>writeFile</td><td>
+Virtual write file routine.
 </td>
     </table></dd></dl>
   </div>
@@ -6907,13 +7186,11 @@ Data key.
 </div>
             </div>
         </div>
-    
-<!-- BeginDsi "dsi/bottom.html" -->
+    <!-- BeginDsi "dsi/bottom.html" -->
+    </div>
 	<div class="bottom">
-		<p class="footnote"> 
-            <a href="../product/copyright.html" >&copy; Embedthis Software LLC, 2003-2010. 
-            All rights reserved. Embedthis, Ejscript and Appweb are trademarks of Embedthis Software LLC.</a>
-		</p>
+		<p class="footnote"><a href="../product/copyright.html" >&copy; Embedthis Software LLC, 2003-2010. 
+            All rights reserved. Embedthis, Ejscript and Appweb are trademarks of Embedthis Software LLC.</a></p>
 	</div>
 <!-- EndDsi -->
 </body>

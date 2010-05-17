@@ -58,7 +58,7 @@ from the current <a href='#readPosition'>readPosition</a> up to the current writ
 <a name='input'></a>
    <tr><td nowrap align='left'>public set </td><td>input</td><td>&nbsp;</td><td>Input callback function when read data is required. The input callback should write to the supplied buffer.</td></tr>
 <a name='output'></a>
-   <tr><td nowrap align='left'>public get </td><td>output</td><td><a href='intrinsic-Function.html'>Function</a></td><td> </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>output</td><td><a href='intrinsic-Function.html'>Function</a></td><td>Output function to process (output) data. The output callback should read from the supplied buffer.</td></tr>
 <a name='readPosition'></a>
    <tr><td nowrap align='left'>public get  set</td><td>readPosition</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Current read position offset. </td></tr>
 <a name='room'></a>
@@ -137,8 +137,8 @@ from the current <a href='#readPosition'>readPosition</a> up to the current writ
 </div>
 <div class='apiDetail'>
 <p>Compact available data down and adjust the read/write positions accordingly.</p>
-<dl><dt>Description</dt><dd>This moves available room to
-the end of the byte array.</dd></dl>
+<dl><dt>Description</dt><dd>This sets the read pointer 
+to the zero index and adjusts the write pointer by the corresponding amount.</dd></dl>
 </div>
 </div>
 <hr />

@@ -175,10 +175,11 @@ module ejs {
          *      function match(element: Object, elementIndex: Number, arr: Array): Boolean
          *  This method is identical to the @transform method.
          *  @param modifier Transforming function
-         *  @return Returns a new array of transformed elements.
+         *  @return Returns the original (transformed) array.
          */
-        function forEach(modifier: Function, thisObj: Object = null): Void {
+        function forEach(modifier: Function): Array {
             transform(modifier)
+            return this
         }
 
         /**
@@ -356,9 +357,9 @@ module ejs {
         }
 
         /**
-         *  Sort the array using the supplied compare function
+         *  Sort the array. The array is sorted in lexical order. A compare function may be supplied.
          *  @param compare Function to use to compare. A null comparator will use a text compare
-         *  @param order If order is >= 0, then an ascending order is used. Otherwise descending.
+         *  @param order If order is >= 0, then an ascending lexical order is used. Otherwise descending.
          *  @return the sorted array reference
          *      type Comparator = (function (*,*): AnyNumber | undefined)
          *  @spec ejs Added the order argument.
@@ -420,8 +421,7 @@ module ejs {
          *  @param items to insert
          *  @return Returns the array reference
          */
-        function unshift(...items): Object
-            insert(0, items)
+        native function unshift(...items): Array
 
         /**
          *  Array intersection. Return the elements that appear in both arrays. 
@@ -724,8 +724,8 @@ module ejs {
         }
 
         /**
-         *  Compact available data down and adjust the read/write positions accordingly. This moves available room to
-         *  the end of the byte array.
+         *  Compact available data down and adjust the read/write positions accordingly. This sets the read pointer 
+         *  to the zero index and adjusts the write pointer by the corresponding amount.
          */
         native function compact(): Void
 
@@ -808,15 +808,16 @@ module ejs {
         #FUTURE
         native function get MD5(): Number
 
-        /**
-         *  Define an output function to process (output) data. The output callback should read from the supplied buffer.
+        /** 
+         *  Output function to process (output) data. The output callback should read from the supplied buffer.
          *  @param callback Function to invoke when the byte array is full or flush() is called.
          *      function outputCallback(buffer: ByteArray): Number
          */
-        native function set output(callback: Function): Void
-
-        /** */
         native function get output(): Function
+
+        /**
+         */
+        native function set output(callback: Function): Void
 
         /**
          *  Read data from the array into another byte array. Data is read from the current read $position pointer toward
@@ -983,8 +984,6 @@ module ejs {
         native function get writePosition(): Number
 
         /**
-         *  Set the current write position offset.
-         *  @param position the new write  position
          */
         native function set writePosition(position: Number): Void
     }
@@ -2358,10 +2357,10 @@ module ejs {
      *  Assert a condition is true. This call tests if a condition is true by testing to see if the supplied 
      *  expression is true. If the expression is false, the interpreter will throw an exception.
      *  @param condition JavaScript expression evaluating or castable to a Boolean result.
-     *  @return True if the condition is.
+     *  @throws AssertError if the condition is false.
      *  @spec ejs
      */
-    native function assert(condition: Boolean): Boolean
+    native function assert(condition: Boolean): Void
 
     /**
      *  Convenient way to trap to the debugger
@@ -3697,7 +3696,7 @@ module ejs {
      *      <tr><td>\\</td><td>Reverse whether a character is treated literally or not.</td></tr>
      *      <tr><td>^</td><td>Match to the start of input. If matching multiline, match starting after a line break.</td></tr>
      *      <tr><td>\$ </td><td>Match to the end of input. If matching multiline, match before after a line break.</td></tr>
-     *      <tr><td>*</td><td>Match the preceding item zero or more times.</td></tr>
+     *      <tr><td>* </td><td>Match the preceding item zero or more times.</td></tr>
      *      <tr><td>+</td><td>Match the preceding item one or more times.</td></tr>
      *      <tr><td>?</td><td>Match the preceding item zero or one times.</td></tr>
      *      <tr><td>(mem)</td><td>Match inside the parenthesis (i.e. "mem") and store the match.</td></tr>
@@ -4264,7 +4263,8 @@ module ejs {
 
         /**
             Extract a substring. Similar to slice but only allows positive indicies.
-            @param startIndex Integer location to start copying
+            If the end index is larger than start, then the effect of substring is as if the two arguments were swapped.
+            @param startIndex Integer location to start copying. 
             @param end Postitive index of one past the last character to extract.
             @return Returns a new string
          */
@@ -4786,7 +4786,7 @@ module ejs.db {
          *  @returns the count of rows in a table in the currently opened database.
          */
         function getNumRows(table: String): Number
-            _adapter.getNumRows()
+            _adapter.getNumRows(table)
 
         /**
          *  The database name defined via the connection string or constructor.
@@ -9412,7 +9412,8 @@ module ejs.io {
             @param user Optional user name if authentication is required.
             @param password Optional password if authentication is required.
          */
-        function open(method: String, url: String, async: Boolean = false, user: String = null, password: String = null): Void {
+        function open(method: String, url: String, async: Boolean = false, user: String = null, 
+                password: String = null): Void {
             hp.method = method
             hp.uri = url
             if (user && password) {
@@ -10732,7 +10733,7 @@ module ejs.sys {
     /**
      *  Set the permissions of a file or directory
      *  @param path File or directory to modify
-     *  @param perms New Posix style permission mask
+     *  @param perms Posix style permission mask
      */
     function chmod(path: String, perms: Number): Void
         Path(path).perms = perms
@@ -10771,20 +10772,13 @@ module ejs.sys {
         Path(path).exists
 
     /**
-     *  Get the file extension portion of the file name. The file extension is the portion starting with the last "."
-     *  in the path. It thus includes "." as the first charcter.
+     *  Get the file extension portion of the file name. The file extension is the portion after the last "."
+     *  in the path.
      *  @param path Filename path to examine
-     *  @return String containing the file extension. It includes "." as the first character.
+     *  @return String containing the file extension. It does not include "." as the first character.
      */
     function extension(path: String): String
         Path(path).extension
-
-    /**
-     *  Return the free space in the file system.
-     *  @return The number of 1M blocks (1024 * 1024 bytes) of free space in the file system.
-     */
-    function freeSpace(path: String = null): Number
-        FileSystem(path).freeSpace()
 
     /**
      *  Is a file a directory. Return true if the specified path exists and is a directory
@@ -10855,17 +10849,21 @@ module ejs.sys {
     function mv(fromFile: String, toFile: String): void
         Path(fromFile).rename(toFile)
 
+    //  DEPRECATED 1.0.2
     /**
-     *  Open or create a file
+     *  Open or create a file. 
      *  @param path Filename path to open
-     *  @param mode optional file access mode with values ored from: Read, Write, Append, Create, Open, Truncate. 
+     *  @param mode optional file access mode with values values from: Read, Write, Append, Create, Open, Truncate. 
      *      Defaults to Read.
-     *  @param permissions optional permissions. Defaults to App.permissions
+     *  @param permissions optional permissions. Defaults to App.permissions.
      *  @return a File object which implements the Stream interface
      *  @throws IOError if the path or file cannot be opened or created.
+     *  @hide
      */
-    function open(path: String, mode: Number = Read, permissions: Number = 0644): File
-        new File(path, { mode: mode, permissions: permissions})
+    function open(path: String, mode: String = "r", permissions: Number = App.permissions): File {
+        print("IN OPEN")
+        return new File(path, { mode: mode, permissions: permissions})
+    }
 
     /**
      *  Get the current working directory
@@ -10874,12 +10872,14 @@ module ejs.sys {
     function pwd(): Path
         App.dir
 
+    //  DEPRECATED 1.0.2
     /**
      *  Read data bytes from a file and return a byte array containing the data.
      *  @param file Open file object previously opened via $open or $File
-        @param count Number of bytes to read
+     *  @param count Number of bytes to read
      *  @return A byte array containing the read data
      *  @throws IOError if the file could not be read.
+     *  @hide
      */
     function read(file: File, count: Number): ByteArray
         file.read(count)
@@ -10917,8 +10917,9 @@ module ejs.sys {
      *  @returns a closed File object after creating an empty temporary file.
      */
     function tempname(directory: String = null): File
-        FileSystem.makeTemp(directory)
+        Path(directory).makeTemp()
 
+    //  DEPRECATED 1.0.2
     /**
      *  Write data to the file. If the stream is in sync mode, the write call blocks until the underlying stream or 
      *  endpoint absorbes all the data. If in async-mode, the call accepts whatever data can be accepted immediately 
@@ -10929,6 +10930,7 @@ module ejs.sys {
      *  the BinaryStream class to write Numbers.
      *  @returns the number of bytes written.  
      *  @throws IOError if the file could not be written.
+     *  @hide
      */
     function write(file: File, ...items): Number
         file.write(items)
@@ -11123,12 +11125,13 @@ module ejs.sys {
 
     /**
      *  Reference to the Worker object for use inside a worker script
-     *  @returns a Worker object
+        This is only present inside Worker scripts.
      */
     var self: Worker
 
     /**
      *  Exit the worker
+        This is only valid inside Worker scripts.
      *  @spec ejs
      */
     function exit(): Void
@@ -11137,20 +11140,20 @@ module ejs.sys {
     /**
      *  Post a message to the Worker's parent
      *  @param data Data to pass to the worker's onmessage callback.
-     *  @param ports Not implemented
+     *  This is only valid inside Worker scripts.
      */
-    function postMessage(data: Object, ports: Array = null): Void
-        self.postMessage(data, ports)
+    function postMessage(data: Object): Void
+        self.postMessage(data, null)
 
     /**
      *  The error callback function
+     *  This is the callback function to receive incoming data from postMessage() calls.
+     *  This is only valid inside Worker scripts.
      */
     function get onerror(): Function
         self.onerror
 
     /**
-     *  Set the error callback function
-     *  @param fun Callback function to receive incoming data from postMessage() calls.
      */
     function set onerror(fun: Function): Void {
         self.onerror = fun
@@ -11158,13 +11161,13 @@ module ejs.sys {
 
     /**
      *  The callback function configured to receive incoming messages. 
+     *  This is the callback function to receive incoming data from postMessage() calls.
+     *  This is only valid inside Worker scripts.
      */
     function get onmessage(): Function
         self.onmessage
 
     /**
-     *  Set the callback function to receive incoming messages. 
-     *  @param fun Callback function to receive incoming data from postMessage() calls.
      */
     function set onmessage(fun: Function): Void {
         self.onmessage = fun
