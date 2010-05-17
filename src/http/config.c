@@ -546,14 +546,16 @@ int maParseConfig(MaServer *server, cchar *configFile)
          *  matching directory.
          */
         for (nextAlias = 0; (alias = mprGetNextItem(hp->aliases, &nextAlias)) != 0; ) {
-            // mprLog(hp, 0, "Alias \"%s\" %s", alias->prefix, alias->filename);
-            path = maMakePath(hp, alias->filename);
-            bestDir = maLookupBestDir(hp, path);
-            if (bestDir == 0) {
-                bestDir = maCreateDir(hp, alias->filename, stack[0].dir);
-                maInsertDir(hp, bestDir);
+            if (alias->filename) {
+                // mprLog(hp, 0, "Alias \"%s\" %s", alias->prefix, alias->filename);
+                path = maMakePath(hp, alias->filename);
+                bestDir = maLookupBestDir(hp, path);
+                if (bestDir == 0) {
+                    bestDir = maCreateDir(hp, alias->filename, stack[0].dir);
+                    maInsertDir(hp, bestDir);
+                }
+                mprFree(path);
             }
-            mprFree(path);
         }
 
         /*
@@ -1397,24 +1399,25 @@ char *maReplaceReferences(MaHost *host, cchar *str)
     char    *result;
 
     buf = mprCreateBuf(host, 0, 0);
+    if (str) {
+        for (src = (char*) str; *src; ) {
+            if (*src == '$') {
+                ++src;
+                if (matchRef("DOCUMENT_ROOT", &src) && host->documentRoot) {
+                    mprPutStringToBuf(buf, host->documentRoot);
+                    continue;
 
-    for (src = (char*) str; *src; ) {
-        if (*src == '$') {
-            ++src;
-            if (matchRef("DOCUMENT_ROOT", &src) && host->documentRoot) {
-                mprPutStringToBuf(buf, host->documentRoot);
-                continue;
+                } else if (matchRef("SERVER_ROOT", &src) && host->server->serverRoot) {
+                    mprPutStringToBuf(buf, host->server->serverRoot);
+                    continue;
 
-            } else if (matchRef("SERVER_ROOT", &src) && host->server->serverRoot) {
-                mprPutStringToBuf(buf, host->server->serverRoot);
-                continue;
-
-            } else if (matchRef("PRODUCT", &src)) {
-                mprPutStringToBuf(buf, BLD_PRODUCT);
-                continue;
+                } else if (matchRef("PRODUCT", &src)) {
+                    mprPutStringToBuf(buf, BLD_PRODUCT);
+                    continue;
+                }
             }
+            mprPutCharToBuf(buf, *src++);
         }
-        mprPutCharToBuf(buf, *src++);
     }
     mprAddNullToBuf(buf);
     result = mprStealBuf(host, buf);
