@@ -802,7 +802,7 @@ static void setEnv(MaConn *conn)
             mprGetPathInfo(conn, resp->filename, info);
         }
         if (info->valid) {
-            resp->etag = mprAsprintf(resp, -1, "%x-%Lx-%Lx", info->inode, info->size, info->mtime);
+            resp->etag = mprAsprintf(resp, -1, "\"%x-%Lx-%Lx\"", info->inode, info->size, info->mtime);
         }
     }
 
