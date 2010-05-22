@@ -4287,6 +4287,7 @@ void ejsConfigureByteArrayType(Ejs *ejs)
 
 
 
+
 #if BLD_FEATURE_FLOATING_POINT
 #define fixed(n) ((int64) (floor(n)))
 #else
@@ -4576,7 +4577,7 @@ static EjsVar *date_Date(Ejs *ejs, EjsDate *date, int argc, EjsVar **argv)
         tm.tm_isdst = -1;
         vp = ejsGetProperty(ejs, (EjsVar*) args, 0);
         year = getNumber(ejs, vp);
-        if (year < 100) {
+        if (0 <= year && year < 100) {
             year += 1900;
         }
         tm.tm_year = year - 1900;
@@ -4587,6 +4588,8 @@ static EjsVar *date_Date(Ejs *ejs, EjsDate *date, int argc, EjsVar **argv)
         if (args->length > 2) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 2);
             tm.tm_mday = getNumber(ejs, vp);
+        } else {
+            tm.tm_mday = 1;
         }
         if (args->length > 3) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 3);
@@ -4779,14 +4782,14 @@ static EjsVar *date_set_fullYear(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 /**
     Return the number of minutes between the local computer time and Coordinated Universal Time.
     @return Integer containing the number of minutes between UTC and local time. The offset is positive if
-    local time is behind UTC and negative if it is ahead. E.g. American PST is UTC-8 so 480 will be retured.
-    This value will vary if daylight savings time is in effect.
+    local time is behind UTC and negative if it is ahead. E.g. American PST is UTC-8 so 420/480 will be retured
+    depending on if daylight savings is in effect.
 
     function getTimezoneOffset(): Number
 */
 static EjsVar *date_getTimezoneOffset(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
-    return (EjsVar*) ejsCreateNumber(ejs, -mprGetMpr(ejs)->timezone);
+    return (EjsVar*) ejsCreateNumber(ejs, -mprGetTimeZoneOffset(ejs, dp->value) / (MPR_TICKS_PER_SEC * 60));
 }
 
 
@@ -6213,6 +6216,7 @@ EjsFrame *ejsCreateFrame(Ejs *ejs, EjsFunction *src)
             ejsGrowObject(ejs, (EjsObject*) frame, numSlots);
         }
         memcpy(frame->function.block.obj.slots, src->block.obj.slots, src->block.obj.numProp * sizeof(EjsVar*));
+        frame->function.block.obj.numProp = src->block.obj.numProp;
     }
     ejsSetDebugName(frame, ejsGetDebugName(src));
     mprAssert(frame->argc == 0);
@@ -12766,7 +12770,7 @@ static EjsVar *stringToJson(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 /*
  *  Convert the string to lower case.
  *
- *  function toLower(locale: String = null): String
+ *  function toLower(): String
  */
 static EjsVar *toLower(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
 {
@@ -12819,7 +12823,7 @@ static EjsVar *stringToString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
  *  @return Returns a new upper case version of the string.
  *  @spec ejs-11
  *
- *  function toUpper(locale: String = null): String
+ *  function toUpper(): String
  */
 static EjsVar *toUpper(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
 {

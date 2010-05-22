@@ -78,7 +78,7 @@ from the mapper.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#some'><b>some</b></a>(match: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Determine if some elements match.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#sort'><b>sort</b></a>(compare: <a href='intrinsic-Function.html'>Function</a> = null , order: <a href='intrinsic-Number.html'>Number</a> = 1): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Sort the array.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#splice'><b>splice</b></a>(start: <a href='intrinsic-Number.html'>Number</a>, deleteCount: <a href='intrinsic-Number.html'>Number</a>, values: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Insert, remove or replace array elements.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the array to a single string each member of the array has toString called on it and the resulting 
+   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the array to a single string each member of the array has toString called on it and the resulting 
 strings are concatenated.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#transform'><b>transform</b></a>(mapper: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Transform all elements.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#unique'><b>unique</b></a>(): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Remove duplicate elements and make the array unique.</td></tr>
@@ -531,15 +531,12 @@ function match(element: Object, elementIndex: Number, arr: Array): Boolean.</dd>
 <hr />
 <a name='toString'></a>
 <div class='api'>
-<div class='apiSig'>override   public  toString(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>override   public  toString(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>Convert the array to a single string each member of the array has toString called on it and the resulting 
 strings are concatenated.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>A string.</dd></dl>
 </div>
 </div>

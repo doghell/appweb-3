@@ -2359,10 +2359,9 @@ extern int mprCreateTimeService(MprCtx ctx);
  *  @param ctx Any memory context allocated by mprAlloc or mprCreate.
  *  @param timep Pointer to a tm structure to hold the result
  *  @param time Time to format
- *  @return Returns a pointer to the tmBuf.
  *  @ingroup MprDate
  */
-extern struct tm *mprDecodeLocalTime(MprCtx ctx, struct tm *timep, MprTime time);
+extern void mprDecodeLocalTime(MprCtx ctx, struct tm *timep, MprTime time);
 
 /**
  *  Decode a time value into a tokenized UTC time structure.
@@ -2371,10 +2370,9 @@ extern struct tm *mprDecodeLocalTime(MprCtx ctx, struct tm *timep, MprTime time)
  *  @param ctx Any memory context allocated by mprAlloc or mprCreate.
  *  @param timep Pointer to a tm structure to hold the result.
  *  @param time The time to format
- *  @return Returns the tm structure reference
  *  @ingroup MprDate
  */
-extern struct tm *mprDecodeUniversalTime(MprCtx ctx, struct tm *timep, MprTime time);
+extern void mprDecodeUniversalTime(MprCtx ctx, struct tm *timep, MprTime time);
 
 /**
  *  Convert a time value to local time and format as a string.
@@ -2456,6 +2454,8 @@ MprTime mprMakeUniversalTime(MprCtx ctx, struct tm *tm);
  *  @returns Zero if successful
  */
 extern int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int timezone, struct tm *defaults);
+
+extern int mprGetTimeZoneOffset(MprCtx ctx, MprTime when);
 
 /**
  *  List Module.
@@ -7304,7 +7304,9 @@ typedef struct Mpr {
     char            *appPath;               /**< Path name of application executable */
     char            *appDir;                /**< Path of directory containing app executable */
     int             flags;                  /**< Processing state */
+#if UNUSED
     int             timezone;               /**< Minutes west of Greenwich */
+#endif
     int             hasDedicatedService;    /**< Running a dedicated events thread */
     int             multiThread;            /**< Is running multi-threaded */
 

@@ -84,10 +84,10 @@ for: comparison, concatenation, copying, searching, conversion, matching, replac
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toCamel'><b>toCamel</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Copy the string into a new string and lower case the first character if there is one.</td></tr>
    <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toJSON'><b>toJSON</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to an equivalent JSON encoding.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#tokenize'><b>tokenize</b></a>(format: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Scan the input and tokenize according to a string format specifier.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toLower'><b>toLower</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to lower case.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toLower'><b>toLower</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to lower case.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toPascal'><b>toPascal</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Copy the string into a new string and capitalize the first character if there is one.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>This function converts an object to a string representation.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toUpper'><b>toUpper</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to upper case.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>This function converts an object to a string representation.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toUpper'><b>toUpper</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to upper case.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#trim'><b>trim</b></a>(str: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Returns a trimmed copy of the string.</td></tr>
 </table>
 
@@ -568,14 +568,11 @@ character is not a character or if it is already lower there is no change.</dd><
 <hr />
 <a name='toLower'></a>
 <div class='api'>
-<div class='apiSig'>  public  toLower(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>  public  toLower(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>Convert the string to lower case.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>Returns a new lower case version of the string.</dd></dl>
 <dl><dt>Specified</dt>
 <dd>ejscript-1.0</dd></dl>
@@ -599,30 +596,24 @@ character is not a character or if it is already capitalized there is no change.
 <hr />
 <a name='toString'></a>
 <div class='api'>
-<div class='apiSig'>override   public  toString(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>override   public  toString(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>This function converts an object to a string representation.</p>
 <dl><dt>Description</dt><dd>Types typically override this to provide 
 the best string representation.</dd></dl>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>A string representation of the object. For Objects "[object className]" will be returned,  where className is set to the name of the class on which the object was based.</dd></dl>
 </div>
 </div>
 <hr />
 <a name='toUpper'></a>
 <div class='api'>
-<div class='apiSig'>  public  toUpper(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>  public  toUpper(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>Convert the string to upper case.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>Returns a new upper case version of the string.</dd></dl>
 <dl><dt>Specified</dt>
 <dd>ejscript-1.0</dd></dl>

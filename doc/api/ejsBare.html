@@ -680,9 +680,6 @@
 <td class="apiName"><a href="#struct_ejs_service" class="nameRef">EjsService</a></td>
 <td class="apiBrief">Ejscript Service structure.</td></tr>
 <tr class="apiDef">
-<td class="apiName"><a href="#struct_ejs_trait" class="nameRef">EjsTrait</a></td>
-<td class="apiBrief">Property traits.</td></tr>
-<tr class="apiDef">
 <td class="apiName"><a href="#struct_ejs_type_helpers" class="nameRef">EjsTypeHelpers</a></td>
 <td class="apiBrief">Type Helpers.</td></tr>
 </table>
@@ -1407,39 +1404,6 @@ Boolean value.
     <a href="#group___ejs_byte_array_1g7c58836430321096069355ee4f0f1114" class="ref">ejsCreateByteArray</a>, <a href="#group___ejs_byte_array_1g8ffdc6934c6b3eb3c6f3eb7a3ca7b3f9" class="ref">ejsIsByteArray</a>, <a href="#group___ejs_byte_array_1g7e9d91928ed2be42e732efe388e86be8" class="ref">ejsSetByteArrayPositions</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">int</td><td><td>endian</td><td>
-Endian encoding.
-</td>
-    <tr><td class="param">bool</td><td><td>growable</td><td>
-Aray is growable.
-</td>
-    <tr><td class="param">int</td><td><td>growInc</td><td>
-Current read position.
-</td>
-    <tr><td class="param">EjsFunction *</td><td><td>input</td><td>
-Input callback function to get more data.
-</td>
-    <tr><td class="param">int</td><td><td>length</td><td>
-Length property.
-</td>
-    <tr><td class="param">EjsFunction *</td><td><td>output</td><td>
-Output callback function send data.
-</td>
-    <tr><td class="param">int</td><td><td>readPosition</td><td>
-Current read position.
-</td>
-    <tr><td class="param">int</td><td><td>swap</td><td>
-I/O must swap bytes due to endian byte ordering.
-</td>
-    <tr><td class="param">uchar *</td><td><td>value</td><td>
-Data bytes in the array.
-</td>
-    <tr><td class="param">EjsObject</td><td><td>var</td><td>
-NEW: Extends Object - Property storage.
-</td>
-    <tr><td class="param">int</td><td><td>writePosition</td><td>
-Current write position.
-</td>
     </table></dd></dl>
   </div>
 </div>
@@ -3473,24 +3437,6 @@ Size of entries array in elements.
 Native module initialization callbacks.
 </td>
     </table></dd></dl>
-  </div>
-</div>
-<a name="struct_ejs_trait"></a>
-<div class="api">
-  <div class="prototype">EjsTrait</div>
-  <div class="apiDetail">
-<p>Property traits.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Property traits describe the type and access attributes of a property. The Trait structure is used by EjsBlock to describe the attributes of properties defined within a block. Note: These traits apply to a property definition and not to the referenced object. ie. two property definitions may have different traits but will refer to the same object.</dd></dl>
-    <dl><dt>Fields:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">int</td><td><td>attributes</td><td>
-Property attributes.
-</td>
-    <tr><td class="param">struct EjsType *</td><td><td>type</td><td>
-Property type.
-</td>
-    </table></dd></dl>
-    <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
   </div>
 </div>
 <a name="struct_ejs_type_helpers"></a>
