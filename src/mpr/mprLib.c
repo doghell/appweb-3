@@ -24782,7 +24782,7 @@ cchar *mprGetCurrentThreadName(MprCtx ctx) { return "main"; }
 #endif
 
 /*
-    Token types ored inot the TimeToken value
+    Token types or'd into the TimeToken value
  */
 #define TOKEN_DAY       0x01000000
 #define TOKEN_MONTH     0x02000000
@@ -24939,7 +24939,7 @@ static int leapYear(int year);
 static MprTime makeTime(MprCtx ctx, struct tm *tp);
 static void validateTime(MprCtx ctx, struct tm *tm, struct tm *defaults);
 
-#if BLD_WIN_LIKE || VXWORKS
+#if BLD_WIN_LIKE
 static int gettimeofday(struct timeval *tv, struct timezone *tz);
 #endif
 
@@ -25096,7 +25096,6 @@ static int localTime(MprCtx ctx, struct tm *timep, MprTime time)
     return localtime_r(&when, timep) != 0;
 #else
     struct tm   *tp;
-    //  MOB -- thread safe?
     time_t when = (time_t) (time / MS_PER_SEC);
     if ((tp = localtime(&when)) == 0) {
         return MPR_ERR;
@@ -25141,6 +25140,21 @@ static int getTimeZoneOffsetFromTm(MprCtx ctx, struct tm *tp)
         offset += tinfo.StandardBias;
     }
     return -offset * 60 * MS_PER_SEC;
+#elif VXWORKS
+    char  *tze, *p;
+    int   offset;
+
+    if ((tze = getenv("TIMEZONE")) != 0) {
+        if ((p = strchr(tze, ':')) != 0) {
+            if ((p = strchr(tze, ':')) != 0) {
+                offset = -mprAtoi(++p, 10) * MS_PER_MIN;
+            }
+        }
+        if (tp->tm_isdst) {
+            offset += MS_PER_HOUR;
+        }
+    }
+    return offset;
 #else
     return tp->tm_gmtoff * MS_PER_SEC;
 #endif
@@ -25236,7 +25250,6 @@ static void decodeTime(MprCtx ctx, struct tm *tp, MprTime when, bool local)
     offset = dst = 0;
 
     if (local) {
-        //  MOB -- cache the results somehow
         alternate = when;
         if (when < MIN_TIME || when > MAX_TIME) {
             /*
@@ -25614,7 +25627,6 @@ static void digits(MprBuf *buf, int count, int fill, int value)
 static char *getTimeZoneName(MprCtx ctx, struct tm *tp)
 {
 #if BLD_WIN_LIKE
-    //MOB1 - is tp->tm_zone set for windows?
     TIME_ZONE_INFORMATION   tz;
     WCHAR                   *wzone;
     GetTimeZoneInformation(&tz);
@@ -26107,7 +26119,7 @@ int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int zoneFlags, st
 
                 case TOKEN_OFFSET:
                     /* Named timezones or symbolic names like: tomorrow, yesterday, next week ... */ 
-//  MOB -- what are the units
+                    /* Units are seconds */
                     offset += (int) value;
                     break;
 
@@ -26213,7 +26225,6 @@ int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int zoneFlags, st
         *time = mprMakeUniversalTime(ctx, &tm);
         *time += -(zoneOffset * MS_PER_MIN);
     }
-//  MOB -- what are the units for offset
     *time += (offset * MS_PER_SEC);
     return 0;
 }
@@ -26304,7 +26315,7 @@ static void validateTime(MprCtx ctx, struct tm *tm, struct tm *defaults)
 /*
     Compatibility for windows and VxWorks
  */
-#if BLD_WIN_LIKE || VXWORKS
+#if BLD_WIN_LIKE
 static int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
     #if BLD_WIN_LIKE
@@ -26361,7 +26372,7 @@ static int gettimeofday(struct timeval *tv, struct timezone *tz)
         return rc;
     #endif
 }
-#endif /* BLD_WIN_LIKE || VXWORKS */
+#endif /* BLD_WIN_LIKE */
 
 /*
     High resolution timer
