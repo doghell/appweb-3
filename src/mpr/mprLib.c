@@ -25380,11 +25380,13 @@ static void decodeTime(MprCtx ctx, struct tm *tp, MprTime when, bool local)
 char *mprFormatTime(MprCtx ctx, cchar *fmt, struct tm *tp)
 {
     struct tm       tm;
-    char            buf[MPR_MAX_STRING];
-#if BLD_WIN_LIKE
     char            localFmt[MPR_MAX_STRING];
-#endif
+    cchar           *cp, *pat;
+    char            *dp, *endp, *sign;
+    char            buf[MPR_MAX_STRING];
+    int             value, size;
 
+    dp = localFmt;
     if (fmt == 0) {
         fmt = MPR_DEFAULT_DATE;
     }
@@ -25392,24 +25394,14 @@ char *mprFormatTime(MprCtx ctx, cchar *fmt, struct tm *tp)
         mprDecodeLocalTime(ctx, &tm, mprGetTime(ctx));
         tp = &tm;
     }
-#if BLD_WIN_LIKE
-{
-    cchar   *cp, *pat;
-    char    *sign, *dp, *endp;
-    int     size, value;
-
-    /*
-        Simulate: D, T, z
-     */
-    dp = localFmt;
     endp = &localFmt[sizeof(localFmt) - 1];
     for (cp = fmt, size = sizeof(localFmt) - 1; *cp && dp < &localFmt[sizeof(localFmt) - 32]; size = endp - dp - 1) {
         if (*cp == '%') {
             *dp++ = *cp++;
-again:
+        again:
             switch (*cp) {
             case '+':
-                pat = "a %b %d %H:%M:%S %Z %Y";
+                pat = "a %b %e %H:%M:%S %Z %Y";
                 strcpy(dp, pat);
                 dp += strlen(pat);
                 cp++;
@@ -25576,15 +25568,6 @@ again:
     }
     *dp = '\0';
     fmt = localFmt;
-}
-#endif
-#if LINUX
-    if (strcmp(fmt, "%+") == 0) {
-        fmt = "%a %b %e %H:%M:%S %Z %Y";
-    } else if (strcmp(fmt, "%v") == 0) {
-         fmt = "%e-%b-%Y";
-    }
-#endif
 	if (*fmt == '\0') {
 		fmt = "%a %b %d %H:%M:%S %Z %Y";
 	}
