@@ -21231,7 +21231,7 @@ static EjsVar *xml_elements(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
  */
 static EjsVar *xml_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
 {
-    return xml->parent ? (EjsVar*) xml->parent : (EjsVar*) ejs->nullValue;
+    return (xml->parent && xml != xml->parent) ? (EjsVar*) xml->parent : (EjsVar*) ejs->nullValue;
 }
 
 /*
@@ -22069,7 +22069,13 @@ static EjsVar *getXmlListPropertyByName(Ejs *ejs, EjsXML *list, EjsName *qname)
 
 static EjsVar *getXmlListNodeName(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
 {
-    return (EjsVar*) ejsCreateString(ejs, xml->qname.name);
+    if (xml->targetProperty.name) {
+        return (EjsVar*) ejsCreateString(ejs, xml->targetProperty.name);
+    } else if (xml->targetObject) {
+        return (EjsVar*) ejsCreateString(ejs, xml->targetObject->qname.name);
+    } else {
+        return ejs->nullValue;
+    }
 }
 
 
