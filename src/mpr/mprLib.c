@@ -24934,7 +24934,7 @@ static int leapMonthStart[] = {
 
 static MprTime daysSinceEpoch(int year);
 static void decodeTime(MprCtx ctx, struct tm *tp, MprTime when, bool local);
-static int getTimeZoneOffsetFromTm(MprCtx ctx, int isDst);
+static int getTimeZoneOffsetFromTm(MprCtx ctx, struct tm *tp);
 static int leapYear(int year);
 static int localTime(MprCtx ctx, struct tm *timep, MprTime time);
 static MprTime makeTime(MprCtx ctx, struct tm *tp);
@@ -24951,8 +24951,10 @@ int mprCreateTimeService(MprCtx ctx)
 {
     Mpr                 *mpr;
     TimeToken           *tt;
+#if UNUSED
     struct timezone     tz;
     struct timeval      tv;
+#endif
 
     mpr = mprGetMpr(ctx);
     mpr->timeTokens = mprCreateHash(mpr, -1);
@@ -24979,11 +24981,13 @@ int mprCreateTimeService(MprCtx ctx)
     for (tt = offsets; tt->name; tt++) {
         mprAddHash(mpr->timeTokens, tt->name, (void*) tt);
     }
+#if UNUSED
     /*
         Get timezone without DST
      */
     gettimeofday(&tv, &tz);
     mpr->timezone = -tz.tz_minuteswest * MS_PER_MIN;
+#endif
     return 0;
 }
 
@@ -25072,9 +25076,12 @@ int mprGetTimeZoneOffset(MprCtx ctx, MprTime when)
 {
     MprTime     alternate;
     struct tm   t;
+    time_t      secs;
 
     alternate = when;
-    if (when < MIN_TIME || when > MAX_TIME) {
+
+    secs = when / MS_PER_SEC;
+    if (secs < MIN_TIME || secs > MAX_TIME) {
         /* Can't use localTime on this date. Map to an alternate date with a valid year.  */
         decodeTime(ctx, &t, when, 0);
         t.tm_year = 110;
@@ -25082,7 +25089,7 @@ int mprGetTimeZoneOffset(MprCtx ctx, MprTime when)
     }
     t.tm_isdst = -1;
     localTime(ctx, &t, alternate);
-    return getTimeZoneOffsetFromTm(ctx, t.tm_isdst);
+    return getTimeZoneOffsetFromTm(ctx, &t);
 }
 
 
@@ -25144,14 +25151,14 @@ struct tm *universalTime(MprCtx ctx, struct tm *timep, MprTime time)
     Return the timezone offset (including DST) in msec. local == (UTC + offset)
     Assumes a valid "tm" with isdst correctly set.
  */
-static int getTimeZoneOffsetFromTm(MprCtx ctx, int isDst)
+static int getTimeZoneOffsetFromTm(MprCtx ctx, struct tm *tp)
 {
 #if BLD_WIN_LIKE
     int                     offset;
     TIME_ZONE_INFORMATION   tinfo;
     GetTimeZoneInformation(&tinfo);
     offset = tinfo.Bias;
-    if (isDst) {
+    if (tp->tm_isdst) {
         offset += tinfo.DaylightBias;
     } else {
         offset += tinfo.StandardBias;
@@ -25166,13 +25173,19 @@ static int getTimeZoneOffsetFromTm(MprCtx ctx, int isDst)
                 offset = -mprAtoi(++p, 10) * MS_PER_MIN;
             }
         }
-        if (isDst) {
+        if (tp->tm_isdst) {
             offset += MS_PER_HOUR;
         }
     }
     return offset;
+#elif BLD_UNIX_LIKE && !CYGWIN
+    return tp->tm_gmtoff * MS_PER_SEC;
 #else
-    return mprGetMpr(ctx)->timezone + (isDst * MS_PER_HOUR);
+    struct timezone     tz;
+    struct timeval      tv;
+    gettimeofday(&tv, &tz);
+    return -tz.tz_minuteswest * MS_PER_MIN;
+    return mprGetMpr(ctx)->timezone + (tp->tm_isdst * MS_PER_MIN);
 #endif
 }
 
@@ -25277,7 +25290,7 @@ static void decodeTime(MprCtx ctx, struct tm *tp, MprTime when, bool local)
         }
         t.tm_isdst = -1;
         localTime(ctx, &t, alternate);
-        offset = getTimeZoneOffsetFromTm(ctx, t.tm_isdst);
+        offset = getTimeZoneOffsetFromTm(ctx, &t);
         dst = t.tm_isdst;
 #if BLD_UNIX_LIKE && !CYGWIN
         zoneName = (char*) t.tm_zone;
