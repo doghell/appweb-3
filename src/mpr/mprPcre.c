@@ -7304,7 +7304,7 @@ typedef struct Mpr {
     char            *appPath;               /**< Path name of application executable */
     char            *appDir;                /**< Path of directory containing app executable */
     int             flags;                  /**< Processing state */
-    int             timezone;               /**< Minutes west of Greenwich */
+    int             timezone;               /**< Minutes west of Greenwich without DST */
     int             hasDedicatedService;    /**< Running a dedicated events thread */
     int             multiThread;            /**< Is running multi-threaded */
 
