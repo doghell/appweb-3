@@ -77,7 +77,7 @@ VxWorks. If the path is not a symbolic link, it is set to null.</td></tr>
    <tr><td nowrap align='left'>public get </td><td>name</td><td><a href='intrinsic-String.html'>String</a></td><td>Name of the Path as a string. This is the same as toString().</td></tr>
 <a name='natural'></a>
    <tr><td nowrap align='left'>public get </td><td>natural</td><td><a href='ejs.io-Path.html'>Path</a></td><td>Natural (native) respresentation of the path. This uses the default O/S file system path separator, 
-this is "" on windows and "/" on unix and is normalized.</td></tr>
+this is "\" on windows and "/" on unix and is normalized.</td></tr>
 <a name='normalize'></a>
    <tr><td nowrap align='left'>public get </td><td>normalize</td><td><a href='ejs.io-Path.html'>Path</a></td><td>Normalized representation of the path. This removes "segment/.." and "./" components. Separators are made 
 uniform by converting all separators to be the same as the first separator found in the path. Note: the 
@@ -95,8 +95,8 @@ the separators are mapped to "/".</td></tr>
 <a name='separator'></a>
    <tr><td nowrap align='left'>public get </td><td>separator</td><td><a href='intrinsic-String.html'>String</a></td><td>The path separator for this path. This will return the first valid path separator used by the path
 or the default file system path separator if the path has no separators. On Windows, a path may contain
-"/" and "" separators.  This will be set to a string containing the first separator found in the path.
-Will typically be either "/" or "/\" depending on the path, platform and file system.
+"/" and "\" separators.  This will be set to a string containing the first separator found in the path.
+Will typically be either "/" or "/\\" depending on the path, platform and file system.
 Use <a href='#natural'>natural</a> or <a href='#portable'>portable</a> to create a new path with different path separators.</td></tr>
 <a name='size'></a>
    <tr><td nowrap align='left'>public get </td><td>size</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Size of the file associated with this Path object. Set to number of bytes in the file or -1 if the size

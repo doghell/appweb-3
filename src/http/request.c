@@ -24,10 +24,6 @@ static bool parseRequest(MaConn *conn, MaPacket *packet);
 static bool processContent(MaConn *conn, MaPacket *packet);
 static void setIfModifiedDate(MaConn *conn, MprTime when, bool ifMod);
 
-#if BLD_DEBUG
-static void traceContent(MaConn *conn, MaPacket *packet, int len);
-#endif
-
 /*********************************** Code *************************************/
 
 MaRequest *maCreateRequest(MaConn *conn)
@@ -674,11 +670,13 @@ static bool processContent(MaConn *conn, MaPacket *packet)
     MaRequest       *req;
     MaResponse      *resp;
     MaQueue         *q;
+    MaHost          *host;
     MprBuf          *content;
     int             nbytes, remaining;
 
     req = conn->request;
     resp = conn->response;
+    host = conn->host;
     q = &resp->queue[MA_QUEUE_RECEIVE];
 
     mprAssert(packet);
@@ -700,13 +698,12 @@ static bool processContent(MaConn *conn, MaPacket *packet)
     }
     nbytes = min(remaining, mprGetBufLength(content));
     mprAssert(nbytes >= 0);
-
-#if BLD_DEBUG
     mprLog(conn, 7, "processContent: packet of %d bytes, remaining %d", mprGetBufLength(content), remaining);
-    if (mprGetLogLevel(conn) >= 5) {
-        traceContent(conn, packet, nbytes);
+
+//TRACE
+    if (mprGetLogLevel(conn) >= host->traceLevel) {
+        maTraceContent(conn, packet, nbytes);
     }
-#endif
 
     if (nbytes > 0) {
         mprAssert(maGetPacketLength(packet) > 0);
@@ -714,11 +711,11 @@ static bool processContent(MaConn *conn, MaPacket *packet)
         req->remainingContent -= nbytes;
         req->receivedContent += nbytes;
 
-        if (req->receivedContent >= conn->host->limits->maxBody) {
+        if (req->receivedContent >= host->limits->maxBody) {
             conn->keepAliveCount = 0;
             maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, 
                 "Request content body is too big %d vs limit %d", 
-                req->receivedContent, conn->host->limits->maxBody);
+                req->receivedContent, host->limits->maxBody);
             return 1;
         } 
 
@@ -810,12 +807,12 @@ bool maProcessCompletion(MaConn *conn)
 }
 
 
-#if BLD_DEBUG
-static void traceContent(MaConn *conn, MaPacket *packet, int len)
+void maTraceContent(MaConn *conn, MaPacket *packet, int len)
 {
-    char    *data, *buf;
+    char    *data, *buf, *dp, *cp;
     int     i, printable;
 
+    level = conn->host->traceLevel;
     buf = mprGetBufStart(packet->content);
 
     for (printable = 1, i = 0; i < len; i++) {
@@ -827,13 +824,25 @@ static void traceContent(MaConn *conn, MaPacket *packet, int len)
         data = mprAlloc(conn, len + 1);
         memcpy(data, buf, len);
         data[len] = '\0';
-        mprRawLog(conn, 5, "@@@ Content =>\n%s\n", data);
+        mprRawLog(conn, level, "@@@ Content =>\n%s\n", data);
         mprFree(data);
     } else {
-        mprRawLog(conn, 5, "@@@ Content => Binary\n");
+        mprRawLog(conn, level, "@@@ Content => (binary) \n");
+        data = mprAlloc(conn, len * 3 + ((len / 16) + 1) + 1);
+        for (i = 0; cp = buf; cp < &buf[len]; cp++) {
+            mprItoa(dp, 2, *cp & 0xff, 16);
+            dp += 2;
+            *dp++ = ' ';
+            if ((++i % 16) == 0) {
+                *dp++ = '\n';
+            }
+        }
+        *dp++ = '\n';
+        *dp = '\0';
+        data[len] = '\0';
+        mprRawLog(conn, level, "%s\n");
     }
 }
-#endif
 
 
 static void reportFailure(MaConn *conn, int code, cchar *fmt, va_list args)

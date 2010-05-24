@@ -156,6 +156,7 @@ static void addPacketForNet(MaQueue *q, MaPacket *packet)
     if (maGetPacketLength(packet) > 0) {
         addToNetVector(q, mprGetBufStart(packet->content), mprGetBufLength(packet->content));
     }
+    maTraceContent(conn, packet);
 }
 
 

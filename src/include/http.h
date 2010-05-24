@@ -657,6 +657,11 @@ typedef struct MaMimeType {
 #define MA_HOST_NAMED_VHOST     0x4         /* Named virtual host */
 #define MA_HOST_NO_TRACE        0x40        /* Prevent use of TRACE */
 
+#define MA_TRACE_REQUEST        0x1         /* Trace requests */
+#define MA_TRACE_RESPONSE       0x2         /* Trace responses */
+#define MA_TRACE_HEADERS        0x4         /* Trace headers */
+#define MA_TRACE_BODY           0x8         /* Trace body */
+
 /**
  *  Host Object
  *  A Host object represents a single listening HTTP connection endpoint. This may be a default server or a
@@ -698,6 +703,10 @@ typedef struct MaHost {
     int             keepAlive;              /**< Keep alive supported */
     int             keepAliveTimeout;       /**< Timeout for keep-alive */
     int             maxKeepAlive;           /**< Max keep-alive requests */
+
+    int             traceLevel;             /**< Trace activation level */
+    int             trace;                  /**< Request/response trace mask */
+    MprHash         *traceExt;              /**< Extensions to trace */
 
     MprHashTable    *mimeTypes;             /**< Hash table of mime types (key is extension) */
     MprTime         now;                    /**< When was the current date last computed */
@@ -1559,6 +1568,7 @@ extern bool maServiceQueues(MaConn *conn);
 extern void maSetRangeDimensions(MaConn *conn, int length);
 extern void maSetRequestGroup(MaConn *conn, cchar *group);
 extern void maSetRequestUser(MaConn *conn, cchar *user);
+extern void maTraceContent(MaConn *conn, MaPacket *packet, int len);
 
 /********************************** MaRequest *********************************/
 /*
