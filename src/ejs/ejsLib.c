@@ -3456,11 +3456,13 @@ static EjsVar *readDouble(Ejs *ejs, EjsByteArray *ap, int argc, EjsVar **argv)
     if (getInput(ejs, ap, EJS_SIZE_DOUBLE) <= 0) {
         return (EjsVar*) ejs->nullValue;
     }
-
+#if OLD
     value = * (double*) &ap->value[ap->readPosition];
+#else
+    memcpy(&value, (char*) &ap->value[ap->readPosition], sizeof(double));
+#endif
     value = swapDouble(ap, value);
     adjustReadPosition(ap, sizeof(double));
-
     return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) value);
 }
 #endif
@@ -4063,7 +4065,11 @@ static void putDouble(EjsByteArray *ap, double value)
 {
     value = swapDouble(ap, value);
 
+#if OLD
     *((double*) &ap->value[ap->writePosition]) = value;
+#else
+    memcpy((char*) &ap->value[ap->writePosition], &value, sizeof(double));
+#endif
     ap->writePosition += sizeof(double);
 }
 #endif
@@ -24318,7 +24324,7 @@ static void callFunction(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, 
 static void callProperty(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, int stackAdjust);
 
 #define GET_BYTE()      *(FRAME)->pc++
-#define GET_DOUBLE()    ejsDecodeDouble(&(FRAME)->pc)
+#define GET_DOUBLE()    ejsDecodeDouble(ejs, &(FRAME)->pc)
 #define GET_INT()       (int) ejsDecodeNum(&(FRAME)->pc)
 #define GET_NUM()       ejsDecodeNum(&(FRAME)->pc)
 #define GET_NAME()      getNameArg(FRAME)
@@ -28494,6 +28500,7 @@ static char *makeModuleName(MprCtx ctx, cchar *name);
 static int  readNumber(Ejs *ejs, MprFile *file, int *number);
 static int  readWord(Ejs *ejs, MprFile *file, int *number);
 static char *search(Ejs *ejs, char *filename, int minVersion, int maxVersion);
+static double swapDoubleWord(Ejs *ejs, double a);
 static int  swapWord(Ejs *ejs, int word);
 static char *tokenToString(EjsModule *mp, int   token);
 
@@ -30106,11 +30113,12 @@ static int readNumber(Ejs *ejs, MprFile *file, int *number)
 
 
 #if BLD_FEATURE_FLOATING_POINT
-double ejsDecodeDouble(uchar **pp)
+double ejsDecodeDouble(Ejs *ejs, uchar **pp)
 {
     double   value;
 
     memcpy(&value, *pp, sizeof(double));
+    value = swapDoubleWord(ejs, value);
     *pp += sizeof(double);
     return value;
 }
@@ -30194,15 +30202,10 @@ int ejsEncodeWord(uchar *pos, int number)
 }
 
 
-int ejsEncodeDouble(uchar *pos, double number)
+int ejsEncodeDouble(Ejs *ejs, uchar *pos, double number)
 {
-#if UNUSED
-    double   *ptr;
-    ptr = (double*) pos;
-    *ptr = number;
-#else
+    number = swapDoubleWord(ejs, number);
     memcpy(pos, &number, sizeof(double));
-#endif
     return sizeof(double);
 }
 
@@ -30311,6 +30314,21 @@ static int swapWord(Ejs *ejs, int word)
     }
     return ((word & 0xFF000000) >> 24) | ((word & 0xFF0000) >> 8) | ((word & 0xFF00) << 8) | ((word & 0xFF) << 24);
 }
+
+
+static double swapDoubleWord(Ejs *ejs, double a)
+{
+    int64   low, high;
+
+    if (mprGetEndian(ejs) == MPR_LITTLE_ENDIAN) {
+        return a;
+    }
+    low = ((int64) a) & 0xFFFFFFFF;
+    high = (((int64) a) >> 32) & 0xFFFFFFFF;
+    return  (double) ((low & 0xFF) << 24 | (low & 0xFF00 << 8) | (low & 0xFF0000 >> 8) | (low & 0xFF000000 >> 16) |
+            ((high & 0xFF) << 24 | (high & 0xFF00 << 8) | (high & 0xFF0000 >> 8) | (high & 0xFF000000 >> 16)) << 32);
+}
+
 
 /*
  *  @copy   default

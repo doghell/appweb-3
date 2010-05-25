@@ -10856,7 +10856,7 @@ int ecEncodeDouble(EcCompiler *cp, double value)
         mprAssert(0);
         return EJS_ERR;
     }
-    len = ejsEncodeDouble((uchar*) mprGetBufEnd(buf), value);
+    len = ejsEncodeDouble(cp->ejs, (uchar*) mprGetBufEnd(buf), value);
     mprAdjustBufEnd(buf, len);
     return 0;
 }
