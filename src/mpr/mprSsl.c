@@ -56,7 +56,7 @@
 #define MPR_CPU_SH4         12
 
 
-#if BLD_UNIX_LIKE && !VXWORKS && !MACOSX
+#if BLD_UNIX_LIKE && !VXWORKS && !MACOSX && !FREEBSD
     #include    <sys/types.h>
     #include    <time.h>
     #include    <arpa/inet.h>
@@ -87,7 +87,7 @@
     #include    <sys/mman.h>
     #include    <sys/stat.h>
     #include    <sys/param.h>
-    #if !CYGWIN
+    #if !CYGWIN && !SOLARIS
         #include    <sys/prctl.h>
     #endif
     #include    <sys/resource.h>
@@ -269,7 +269,10 @@
     #include    <sys/types.h>
     #include    <sys/utsname.h>
     #include    <sys/wait.h>
+    #include    <sys/mman.h>
+    #include    <sys/sysctl.h>
     #include    <unistd.h>
+    #include    <poll.h>
 #if BLD_FEATURE_FLOATING_POINT
     #include    <float.h>
     #define __USE_ISOC99 1
@@ -436,7 +439,9 @@ extern "C" {
 #define BITSPERBYTE     (8 * sizeof(char))
 #endif
 
+#if !SOLARIS
 #define BITS(type)      (BITSPERBYTE * (int) sizeof(type))
+#endif
 
 #ifndef MAXINT
 #if INT_MAX
@@ -634,6 +639,7 @@ extern "C" {
     #define inline __inline__
     #endif
 
+extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 #endif  /* VXWORKS */
 
 
@@ -677,6 +683,7 @@ extern "C" {
     #define LD_LIBRARY_PATH "DYLD_LIBRARY_PATH"
 #endif /* MACOSX */
 
+
 #if FREEBSD
     typedef off_t MprOffset;
     typedef unsigned long ulong;
@@ -693,7 +700,9 @@ extern "C" {
     #define O_TEXT          0
     #define SOCKET_ERROR    -1
     #define MPR_DLL_EXT     ".dylib"
+#if UNUSED
     #define __WALL          0x40000000
+#endif
     #define PTHREAD_MUTEX_RECURSIVE_NP  PTHREAD_MUTEX_RECURSIVE
 
 #if BLD_FEATURE_FLOATING_POINT
@@ -866,6 +875,7 @@ extern "C" {
     extern int      getuid(void);
     extern int      geteuid(void);
 
+    extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 #endif /* WIN_LIKE */
 
 
@@ -4827,10 +4837,6 @@ typedef void *Type;
  */
 extern void *mprAlloc(MprCtx ctx, uint size);
 
-#if UNUSED
-extern MprBlk *mprAllocBlock(MprCtx ctx, MprHeap *heap, MprBlk *parent, uint size);
-#endif
-
 /**
  *  Allocate an object block of memory
  *  @description Allocates a block of memory using the supplied memory context \a ctx as the parent. #mprAllocWithDestructor
@@ -5049,10 +5055,6 @@ extern char *_mprStrdup(MprCtx ctx, cchar *str);
 
 #define mprAlloc(ctx, size) \
     mprSetName(_mprAlloc(ctx, size), MPR_LOC)
-#if UNUSED
-#define mprAllocBlock(heap, parent, size) \
-    mprSetName(_mprAllocBlock(heap, parent, size), MPR_LOC)
-#endif
 #define mprAllocWithDestructor(ctx, size, destructor) \
     mprSetName(_mprAllocWithDestructor(ctx, size, destructor), MPR_LOC)
 #define mprAllocWithDestructorZeroed(ctx, size, destructor) \
@@ -5290,13 +5292,9 @@ typedef struct MprWaitService {
     int             lastMaskGeneration;     /* Last generation number for mask changes */
     int             rebuildMasks;           /* IO mask rebuild required */
 
-#if LINUX || MACOSX
+#if LINUX || MACOSX || FREEBSD
     struct pollfd   *fds;                   /* File descriptors to poll on */
     int             fdsCount;               /* Count of fds */
-#if UNUSED
-    struct pollfd   *stableFds;             /* Stable list used while actually polling */
-    int             stableFdsCount;         /* Count of stableFds */
-#endif
     int             fdsSize;                /* Size of fds array */
     int             breakPipe[2];           /* Pipe to wakeup select when multithreaded */
 

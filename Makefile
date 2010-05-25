@@ -64,7 +64,7 @@ diff import sync:
 config:
 	$(call log) "[Config]" "configure"
 	./configure
-	make depend clean >/dev/null
+	$(MAKE) depend clean >/dev/null
 
 rom:
 	./configure --host=i686-apple-darwin --build=x86_64-apple-darwin --rom --static --without-ssl --without-php --without-ejs
@@ -279,11 +279,11 @@ endif
 
 redo:
 	hg pull ; hg update -C
-	make TRACE=0 release clean depend compile install-binary test
+	$(MAKE) TRACE=0 release clean depend compile install-binary test
 
 update:
 	hg pull ; hg update -C
-	make TRACE=0 clean depend compile install-binary test
+	$(MAKE) TRACE=0 clean depend compile install-binary test
 
 debug:
 	open  projects/MACOSX/appweb-all/*.xcodeproj

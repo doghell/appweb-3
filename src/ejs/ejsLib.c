@@ -24342,7 +24342,7 @@ static void callProperty(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, 
     #define traceCode(ejs, opcode) opcode
 #endif
 
-#if LINUX || MACOSX || LINUX || SOLARIS || VXWORKS
+#if BLD_UNIX_LIKE || VXWORKS
     #define CASE(opcode) opcode
     #define BREAK \
         if (1) { \
@@ -24413,7 +24413,7 @@ static void VM(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, int stackA
     uchar           *mark;
     int             i, offset, count, opcode;
 
-#if LINUX || MACOSX || LINUX || SOLARIS || VXWORKS 
+#if BLD_UNIX_LIKE || VXWORKS
     /*
      *  Direct threading computed goto processing. Include computed goto jump table.
      */
@@ -24639,7 +24639,7 @@ static void *opcodeJump[] = {
     FRAME->filename = 0;
     FRAME->lineNumber = 0;
 
-#if LINUX || MACOSX || LINUX || SOLARIS || VXWORKS 
+#if BLD_UNIX_LIKE || VXWORKS
     /*
      *  Direct threading computed goto processing. Include computed goto jump table.
      */
@@ -26663,7 +26663,7 @@ static void *opcodeJump[] = {
             mprAssert(0);
             BREAK;
 
-#if !LINUX && !MACOSX && !LINUX && !SOLARIS && !VXWORKS
+#if !BLD_UNIX_LIKE && !FREEBSD
         }
         if (ejs->attention && !payAttention(ejs)) {
             goto done;

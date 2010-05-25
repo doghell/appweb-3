@@ -93,7 +93,7 @@ static MprBuf           *headerOutput;
 #if VXWORKS
 static char             **ppGlobalEnviron;
 #endif
-#if WINCE
+#if WINCE || FREEBSD
 static char             **environ;
 #endif
 #if BLD_DEBUG
