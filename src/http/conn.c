@@ -122,6 +122,7 @@ void maPrepConnection(MaConn *conn)
     conn->requestFailed = 0;
     conn->request = 0;
     conn->response = 0;
+    conn->trace = 0;
     conn->state =  MPR_HTTP_STATE_BEGIN;
     conn->flags &= ~MA_CONN_CLEAN_MASK;
     conn->expire = conn->time + conn->host->keepAliveTimeout;

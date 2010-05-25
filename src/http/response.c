@@ -158,8 +158,9 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
     }
     resp->headerSize = mprGetBufLength(buf);
     resp->flags |= MA_RESP_HEADERS_CREATED;
-
+#if UNUSED
     mprLog(conn, 3, "\n@@@ Response => \n%s", mprGetBufStart(buf));
+#endif
 }
 
 

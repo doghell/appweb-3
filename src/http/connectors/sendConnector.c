@@ -183,6 +183,7 @@ static void addPacketForSend(MaQueue *q, MaPacket *packet)
     MaResponse  *resp;
     MaConn      *conn;
     MprIOVec    *iovec;
+    int         mask;
 
     conn = q->conn;
     resp = conn->response;
@@ -207,6 +208,10 @@ static void addPacketForSend(MaQueue *q, MaPacket *packet)
             q->ioFileEntry = 1;
             q->ioFileOffset += maGetPacketLength(packet);
         }
+    }
+    mask = (packet->flags & MA_PACKET_HEADER) ? MA_TRACE_HEADERS : MA_TRACE_BODY;
+    if (maShouldTrace(conn, mask)) {
+        maTraceContent(conn, packet, 0, resp->bytesWritten, mask);
     }
 }
 

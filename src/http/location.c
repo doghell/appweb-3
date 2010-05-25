@@ -134,7 +134,7 @@ int maAddHandler(MaHttp *http, MaLocation *location, cchar *name, cchar *extensi
                 word = "";
             }
             mprAddHash(location->extensions, word, handler);
-            word = mprStrTok(0, " \t\r\n", &tok);
+            word = mprStrTok(NULL, " \t\r\n", &tok);
         }
         mprFree(extlist);
 

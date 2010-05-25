@@ -603,7 +603,8 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
     MprHash         *hp;
     char            ipAddrPort[MPR_MAX_IP_ADDR_PORT];
     char            *name, *path, *prefix, *cp, *tok, *ext, *mimeType, *url, *newUrl, *extensions, *codeStr, *hostName;
-    int             port, rc, code, processed, num, flags, colonCount, len;
+    char            *items, *include, *exclude;
+    int             port, rc, code, processed, num, flags, colonCount, len, mask, level;
 
     mprAssert(state);
     mprAssert(key);
@@ -1055,6 +1056,41 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
                 mprSetLogLevel(server, level);
             }
 #endif
+            return 1;
+
+        } else if (mprStrcmpAnyCase(key, "LogTrace") == 0) {
+            cp = mprStrTok(value, " \t", &tok);
+            level = atoi(cp);
+            if (level < 0 || level > 9) {
+                mprError(server, "Bad LogTrace level %d, must be 0-9", level);
+                return MPR_ERR_BAD_SYNTAX;
+            }
+            items = mprStrTok(0, "\n", &tok);
+            mprStrLower(items);
+            mask = 0;
+            if (strstr(items, "headers")) {
+                mask |= MA_TRACE_HEADERS;
+            }
+            if (strstr(items, "body")) {
+                mask |= MA_TRACE_BODY;
+            }
+            if (strstr(items, "request")) {
+                mask |= MA_TRACE_REQUEST;
+            }
+            if (strstr(items, "response")) {
+                mask |= MA_TRACE_RESPONSE;
+            }
+            maSetHostTrace(host, level, mask);
+            return 1;
+
+        } else if (mprStrcmpAnyCase(key, "LogTraceFilter") == 0) {
+            cp = mprStrTok(value, " \t", &tok);
+            len = atoi(cp);
+            include = mprStrTok(0, " \t", &tok);
+            exclude = mprStrTok(0, " \t", &tok);
+            include = mprStrTrim(include, "\"");
+            exclude = mprStrTrim(exclude, "\"");
+            maSetHostTraceFilter(host, len, include, exclude);
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LoadModulePath") == 0) {

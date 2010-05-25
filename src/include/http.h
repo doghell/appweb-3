@@ -704,9 +704,12 @@ typedef struct MaHost {
     int             keepAliveTimeout;       /**< Timeout for keep-alive */
     int             maxKeepAlive;           /**< Max keep-alive requests */
 
+    int             connCount;              /**< Connect sequence number */
     int             traceLevel;             /**< Trace activation level */
-    int             trace;                  /**< Request/response trace mask */
-    MprHash         *traceExt;              /**< Extensions to trace */
+    int             traceMaxLength;         /**< Maximum trace file length (if known) */
+    int             traceMask;              /**< Request/response trace mask */
+    MprHashTable    *traceInclude;          /**< Extensions to include in trace */
+    MprHashTable    *traceExclude;          /**< Extensions to exclude from trace */
 
     MprHashTable    *mimeTypes;             /**< Hash table of mime types (key is extension) */
     MprTime         now;                    /**< When was the current date last computed */
@@ -743,21 +746,25 @@ extern int          maAddLocation(MaHost *host, MaLocation *newLocation);
 extern int          maInsertDir(MaHost *host, MaDir *newDir);
 extern int          maOpenMimeTypes(MaHost *host, cchar *path);
 extern void         maRemoveConn(MaHost *host, struct MaConn *conn);
+extern int          maSetupTrace(MaHost *host, cchar *ext);
 extern void         maSetMaxKeepAlive(MaHost *host, int timeout);
-extern int          maSetMimeActionProgram(MaHost *host, cchar *mimetype, cchar *actionProgram);
-extern int          maStartHost(MaHost *host);
-extern int          maStopHost(MaHost *host);
 extern void         maSetDocumentRoot(MaHost *host, cchar *dir) ;
+extern void         maSetHostFilter(MaHost *host, int length, cchar *include, cchar *exclude);
 extern void         maSetHostIpAddrPort(MaHost *host, cchar *ipAddrPort);
 extern void         maSetHostName(MaHost *host, cchar *name);
+extern void         maSetHostTrace(MaHost *host, int level, int mask);
+extern void         maSetHostTraceFilter(MaHost *host, int len, cchar *include, cchar *exclude);
 extern void         maSetHttpVersion(MaHost *host, int version);
 extern void         maSetKeepAlive(MaHost *host, bool on);
 extern void         maSetKeepAliveTimeout(MaHost *host, int timeout);
+extern int          maSetMimeActionProgram(MaHost *host, cchar *mimetype, cchar *actionProgram);
 extern void         maSetNamedVirtualHost(MaHost *host);
 extern void         maSecureHost(MaHost *host, struct MprSsl *ssl);
 extern void         maSetTimeout(MaHost *host, int timeout);
 extern void         maSetTraceMethod(MaHost *host, bool on);
 extern void         maSetVirtualHost(MaHost *host);
+extern int          maStartHost(MaHost *host);
+extern int          maStopHost(MaHost *host);
 
 /******************************************************************************/
 /**
@@ -1543,7 +1550,9 @@ typedef struct MaConn {
     int             keepAliveCount;         /**< Count of remaining keep alive requests for this connection */
     int             protocol;               /**< HTTP protocol version 0 == HTTP/1.0, 1 == HTTP/1.1*/
     int             remotePort;             /**< Remote client IP port number */
+    int             seqno;                  /**< Unique connection sequence number */
     int             timeout;                /**< Timeout period in msec */
+    int             trace;                  /**< Current request should be traced */
 #if BLD_FEATURE_MULTITHREAD
     MprMutex        *mutex;                 /**< Optional multi-thread sync */
 #endif
@@ -1568,7 +1577,9 @@ extern bool maServiceQueues(MaConn *conn);
 extern void maSetRangeDimensions(MaConn *conn, int length);
 extern void maSetRequestGroup(MaConn *conn, cchar *group);
 extern void maSetRequestUser(MaConn *conn, cchar *user);
-extern void maTraceContent(MaConn *conn, MaPacket *packet, int len);
+
+#define maShouldTrace(conn, mask) ((conn->trace & (mask)) == (mask))
+extern void maTraceContent(MaConn *conn, MaPacket *packet, int size, int offset, int mask);
 
 /********************************** MaRequest *********************************/
 /*
@@ -1854,7 +1865,7 @@ typedef struct MaResponse {
 
 } MaResponse;
 
-//DDD
+
 /**
  *  Set a response cookie
  *  @description Define a cookie to send in the response Http header

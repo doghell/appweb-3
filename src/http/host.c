@@ -53,6 +53,10 @@ MaHost *maCreateHost(MaServer *server, cchar *ipAddrPort, MaLocation *location)
     host->httpVersion = MPR_HTTP_1_1;
     host->timeout = MA_SERVER_TIMEOUT;
     host->limits = &server->http->limits;
+    
+    host->traceMask = MA_TRACE_REQUEST | MA_TRACE_RESPONSE | MA_TRACE_HEADERS;
+    host->traceLevel = 3;
+    host->traceMaxLength = INT_MAX;
 
     host->keepAliveTimeout = MA_KEEP_TIMEOUT;
     host->maxKeepAlive = MA_MAX_KEEP_ALIVE;
@@ -112,6 +116,16 @@ MaHost *maCreateVirtualHost(MaServer *server, cchar *ipAddrPort, MaHost *parent)
     host->keepAlive = parent->keepAlive;
     host->accessLog = parent->accessLog;
     host->location = maCreateLocation(host, parent->location);
+
+    host->traceMask = parent->traceMask;
+    host->traceLevel = parent->traceLevel;
+    host->traceMaxLength = parent->traceMaxLength;
+    if (parent->traceInclude) {
+        host->traceInclude = mprCopyHash(host, parent->traceInclude);
+    }
+    if (parent->traceExclude) {
+        host->traceExclude = mprCopyHash(host, parent->traceExclude);
+    }
 
     maAddLocation(host, host->location);
     updateCurrentDate(host);
@@ -256,6 +270,62 @@ void maSecureHost(MaHost *host, struct MprSsl *ssl)
         }
 #endif
     }
+}
+
+
+void maSetHostTrace(MaHost *host, int level, int mask)
+{
+    host->traceMask = mask;
+    host->traceLevel = level;
+}
+
+
+void maSetHostTraceFilter(MaHost *host, int len, cchar *include, cchar *exclude)
+{
+    char    *word, *tok, *line;
+
+    host->traceMaxLength = len;
+
+    if (include && strcmp(include, "*") != 0) {
+        host->traceInclude = mprCreateHash(host, 0);
+        line = mprStrdup(host, include);
+        word = mprStrTok(line, ", \t\r\n", &tok);
+        while (word) {
+            if (word[0] == '*' && word[1] == '.') {
+                word += 2;
+            }
+            mprAddHash(host->traceInclude, word, host);
+            word = mprStrTok(NULL, ", \t\r\n", &tok);
+        }
+        mprFree(line);
+    }
+    if (exclude) {
+        host->traceExclude = mprCreateHash(host, 0);
+        line = mprStrdup(host, exclude);
+        word = mprStrTok(line, ", \t\r\n", &tok);
+        while (word) {
+            if (word[0] == '*' && word[1] == '.') {
+                word += 2;
+            }
+            mprAddHash(host->traceExclude, word, host);
+            word = mprStrTok(NULL, ", \t\r\n", &tok);
+        }
+        mprFree(line);
+    }
+}
+
+
+int maSetupTrace(MaHost *host, cchar *ext)
+{
+    if (ext) {
+        if (host->traceInclude && !mprLookupHash(host->traceInclude, ext)) {
+            return 0;
+        }
+        if (host->traceExclude && mprLookupHash(host->traceExclude, ext)) {
+            return 0;
+        }
+    }
+    return host->traceMask;
 }
 
 
@@ -613,6 +683,7 @@ void maAddConn(MaHost *host, MaConn *conn)
     lock(host);
     mprAddItem(host->connections, conn);
     conn->started = mprGetTime(conn);
+    conn->seqno = host->connCount++;
 
     if ((host->now + MPR_TICKS_PER_SEC) < conn->started) {
         updateCurrentDate(host);

@@ -164,10 +164,11 @@ void maCreatePipeline(MaConn *conn)
     connector = location->connector;
 #if BLD_FEATURE_SEND
     if (resp->handler == http->fileHandler && connector == http->netConnector && 
-            http->sendConnector && !req->ranges && !host->secure && resp->chunkSize <= 0) {
+            http->sendConnector && !req->ranges && !host->secure && resp->chunkSize <= 0 && !conn->trace) {
         /*
-         *  Switch (transparently) to the send connector if serving whole static file content via the net connector
-         */
+            Switch (transparently) to the send connector if serving whole static file content via the net connector
+            and not tracing.
+        */
         connector = http->sendConnector;
     }
 #endif
