@@ -71,6 +71,9 @@ directory elements and excluding the base name. On some systems, it will include
 <a name='linkTarget'></a>
    <tr><td nowrap align='left'>public get </td><td>linkTarget</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The target pointed to if this path is a symbolic link. Not available on some platforms such as Windows and 
 VxWorks. If the path is not a symbolic link, it is set to null.</td></tr>
+<a name='mimeType'></a>
+   <tr><td nowrap align='left'>public get </td><td>mimeType</td><td><a href='intrinsic-String.html'>String</a></td><td>Get the mime type for a path or extension string. The path's extension is used to lookup the corresponding
+mime type.</td></tr>
 <a name='modified'></a>
    <tr><td nowrap align='left'>public get </td><td>modified</td><td><a href='intrinsic-Date.html'>Date</a></td><td>When the file was created or last modified. Set to null the file does not exist.</td></tr>
 <a name='name'></a>
@@ -123,7 +126,6 @@ determination failed.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#makeLink'><b>makeLink</b></a>(existing: <a href='ejs.io-Path.html'>Path</a>, hard: <a href='intrinsic-Boolean.html'>Boolean</a> = false): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Create a link to a file.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#makeTemp'><b>makeTemp</b></a>(): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Create a temporary file in the path directory.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#map'><b>map</b></a>(separator: <a href='intrinsic-String.html'>String</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get a path after mapping the path directory separator.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#mimeType'><b>mimeType</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get the mime type for a path or extension string.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#open'><b>open</b></a>(options: <a href='intrinsic-Object.html'>Object</a> = null): <a href='ejs.io-File.html'>File</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Open a path and return a File object.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#openBinaryStream'><b>openBinaryStream</b></a>(options: <a href='intrinsic-Object.html'>Object</a> = null): <a href='ejs.io-BinaryStream.html'>BinaryStream</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Open a file and return a BinaryStream object.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#openTextStream'><b>openTextStream</b></a>(options: <a href='intrinsic-Object.html'>Object</a> = null): <a href='ejs.io-TextStream.html'>TextStream</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Open a file and return a TextStream object.</td></tr>
@@ -138,8 +140,7 @@ If the path is a directory, this call will remove all subdirectories and their c
 directory itself.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#rename'><b>rename</b></a>(target: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Rename a file.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#replaceExt'><b>replaceExt</b></a>(ext: <a href='intrinsic-String.html'>String</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Replace the path extension and return a new path.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#resolve'><b>resolve</b></a>(otherPaths: <a href='intrinsic-Array.html'>Array</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Resolve paths relative to this path
-Resolve each other path and return the last path resolved.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#resolve'><b>resolve</b></a>(otherPaths: <a href='intrinsic-Array.html'>Array</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Resolve paths in the neighborhood of this path.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#same'><b>same</b></a>(other: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Compare two paths test if they represent the same file.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#startsWith'><b>startsWith</b></a>(prefix: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Return true if the path starts with the given prefix.</td></tr>
    <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toJSON'><b>toJSON</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the path to a JSON string.</td></tr>
@@ -350,19 +351,6 @@ the function returns without throwing an exception.</dd></dl>
 <tr class='param'><td class='param'>separator: <a href='intrinsic-String.html'>String</a> </td><td>Path directory separator to use.</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>A new Path after mapping separators.</dd></dl>
-</div>
-</div>
-<hr />
-<a name='mimeType'></a>
-<div class='api'>
-<div class='apiSig'>  public  mimeType(): <a href='intrinsic-String.html'>String</a>
-</div>
-<div class='apiDetail'>
-<p>Get the mime type for a path or extension string.</p>
-<dl><dt>Description</dt><dd>The path's extension is used to lookup the corresponding
-mime type.</dd></dl>
-<dl><dt>Returns</dt>
-<dd>The mime type string.</dd></dl>
 </div>
 </div>
 <hr />
@@ -581,12 +569,15 @@ directory itself.</p>
 <div class='apiSig'>  public  resolve(otherPaths: <a href='intrinsic-Array.html'>Array</a>): <a href='ejs.io-Path.html'>Path</a>
 </div>
 <div class='apiDetail'>
-<p>Resolve paths relative to this path
-Resolve each other path and return the last path resolved.</p>
-<dl><dt>Description</dt><dd>Each path is resolved by joined the 
-directory containing the prior path to the next path under consideration. If the next path is an 
-absolute path, it is used unmodified. The effect is to find the given paths with a virtual current
-directory set to the directory containing the prior path.</dd></dl>
+<p>Resolve paths in the neighborhood of this path.</p>
+<dl><dt>Description</dt><dd>Resolve operates like join, except that it joins the 
+given paths to the directory portion of the current ("this") path. For example: if "path" is set to
+"/usr/bin/ejs/bin", then path.resolve("lib") will return "/usr/lib/ejs/lib". i.e. it will return the
+sibling directory "lib".<br/><br/>Resolve operations by accumulating a virtual current directory, starting with "this" path. It then
+successively joins the given paths. If the next path is an absolute path, it is used unmodified. 
+The effect is to find the given paths with a virtual current directory set to the directory containing 
+the prior path.<br/><br/>Resolve is useful for creating paths in the region of the current path and gracefully handles both 
+absolute and relative path segments.</dd></dl>
 <dl><dt>Returns</dt>
 <dd>A new Path object that is resolved against the prior path.</dd></dl>
 </div>

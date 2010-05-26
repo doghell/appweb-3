@@ -17895,6 +17895,12 @@ static EjsVar *pa_map(Ejs *ejs, EjsPath *fp, int argc, EjsVar **argv)
 }
 
 
+EjsVar *pa_mimeType(Ejs *ejs, EjsPath *fp, int argc, EjsVar **argv)
+{
+    return (EjsVar*) ejsCreateString(ejs, mprLookupMimeType(ejs, fp->path));
+}
+
+
 /*
     Get when the file was created or last modified.
 
@@ -18511,6 +18517,7 @@ void ejsConfigurePathType(Ejs *ejs)
     ejsBindMethod(ejs, type, ES_ejs_io_Path_makeLink, (EjsNativeFunction) makePathLink);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_makeTemp, (EjsNativeFunction) makePathTemp);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_map, (EjsNativeFunction) pa_map);
+    ejsBindMethod(ejs, type, ES_ejs_io_Path_mimeType, (EjsNativeFunction) pa_mimeType);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_modified, (EjsNativeFunction) getModifiedDate);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_name, (EjsNativeFunction) getPathName);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_natural, (EjsNativeFunction) getNaturalPath);
@@ -26670,7 +26677,7 @@ static void *opcodeJump[] = {
             mprAssert(0);
             BREAK;
 
-#if !BLD_UNIX_LIKE && !FREEBSD
+#if !BLD_UNIX_LIKE && !VXWORKS
         }
         if (ejs->attention && !payAttention(ejs)) {
             goto done;
