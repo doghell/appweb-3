@@ -285,6 +285,9 @@ MAIN(appweb, int argc, char **argv)
     mprLog(http, 1, "Exiting ...");
     maStopHttp(http);
     mprLog(http, 1, "Exit complete");
+
+    mprStop(mpr);
+    mprFree(mpr);
     return 0;
 }
 

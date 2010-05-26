@@ -9369,7 +9369,7 @@ static int decodeNumber(EcInput *input, int radix, int length)
             }
         } else if (radix == 16) {
             lowerc = tolower(c);
-            if (!isdigit(c) && !('a' <= c && c <= 'f')) {
+            if (!isdigit(lowerc) && !('a' <= lowerc && lowerc <= 'f')) {
                 break;
             }
         }
@@ -9512,9 +9512,10 @@ static void setTokenCurrentLine(EcToken *tp)
     tp->currentLine = tp->stream->currentLine;
     tp->lineNumber = tp->stream->lineNumber;
     /*
-     *  The column is less one because we have already consumed one character.
+        The column is less one because we have already consumed one character.
      */
-    tp->column = tp->stream->column - 1;
+    tp->column = max(tp->stream->column - 1, 0);
+    mprAssert(tp->column >= 0);
     tp->filename = tp->stream->name;
 }
 
@@ -9611,6 +9612,7 @@ static void putBackChar(EcStream *stream, int c)
         if (c == '\n') {
             stream->currentLine = stream->lastLine;
             stream->column = stream->lastColumn + 1;
+            mprAssert(stream->column >= 0);
             stream->lineNumber--;
             mprAssert(stream->lineNumber >= 0);
         }
@@ -19603,12 +19605,13 @@ static char *makeHighlight(EcCompiler *cp, char *src, int col)
     /*
      *  Cover the case where the ^ must go after the end of the input
      */
-    dest[col] = '^';
-    if (p == &dest[col]) {
-        ++p;
+    if (col >= 0) {
+        dest[col] = '^';
+        if (p == &dest[col]) {
+            ++p;
+        }
+        *p = '\0';
     }
-    *p = '\0';
-
     return dest;
 }
 
@@ -19848,7 +19851,6 @@ static EcNode *createNode(EcCompiler *cp, int kind)
         }
         np->lineNumber = token->lineNumber;
         np->column = token->column;
-
         mprLog(np, 9, "At line %d, token \"%s\", line %s", token->lineNumber, token->text, np->currentLine);
     }
 

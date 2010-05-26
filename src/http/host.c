@@ -317,6 +317,9 @@ void maSetHostTraceFilter(MaHost *host, int len, cchar *include, cchar *exclude)
 
 int maSetupTrace(MaHost *host, cchar *ext)
 {
+    if (host->traceLevel > mprGetLogLevel(host)) {
+        return 0;
+    }
     if (ext) {
         if (host->traceInclude && !mprLookupHash(host->traceInclude, ext)) {
             return 0;

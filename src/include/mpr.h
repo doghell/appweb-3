@@ -4694,6 +4694,7 @@ typedef int (*MprDestructor)(MprCtx ctx);
 typedef struct MprBlk {
 #if BLD_DEBUG
     char            *name;                  /* Debug Name */
+    int             seqno;                  /* Unique block allocation number */
 #endif
     struct MprBlk   *parent;                /* Parent block */
     struct MprBlk   *children;              /* First child block. Flags stored in low order bits. */

@@ -34,25 +34,25 @@
 <table class='itemTable' summary='properties'>
    <tr><th>Qualifiers</th><th>Property</th><th>Type</th><th width='95%'>Description</th></tr>
 <a name='date'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>date</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The day of the month (1-31). </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>date</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The day of the month (1-31). If a value outside the range is given, the date is adjusted without error.</td></tr>
 <a name='day'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>day</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The day of the week (0 - 6, where 0 is Sunday) in local time. </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>day</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The day of the week (0 - 6, where 0 is Sunday) in local time. If a value outside the range is given, the date is adjusted without error.</td></tr>
 <a name='dayOfYear'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>dayOfYear</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The day of the year (0 - 365) in local time. </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>dayOfYear</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The day of the year (0 - 365) in local time. If a value outside the range is given, the date is adjusted without error.</td></tr>
 <a name='elapsed'></a>
    <tr><td nowrap align='left'>public get </td><td>elapsed</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Time in milliseconds since the date object was constructed. </td></tr>
 <a name='fullYear'></a>
    <tr><td nowrap align='left'>public get  set</td><td>fullYear</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The year as four digits in local time. </td></tr>
 <a name='hours'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>hours</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current hour (0 - 23) in local time. </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>hours</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current hour (0 - 23) in local time. If a value outside the range is given, the date is adjusted without error.</td></tr>
 <a name='milliseconds'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>milliseconds</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current millisecond (0 - 999) in local time. </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>milliseconds</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current millisecond (0 - 999) in local time. If a value outside the range is given, the date is adjusted without error.</td></tr>
 <a name='minutes'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>minutes</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current minute (0 - 59) in local time. </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>minutes</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current minute (0 - 59) in local time. If a value outside the range is given, the date is adjusted without error.</td></tr>
 <a name='month'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>month</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current month (0 - 11) in local time. </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>month</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current month (0 - 11) in local time. If a value outside the range is given, the date is adjusted without error.</td></tr>
 <a name='seconds'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>seconds</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current second (0 - 59) in local time. </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>seconds</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The current second (0 - 59) in local time. If a value outside the range is given, the date is adjusted without error.</td></tr>
 <a name='time'></a>
    <tr><td nowrap align='left'>public get  set</td><td>time</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The number of milliseconds since midnight, January 1st, 1970 UTC and the current date object. This is the same as Date.now().</td></tr>
 <a name='year'></a>
@@ -93,9 +93,9 @@
    <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#parse'><b>parse</b></a>(dateString: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Number.html'>Number</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Parse a date string and return the number of milliseconds since midnight, January 1st, 1970 UTC.</td></tr>
    <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#parseDate'><b>parseDate</b></a>(dateString: <a href='intrinsic-String.html'>String</a>, defaultDate: <a href='intrinsic-Date.html'>Date</a> = null): <a href='intrinsic-Date.html'>Date</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Parse a date string and Return a new Date object.</td></tr>
    <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#parseUTCDate'><b>parseUTCDate</b></a>(dateString: <a href='intrinsic-String.html'>String</a>, defaultDate: <a href='intrinsic-Date.html'>Date</a> = null): <a href='intrinsic-Date.html'>Date</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Parse a date string and Return a new Date object.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setDate'><b>setDate</b></a>(d: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the date of the month (0 - 31).</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setDate'><b>setDate</b></a>(d: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the date of the month (1 - 31).</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setFullYear'><b>setFullYear</b></a>(y: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current year as four digits in local time.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setHours'><b>setHours</b></a>(h: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current hour (0 - 59) in local time.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setHours'><b>setHours</b></a>(h: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current hour (0 - 23) in local time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setMilliseconds'><b>setMilliseconds</b></a>(ms: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current millisecond (0 - 999) in local time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setMinutes'><b>setMinutes</b></a>(min: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current minute (0 - 59) in local time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setMonth'><b>setMonth</b></a>(mon: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current month (0 - 11) in local time.</td></tr>
@@ -103,7 +103,7 @@
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setTime'><b>setTime</b></a>(value: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the number of milliseconds since midnight, January 1st, 1970 UTC.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setUTCDate'><b>setUTCDate</b></a>(d: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the date of the month (0 - 31) in UTC time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setUTCFullYear'><b>setUTCFullYear</b></a>(y: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current year as four digits in UTC time.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setUTCHours'><b>setUTCHours</b></a>(h: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current hour (0 - 59) in UTC time.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setUTCHours'><b>setUTCHours</b></a>(h: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current hour (0 - 23) in UTC time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setUTCMilliseconds'><b>setUTCMilliseconds</b></a>(ms: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current millisecond (0 - 999) in UTC time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setUTCMinutes'><b>setUTCMinutes</b></a>(min: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current minute (0 - 59) in UTC time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#setUTCMonth'><b>setUTCMonth</b></a>(mon: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the current month (0 - 11) in UTC time.</td></tr>
@@ -117,7 +117,7 @@
    <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Return a string representing the date in local time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toTimeString'><b>toTimeString</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Return a string containing the time portion in human readable form in American English.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toUTCString'><b>toUTCString</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Return a string containing the date in UTC time.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#UTC'><b>UTC</b></a>(year: <a href='intrinsic-Number.html'>Number</a>, month: <a href='intrinsic-Number.html'>Number</a>, day: <a href='intrinsic-Number.html'>Number</a>, hours: <a href='intrinsic-Number.html'>Number</a> = 0 , minutes: <a href='intrinsic-Number.html'>Number</a> = 0 , seconds: <a href='intrinsic-Number.html'>Number</a> = 0 , milliseconds: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Date.html'>Date</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Construct a new date object interpreting its arguments in UTC rather than local time.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public static </td><td><a href='#UTC'><b>UTC</b></a>(year: <a href='intrinsic-Number.html'>Number</a>, month: <a href='intrinsic-Number.html'>Number</a>, day: <a href='intrinsic-Number.html'>Number</a>, hours: <a href='intrinsic-Number.html'>Number</a> = 0 , minutes: <a href='intrinsic-Number.html'>Number</a> = 0 , seconds: <a href='intrinsic-Number.html'>Number</a> = 0 , milliseconds: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Number.html'>Number</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Calculate the number of milliseconds since the epoch for a UTC time.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#valueOf'><b>valueOf</b></a>(): <a href='intrinsic-Number.html'>Number</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Return the primitive value of the object.</td></tr>
 </table>
 
@@ -530,7 +530,7 @@ the date string will be interpreted as a UTC date/time.</dd></dl>
 <div class='apiSig'>  public  setDate(d: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a>
 </div>
 <div class='apiDetail'>
-<p>Set the date of the month (0 - 31).</p>
+<p>Set the date of the month (1 - 31).</p>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>d: <a href='intrinsic-Number.html'>Number</a> </td><td>Date of the month.</td></tr></table></dd>
@@ -554,7 +554,7 @@ the date string will be interpreted as a UTC date/time.</dd></dl>
 <div class='apiSig'>  public  setHours(h: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a>
 </div>
 <div class='apiDetail'>
-<p>Set the current hour (0 - 59) in local time.</p>
+<p>Set the current hour (0 - 23) in local time.</p>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>h: <a href='intrinsic-Number.html'>Number</a> </td><td>The hour as an integer.</td></tr></table></dd>
@@ -650,7 +650,7 @@ the date string will be interpreted as a UTC date/time.</dd></dl>
 <div class='apiSig'>  public  setUTCHours(h: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a>
 </div>
 <div class='apiDetail'>
-<p>Set the current hour (0 - 59) in UTC time.</p>
+<p>Set the current hour (0 - 23) in UTC time.</p>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>h: <a href='intrinsic-Number.html'>Number</a> </td><td>The hour as an integer.</td></tr></table></dd>
@@ -834,15 +834,17 @@ Sample: "Fri 15 Dec 2006 23:45:09 GMT-0800 (PST)".</dd></dl>
 <hr />
 <a name='UTC'></a>
 <div class='api'>
-<div class='apiSig'>static   public  UTC(year: <a href='intrinsic-Number.html'>Number</a>, month: <a href='intrinsic-Number.html'>Number</a>, day: <a href='intrinsic-Number.html'>Number</a>, hours: <a href='intrinsic-Number.html'>Number</a> = 0 , minutes: <a href='intrinsic-Number.html'>Number</a> = 0 , seconds: <a href='intrinsic-Number.html'>Number</a> = 0 , milliseconds: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Date.html'>Date</a>
+<div class='apiSig'>static   public  UTC(year: <a href='intrinsic-Number.html'>Number</a>, month: <a href='intrinsic-Number.html'>Number</a>, day: <a href='intrinsic-Number.html'>Number</a>, hours: <a href='intrinsic-Number.html'>Number</a> = 0 , minutes: <a href='intrinsic-Number.html'>Number</a> = 0 , seconds: <a href='intrinsic-Number.html'>Number</a> = 0 , milliseconds: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Number.html'>Number</a>
 </div>
 <div class='apiDetail'>
-<p>Construct a new date object interpreting its arguments in UTC rather than local time.</p>
+<p>Calculate the number of milliseconds since the epoch for a UTC time.</p>
 <dl><dt>Description</dt><dd>Date(year, month, date [, hour, minute, second, msec])</li></dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>year: <a href='intrinsic-Number.html'>Number</a> </td><td>Year.</td></tr><tr class='param'><td class='param'>month: <a href='intrinsic-Number.html'>Number</a> </td><td>Month of year.</td></tr><tr class='param'><td class='param'>day: <a href='intrinsic-Number.html'>Number</a> </td><td>Day of month.</td></tr><tr class='param'><td class='param'>hours: <a href='intrinsic-Number.html'>Number</a> </td><td>Hour of day. [default: 0 ]</td></tr><tr class='param'><td class='param'>minutes: <a href='intrinsic-Number.html'>Number</a> </td><td>Minute of hour. [default: 0 ]</td></tr><tr class='param'><td class='param'>seconds: <a href='intrinsic-Number.html'>Number</a> </td><td>Secods of minute. [default: 0 ]</td></tr><tr class='param'><td class='param'>milliseconds: <a href='intrinsic-Number.html'>Number</a> </td><td>Milliseconds of second. [default: 0]</td></tr></table></dd>
-</dl></div>
+</dl><dl><dt>Returns</dt>
+<dd>The number of milliseconds since January 1, 1970 00:00:00 UTC.</dd></dl>
+</div>
 </div>
 <hr />
 <a name='valueOf'></a>
