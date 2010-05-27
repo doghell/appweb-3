@@ -60,7 +60,7 @@ FLAGS="C D I LD J CPP"
 if which gnumake >/dev/null ; then
     MAKE=`which gnumake`
 elif which gmake >/dev/null ; then
-    MAKE=`which gnumake`
+    MAKE=`which gmake`
 else
     MAKE=make
 fi
@@ -1976,7 +1976,7 @@ postGen() {
     rm -f obj/*.o obj/*.obj bin/*.exe
     rm -f lib/*.so lib/*.dylib lib/*.lib lib/*.dll lib/*.a
     rm -f modules/*.so modules/*.dylib modules/*.mod modules/*.dll
-    [ -f .makedep ] && make -C bin clean depend 2>&1 >/dev/null
+    [ -f .makedep ] && $MAKE -C bin clean depend 2>&1 >/dev/null
     $MAKE depend 2>&1 >/dev/null
     $MAKE clean 2>&1 >/dev/null
 }
