@@ -57,9 +57,9 @@ FLAGS="C D I LD J CPP"
 #
 #   Set preferred make
 #
-if which gnumake ; then
+if which gnumake >/dev/null ; then
     MAKE=`which gnumake`
-elif which gmake ; then
+elif which gmake >/dev/null ; then
     MAKE=`which gnumake`
 else
     MAKE=make
