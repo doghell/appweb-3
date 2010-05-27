@@ -318,6 +318,8 @@ static int preloadModules(EcCompiler *cp, MprList *modules);
     if (cp->errorCount > 0) {
         err++;
     }
+    mprStop(mpr);
+    mprFree(mpr);
     return err;
 }
 
