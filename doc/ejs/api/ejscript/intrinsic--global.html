@@ -82,7 +82,6 @@ for a property that has not been defined.</td></tr>
    <tr class='apiDef'><td class='apiType'>intrinsic </td><td><a href='#breakpoint'><b>breakpoint</b></a>(): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convenient way to trap to the debugger.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#chdir'><b>chdir</b></a>(dir: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Change the current working directory.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#chmod'><b>chmod</b></a>(path: <a href='intrinsic-String.html'>String</a>, perms: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Set the permissions of a file or directory.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#close'><b>close</b></a>(file: <a href='ejs.io-File.html'>File</a>, graceful: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Close the file and free up all associated resources.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#cp'><b>cp</b></a>(fromPath: <a href='intrinsic-String.html'>String</a>, toPath: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Copy a file.</td></tr>
    <tr class='apiDef'><td class='apiType'>intrinsic </td><td><a href='#decodeURI'><b>decodeURI</b></a>(str: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Reverse www-url encoding on a string.</td></tr>
    <tr class='apiDef'><td class='apiType'>intrinsic </td><td><a href='#deserialize'><b>deserialize</b></a>(obj: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Object.html'>Object</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert a string into an object.</td></tr>
@@ -101,7 +100,6 @@ This is only valid inside Worker scripts.</td></tr>
    <tr class='apiDef'><td class='apiType'>intrinsic </td><td><a href='#hashcode'><b>hashcode</b></a>(o: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Number.html'>Number</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get the object's Unique hash id.</td></tr>
    <tr class='apiDef'><td class='apiType'>intrinsic </td><td><a href='#input'><b>input</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Read from the standard input.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#isDir'><b>isDir</b></a>(path: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Is a file a directory.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#kill'><b>kill</b></a>(pid: <a href='intrinsic-Number.html'>Number</a>, signal: <a href='intrinsic-Number.html'>Number</a> = 2): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Kill a process.</td></tr>
    <tr class='apiDef'><td class='apiType'>intrinsic </td><td><a href='#load'><b>load</b></a>(file: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Load a script or module.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#ls'><b>ls</b></a>(path: <a href='intrinsic-String.html'>String</a> = . , enumDirs: <a href='intrinsic-Boolean.html'>Boolean</a> = false): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get a list of files in a directory.</td></tr>
    <tr class='apiDef'><td class='apiType'>intrinsic </td><td><a href='#md5'><b>md5</b></a>(str: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Computed an MD5 sum of a string
@@ -184,18 +182,6 @@ trailing portion without any directory elements.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>path: <a href='intrinsic-String.html'>String</a> </td><td>File or directory to modify.</td></tr><tr class='param'><td class='param'>perms: <a href='intrinsic-Number.html'>Number</a> </td><td>Posix style permission mask.</td></tr></table></dd>
-</dl></div>
-</div>
-<hr />
-<a name='close'></a>
-<div class='api'>
-<div class='apiSig'>  public  close(file: <a href='ejs.io-File.html'>File</a>, graceful: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Void.html'>Void</a>
-</div>
-<div class='apiDetail'>
-<p>Close the file and free up all associated resources.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>file: <a href='ejs.io-File.html'>File</a> </td><td>Open file object previously opened via <a href='#open'>open</a> or <a href='#File'>File</a>. </td></tr><tr class='param'><td class='param'>graceful: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>If true, then close the file gracefully after writing all pending data. [default: true]</td></tr></table></dd>
 </dl></div>
 </div>
 <hr />
@@ -449,18 +435,6 @@ in the path.</dd></dl>
 </dl><dl><dt>Returns</dt>
 <dd>True if the file can be accessed.</dd></dl>
 </div>
-</div>
-<hr />
-<a name='kill'></a>
-<div class='api'>
-<div class='apiSig'>  public  kill(pid: <a href='intrinsic-Number.html'>Number</a>, signal: <a href='intrinsic-Number.html'>Number</a> = 2): <a href='intrinsic-Void.html'>Void</a>
-</div>
-<div class='apiDetail'>
-<p>Kill a process.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>pid: <a href='intrinsic-Number.html'>Number</a> </td><td>Process ID to kill.</td></tr><tr class='param'><td class='param'>signal: <a href='intrinsic-Number.html'>Number</a> </td><td>Signal number to issue to kill the process. [default: 2]</td></tr></table></dd>
-</dl></div>
 </div>
 <hr />
 <a name='load'></a>

@@ -700,9 +700,7 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
     #define O_TEXT          0
     #define SOCKET_ERROR    -1
     #define MPR_DLL_EXT     ".dylib"
-#if UNUSED
-    #define __WALL          0x40000000
-#endif
+    #define __WALL          0
     #define PTHREAD_MUTEX_RECURSIVE_NP  PTHREAD_MUTEX_RECURSIVE
 
 #if BLD_FEATURE_FLOATING_POINT

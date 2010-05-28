@@ -10720,10 +10720,13 @@ module ejs.sys {
     function chmod(path: String, perms: Number): Void
         Path(path).perms = perms
 
+    //  DEPRECATED 1.0.2
     /**
      *  Close the file and free up all associated resources.
      *  @param file Open file object previously opened via $open or $File
      *  @param graceful if true, then close the file gracefully after writing all pending data.
+     *  @hide
+     *  @deprecated
      */
     function close(file: File, graceful: Boolean = true): Void
         file.close(graceful)
@@ -10770,10 +10773,13 @@ module ejs.sys {
     function isDir(path: String): Boolean
         Path(path).isDir
 
+    //  DEPRECATED 1.0.2
     /**
      *  Kill a process
      *  @param pid Process ID to kill
      *  @param signal Signal number to issue to kill the process
+     *  @hide
+     *  @deprecated
      */
     function kill(pid: Number, signal: Number = 2): Void {
         if (Config.OS == "WIN") {
@@ -10841,6 +10847,7 @@ module ejs.sys {
      *  @return a File object which implements the Stream interface
      *  @throws IOError if the path or file cannot be opened or created.
      *  @hide
+     *  @deprecated
      */
     function open(path: String, mode: String = "r", permissions: Number = App.permissions): File {
         print("IN OPEN")
@@ -10862,6 +10869,7 @@ module ejs.sys {
      *  @return A byte array containing the read data
      *  @throws IOError if the file could not be read.
      *  @hide
+     *  @deprecated
      */
     function read(file: File, count: Number): ByteArray
         file.read(count)
@@ -10913,6 +10921,7 @@ module ejs.sys {
      *  @returns the number of bytes written.  
      *  @throws IOError if the file could not be written.
      *  @hide
+     *  @deprecated
      */
     function write(file: File, ...items): Number
         file.write(items)
