@@ -68,6 +68,7 @@
         ejsReportError(ejs, EJS_EJSWEB);
         return EJS_ERR;
     }
+    mprFree(ejs);
     mprStop(mpr);
     mprFree(mpr);
     return (rc == 0) ? 0 : 1;
