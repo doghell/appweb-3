@@ -29,19 +29,19 @@ cpy -p -d package LINUX MACOSX WIN "${DIR}"
 #   Source for mpr, ejs, server, http
 #
 srcFilter="/\.log$|\.tmp|old\/|web\/tmp"
-cpy -p -f "${srcFilter}" src/Makefile src/mpr src/ejs src/http src/utils src/include src/test "${DIR}"
-cpy -p -d all -f "${srcFilter}" Makefile.all Makefile "${DIR}"
-cpy -p -d src -f "${srcFilter}" server "${DIR}"
-cpy -p -f "${srcFilter}" test "${DIR}"
+cpy -f "${srcFilter}" -p src/Makefile src/mpr src/ejs src/http src/utils src/include src/test "${DIR}"
+cpy -f "${srcFilter}" -p -d all Makefile.all Makefile "${DIR}"
+cpy -f "${srcFilter}" -p -d src server "${DIR}"
+cpy -f "${srcFilter}" -p test "${DIR}"
 
 docFilter="api/ejs/xml/|api/ejs/html/|api/appweb/html|api/appweb/xml"
-cpy -p -f "${docFilter}" doc "${DIR}"
+cpy -f "${docFilter}" -p doc "${DIR}"
 
 samplesFilter="\.mod$|\.so$|\.dylib$|\.js$|\.o"
-cpy -p -f "${samplesFilter}" samples "${DIR}"
+cpy -f "${samplesFilter}" -p samples "${DIR}"
 
 projectsFilter="/Debug|/Release|\.user|\.suo|\.ncb|*.mode1v3|*.pbxuser|/appweb.build/|iphone"
-cpy -p -f "${projectsFilter}" projects "${DIR}"
+cpy -f "${projectsFilter}" -p projects "${DIR}"
 
 cat src/include/master/buildConfig.h | sed 's/-VERSION-/${BLD_VERSION}/;s/-NUMBER-/${BLD_NUMBER}/' \
     >"${DIR}/src/include/buildConfig.h"

@@ -11,7 +11,7 @@ usePrefixes CFG BIN LIB LOG MOD PRD VER WEB
 ${CHMOD} 755 "${BLD_CFG_PREFIX}"
 
 if [ "${TASK}" = Remove -a -f "${BLD_BIN_PREFIX}/linkup" ] ; then
-    cp ${BLD_BIN_PREFIX}/linkup /tmp/linkup$$
+    cp "${BLD_BIN_PREFIX}/linkup" /tmp/linkup$$
 fi
 
 cpy -w -t -e doc/licenses/LICENSE.TXT doc/product/README.TXT doc/product/COPYRIGHT.TXT "${BLD_CFG_PREFIX}"
@@ -60,7 +60,6 @@ cpy "src/server/*.db" "${BLD_CFG_PREFIX}"
 
 if [ "$WITH_TESTWEB" != "" ] ; then
 	webFilter='mgmt/'
-    # cpy will use "/." as the path prefix under BLD_WEB_PREFIX
     cpy -f "${webFilter}" "src/server/web/." "${BLD_WEB_PREFIX}"
     if [ "${TASK}" != Remove ] ; then
         chmod +x "${BLD_WEB_PREFIX}/test/"{*.cgi,*.pl,*.py}

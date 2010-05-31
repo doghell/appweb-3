@@ -881,6 +881,7 @@ class EjsWeb {
         }
 
         for each (f in files) {
+            if (f == null) break
             let base = basename(f).toString()
             if (!base.match(/^([0-9]+).*es/)) {
                 continue
