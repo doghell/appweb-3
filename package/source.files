@@ -12,37 +12,36 @@ usePrefixes SRC
 #
 makeDir "${DIR}/src/include" "${DIR}/build/bin" "${DIR}/obj" "${DIR}/bin" "${DIR}/lib" "${DIR}/modules" "${DIR}/all"
 
-cpy -e                    Makefile "${DIR}"
-cpy -w -e                 "*.TXT" "${DIR}"
-cpy -m 0755               configure "${DIR}"
-cpy -d .                  obj/Makefile  lib/Makefile modules/Makefile bin/Makefile "${DIR}"
-cpy -d build -c "Makefile|Makefile.top|configure.${BLD_PRODUCT}|*.defaults|config.*|*.make" "*"  "${DIR}/build"
-cpy -m 0755 -d build/bin  bld getlib makedep priv fakePriv mkdmg utest utest.worker "${DIR}/build/bin"
-cpy -m 0755 -d build/bin  "make*Package*" makeInstall "${DIR}/build/bin"
-cpy -m 0755 -d build/bin  patchAppwebConf all-in-one  "${DIR}/build/bin"
-cpy -d build/src          Makefile "*.c" "*.h" "${DIR}/build/src"
-cpy -d build/components   "*" "${DIR}/build/components"
-cpy -d package            Makefile "*.files" "${DIR}/package"
-cpy -m 0755 -d package    "*.sh" makeInstall.appweb  linkup "${DIR}/package"
-cpy -d package            LINUX MACOSX WIN "${DIR}/package"
+cpy -e Makefile "${DIR}"
+cpy -w -e "*.TXT" "${DIR}"
+cpy -m 0755 configure "${DIR}"
+cpy -p obj/Makefile lib/Makefile modules/Makefile bin/Makefile "${DIR}"
+cpy -p -d build -c "Makefile|Makefile.top|configure.${BLD_PRODUCT}|*.defaults|config.*|*.make" "*" "${DIR}"
+cpy -m 0755 -p -d build/bin bld getlib makedep priv fakePriv mkdmg utest utest.worker "${DIR}"
+cpy -m 0755 -p -d build/bin "make*Package*" makeInstall patchAppwebConf all-in-one "${DIR}"
+cpy -p -d build/src Makefile "*.c" "*.h" "${DIR}"
+cpy -p -d build/components "*" "${DIR}"
+cpy -p -d package Makefile "*.files" "${DIR}"
+cpy -m 0755 -p -d package "*.sh" makeInstall.appweb linkup "${DIR}"
+cpy -p -d package LINUX MACOSX WIN "${DIR}"
 
 #
 #   Source for mpr, ejs, server, http
 #
 srcFilter="/\.log$|\.tmp|old\/|web\/tmp"
-cpy -f "${srcFilter}" src/Makefile src/mpr src/ejs src/http src/utils src/include src/test "${DIR}/src"
-cpy -f "${srcFilter}" all/Makefile.all all/Makefile  "${DIR}/all"
-cpy -f "${srcFilter}" src/server "${DIR}/src"
-cpy -f "${srcFilter}" test  "${DIR}"
+cpy -p -f "${srcFilter}" src/Makefile src/mpr src/ejs src/http src/utils src/include src/test "${DIR}"
+cpy -p -d all -f "${srcFilter}" Makefile.all Makefile "${DIR}"
+cpy -p -d src -f "${srcFilter}" server "${DIR}"
+cpy -p -f "${srcFilter}" test "${DIR}"
 
 docFilter="api/ejs/xml/|api/ejs/html/|api/appweb/html|api/appweb/xml"
-cpy -f "${docFilter}" doc "${DIR}"
+cpy -p -f "${docFilter}" doc "${DIR}"
 
 samplesFilter="\.mod$|\.so$|\.dylib$|\.js$|\.o"
-cpy -f "${samplesFilter}" samples "${DIR}"
+cpy -p -f "${samplesFilter}" samples "${DIR}"
 
 projectsFilter="/Debug|/Release|\.user|\.suo|\.ncb|*.mode1v3|*.pbxuser|/appweb.build/|iphone"
-cpy -f "${projectsFilter}" projects "${DIR}"
+cpy -p -f "${projectsFilter}" projects "${DIR}"
 
 cat src/include/master/buildConfig.h | sed 's/-VERSION-/${BLD_VERSION}/;s/-NUMBER-/${BLD_NUMBER}/' \
     >"${DIR}/src/include/buildConfig.h"
