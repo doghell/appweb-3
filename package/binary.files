@@ -77,9 +77,6 @@ if [ "$WITH_CONF" = "" ] ; then
 	fi
     cpy "${configDir}/appweb.conf" "${BLD_CFG_PREFIX}"
     makeDir "${BLD_CFG_PREFIX}/conf"
-
-    MOB -- but directories under configDir must be copied as directories
-
     cpy "${configDir}/*" "${BLD_CFG_PREFIX}"
 else
     cpy "$WITH_CONF" "${BLD_CFG_PREFIX}/appweb.conf"
