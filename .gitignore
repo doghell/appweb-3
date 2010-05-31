@@ -99,3 +99,5 @@ test/t.es
 test/regress/tcp
 bin/x86*
 lib/x86*
+.cpy_copied
+install.log

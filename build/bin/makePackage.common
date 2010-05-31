@@ -271,16 +271,11 @@ cpy() {
         if [ "$baseDir" != "" ] ; then
             files=$baseDir/$files
         fi
+        isDir=0
+        [ -d "${files}" ] && isDir=1
+        pattern="*"
 
-        if [ -d "${files}" ] ; then
-            isDir=1
-            pattern="*"
-        else
-            isDir=0
-            pattern="*"
-        fi
-        [ "$pattern" = "." -o "$pattern" = "" ] && pattern="*" 
-
+        files=${files##./}
         [ $v -gt 0 ] && echo find ${files} -name "$pattern"
         find ${files} -name "$pattern" | egrep -v "$stndFilter" | egrep -v "$filter" | egrep "$check" | while read src 
         do
@@ -298,7 +293,7 @@ cpy() {
 
             if [ "$isDir" = 1 ] ; then
                 #
-                #   Source is a directory, so prepend the last path segment of "files"
+                #   Source to cpy was a directory, so prepend the last path segment of "files"
                 #
                 d=${files%/*}
                 if [ "$d" != "$files" -a "$entirePath" = 0 ] ; then
@@ -308,14 +303,17 @@ cpy() {
                 fi
             else
                 #
-                #   Source is a file, so just take the basename of the source
+                #   Source to cpy was a file, so strip of the source directory (if not entirePath requested).
                 #   If the target is a directory, copy into that dir. Otherwise copy to the target file itself.
                 #
                 if [ -d "$target" ] ; then
                     if [ "$entirePath" = 1 ] ; then
                         dest=$target/${src}
                     else
-                        dest=$target/${src##*/}
+                        dir=${files%/*}
+                        base=${src##${dir}/}
+                        dest=$target/${base}
+                        # dest=$target/${base}
                     fi
                 else
                     dest=$target
