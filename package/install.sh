@@ -425,8 +425,8 @@ installFiles() {
                 echo -e "dpkg -i $NAME"
                 dpkg -i $HOME/$NAME >/dev/null
             else
-                echo tar xfz "$HOME/${NAME}.gz" --strip-components 1 -C /
-                tar xfz "$HOME/${NAME}.gz" --strip-components 1 -C /
+                echo tar xfz "$HOME/${NAME}.gz" --strip-components 1 -P -C /
+                tar xfz "$HOME/${NAME}.gz" --strip-components 1 -P -C /
             fi
         fi
     done

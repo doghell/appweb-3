@@ -25,7 +25,7 @@ if [ $BLD_UNIX_LIKE ] ; then
 fi
 
 if [ ${BLD_HOST_OS} != "WIN" ] ; then
-    if [ ${TASK} = Install -a -a -f "${BLD_BIN_PREFIX}/linkup" ] ; then
+    if [ ${TASK} = Install -a -f "${BLD_BIN_PREFIX}/linkup" ] ; then
         bash "${BLD_BIN_PREFIX}/linkup" $TASK
     fi
 fi
