@@ -241,24 +241,19 @@ uclinuxCheck:
 		BLD_PRODUCT=appweb ; \
 		echo "    ln -s $$BLD_PRODUCT/uclinux.defaults build/buildConfig.defaults" ;\
 		ln -s $$BLD_PRODUCT/uclinux.defaults build/buildConfig.defaults ; \
-		if [ ! -f build/buildConfig.cache -o ../../.config -nt buildConfig.make ] ; \
-		then \
-			if [ "$$CONFIG_USER_APPWEB_DYNAMIC" = "y" ] ; \
-			then \
+		if [ ! -f build/buildConfig.cache -o ../../.config -nt buildConfig.make ] ; then \
+			if [ "$$CONFIG_USER_APPWEB_DYNAMIC" = "y" ] ; then \
 				SW="$$SW" ; \
 			else \
 				SW="$$SW --static" ; \
 			fi ; \
-			if [ "$$CONFIG_USER_APPWEB_MULTITHREAD" = "y" ] ; \
-			then \
+			if [ "$$CONFIG_USER_APPWEB_MULTITHREAD" = "y" ] ; then \
 				SW="$$SW --enable-multi-thread" ; \
 			else SW="$$SW --disable-multi-thread" ; \
 			fi ; \
-			if [ "$$CONFIG_USER_APPWEB_SSL" = "y" ] ; \
-			then \
+			if [ "$$CONFIG_USER_APPWEB_SSL" = "y" ] ; then \
 				SW="$$SW --with-openssl=../../lib/libssl" ; \
-			elif [ "$$CONFIG_USER_APPWEB_MATRIXSSL" = "y" ] ; \
-			then \
+			elif [ "$$CONFIG_USER_APPWEB_MATRIXSSL" = "y" ] ; then \
 				SW="$$SW --with-matrixssl=../../lib/matrixssl" ; \
 			else SW="$$SW --without-ssl" ; \
 			fi ; \
