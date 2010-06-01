@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="ajsmod"
-    ProjectGUID="ced7516c-8426-41b5-a9bd-f524cd7b7270"
+    ProjectGUID="4d992b3b-5f68-4f1c-902b-e0dc7b36c66d"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -136,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{d9811082-c819-4d4e-9379-c68ee2fd119d}"
+            UniqueIdentifier="{620825d6-d92e-475e-bee7-047c2114e49b}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -170,7 +170,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{b22e06cb-d693-4a31-9ae2-e8c89f3c68b1}"
+            UniqueIdentifier="{f4431812-a07c-4b9a-9aa4-dcbe90ef7158}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ejsmod.c"

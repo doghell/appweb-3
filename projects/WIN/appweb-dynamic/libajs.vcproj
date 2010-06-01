@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="libajs"
-    ProjectGUID="bc43f792-ffdc-448e-993e-8af26351a836"
+    ProjectGUID="e1456528-0423-4b25-99ba-1f54ba9b56c1"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{5a34df73-afd5-4ac7-a2f3-dfc205d1ad5f}"
+            UniqueIdentifier="{0cc4b480-0d48-4203-87c1-3e41ae69b35b}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{2ae6ea16-ea10-417c-b2de-7a07784b5aea}"
+            UniqueIdentifier="{3016a4bb-fdd6-4b88-b4a0-e9c5b3bcb82e}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ejsLib.c"

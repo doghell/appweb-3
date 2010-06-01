@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_ejs"
-    ProjectGUID="d11941a2-e55b-48fc-a9eb-6be909e666f1"
+    ProjectGUID="bb5beaf8-b2db-4301-90ea-8324c7ce21f1"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{40fee12f-b5f6-4f85-9270-353952be5f95}"
+            UniqueIdentifier="{f364b351-eb90-49c7-adb1-67189030393b}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{27a2abc8-b138-4648-b19c-b52e59838abd}"
+            UniqueIdentifier="{5122498e-9d7b-4e1a-807e-2a679a0de256}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ejsAppweb.c"

@@ -18,6 +18,7 @@ EXPORTS
   ejsAllocVar
   ejsAppendAttributeToXML
   ejsAppendList
+  ejsAppendSearchPath
   ejsAppendToXML
   ejsBindFunction
   ejsBindMethod
@@ -282,7 +283,6 @@ EXPORTS
   ejsParseWebSessionCookie
   ejsPopBlock
   ejsPopBlockNamespaces
-  ejsPrependSearchPath
   ejsPrintAllocReport
   ejsPushBlock
   ejsRebuildHash
@@ -370,6 +370,7 @@ EXPORTS
   httpAvailable
   markHttpVar
   markType
+  pa_mimeType
   peekNextJsonToken
   quickSort
   setHttpCallback

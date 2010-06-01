@@ -271,10 +271,10 @@
     #define BLD_FEATURE_PHP 0
     #define BLD_FEATURE_SSL 0
 
-    #define BLD_VERSION "3.2.0"
-    #define BLD_NUMBER "8-repos"
-    #define BLD_NUMBER_ONLY "8"
+    #define BLD_VERSION "3.2.2"
+    #define BLD_NUMBER "1"
+    #define BLD_NUMBER_ONLY "1"
     #define BLD_MAJOR_VERSION 3
     #define BLD_MINOR_VERSION 2
-    #define BLD_PATCH_VERSION 0
-    #define BLD_VNUM "3002000"
+    #define BLD_PATCH_VERSION 2
+    #define BLD_VNUM "3002002"

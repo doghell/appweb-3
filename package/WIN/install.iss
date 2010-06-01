@@ -40,9 +40,64 @@ begin
 end;
 
 
+//
+//	Initial sample by Jared Breland
+//
+procedure AddPath(keyName: String; dir: String);
+var
+	newPath, oldPath, hive, key: String;
+	paths:		TArrayOfString;
+	i:			Integer;
+	regHive:	Integer;
+begin
+
+  if (IsAdminLoggedOn or IsPowerUserLoggedOn) then begin
+    regHive := HKEY_LOCAL_MACHINE;
+    key := 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment';
+  end else begin
+    regHive := HKEY_CURRENT_USER;
+    key := 'Environment';
+  end;
+
+	i := 0;
+
+	if RegValueExists(regHive, key, keyName) then begin
+		RegQueryStringValue(regHive, key, keyName, oldPath);
+		oldPath := oldPath + ';';
+
+		while (Pos(';', oldPath) > 0) do begin
+			SetArrayLength(paths, i + 1);
+			paths[i] := Copy(oldPath, 0, Pos(';', oldPath) - 1);
+			oldPath := Copy(oldPath, Pos(';', oldPath) + 1, Length(oldPath));
+			i := i + 1;
+
+			if dir = paths[i - 1] then begin
+				continue;
+			end;
+
+			if i = 1 then begin
+				newPath := paths[i - 1];
+			end else begin
+				newPath := newPath + ';' + paths[i - 1];
+			end;
+		end;
+	end;
+
+	if (IsUninstaller() = false) and (dir <> '') then begin
+		if (newPath <> '') then begin
+			newPath := newPath + ';' + dir;
+		end else begin
+	    	newPath := dir;
+	  end;
+  	end;
+	RegWriteStringValue(regHive, key, keyName, newPath);
+end;
+
+
 procedure CurStepChanged(CurStep: TSetupStep);
 var
   path: String;
+  bin: String;
   app: String;
   rc: Integer;
 begin
@@ -57,10 +112,25 @@ begin
    path := app + '/bin/angel.exe';
    if FileExists(path) then
      Exec(path, '--stop appweb', app, 0, ewWaitUntilTerminated, rc);
-     
   end;
+  if CurStep = ssPostInstall then
+    if IsTaskSelected('addpath') then begin
+      bin := ExpandConstant('{app}\bin');      
+      // AddPath('EJSPATH', bin);
+      AddPath('Path', bin);
+    end;
 end;
 
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+	bin:			String;
+begin
+	if CurUninstallStep = usUninstall then begin
+	    bin := ExpandConstant('{app}\bin');			
+		// AddPath('EJSPATH', bin);
+		AddPath('Path', bin);
+	end;
+end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
@@ -160,6 +230,9 @@ Type: files; Name: "{app}/logs/access.log.old";
 Type: files; Name: "{app}/logs/error.log";
 Type: files; Name: "{app}/logs/error.log.old";
 Type: filesandordirs; Name: "{app}/*.obj";
+
+[Tasks]
+Name: addpath; Description: Add !!BLD_NAME!! to the system PATH variable;
 
 [Run]
 Filename: "{app}/bin/!!BLD_PRODUCT!!Monitor.exe"; Parameters: "--stop"; WorkingDir: "{app}/bin"; Check: IsPresent('{app}/bin/!!BLD_PRODUCT!!Monitor.exe'); StatusMsg: "Stopping the Appweb Monitor"; Flags: waituntilterminated;

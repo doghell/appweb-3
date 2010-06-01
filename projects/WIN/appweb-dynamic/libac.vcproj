@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="libac"
-    ProjectGUID="7d7d27a5-19de-4465-bfa9-0fe7e6be3fca"
+    ProjectGUID="2ce894d0-3f21-4c70-a7f9-be61dab3fdac"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{af176257-5906-49a6-9c0b-3af4cb1b60f4}"
+            UniqueIdentifier="{28f176fb-d68a-4117-91b1-69f668a196c9}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{a774d936-bf6b-4090-ab7c-68dfa4427f70}"
+            UniqueIdentifier="{d390c195-c70d-4990-b019-2ac0e35c7eb1}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ecLib.c"

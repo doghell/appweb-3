@@ -193,6 +193,8 @@ EXPORTS
   maSetHeader
   maSetHostIpAddrPort
   maSetHostName
+  maSetHostTrace
+  maSetHostTraceFilter
   maSetHttpGroup
   maSetHttpUser
   maSetHttpVersion
@@ -218,6 +220,7 @@ EXPORTS
   maSetTimeout
   maSetTraceMethod
   maSetVirtualHost
+  maSetupTrace
   maSplitConfigValue
   maSplitPacket
   maStartAccessLogging
@@ -233,6 +236,7 @@ EXPORTS
   maStopLogging
   maStopServer
   maTestFormVar
+  maTraceContent
   maTraceOptions
   maUnloadStaticModules
   maUpdateUserAcls

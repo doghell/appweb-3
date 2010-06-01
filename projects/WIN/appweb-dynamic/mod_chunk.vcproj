@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_chunk"
-    ProjectGUID="eaea5178-ba5a-489f-9ae9-0ff0c9e178f1"
+    ProjectGUID="a352a6e7-2395-47e0-ad25-e1d729a5b137"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{50d02f03-c9da-40e9-bdb9-4bdcaffa8173}"
+            UniqueIdentifier="{8889da96-9829-4bf1-8e30-8ed748dd4a28}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{d51e3f78-5c3d-4553-8148-1ad6525035bc}"
+            UniqueIdentifier="{19d85319-0505-428d-a04d-3712b5703e1f}"
             >
             <File
                 RelativePath="..\..\..\src\http\filters\chunkFilter.c"

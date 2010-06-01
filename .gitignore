@@ -101,3 +101,8 @@ bin/x86*
 lib/x86*
 .cpy_copied
 install.log
+bin/*.manifest
+src/server/cgi-bin/cgiProgram.out
+bin/i386-wrs*
+ino.log
+lib/i386-wrs*

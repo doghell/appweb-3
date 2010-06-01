@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_egi"
-    ProjectGUID="cea8a06b-6e82-4860-b2ef-d8cd1ecd023d"
+    ProjectGUID="d1fb70ff-9835-4587-8de9-a74f92db1efe"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{e8394e56-ed54-46bf-8d9d-40f597b826cb}"
+            UniqueIdentifier="{2029b576-9126-40ce-974d-233d4a82b9d2}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{c886bacd-9d83-49f1-9114-356756d386d1}"
+            UniqueIdentifier="{57e849ba-967b-44e0-9c4d-d944f5d2de5b}"
             >
             <File
                 RelativePath="..\..\..\src\http\handlers\egiHandler.c"
