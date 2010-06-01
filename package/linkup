@@ -17,7 +17,6 @@ if [ -x "${ROOT_DIR}/usr/local/bin" ] ; then
 else 
     BIN="${ROOT_DIR}/usr/bin"
 fi
-
 prefix="${ROOT_DIR}/usr/lib/${PRODUCT}"
 
 # Appweb is not yet fully versioned
@@ -40,6 +39,8 @@ else
     inc=${latest}/inc
     man=${latest}/doc/man
 
+    [ ! -x "${BIN}" ] && mkdir -p "${BIN}"
+
     home=`pwd`
     for name in $PROGRAMS
     do
@@ -51,10 +52,12 @@ else
     done
 
     if [ -d "${inc}" ] ; then
+        [ ! -x "${INC}" ] && mkdir -p "${INC}"
         rm -rf  "${INC}/${PRODUCT}"
         ln -s "${inc}" "${INC}/${PRODUCT}"
     fi
     if [ -d "${man}" ] ; then
+        [ ! -x "${MAN}" ] && mkdir -p "${MAN}"
         for f in ${man}/*.1.gz
         do
             name=`basename "$f"`
