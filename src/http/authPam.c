@@ -19,7 +19,6 @@
 /********************************* Defines ************************************/
 
 typedef struct {
-    MprCtx  ctx;
     char    *name;
     char    *password;
 } UserInfo;
@@ -46,7 +45,6 @@ bool maValidatePamCredentials(MaConn *conn, cchar *realm, cchar *user, cchar *pa
     struct pam_conv     conv = { pamChat, &info };
     int                 res;
    
-    info.ctx = conn->request;
     info.name = (char*) user;
     info.password = (char*) password;
     pamh = NULL;
@@ -78,22 +76,20 @@ static int pamChat(int msgCount, const struct pam_message **msg, struct pam_resp
     if (resp == 0 || msg == 0 || info == 0) {
         return PAM_CONV_ERR;
     }
-    
-    if ((reply = mprAlloc(info->ctx, msgCount * sizeof(struct pam_response))) == 0) {
+    if ((reply = malloc(msgCount * sizeof(struct pam_response))) == 0) {
         return PAM_CONV_ERR;
     }
-    
     for (i = 0; i < msgCount; i++) {
         reply[i].resp_retcode = 0;
         reply[i].resp = 0;
         
         switch (msg[i]->msg_style) {
         case PAM_PROMPT_ECHO_ON:
-            reply[i].resp = mprStrdup(info->ctx, info->name);
+            reply[i].resp = strdup(info->name);
             break;
 
         case PAM_PROMPT_ECHO_OFF:
-            reply[i].resp = mprStrdup(info->ctx, info->password);
+            reply[i].resp = strdup(info->password);
             break;
 
         default:
