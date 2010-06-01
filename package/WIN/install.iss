@@ -123,6 +123,7 @@ end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
+	app:			String;
 	bin:			String;
 begin
 	if CurUninstallStep = usUninstall then begin
@@ -130,6 +131,10 @@ begin
 		// AddPath('EJSPATH', bin);
 		AddPath('Path', bin);
 	end;
+	if CurUninstallStep = usDone then begin
+	    app := ExpandConstant('{app}');			
+        RemoveDir(app);
+    end;
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -252,7 +257,6 @@ Filename: "http://127.0.0.1:{code:GetPort}/index.html"; Description: "View the D
 [UninstallRun]
 Filename: "{app}/bin/!!BLD_PRODUCT!!Monitor.exe"; Parameters: "--stop"; WorkingDir: "{app}"; StatusMsg: "Stopping the Appweb Monitor"; Flags: waituntilterminated;
 Filename: "{app}/bin/angel.exe"; Parameters: "--uninstall appweb"; WorkingDir: "{app}"; Check: IsPresent('{app}/bin/angel.exe'); Components: bin
-
 Filename: "{app}/bin/removeFiles.exe"; Parameters: "-r -s 5"; WorkingDir: "{app}"; Flags:
 
 [Files]
