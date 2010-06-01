@@ -34447,7 +34447,7 @@ static int compile(EjsWeb *web, cchar *shell, cchar *kind, cchar *name)
     mprSetCmdDir(cmd, web->appDir);
 
     dir = mprGetPathDir(web, shell);
-    ejsweb = mprJoinPath(web, dir, "../" BLD_MOD_NAME "/" EJS_EJSWEB EJS_MODULE_EXT);
+    ejsweb = mprJoinPath(web, dir, "../modules/" EJS_EJSWEB EJS_MODULE_EXT);
 
     if (strcmp(kind, "view") == 0) {
         name = mprJoinPath(cmd, "views", name);
