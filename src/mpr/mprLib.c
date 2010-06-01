@@ -26469,13 +26469,13 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
     High resolution timer
  */
 #if BLD_UNIX_LIKE
-    #if MPR_CPU_IX86
+    #if BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64
         inline MprTime mprGetHiResTime() {
             MprTime  now;
             __asm__ __volatile__ ("rdtsc" : "=A" (now));
             return now;
         }
-    #endif /* MPR_CPU_IX86 */
+    #endif /* BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64 */
 
 #elif BLD_WIN_LIKE
     inline MprTime mprGetHiResTime() {
