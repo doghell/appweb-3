@@ -304,6 +304,7 @@ static int  preloadModules(EcCompiler *cp, MprList *modules);
         ejsPrintAllocReport(ejs);
     }
 #endif
+    mprFree(ejs);
     mprStop(mpr);
     mprFree(mpr);
     return err;
