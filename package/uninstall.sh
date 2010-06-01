@@ -271,7 +271,7 @@ postClean() {
 
 	echo
 
-    /tmp/linkup$$ Remove
+    /tmp/linkup$$ Remove /
     rm -f /tmp/linkup$$
 
     # Legacy
