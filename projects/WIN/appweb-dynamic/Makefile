@@ -37,9 +37,9 @@ endif
 compileExtra: prep $(PROJECTS)
 
 prep:
-ifeq ($(BLD_FEATURE_STATIC),0)
-	cp ../../../bin/*.def .
-endif
+	if ls ../../../bin/*.def >/dev/null 2>&1 ; then \
+		cp ../../../bin/*.def . ; \
+	fi
 
 libmpr.vcproj: Makefile buildConfig.override
 	@makeVsProj --project libmpr.vcproj --library mpr --dflags "$(DFLAGS)" \
