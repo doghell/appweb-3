@@ -1327,11 +1327,11 @@ extern "C" {
 #define MPR_TIMEOUT_LOG_STAMP   3600000     /**< Time between log time stamps (1 hr) */
 #define MPR_TIMEOUT_PRUNER      600000      /**< Time between pruner runs (10 min) */
 #define MPR_TIMEOUT_START_TASK  2000        /**< Time to start tasks running */
-#define MPR_TIMEOUT_STOP_TASK   10000       /**< Time to stop or reap tasks */
-#define MPR_TIMEOUT_STOP_THREAD 10000       /**< Time to stop running threads */
+#define MPR_TIMEOUT_STOP_TASK   5000        /**< Time to stop or reap tasks */
+#define MPR_TIMEOUT_STOP_THREAD 5000        /**< Time to stop running threads */
 #define MPR_TIMEOUT_STOP        5000        /**< Wait when stopping resources */
 #define MPR_TIMEOUT_LINGER      2000        /**< Close socket linger timeout */
-#define MPR_TIMEOUT_HANDLER     10000        /**< Wait period when removing a wait handler */
+#define MPR_TIMEOUT_HANDLER     10000       /**< Wait period when removing a wait handler */
 
 
 /*

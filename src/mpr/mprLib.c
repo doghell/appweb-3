@@ -23832,7 +23832,7 @@ bool mprStopThreadService(MprThreadService *ts, int timeout)
 {
     while (timeout > 0 && ts->threads->length > 1) {
         mprSleep(ts, 50);
-        timeout -= 10;
+        timeout -= 50;
     }
     return ts->threads->length == 0;
 }
@@ -24357,7 +24357,7 @@ bool mprStopWorkerService(MprWorkerService *ws, int timeout)
     while (timeout > 0 && ws->numThreads > 0) {
         mprUnlock(ws->mutex);
         mprSleep(ws, 50);
-        timeout -= 10;
+        timeout -= 50;
         mprLock(ws->mutex);
     }
 
