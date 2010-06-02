@@ -4288,6 +4288,10 @@ MAIN(ejsmodMain, int argc, char **argv)
     if (mp->errorCount > 0) {
         err = -1;
     }
+    mprFree(ejs);
+    if (mprStop(mpr)) {
+        mprFree(mpr);
+    }
     return err;
 }
 

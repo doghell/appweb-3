@@ -4447,7 +4447,9 @@ error:
 static int mprDestructor(Mpr *mpr)
 {
     if ((mpr->flags & MPR_STARTED) && !(mpr->flags & MPR_STOPPED)) {
-        mprStop(mpr);
+        if (!mprStop(mpr)) {
+            return 1;
+        }
     }
     return 0;
 
@@ -4486,17 +4488,21 @@ int mprStart(Mpr *mpr, int startEventsThread)
 }
 
 
-void mprStop(Mpr *mpr)
+bool mprStop(Mpr *mpr)
 {
+    int     stopped;
+
+    stopped = 1;
+
     mprLock(mpr->mutex);
     if (! (mpr->flags & MPR_STARTED) || (mpr->flags & MPR_STOPPED)) {
         mprUnlock(mpr->mutex);
-        return;
+        return 0;
     }
     mpr->flags |= MPR_STOPPED;
 
     /*
-     *  Trigger graceful termination. This will prevent further tasks and events being created.
+        Trigger graceful termination. This will prevent further tasks and events being created.
      */
     mprTerminate(mpr, 1);
 
@@ -4505,10 +4511,16 @@ void mprStop(Mpr *mpr)
 #endif
     mprStopSocketService(mpr->socketService);
 #if BLD_FEATURE_MULTITHREAD
-    mprStopWorkerService(mpr->workerService, MPR_TIMEOUT_STOP_TASK);
+    if (!mprStopWorkerService(mpr->workerService, MPR_TIMEOUT_STOP_TASK)) {
+        stopped = 0;
+    }
+    if (!mprStopThreadService(mpr->threadService, MPR_TIMEOUT_STOP_TASK)) {
+        stopped = 0;
+    }
 #endif
     mprStopModuleService(mpr->moduleService);
     mprStopOsService(mpr->osService);
+    return stopped;
 }
 
 
@@ -4521,6 +4533,7 @@ int mprStartEventsThread(Mpr *mpr)
     MprThread   *tp;
 
     mprLog(mpr, MPR_CONFIG, "Starting service thread");
+
     if ((tp = mprCreateThread(mpr, "events", serviceEvents, 0, MPR_NORMAL_PRIORITY, 0)) == 0) {
         return MPR_ERR_CANT_CREATE;
     }
@@ -4540,6 +4553,8 @@ static void serviceEvents(void *data, MprThread *tp)
     mpr = mprGetMpr(tp);
     mpr->serviceThread = tp->osThread;
     mprServiceEvents(mpr->dispatcher, -1, MPR_SERVICE_EVENTS | MPR_SERVICE_IO);
+    mpr->serviceThread = 0;
+    mpr->hasDedicatedService = 1;
 }
 
 
@@ -5401,7 +5416,9 @@ int mprFree(void *ptr)
     decStats(heap, bp);
     unlinkBlock(bp);
     freeBlock(mpr, heap, bp);
-    unlockHeap(heap);
+    if (ptr != mpr) {
+        unlockHeap(heap);
+    }
     return 0;
 }
 
@@ -23801,12 +23818,23 @@ MprThreadService *mprCreateThreadService(Mpr *mpr)
         return 0;
     }
     ts->mainThread->isMain = 1;
-
+#if UNUSED
     if (mprAddItem(ts->threads, ts->mainThread) < 0) {
         mprFree(ts);
         return 0;
     }
+#endif
     return ts;
+}
+
+
+bool mprStopThreadService(MprThreadService *ts, int timeout)
+{
+    while (timeout > 0 && ts->threads->length > 1) {
+        mprSleep(ts, 50);
+        timeout -= 10;
+    }
+    return ts->threads->length == 0;
 }
 
 
@@ -23883,7 +23911,6 @@ MprThread *mprCreateThread(MprCtx ctx, cchar *name, MprThreadProc entry, void *d
     if (ts) {
         ctx = ts;
     }
-
     tp = mprAllocObjWithDestructorZeroed(ctx, MprThread, threadDestructor);
     if (tp == 0) {
         return 0;
@@ -23900,7 +23927,6 @@ MprThread *mprCreateThread(MprCtx ctx, cchar *name, MprThreadProc entry, void *d
     } else {
         tp->stackSize = stackSize;
     }
-
 #if BLD_WIN_LIKE
     tp->threadHandle = 0;
 #endif
@@ -24303,11 +24329,12 @@ int mprStartWorkerService(MprWorkerService *ws)
 }
 
 
-void mprStopWorkerService(MprWorkerService *ws, int timeout)
+bool mprStopWorkerService(MprWorkerService *ws, int timeout)
 {
     MprWorker     *worker;
-    int           next;
+    int           rc, next;
 
+    rc = 0;
     mprLock(ws->mutex);
 
     if (ws->pruneTimer) {
@@ -24337,6 +24364,7 @@ void mprStopWorkerService(MprWorkerService *ws, int timeout)
     mprAssert(ws->idleThreads->length == 0);
     mprAssert(ws->busyThreads->length == 0);
     mprUnlock(ws->mutex);
+    return ws->numThreads == 0;
 }
 
 
