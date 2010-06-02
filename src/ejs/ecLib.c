@@ -44,7 +44,7 @@
 
 static void     addGlobalProperty(EcCompiler *cp, EcNode *np, EjsName *qname);
 static void     addScope(EcCompiler *cp, EjsBlock *block);
-static void     allocName(Ejs *ejs, EjsName *qname);
+static EjsName  *allocName(Ejs *ejs, EjsName *qname);
 static void     astBinaryOp(EcCompiler *cp, EcNode *np);
 static void     astBindName(EcCompiler *cp, EcNode *np);
 static void     astBlock(EcCompiler *cp, EcNode *np);
@@ -3528,13 +3528,11 @@ static EjsNamespace *resolveNamespace(EcCompiler *cp, EcNode *np, EjsVar *block,
     if (namespace == 0 || !ejsIsNamespace(namespace)) {
         namespace = ejsLookupNamespace(cp->ejs, np->qname.space);
     }
-
     if (namespace == 0) {
         if (strcmp(cp->state->namespace, np->qname.space) == 0) {
             namespace = ejsCreateNamespace(ejs, np->qname.space, np->qname.space);
         }
     }
-
     if (namespace == 0) {
         if (!np->literalNamespace) {
             astError(cp, np, "Can't find namespace \"%s\"", qname.name);
@@ -3558,7 +3556,6 @@ static EjsNamespace *resolveNamespace(EcCompiler *cp, EcNode *np, EjsVar *block,
             }
         }
     }
-
     return namespace;
 }
 
@@ -3833,7 +3830,7 @@ static EjsNamespace *createHoistNamespace(EcCompiler *cp, EjsVar *obj)
     char            *spaceName;
 
     ejs = cp->ejs;
-    spaceName = mprAsprintf(cp, -1, "-hoisted-%d", ejsGetPropertyCount(ejs, obj));
+    spaceName = mprAsprintf(ejs, -1, "-hoisted-%d", ejsGetPropertyCount(ejs, obj));
     namespace = ejsCreateNamespace(ejs, spaceName, spaceName);
 
     letBlockNode = cp->state->letBlockNode;
@@ -3995,10 +3992,11 @@ int ecLookupVar(EcCompiler *cp, EjsVar *vp, EjsName *name, bool anySpace)
 }
 
 
-static void allocName(Ejs *ejs, EjsName *qname)
+static EjsName *allocName(Ejs *ejs, EjsName *qname)
 {
     qname->space = mprStrdup(ejs, qname->space);
     qname->name = mprStrdup(ejs, qname->name);
+    return qname;
 }
 
 /*
