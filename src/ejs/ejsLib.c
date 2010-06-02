@@ -1171,7 +1171,7 @@ static EjsVar *sliceArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
 {
     EjsArray    *result;
     EjsVar      **src, **dest;
-    int         start, end, step, i, j, len;
+    int         start, end, step, i, j, len, size;
 
     mprAssert(1 <= argc && argc <= 3);
 
@@ -1207,11 +1207,12 @@ static EjsVar *sliceArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
     } else if (end >= ap->length) {
         end = ap->length;
     }
+    size = (start < end) ? end - start : start - end;
 
     /*
-     *  This may allocate too many elements if step is > 0, but length will still be correct.
+     *  This may allocate too many elements if abs(step) is > 1, but length will still be correct.
      */
-    result = ejsCreateArray(ejs, end - start);
+    result = ejsCreateArray(ejs, size);
     if (result == 0) {
         ejsThrowMemoryError(ejs);
         return 0;
@@ -12535,7 +12536,7 @@ static EjsVar *searchString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 static EjsVar *sliceString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 {
     EjsString       *result;
-    int             start, end, step, i, j;
+    int             start, end, step, i, j, size;
 
     mprAssert(1 <= argc && argc <= 3);
 
@@ -12574,7 +12575,8 @@ static EjsVar *sliceString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     if (end < start) {
         end = start;
     }
-    result = ejsCreateBareString(ejs, (end - start) / abs(step));
+    size = (start < end) ? end - start : start - end;
+    result = ejsCreateBareString(ejs, size / abs(step) + 1);
     if (result == 0) {
         return 0;
     }
@@ -12584,9 +12586,15 @@ static EjsVar *sliceString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
         }
 
     } else {
+#if WAS
         for (i = end - 1, j = 0; i >= start; i += step) {
             result->value[j++] = sp->value[i];
         }
+#else
+        for (i = start, j = 0; i > end; i += step) {
+            result->value[j++] = sp->value[i];
+        }
+#endif
     }
     result->value[j] = '\0';
     result->length = j;
