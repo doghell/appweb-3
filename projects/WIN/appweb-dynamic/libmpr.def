@@ -448,6 +448,7 @@ EXPORTS
   mprStopModuleService
   mprStopOsService
   mprStopSocketService
+  mprStopThreadService
   mprStopWorkerService
   mprStrLower
   mprStrTok

@@ -286,9 +286,11 @@ MAIN(appweb, int argc, char **argv)
     maStopHttp(http);
     mprLog(http, 1, "Exit complete");
 
+#if VXWORKS
     if (mprStop(mpr)) {
         mprFree(mpr);
     }
+#endif
     return 0;
 }
 
