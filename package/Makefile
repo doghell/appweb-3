@@ -12,14 +12,13 @@ PACKS			:= binary dev source
 PKG_DIR			:= `pwd`/../staging
 INS_DIR 		:= c:/tmp/testInsAppweb
 
-install install-%: prep
+install install-%:
 	packs="binary dev"; \
 	[ "$$packs" = "binary dev" ] && BROWSER=--browser ; \
-    echo PACKS $$packs ; \
 	priv OPTIONS=$(OPTIONS) QUIET=$(QUIET) TRACE=$(TRACE) $(BLD_TOP)/build/bin/makeInstall \
 	$$BROWSER --root=$(ROOT_DIR) --install --with-conf="$(CONF)" --with-testweb pre $$packs post
 
-uninstall uninstall-%: prep
+uninstall uninstall-%:
 	packs="binary dev" ; \
 	priv OPTIONS=$(OPTIONS) QUIET=$(QUIET) TRACE=$(TRACE) $(BLD_TOP)/build/bin/makeInstall \
 	--root=$(ROOT_DIR) --remove --with-testweb pre $$packs post
@@ -32,50 +31,16 @@ packageExtra:
 packageOnly:
 	fakePriv $(BLD_TOOLS_DIR)/makePackage --root=$(PKG_DIR) $(PACKS)
 
-install-package: prep
-    name="$(BASE_NAME).tar.tar.gz" ; \
-    cd $(BLD_TOP); top=`pwd` ; cd /tmp ; tar xvfz $$top/releases/$$name ; \
-    priv "$(BLD_PRODUCT)_HEADLESS=1 ./install" ; \
+test-install-package:
+test-uninstall-package: 
+test-install-native-package:
+test-uninstall-native-package:
+test-installed:
+test-removed:
 
-uninstall-package: prep
-    name="$(BASE_NAME).tar.tar.gz" ; \
-    cd $(BLD_TOP); top=`pwd` ; cd /tmp ; tar xvfz $$top/releases/$$name ; \
-    priv "$(BLD_PRODUCT)_HEADLESS=1 ./uninstall" ; \
+checkInstalled: installed-files
 
-install-native-package: prep
-	if [ $(BLD_HOST_OS) = WIN ] ; then \
-		rm -fr "$(INS_DIR)" ; mkdir -p "$(INS_DIR)" ; \
-		name="$(BASE_NAME).exe.zip" ; \
-		cp WIN/unattended.ans ../releases/$$name "$(INS_DIR)" ; cd "$(INS_DIR)" ; \
-		unzip -q -o $$name ; \
-		echo "Dir=$(INS_DIR)" >>unattended.ans ; \
-		./$(BASE_NAME).exe /loadinf=/tmp/unattended.ans /silent ; \
-	elif [ $(BLD_HOST_OS) = MACOSX ] ; then \
-		hdiutil eject /Volumes/$(BLD_PRODUCT)-$(BLD_VERSION) >/dev/null 2>&1 ; \
-		hdid $(BLD_TOP)/releases/$(BASE_NAME).dmg >/dev/null ; \
-		priv installer -package /Volumes/$(BLD_PRODUCT)-$(BLD_VERSION)/$(BLD_PRODUCT).mpkg -target /; \
-		hdiutil eject /Volumes/$(BLD_PRODUCT)-$(BLD_VERSION) >/dev/null 2>&1 ; \
-	else \
-		name="$(BASE_NAME).tar.tar.gz" ; \
-		cd $(BLD_TOP); top=`pwd` ; cd /tmp ; tar xvfz $$top/releases/$$name ; \
-		priv $(BLD_PRODUCT)_HEADLESS=1 ./install ; \
-	fi
-
-uninstall-native-package: prep
-	if [ $(BLD_HOST_OS) = WIN ] ; then \
-		if [ ! -x "$(INS_DIR)/unins000.exe" ] ; then \
-			echo "Can't find $(INS_DIR)/unins000.exe to uninstall" ; \
-			exit 255 ; \
-		fi ; \
-		"$(INS_DIR)/unins000.exe" /silent ; \
-		rm -fr "$(INS_DIR)" ; \
-	else \
-		name="$(BASE_NAME).tar.tar.gz" ; \
-		cd $(BLD_TOP); top=`pwd` ; cd /tmp ; tar xvfz $$top/releases/$$name ; \
-		priv "$(BLD_PRODUCT)_HEADLESS=1 ./uninstall" ; \
-	fi
-
-checkInstalled:
+installed-files:
 	( \
 		for d in /etc /usr/src /usr/share /usr/share/doc /usr/lib /usr/lib/$(BLD_PRODUCT) /usr/include \
 			/usr/local/bin /usr/local/bin/$(BLD_PRODUCT) /usr/bin /usr/bin/$(BLD_PRODUCT) \
@@ -96,11 +61,6 @@ checkInstalled:
 			[ -x "$$d" ] && echo "$$d" || true; \
 		done ; \
 	) | sort | uniq
-
-prep:
-	if [ ! -x $(BLD_TOOLS_DIR)/edep$(BLD_BUILD_EXE) -a "$(BUILDING_CROSS)" != 1 ] ; then \
-		$(MAKE) -S --no-print-directory _RECURSIVE_=1 -C $(BLD_TOP)/build/src compile ; \
-	fi
 
 dependExtra:
 	[ "$(shell echo *.sh)" != "*.sh" ] && chmod +x *.sh ; true

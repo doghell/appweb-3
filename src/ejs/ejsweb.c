@@ -68,10 +68,12 @@
         ejsReportError(ejs, EJS_EJSWEB);
         return EJS_ERR;
     }
+#if VXWORKS
     mprFree(ejs);
     if (mprStop(mpr)) {
         mprFree(mpr);
     }
+#endif
     return (rc == 0) ? 0 : 1;
 }
 

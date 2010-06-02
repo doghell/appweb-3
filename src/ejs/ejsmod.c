@@ -4288,10 +4288,12 @@ MAIN(ejsmodMain, int argc, char **argv)
     if (mp->errorCount > 0) {
         err = -1;
     }
+#if VXWORKS
     mprFree(ejs);
     if (mprStop(mpr)) {
         mprFree(mpr);
     }
+#endif
     return err;
 }
 
