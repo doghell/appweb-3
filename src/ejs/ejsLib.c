@@ -9077,9 +9077,10 @@ EjsObject *ejsCopyObject(Ejs *ejs, EjsObject *src, bool deep)
     dest->var.noPool = src->var.noPool;
     dest->var.permanent = src->var.permanent;
     dest->var.primitive = src->var.primitive;
-    dest->var.separateSlots = src->var.separateSlots;
     dest->var.survived = src->var.survived;
-    
+#if UNUSED && BUG
+    dest->var.separateSlots = src->var.separateSlots;
+#endif
     ejsSetDebugName(dest, mprGetName(src));
 
     if (numProp <= 0) {

@@ -16364,7 +16364,7 @@ static EcNode *parseReturnStatement(EcCompiler *cp)
 
     } else {
         if (cp->state->currentFunctionNode == 0) {
-            np = parseError(cp, "Return statemeout outside function");
+            np = parseError(cp, "Return statement outside function");
 
         } else {
             np = createNode(cp, N_RETURN);
