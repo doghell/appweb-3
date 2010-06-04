@@ -4041,7 +4041,8 @@ module ejs {
         native function endsWith(test: String): Boolean
 
         /**
-            Format arguments as a string. Use the string as a format specifier.
+            Format arguments as a string. Use the string as a format specifier. The format specifier has the form:
+            %[-+ #,][width][precision][type]. See printf(1) for the meaning of the various fields.
             @param args Array containing the data to format. 
             @return Formatted string.
             @example
@@ -5843,11 +5844,10 @@ module ejs.db {
                 return value
 
             case Date:
-                return "%Ld".format((new Date(value)).time)
+                return "%d".format((new Date(value)).time)
 
             case Number:
                 return value cast Number
-                // return "%Ld".format(value cast Number)
              
             case String:
                 return Database.quote(value)
@@ -6151,9 +6151,9 @@ module ejs.db {
      */
     function mapType(value: Object): String {
         if (value is Date) {
-            return "%Ld".format((new Date(value)).time)
+            return "%d".format((new Date(value)).time)
         } else if (value is Number) {
-            return "%Ld".format(value)
+            return "%d".format(value)
         }
         return value
     }

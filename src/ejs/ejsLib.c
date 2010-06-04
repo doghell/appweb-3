@@ -11817,6 +11817,8 @@ static EjsVar *endsWith(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
  *  function format(...args): String
  *
  *  Format:         %[modifier][width][precision][bits][type]
+    Modifiers:      +- #,
+    Bits:           hlL
  */
 static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 {
@@ -11824,7 +11826,7 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     EjsString   *result;
     EjsVar      *value;
     char        *buf;
-    char        fmt[16];
+    char        fmt[32];
     int         c, i, len, nextArg, start, kind, last;
 
     mprAssert(argc == 1 && ejsIsArray(argv[0]));
@@ -11872,7 +11874,7 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 
         if (strchr("cdefginopsSuxX", kind)) {
             len = i - start + 1;
-            mprMemcpy(fmt, sizeof(fmt), &sp->value[start], len);
+            mprMemcpy(fmt, sizeof(fmt) - 4, &sp->value[start], len);
             fmt[len] = '\0';
 
             value = ejsGetProperty(ejs, (EjsVar*) args, nextArg);
@@ -11889,7 +11891,13 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 #endif
             case 'd': case 'i': case 'o': case 'u':
                 value = (EjsVar*) ejsToNumber(ejs, value);
+#if BLD_FEATURE_FLOATING_POINT
+                /* Convert to floating point format */
+                strcpy(&fmt[len - 1], ".0f");
+                buf = mprAsprintf(ejs, -1, fmt, ejsGetNumber(value));
+#else
                 buf = mprAsprintf(ejs, -1, fmt, (int) ejsGetNumber(value));
+#endif
                 break;
 
             case 's':
