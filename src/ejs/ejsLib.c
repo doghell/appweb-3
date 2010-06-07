@@ -11816,9 +11816,8 @@ static EjsVar *endsWith(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
  *
  *  function format(...args): String
  *
- *  Format:         %[modifier][width][precision][bits][type]
+ *  Format:         %[modifier][width][precision][type]
     Modifiers:      +- #,
-    Bits:           hlL
  */
 static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 {
@@ -11860,7 +11859,6 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
         if (c != '%') {
             continue;
         }
-
         if (i > last) {
             catString(ejs, result, &sp->value[last], i - last);
         }
@@ -17006,8 +17004,8 @@ static EjsVar *getStringHeader(Ejs *ejs, EjsHttp *hp, cchar *key)
 
 
 /*
- *  Prepare form data as a series of key-value pairs. Data is formatted according to www-url-encoded specs by 
- *  mprSetHttpFormData. Objects are flattened into a one level key/value pairs. Keys can have embedded "." separators.
+ *  Prepare form data as a series of key-value pairs. Data is an object with properties becoming keys in a 
+ *  www-url-encoded string. Objects are flattened into a one level key/value pairs by using JSON encoding. 
  *  E.g.  name=value&address=77%20Park%20Lane
  */
 static void prepForm(Ejs *ejs, EjsHttp *hp, char *prefix, EjsVar *data)
@@ -17028,7 +17026,7 @@ static void prepForm(Ejs *ejs, EjsHttp *hp, char *prefix, EjsVar *data)
         if (vp == 0) {
             continue;
         }
-        if (ejsGetPropertyCount(ejs, vp) > 0) {
+        if (ejsGetPropertyCount(ejs, vp) > 0 && !ejsIsArray(vp)) {
             if (prefix) {
                 newPrefix = mprAsprintf(hp, -1, "%s.%s", prefix, qname.name);
                 prepForm(ejs, hp, newPrefix, vp);
@@ -17037,7 +17035,11 @@ static void prepForm(Ejs *ejs, EjsHttp *hp, char *prefix, EjsVar *data)
                 prepForm(ejs, hp, (char*) qname.name, vp);
             }
         } else {
-            value = ejsToString(ejs, vp);
+            if (ejsIsArray(vp)) {
+                value = ejsToJson(ejs, vp);
+            } else {
+                value = ejsToString(ejs, vp);
+            }
             sep = (hp->requestContent) ? "&" : "";
             if (prefix) {
                 newKey = mprStrcat(hp, -1, prefix, ".", key, NULL);
@@ -17048,6 +17050,8 @@ static void prepForm(Ejs *ejs, EjsHttp *hp, char *prefix, EjsVar *data)
             }
             encodedValue = mprUrlEncode(hp, value->value);
             hp->requestContent = mprReallocStrcat(hp, -1, hp->requestContent, sep, encodedKey, "=", encodedValue, NULL);
+            mprFree(encodedKey);
+            mprFree(encodedValue);
         }
     }
 }
@@ -34715,11 +34719,11 @@ static void createCookie(Ejs *ejs, EjsVar *cookies, cchar *name, cchar *value, c
 /*
  *  Define a form variable as an ejs property in the params[] collection. Support a.b.c syntax
  */
-void ejsDefineWebParam(Ejs *ejs, cchar *key, cchar *value)
+void ejsDefineWebParam(Ejs *ejs, cchar *key, cchar *svalue)
 {
     EjsName     qname;
     EjsWeb      *web;
-    EjsVar      *where, *vp;
+    EjsVar      *where, *vp, *value;
     char        *subkey, *end;
     int         slotNum;
 
@@ -34728,12 +34732,18 @@ void ejsDefineWebParam(Ejs *ejs, cchar *key, cchar *value)
     where = web->params;
     mprAssert(where);
 
+    if (*svalue == '[') {
+        value = ejsDeserialize(ejs, ejsCreateString(ejs, svalue));
+    } else {
+        value = (EjsVar*) ejsCreateString(ejs, svalue);
+    }
+
     /*
      *  name.name.name
      */
     if (strchr(key, '.') == 0) {
         ejsName(&qname, "", key);
-        ejsSetPropertyByName(ejs, where, &qname, (EjsVar*) ejsCreateString(ejs, value));
+        ejsSetPropertyByName(ejs, where, &qname, value);
 
     } else {
         subkey = mprStrdup(ejs, key);
@@ -34745,12 +34755,11 @@ void ejsDefineWebParam(Ejs *ejs, cchar *key, cchar *value)
                 slotNum = ejsSetPropertyByName(ejs, where, &qname, (EjsVar*) ejsCreateObject(ejs, ejs->objectType, 0));
                 vp = ejsGetProperty(ejs, where, slotNum);
             }
-
             where = vp;
         }
         mprAssert(where);
         ejsName(&qname, "", subkey);
-        ejsSetPropertyByName(ejs, where, &qname, (EjsVar*) ejsCreateString(ejs, value));
+        ejsSetPropertyByName(ejs, where, &qname, value);
     }
 }
 

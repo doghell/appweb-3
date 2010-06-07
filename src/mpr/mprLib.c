@@ -19006,7 +19006,9 @@ static char *sprintfCore(MprCtx ctx, char *buf, int maxsize, cchar *spec, va_lis
 
         case STATE_DOT:
             fmt.precision = 0;
+#if UNUSED
             fmt.flags &= ~SPRINTF_LEAD_ZERO;
+#endif
             break;
 
         case STATE_PRECISION:
@@ -19307,30 +19309,54 @@ static void outNum(MprCtx ctx, Format *fmt, cchar *prefix, uint64 value)
  */
 static void outFloat(MprCtx ctx, Format *fmt, char specChar, double value)
 {
-    char    numBuf[MPR_MAX_STRING], *cp;
+    char    result[MPR_MAX_STRING], *cp;
+    int     c, fill, i, len, index;
 
-    numBuf[0] = '\0';
+    result[0] = '\0';
     if (specChar == 'f') {
-        sprintf(numBuf, "%*.*f", fmt->width, fmt->precision, value);
-        // result = mprDtoa(ctx, value, fmt->precision, MPR_DTOA_ALL_DIGITS, MPR_DTOA_FIXED_FORM);
+        // sprintf(result, "%*.*f", fmt->width, fmt->precision, value);
+        sprintf(result, "%.*f", fmt->precision, value);
 
     } else if (specChar == 'g') {
-        sprintf(numBuf, "%*.*g", fmt->width, fmt->precision, value);
-        // result = mprDtoa(ctx, value, fmt->precision, 0, 0);
+        // sprintf(result, "%*.*g", fmt->width, fmt->precision, value);
+        sprintf(result, "%*.*g", fmt->width, fmt->precision, value);
 
     } else if (specChar == 'e') {
-        sprintf(numBuf, "%*.*e", fmt->width, fmt->precision, value);
-        // result = mprDtoa(ctx, value, fmt->precision, MPR_DTOA_N_DIGITS, MPR_DTOA_EXPONENT_FORM);
+        // sprintf(result, "%*.*e", fmt->width, fmt->precision, value);
+        sprintf(result, "%*.*e", fmt->width, fmt->precision, value);
     }
-#if FUTURE
+
+    len = strlen(result);
+    fill = fmt->width - len;
+    if (fmt->flags & SPRINTF_COMMA) {
+        if (((len - 1) / 3) > 0) {
+            fill -= (len - 1) / 3;
+        }
+    }
+
+    if (fmt->flags & SPRINTF_SIGN && value > 0) {
+        BPUT(ctx, fmt, '+');
+        fill--;
+    }
+    if (!(fmt->flags & SPRINTF_LEFT)) {
+        c = (fmt->flags & SPRINTF_LEAD_ZERO) ? '0': ' ';
+        for (i = 0; i < fill; i++) {
+            BPUT(ctx, fmt, c);
+        }
+    }
+    index = len;
     for (cp = result; *cp; cp++) {
         BPUT(ctx, fmt, *cp);
+        if (fmt->flags & SPRINTF_COMMA) {
+            if ((--index % 3) == 0 && index > 0) {
+                BPUT(ctx, fmt, ',');
+            }
+        }
     }
-    BPUTNULL(ctx, fmt);
-    mprFree(result);
-#endif
-    for (cp = numBuf; *cp; cp++) {
-        BPUT(ctx, fmt, *cp);
+    if (fmt->flags & SPRINTF_LEFT) {
+        for (i = 0; i < fill; i++) {
+            BPUT(ctx, fmt, ' ');
+        }
     }
     BPUTNULL(ctx, fmt);
 }
