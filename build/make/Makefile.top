@@ -143,7 +143,7 @@ upload:
 		do \
 			chmod 664 $$name ; \
 			echo http --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
-			http --log stdout:5 -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
+			http -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
 		done ; \
 	fi
 
@@ -158,6 +158,6 @@ uploadSource:
 		do \
 			chmod 664 $$name ; \
 			echo http --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
-			http --log stdout:5 -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
+			http -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
 		done ; \
 	fi
