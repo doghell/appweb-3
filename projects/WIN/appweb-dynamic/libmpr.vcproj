@@ -41,7 +41,7 @@
 				Optimization="1"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../../..;../../../src/include"
+				AdditionalIncludeDirectories="../../../src/include/master;../../..;../../../src/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;_REENTRANT;_MT"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -124,7 +124,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../../..;../../../src/include"
+				AdditionalIncludeDirectories="../../../src/include/master;../../..;../../../src/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;_REENTRANT;_MT"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -187,7 +187,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{e7cea9ab-7686-4569-ad76-5ec9a6bd1858}"
+			UniqueIdentifier="{f11be9bc-7665-40e1-b975-cdf7caf5f396}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -205,7 +205,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{31088b27-3516-40c7-9a4a-410bc839881c}"
+			UniqueIdentifier="{2a678364-5efb-4c0a-8ac0-10d50f8c68ae}"
 			>
 			<File
 				RelativePath="..\..\..\src\mpr\mprLib.c"

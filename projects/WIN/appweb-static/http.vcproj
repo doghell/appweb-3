@@ -41,7 +41,7 @@
 				Optimization="1"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../../..;../../../src/include"
+				AdditionalIncludeDirectories="../../../src/include/master;C:/home/mob/git/packages/openssl/openssl-1.0.0-beta5/inc32;C:/home/mob/git/packages/matrixssl/matrixssl-1-8-8-open;C:/home/mob/git/packages/php/php-5.3.1;C:/home/mob/git/packages/php/php-5.3.1/main;C:/home/mob/git/packages/php/php-5.3.1/Zend;C:/home/mob/git/packages/php/php-5.3.1/TSRM;../../..;../../../src/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;_REENTRANT;_MT"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -123,7 +123,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../../..;../../../src/include"
+				AdditionalIncludeDirectories="../../../src/include/master;C:/home/mob/git/packages/openssl/openssl-1.0.0-beta5/inc32;C:/home/mob/git/packages/matrixssl/matrixssl-1-8-8-open;C:/home/mob/git/packages/php/php-5.3.1;C:/home/mob/git/packages/php/php-5.3.1/main;C:/home/mob/git/packages/php/php-5.3.1/Zend;C:/home/mob/git/packages/php/php-5.3.1/TSRM;../../..;../../../src/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;_REENTRANT;_MT"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -185,7 +185,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{fc503f04-8237-4f8a-87de-c38e7078fd6c}"
+			UniqueIdentifier="{d2af9160-038d-4d5b-aac3-8044497c13fc}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -203,7 +203,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{a934c1a0-4c18-474a-b3f2-e730a40ce3b4}"
+			UniqueIdentifier="{0e6749a4-9e1d-41ae-bc66-7dca9473338c}"
 			>
 			<File
 				RelativePath="..\..\..\src\mpr\http.c"

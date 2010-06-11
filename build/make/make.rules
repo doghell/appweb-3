@@ -34,7 +34,7 @@
 #						in buildConfig.make and buildConfig.sh
 #		PRE_DIRS		Directories to recurse before the current directory
 #		POST_DIRS		Directories to recurse after the current directory
-#		MAKE_XXFLAGS    These are specified in user makes. Valid for IFLAGS,
+#		MAKE_XXFLAGS    These are specified in user makefiles. Valid for IFLAGS,
 #                       CFLAGS and LDFLAGS
 #       _XXFLAGS        Flags from the make.* per O/S configuration files.
 #

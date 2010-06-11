@@ -44,7 +44,7 @@
 				Optimization="1"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../../..;../../../src/include"
+				AdditionalIncludeDirectories="../../../src/include/master;../../..;../../../src/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;_REENTRANT;_MT"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -129,7 +129,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../../..;../../../src/include"
+				AdditionalIncludeDirectories="../../../src/include/master;../../..;../../../src/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;_REENTRANT;_MT"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -191,7 +191,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{26c1a916-e6d0-4327-9a5c-40b4026e9ae4}"
+			UniqueIdentifier="{29b3fba3-84c9-49ef-9576-89f1cc93cee2}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -225,7 +225,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{c68a32e2-1c4f-43b7-997e-381e26dbe1d7}"
+			UniqueIdentifier="{eede6c88-1147-4e6d-894b-4f8abb904537}"
 			>
 			<File
 				RelativePath="..\..\..\src\ejs\ejsc.c"

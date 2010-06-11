@@ -21,9 +21,22 @@ LIBS		= ws2_32.lib
 PROJECTS	= appweb.vcproj angel.vcproj appwebMonitor.vcproj ajsmod.vcproj ajsc.vcproj ajs.vcproj ajssql.vcproj \
 				http.vcproj httpPassword.vcproj
 
+MAKE_IFLAGS	+= $(BLD_TOP)/src/include/master $(BLD_REGEXP_IFLAGS) $(BLD_MPR_IFLAGS)
+ifeq ($(BLD_FEATURE_OPENSSL),1)
+	MAKE_IFLAGS	+= $(BLD_OPENSSL_IFLAGS)
+endif
+ifeq ($(BLD_FEATURE_MATRIXSSL),1)
+	MAKE_IFLAGS	+= $(BLD_MATRIXSSL_IFLAGS)
+endif
+ifeq ($(BLD_FEATURE_PHP),1)
+	MAKE_IFLAGS	+= $(BLD_PHP_IFLAGS)
+endif
 MAKE_DFLAGS	+= -DSTATIC_OVERRIDE=1
 
-compileExtra: $(PROJECTS)
+compileExtra: prep $(PROJECTS)
+
+prep:
+	$(call log) "[Generate]" "appweb-static VS project"
 
 appweb.vcproj: Makefile buildConfig.override
 	@makeVsProj --project appweb.vcproj --exe appweb.exe --search "$(BLD_EJS_LIBPATHS)" --dflags "$(DFLAGS)" \
