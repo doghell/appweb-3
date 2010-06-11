@@ -9,14 +9,14 @@
     #define BLD_APPWEB_PRODUCT 1
     #define BLD_PRODUCT "appweb"
     #define BLD_NAME "Embedthis Appweb"
-    #define BLD_TYPE "RELEASE"
+    #define BLD_TYPE "DEBUG"
     #define BLD_TUNE MPR_TUNE_SIZE
-    #define BLD_DEFAULTS "release"
+    #define BLD_DEFAULTS "standard"
     #define BLD_COMPONENTS "winsdk ar cc make nm ld mt rc doxygen pkg regexp mpr sqlite ejs appweb"
     #define BLD_EMBEDTHIS 1
 
     #define BLD_COMPANY "Embedthis"
-    #define BLD_DEBUG 0
+    #define BLD_DEBUG 1
     #define BLD_DIRS "build obj lib modules bin src test all doc samples package projects releases"
     #define BLD_CLEAN_INSTALL "0"
     #define BLD_LICENSE "gpl"
@@ -272,8 +272,8 @@
     #define BLD_FEATURE_SSL 0
 
     #define BLD_VERSION "3.2.2"
-    #define BLD_NUMBER "1"
-    #define BLD_NUMBER_ONLY "1"
+    #define BLD_NUMBER "2-repos"
+    #define BLD_NUMBER_ONLY "2"
     #define BLD_MAJOR_VERSION 3
     #define BLD_MINOR_VERSION 2
     #define BLD_PATCH_VERSION 2
