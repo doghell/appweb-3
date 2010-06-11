@@ -5,8 +5,15 @@
 #   Currently only supports Visual Studio on Windows
 #   This is an internal-script used when testing only
 #
+
 PRODUCT=appweb
 VS="/Program Files/Microsoft Visual Studio 8/Common7/IDE/devenv.exe"
+
+log() {
+    tag=$1
+    shift
+    printf "%12s %s\n" $tag "$*"
+}
 
 if [ -x "${VS}" ] ; then
     if [ ! -f src/include/buildConfig.save ] ; then
@@ -14,12 +21,12 @@ if [ -x "${VS}" ] ; then
     fi
     cp src/include/master/buildConfig.h src/include
 
-    echo Building: ${PRODUCT}-static VS project
+    log "[Test]" "Building ${PRODUCT}-static VS project"
     rm -fr projects/WIN/*/Win32
     "${VS}" projects/WIN/${PRODUCT}-static/*.sln /clean
     "${VS}" projects/WIN/${PRODUCT}-static/*.sln /build
 
-    echo Building: ${PRODUCT}-dynamic VS project"
+    log "[Test]" "Building ${PRODUCT}-dynamic VS project"
     rm -fr projects/WIN/*/Win32
     "${VS}" projects/WIN/${PRODUCT}-dynamic/*.sln /clean
     "${VS}" projects/WIN/${PRODUCT}-dynamic/*.sln /build
@@ -27,5 +34,5 @@ if [ -x "${VS}" ] ; then
     if [ -f src/include/buildConfig.save ] ; then
         mv src/include/buildConfig.save src/include/buildConfig.h
     fi
-    echo Build complete
+    rm -fr projects/WIN/*/Win32
 fi
