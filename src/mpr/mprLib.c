@@ -25658,7 +25658,7 @@ char *mprFormatTime(MprCtx ctx, cchar *fmt, struct tm *tp)
 
             case 's':
                 dp--;
-                mprItoa(dp, size, (int64) mprMakeTime(ctx, tp) / MS_PER_SEC, 10);
+                mprItoa(dp, size, (int64) mprMakeUniversalTime(ctx, tp) / MS_PER_SEC, 10);
                 dp += strlen(dp);
                 cp++;
                 break;
