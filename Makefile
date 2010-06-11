@@ -267,13 +267,23 @@ uclinuxCheck:
 	fi
 endif
 
-redo:
-	hg pull ; hg update -C
-	$(MAKE) TRACE=0 release clean depend compile install-binary test
+testExtra: test-projects
 
-update:
-	hg pull ; hg update -C
-	$(MAKE) TRACE=0 clean depend compile install-binary test
-
-debug:
-	open  projects/MACOSX/appweb-all/*.xcodeproj
+test-projects:
+ifeq    ($(BLD_HOST_OS),WIN)
+	if [ "$(BUILD_DEPTH)" -ge 3 ] ; then \
+		if [ -x "/Program Files/Microsoft Visual Studio 8/Common7/IDE/devenv.exe" ] ; then \
+			[ ! -f src/include/buildConfig.save ] && mv src/include/buildConfig.h src/include/buildConfig.save; true ; \
+			cp src/include/master/buildConfig.h src/include ; \
+			$(call log) "[Build]" "appweb-static VS project" ; \
+			rm -fr projects/WIN/*/Win32 ; \
+			"/Program Files/Microsoft Visual Studio 8/Common7/IDE/devenv.exe" projects/WIN/appweb-static/*.sln /clean ; \
+			"/Program Files/Microsoft Visual Studio 8/Common7/IDE/devenv.exe" projects/WIN/appweb-static/*.sln /build ; \
+			$(call log) "[Build]" "appweb-dynamic VS project" ; \
+			rm -fr projects/WIN/*/Win32 ; \
+			"/Program Files/Microsoft Visual Studio 8/Common7/IDE/devenv.exe" projects/WIN/appweb-dynamic/*.sln /clean ; \
+			"/Program Files/Microsoft Visual Studio 8/Common7/IDE/devenv.exe" projects/WIN/appweb-dynamic/*.sln /build ; \
+			mv src/include/buildConfig.save src/include/buildConfig.h ; \
+		fi ; \
+	fi
+endif

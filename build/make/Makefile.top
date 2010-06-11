@@ -32,6 +32,7 @@
 #
 
 BLD_TOP		:= .
+BUILD_DEPTH	?= 2
 BUILD_CHECK	:= buildCheck
 FIRST		:= first
 SHELL		:= bash

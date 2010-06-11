@@ -106,3 +106,5 @@ src/server/cgi-bin/cgiProgram.out
 bin/i386-wrs*
 ino.log
 lib/i386-wrs*
+.embedthis
+target
