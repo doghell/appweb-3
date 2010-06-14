@@ -93,6 +93,9 @@ echo RPM_DIR $RPM_DIR
 makeRPMPackage() {
     local f
 
+echo XXXXXXXXXXXXXXX HOME IS $HOME
+echo YYYYYYYYYYYYYYYY TILDE is ~
+echo CREATING ~/.rpmmacros
     cat <<!MACROS_EOF > ~/.rpmmacros
 %_topdir $RPM_DIR
 
