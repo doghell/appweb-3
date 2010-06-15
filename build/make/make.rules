@@ -57,7 +57,8 @@ export 	MAKE_CFLAGS MAKE_DFLAGS MAKE_IFLAGS MAKE_LDFLAGS EXPORT_OBJECTS BUILDING
 #
 #	Compute the directory path for display purposes
 #
-_DPATH_			?=	.
+_DPATH_			?= .
+BUILD_DEPTH     ?= 2
 BUILDING_CROSS 	:= 0
 MAKE			:= $(BLD_MAKE)
 ifeq ($(TRACE),)
@@ -381,7 +382,7 @@ endif
 #
 #	Create a redistributable package
 #
-ifeq    ($(PACKAGE),1)
+ifeq    ($(DO_PACKAGE),1)
 package: $(BUILD_CHECK) packagePriv packageDirs packageExtra
 
 packagePriv:
