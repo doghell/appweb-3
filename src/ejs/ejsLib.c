@@ -9078,9 +9078,6 @@ EjsObject *ejsCopyObject(Ejs *ejs, EjsObject *src, bool deep)
     dest->var.permanent = src->var.permanent;
     dest->var.primitive = src->var.primitive;
     dest->var.survived = src->var.survived;
-#if UNUSED && BUG
-    dest->var.separateSlots = src->var.separateSlots;
-#endif
     ejsSetDebugName(dest, mprGetName(src));
 
     if (numProp <= 0) {
@@ -9095,14 +9092,13 @@ EjsObject *ejsCopyObject(Ejs *ejs, EjsObject *src, bool deep)
         }
     }
 
-    /*
-     *  Must always copy names incase src is GC'd.
-     */
     if (dest->names == NULL && ejsGrowObjectNames(dest, numProp) < 0) {
         return 0;
     }
     for (i = 0; i < numProp && src->names; i++) {
-        dest->names->entries[i] = src->names->entries[i];
+        dest->names->entries[i].qname.space = mprStrdup(dest, src->names->entries[i].qname.space);
+        dest->names->entries[i].qname.name = mprStrdup(dest, src->names->entries[i].qname.name);
+        dest->names->entries[i].nextSlot = src->names->entries[i].nextSlot;
     }
     if (makeHash(dest) < 0) {
         return 0;
