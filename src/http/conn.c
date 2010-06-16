@@ -42,11 +42,9 @@ static MaConn *createConn(MprCtx ctx, MaHost *host, MprSocket *sock, cchar *ipAd
     if (conn == 0) {
         return 0;
     }
-
     if (host->keepAlive) {
         conn->keepAliveCount = host->maxKeepAlive;
     }
-
     conn->http = host->server->http;
     conn->sock = sock;
     mprStealBlock(conn, sock);
@@ -58,7 +56,6 @@ static MaConn *createConn(MprCtx ctx, MaHost *host, MprSocket *sock, cchar *ipAd
     conn->address = address;
     conn->host = host;
     conn->originalHost = host;
-    conn->input = 0;
     conn->expire = mprGetTime(conn) + host->timeout;
 
     maInitSchedulerQueue(&conn->serviceq);
@@ -346,7 +343,6 @@ static inline MaPacket *getPacket(MaConn *conn, int *bytesToRead)
             len = mprGetBufSpace(content);
         }
     }
-    mprAssert(packet == conn->input);
     mprAssert(len > 0);
     *bytesToRead = len;
     return packet;

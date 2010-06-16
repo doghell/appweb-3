@@ -1196,14 +1196,14 @@ extern int maJoinPacket(MaPacket *packet, MaPacket *other);
  *      stages can digest their contents. If a packet is too large for the queue maximum size, it should be split.
  *      When the packet is split, a new packet is created containing the data after the offset. Any suffix headers
  *      are moved to the new packet.
- *  @param conn MaConn connection object
+ *  @param ctx A conn or request memory context object to own the packet.
  *  @param packet Packet to split
  *  @param offset Location in the original packet at which to split
  *  @return New MaPacket object containing the data after the offset. No need to free, unless you have a very long
  *      running request. Otherwise the packet memory will be released automatically when the request completes.
  *  @ingroup MaPacket
  */
-extern MaPacket *maSplitPacket(struct MaConn *conn, MaPacket *packet, int offset);
+extern MaPacket *maSplitPacket(MprCtx ctx, MaPacket *packet, int offset);
 
 #if DOXYGEN
 /**
@@ -1835,7 +1835,6 @@ typedef struct MaConn {
     MprSocket       *sock;                  /**< Underlying socket handle */
     MaHost          *originalHost;          /**< Owning host for this connection. May be changed by Host header  */
     MaPacket        *input;                 /**< Header packet */
-    MaPacket        *freePackets;           /**< Free list of packets */
     char            *remoteIpAddr;          /**< Remote client IP address (REMOTE_ADDR) */
     MprTime         started;                /**< When the connection started */
     MprTime         expire;                 /**< When the connection should expire */
@@ -1918,8 +1917,7 @@ typedef struct MaRequest {
     MprHeap         *arena;                 /**< Request memory arena */
     struct MaConn   *conn;                  /**< Connection object */
     MaPacket        *headerPacket;          /**< HTTP headers */
-    MaPacket        *packet;                /**< Current input packet */
-
+    MaPacket        *freePackets;           /**< List of free packets */
     int             length;                 /**< Declared content length (ENV: CONTENT_LENGTH) */
     int             chunkState;             /**< Chunk encoding state */
     int             chunkSize;              /**< Size of the next chunk */
@@ -2127,7 +2125,6 @@ typedef struct MaResponse {
     MaStage         *handler;               /**< Response handler */
     MaStage         *connector;             /**< Response connector */
     MprList         *outputPipeline;        /**< Output processing */
-    MaPacket        *freePackets;           /**< List of free packets */
     void            *handlerData;           /**< Data reserved for the handler */
 
     int             flags;                  /**< Response flags */

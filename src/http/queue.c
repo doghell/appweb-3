@@ -202,13 +202,16 @@ MaPacket *maCreatePacket(MprCtx ctx, int size)
 MaPacket *maCreateConnPacket(MaConn *conn, int size)
 {
     MaPacket    *packet;
+    MaRequest   *req;
 
     if (conn->state == MPR_HTTP_STATE_COMPLETE) {
         return maCreatePacket((MprCtx) conn, size);
     }
-    if (conn->request) {
-        if ((packet = conn->freePackets) != NULL && size <= packet->content->buflen) {
-            conn->freePackets = packet->next; 
+    req = conn->request;
+    if (req) {
+        /* These packets are all owned by the request */
+        if ((packet = req->freePackets) != NULL && size <= packet->content->buflen) {
+            req->freePackets = packet->next; 
             packet->next = 0;
             return packet;
         }
@@ -219,11 +222,13 @@ MaPacket *maCreateConnPacket(MaConn *conn, int size)
 
 void maFreePacket(MaQueue *q, MaPacket *packet)
 {
-    MaConn  *conn;
+    MaConn      *conn;
+    MaRequest   *req;
 
     conn = q->conn;
+    req = conn->request;
 
-    if (packet->content == 0 || packet->content->buflen < MA_BUFSIZE || mprGetParent(packet) == conn) {
+    if (req == 0 || packet->content == 0 || packet->content->buflen < MA_BUFSIZE || mprGetParent(packet) == conn) {
         /* 
          *  Don't bother recycling non-content, small packets or packets owned by the connection
          *  We only store packets owned by the request and not by the connection on the free list.
@@ -243,8 +248,8 @@ void maFreePacket(MaQueue *q, MaPacket *packet)
     packet->suffix = 0;
     packet->entityLength = 0;
     packet->flags = 0;
-    packet->next = conn->freePackets;
-    conn->freePackets = packet;
+    packet->next = req->freePackets;
+    req->freePackets = packet;
 } 
 
 
@@ -568,6 +573,8 @@ bool maPacketTooBig(MaQueue *q, MaPacket *packet)
 int maResizePacket(MaQueue *q, MaPacket *packet, int size)
 {
     MaPacket    *tail;
+    MaConn      *conn;
+    MprCtx      ctx;
     int         len;
     
     if (size <= 0) {
@@ -589,7 +596,9 @@ int maResizePacket(MaQueue *q, MaPacket *packet, int size)
     if (size == len) {
         return 0;
     }
-    tail = maSplitPacket(q->conn, packet, size);
+    conn = q->conn;
+    ctx = conn->request ? (MprCtx) conn->request : (MprCtx) conn;
+    tail = maSplitPacket(ctx, packet, size);
     if (tail == 0) {
         return MPR_ERR_NO_MEMORY;
     }
@@ -717,9 +726,8 @@ int maJoinPacket(MaPacket *packet, MaPacket *p)
  *  Split a packet at a given offset and return a new packet containing the data after the offset.
  *  The suffix data migrates to the new packet. 
  */
-MaPacket *maSplitPacket(MaConn *conn, MaPacket *orig, int offset)
+MaPacket *maSplitPacket(MprCtx ctx, MaPacket *orig, int offset)
 {
-    MprCtx      ctx;
     MaPacket    *packet;
     int         count, size;
 
@@ -731,7 +739,6 @@ MaPacket *maSplitPacket(MaConn *conn, MaPacket *orig, int offset)
     size = max(count, MA_BUFSIZE);
     size = MA_PACKET_ALIGN(size);
     
-    ctx = conn->request ? (MprCtx) conn->request : (MprCtx) conn;
     if ((packet = maCreateDataPacket(ctx, orig->entityLength ? 0: size)) == 0) {
         return 0;
     }
