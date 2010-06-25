@@ -2506,8 +2506,7 @@ module ejs {
 /*
     Added to ease forward compatibility
  */
-module ejs.unix {
-}
+module ejs.unix { }
 
 
 /*
@@ -6170,6 +6169,9 @@ module ejs.db {
         return value
     }
 }
+
+/* To ease forward compatibility */
+module ejs.db.mapper {}
 
 
 /*
