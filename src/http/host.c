@@ -710,7 +710,7 @@ static void updateCurrentDate(MaHost *host)
 
     mprDecodeUniversalTime(host, &tm, host->now + (86400 * 1000));
     oldDate = host->expiresDate;
-    host->expiresDate = mprFormatTime(host, MPR_RFC_DATE, &tm);
+    host->expiresDate = mprFormatTime(host, MPR_HTTP_DATE, &tm);
     mprFree(oldDate);
 }
 

@@ -407,7 +407,7 @@ void maSetCookie(MaConn *conn, cchar *name, cchar *value, cchar *path, cchar *co
     if (lifetime > 0) {
         mprDecodeUniversalTime(resp, &tm, conn->time + (lifetime * MPR_TICKS_PER_SEC));
         expiresAtt = "; expires=";
-        expires = mprFormatTime(resp, MPR_RFC_DATE, &tm);
+        expires = mprFormatTime(resp, MPR_HTTP_DATE, &tm);
 
     } else {
         expires = expiresAtt = "";
