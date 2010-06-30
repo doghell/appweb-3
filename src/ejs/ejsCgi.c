@@ -553,7 +553,7 @@ static void setCookie(void *handle, cchar *name, cchar *value, cchar *path, ccha
     }
     if (lifetime > 0) {
         mprDecodeUniversalTime(mpr, &tm, mprGetTime(mpr) + (lifetime * MPR_TICKS_PER_SEC));
-        mprFormatTime(mpr, MPR_RFC_DATE, &tm);
+        mprFormatTime(mpr, MPR_HTTP_DATE, &tm);
         expiresAtt = "; expires=";
         expires = dateStr;
 
