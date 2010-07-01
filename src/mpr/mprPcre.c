@@ -57,7 +57,7 @@
 #define MPR_CPU_SH4         12
 
 
-#if BLD_UNIX_LIKE && !VXWORKS && !MACOSX
+#if BLD_UNIX_LIKE && !VXWORKS && !MACOSX && !FREEBSD
     #include    <sys/types.h>
     #include    <time.h>
     #include    <arpa/inet.h>
@@ -88,7 +88,7 @@
     #include    <sys/mman.h>
     #include    <sys/stat.h>
     #include    <sys/param.h>
-    #if !CYGWIN
+    #if !CYGWIN && !SOLARIS
         #include    <sys/prctl.h>
     #endif
     #include    <sys/resource.h>
@@ -270,7 +270,10 @@
     #include    <sys/types.h>
     #include    <sys/utsname.h>
     #include    <sys/wait.h>
+    #include    <sys/mman.h>
+    #include    <sys/sysctl.h>
     #include    <unistd.h>
+    #include    <poll.h>
 #if BLD_FEATURE_FLOATING_POINT
     #include    <float.h>
     #define __USE_ISOC99 1
@@ -437,7 +440,9 @@ extern "C" {
 #define BITSPERBYTE     (8 * sizeof(char))
 #endif
 
+#if !SOLARIS
 #define BITS(type)      (BITSPERBYTE * (int) sizeof(type))
+#endif
 
 #ifndef MAXINT
 #if INT_MAX
@@ -508,10 +513,10 @@ extern "C" {
 #define BLD_HAS_UNNAMED_UNIONS 1
 #endif
 
-#if BLD_WIN_LIKE
-    #define  VA_NULL    {0}
-#else
+#if BLD_CC_DOUBLE_BRACES
     #define  VA_NULL    {{0}}
+#else
+    #define  VA_NULL    {0}
 #endif
 
 
@@ -635,6 +640,7 @@ extern "C" {
     #define inline __inline__
     #endif
 
+extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 #endif  /* VXWORKS */
 
 
@@ -678,6 +684,7 @@ extern "C" {
     #define LD_LIBRARY_PATH "DYLD_LIBRARY_PATH"
 #endif /* MACOSX */
 
+
 #if FREEBSD
     typedef off_t MprOffset;
     typedef unsigned long ulong;
@@ -694,7 +701,7 @@ extern "C" {
     #define O_TEXT          0
     #define SOCKET_ERROR    -1
     #define MPR_DLL_EXT     ".dylib"
-    #define __WALL          0x40000000
+    #define __WALL          0
     #define PTHREAD_MUTEX_RECURSIVE_NP  PTHREAD_MUTEX_RECURSIVE
 
 #if BLD_FEATURE_FLOATING_POINT
@@ -867,6 +874,7 @@ extern "C" {
     extern int      getuid(void);
     extern int      geteuid(void);
 
+    extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 #endif /* WIN_LIKE */
 
 
@@ -1282,7 +1290,9 @@ extern "C" {
 #define MPR_MAX_IP_NAME         128             /**< Maximum size of a host name string */
 #define MPR_MAX_IP_ADDR         128             /**< Maximum size of an IP address */
 #define MPR_MAX_IP_PORT         8               /**< MMaximum size of a port number */
-#define MPR_MAX_IP_ADDR_PORT    (MPR_MAX_IP_ADDR + NI_MAXSERV)  /**< Maximum size of an IP address with port number */
+
+/**< Maximum size of an IP address with port number */
+#define MPR_MAX_IP_ADDR_PORT    (MPR_MAX_IP_ADDR + MPR_MAX_IP_PORT + 1) 
 
 /*
  *  Signal sent on Unix to break out of a select call.
@@ -1318,11 +1328,11 @@ extern "C" {
 #define MPR_TIMEOUT_LOG_STAMP   3600000     /**< Time between log time stamps (1 hr) */
 #define MPR_TIMEOUT_PRUNER      600000      /**< Time between pruner runs (10 min) */
 #define MPR_TIMEOUT_START_TASK  2000        /**< Time to start tasks running */
-#define MPR_TIMEOUT_STOP_TASK   10000       /**< Time to stop or reap tasks */
-#define MPR_TIMEOUT_STOP_THREAD 10000       /**< Time to stop running threads */
+#define MPR_TIMEOUT_STOP_TASK   5000        /**< Time to stop or reap tasks */
+#define MPR_TIMEOUT_STOP_THREAD 5000        /**< Time to stop running threads */
 #define MPR_TIMEOUT_STOP        5000        /**< Wait when stopping resources */
 #define MPR_TIMEOUT_LINGER      2000        /**< Close socket linger timeout */
-#define MPR_TIMEOUT_HANDLER     10000        /**< Wait period when removing a wait handler */
+#define MPR_TIMEOUT_HANDLER     10000       /**< Wait period when removing a wait handler */
 
 
 /*
@@ -2329,6 +2339,7 @@ extern void mprSetBufRefillProc(MprBuf *buf, MprBufProc fn, void *arg);
  */
 #define MPR_RFC_DATE        "%a, %d %b %Y %T %Z"
 #define MPR_DEFAULT_DATE    "%a %b %d %T %Y %Z"
+#define MPR_HTTP_DATE       "%a, %d %b %Y %T GMT"
 
 /**
  *  Date and Time Service
@@ -2357,10 +2368,9 @@ extern int mprCreateTimeService(MprCtx ctx);
  *  @param ctx Any memory context allocated by mprAlloc or mprCreate.
  *  @param timep Pointer to a tm structure to hold the result
  *  @param time Time to format
- *  @return Returns a pointer to the tmBuf.
  *  @ingroup MprDate
  */
-extern struct tm *mprDecodeLocalTime(MprCtx ctx, struct tm *timep, MprTime time);
+extern void mprDecodeLocalTime(MprCtx ctx, struct tm *timep, MprTime time);
 
 /**
  *  Decode a time value into a tokenized UTC time structure.
@@ -2369,10 +2379,9 @@ extern struct tm *mprDecodeLocalTime(MprCtx ctx, struct tm *timep, MprTime time)
  *  @param ctx Any memory context allocated by mprAlloc or mprCreate.
  *  @param timep Pointer to a tm structure to hold the result.
  *  @param time The time to format
- *  @return Returns the tm structure reference
  *  @ingroup MprDate
  */
-extern struct tm *mprDecodeUniversalTime(MprCtx ctx, struct tm *timep, MprTime time);
+extern void mprDecodeUniversalTime(MprCtx ctx, struct tm *timep, MprTime time);
 
 /**
  *  Convert a time value to local time and format as a string.
@@ -2454,6 +2463,8 @@ MprTime mprMakeUniversalTime(MprCtx ctx, struct tm *tm);
  *  @returns Zero if successful
  */
 extern int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int timezone, struct tm *defaults);
+
+extern int mprGetTimeZoneOffset(MprCtx ctx, MprTime when);
 
 /**
  *  List Module.
@@ -4447,8 +4458,7 @@ typedef struct MprThreadService {
 typedef void (*MprThreadProc)(void *arg, struct MprThread *tp);
 
 extern MprThreadService *mprCreateThreadService(struct Mpr *mpr);
-extern int mprStartThreadService(MprThreadService *ts);
-extern int mprStopThreadService(MprThreadService *ts, int timeout);
+extern bool mprStopThreadService(MprThreadService *ts, int timeout);
 
 /**
  *  Thread Service. 
@@ -4683,6 +4693,7 @@ typedef int (*MprDestructor)(MprCtx ctx);
 typedef struct MprBlk {
 #if BLD_DEBUG
     char            *name;                  /* Debug Name */
+    int             seqno;                  /* Unique block allocation number */
 #endif
     struct MprBlk   *parent;                /* Parent block */
     struct MprBlk   *children;              /* First child block. Flags stored in low order bits. */
@@ -4825,8 +4836,6 @@ typedef void *Type;
  *  @ingroup MprMem
  */
 extern void *mprAlloc(MprCtx ctx, uint size);
-
-extern MprBlk *mprAllocBlock(MprHeap *heap, MprBlk *parent, uint size);
 
 /**
  *  Allocate an object block of memory
@@ -5023,7 +5032,7 @@ extern cchar *mprGetName(void *ptr);
 #endif
 
 extern void *_mprAlloc(MprCtx ctx, uint size);
-extern MprBlk *_mprAllocBlock(MprHeap *heap, MprBlk *parent, uint size);
+extern MprBlk *_mprAllocBlock(MprCtx ctx, MprHeap *heap, MprBlk *parent, uint size);
 extern void *_mprAllocWithDestructor(MprCtx ctx, uint size, MprDestructor destructor);
 extern void *_mprAllocWithDestructorZeroed(MprCtx ctx, uint size, MprDestructor destructor);
 extern void *_mprAllocZeroed(MprCtx ctx, uint size);
@@ -5046,8 +5055,6 @@ extern char *_mprStrdup(MprCtx ctx, cchar *str);
 
 #define mprAlloc(ctx, size) \
     mprSetName(_mprAlloc(ctx, size), MPR_LOC)
-#define mprAllocBlock(heap, parent, size) \
-    mprSetName(_mprAllocBlock(heap, parent, size), MPR_LOC)
 #define mprAllocWithDestructor(ctx, size, destructor) \
     mprSetName(_mprAllocWithDestructor(ctx, size, destructor), MPR_LOC)
 #define mprAllocWithDestructorZeroed(ctx, size, destructor) \
@@ -5232,7 +5239,7 @@ extern int64 mprGetUsedMemory(MprCtx ctx);
  *  @param size of virtual memory to map. This size will be rounded up to the nearest page boundary.
  *  @param mode Mask set to MPR_MAP_READ | MPR_MAP_WRITE
  */
-extern void *mprMapAlloc(uint size, int mode);
+extern void *mprMapAlloc(MprCtx ctx, uint size, int mode);
 
 /**
  *  Free (unpin) a mapped section of virtual memory
@@ -5285,11 +5292,9 @@ typedef struct MprWaitService {
     int             lastMaskGeneration;     /* Last generation number for mask changes */
     int             rebuildMasks;           /* IO mask rebuild required */
 
-#if LINUX || MACOSX
+#if LINUX || MACOSX || FREEBSD
     struct pollfd   *fds;                   /* File descriptors to poll on */
-    struct pollfd   *stableFds;             /* Stable list used while actually polling */
     int             fdsCount;               /* Count of fds */
-    int             stableFdsCount;         /* Count of stableFds */
     int             fdsSize;                /* Size of fds array */
     int             breakPipe[2];           /* Pipe to wakeup select when multithreaded */
 
@@ -5984,7 +5989,7 @@ typedef struct MprWorkerService {
 
 extern MprWorkerService *mprCreateWorkerService(MprCtx ctx);
 extern int mprStartWorkerService(MprWorkerService *ws);
-extern void mprStopWorkerService(MprWorkerService *ws, int timeout);
+extern bool mprStopWorkerService(MprWorkerService *ws, int timeout);
 
 /**
  *  Get the count of available worker threads
@@ -6137,6 +6142,7 @@ typedef struct MprUri {
     int         port;                   /**< Port number */
     char        *url;                   /**< Url path name (without scheme, host, query or fragements) */
     char        *ext;                   /**< Document extension */
+    char        *reference;             /**< Reference fragment */
     char        *query;                 /**< Query string */
     bool        secure;                 /**< Using https */
 } MprUri;
@@ -7275,6 +7281,7 @@ extern int mprWriteCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize);
 typedef struct Mpr {
     MprHeap         heap;                   /**< Top level memory pool */
     MprHeap         pageHeap;               /**< Heap for arenas and slabs. Always page oriented */
+    MprAlloc        alloc;                  /**< Memory allocation statistics */
 
     bool            debugMode;              /**< Run in debug mode (no timers) */
     int             logLevel;               /**< Log trace level */
@@ -7294,7 +7301,7 @@ typedef struct Mpr {
     char            *appPath;               /**< Path name of application executable */
     char            *appDir;                /**< Path of directory containing app executable */
     int             flags;                  /**< Processing state */
-    int             timezone;               /**< Minutes west of Greenwich */
+    int             timezone;               /**< Minutes west of Greenwich without DST */
     int             hasDedicatedService;    /**< Running a dedicated events thread */
     int             multiThread;            /**< Is running multi-threaded */
 
@@ -7316,6 +7323,7 @@ typedef struct Mpr {
 #endif
 
     struct MprModuleService *moduleService; /**< Module service object */
+    void            *ejsService;            /**< Ejscript service */
 
 #if BLD_FEATURE_MULTITHREAD
     struct MprThreadService *threadService; /**< Thread service object */
@@ -7341,11 +7349,13 @@ typedef struct Mpr {
 } Mpr;
 
 
-#if !BLD_WIN_LIKE || DOXYGEN
-extern Mpr  *_globalMpr;                /* Mpr singleton */
-#define mprGetMpr(ctx) _globalMpr
+#if BLD_UNIX_LIKE
+#define BLD_HAS_GLOBAL_MPR 1
 #else
+#define BLD_HAS_GLOBAL_MPR 0
+#endif
 
+#if DOXYGEN || !BLD_HAS_GLOBAL_MPR || BLD_WIN_LIKE
 /**
  *  Return the MPR control instance.
  *  @description Return the MPR singleton control object. 
@@ -7355,6 +7365,10 @@ extern Mpr  *_globalMpr;                /* Mpr singleton */
  *  @ingroup Mpr
  */
 extern struct Mpr *mprGetMpr(MprCtx ctx);
+#else
+
+extern Mpr  *_globalMpr;                /* Mpr singleton */
+#define mprGetMpr(ctx) _globalMpr
 #endif
 
 /**
@@ -7399,8 +7413,9 @@ extern int mprStart(Mpr *mpr, int startEventsThread);
 /**
  *  Stop the MPR and shutdown all services. After this call, the MPR cannot be used.
  *  @param mpr Mpr object created via mprCreateMpr
+ *  @return True if all services have been successfully stopped. Otherwise false.
  */
-extern void mprStop(Mpr *mpr);
+extern bool mprStop(Mpr *mpr);
 
 /**
  *  Signal the MPR to exit gracefully.

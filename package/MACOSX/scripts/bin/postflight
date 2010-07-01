@@ -8,7 +8,7 @@
 
 PKG_DIR="$1"
 INS_DIR="$2"
-BIN="!!BLD_BIN_DIR!!"
+BIN="!!ORIG_BLD_BIN_PREFIX!!"
 NAME="!!ORIG_BLD_PREFIX!!"
 path="${INS_DIR}${NAME}"
 

@@ -11,6 +11,9 @@ RPM_DIR=$ROOT_DIR/RPM
 RPM_SPEC_FILE=
 BLD_DATE=`date '+%c'`
 
+echo TOP 
+env
+
 ################################################################################
 
 setupRPM() {
@@ -42,6 +45,8 @@ createSpecFile() {
     #   Binary RPM
     #
     cd ${ROOT_DIR}/BIN
+echo MOB create createSpecFile: makeRPMPackage
+echo RPM_DIR $RPM_DIR
     echo '%defattr(-,root,root)' >$RPM_DIR/BUILD/binFiles.txt
     find . -type d -print | sed -e 's!\.!!' | grep ${BLD_PRODUCT} | sed -e "s!^!%dir !" >>$RPM_DIR/BUILD/binFiles.txt
     find . -type f -print | sed -e "s/.//" | sed 's/.*/"&"/' >>$RPM_DIR/BUILD/binFiles.txt
@@ -88,6 +93,9 @@ createSpecFile() {
 makeRPMPackage() {
     local f
 
+echo XXXXXXXXXXXXXXX HOME IS $HOME
+echo YYYYYYYYYYYYYYYY TILDE is ~
+echo CREATING ~/.rpmmacros
     cat <<!MACROS_EOF > ~/.rpmmacros
 %_topdir $RPM_DIR
 
@@ -121,9 +129,9 @@ makeRPMPackage() {
             name=`createPackageName ${BLD_PRODUCT}-$suffix`.rpm
         fi
         if [ "$suffix" = "bin" ] ; then
-            rpm="$RPM_DIR/RPMS/$BLD_HOST_CPU/${BLD_PRODUCT}-${BLD_VERSION}-${BLD_NUMBER}.${BLD_HOST_CPU}.rpm"
+            rpm="$RPM_DIR/RPMS/$BLD_HOST_CPU/${BLD_PRODUCT}-${BLD_VERSION}-${BLD_NUMBER_ONLY}.${BLD_HOST_CPU}.rpm"
         else
-            rpm="$RPM_DIR/RPMS/$BLD_HOST_CPU/${BLD_PRODUCT}-$suffix-${BLD_VERSION}-${BLD_NUMBER}.${BLD_HOST_CPU}.rpm"
+            rpm="$RPM_DIR/RPMS/$BLD_HOST_CPU/${BLD_PRODUCT}-$suffix-${BLD_VERSION}-${BLD_NUMBER_ONLY}.${BLD_HOST_CPU}.rpm"
         fi
         echo "# Creating `basename $name`"
         mv $rpm $ROOT_DIR/$name

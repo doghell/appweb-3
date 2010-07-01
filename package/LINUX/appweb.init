@@ -1,6 +1,6 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          apache2
+# Provides:          appweb
 # Required-Start:    $local_fs $remote_fs $network $syslog
 # Required-Stop:     $local_fs $remote_fs $network $syslog
 # Default-Start:     2 3 4 5
@@ -55,25 +55,26 @@ start() {
         eval daemon $SWITCHES $APPWEB_CMD ${APPWEB_SWITCHES} 
         RETVAL=$?
         [ ${RETVAL} = 0 ] && touch /var/lock/subsys/$APPWEB
+        echo
     elif type start-stop-daemon >/dev/null 2>&1 ; then
         eval start-stop-daemon $SWITCHES --oknodo --start --quiet --exec "${APPWEB_CMD}" -- ${APPWEB_SWITCHES}
         RETVAL=$?
         [ ${RETVAL} = 0 ] && touch /var/lock/$APPWEB
+        if [ ${RETVAL} = 0 ] ; then
+            echo "OK"
+        else
+            echo "FAILED"
+        fi
     fi
-#    if [ ${RETVAL} = 0 ] ; then
-#        echo "OK"
-#    else
-#        echo "FAILED"
-#    fi
     return ${RETVAL}
 }
 
 stop() {
-	if [ "!!BLD_FEATURE_ANGEL!!" = 1 ] ; then
-		${APPWEB_CMD} --stop
-	fi
     if type start-stop-daemon >/dev/null 2>&1 ; then
-        echo -n $"Stopping ${APPWEB_NAME}: "
+        if [ "!!BLD_FEATURE_ANGEL!!" = 1 ] ; then
+            ${APPWEB_CMD} --stop
+        fi
+        echo -n "Stopping ${APPWEB_NAME}: "
         if [ -f /etc/SuSE-release ] ; then
             start-stop-daemon --stop --quiet --oknodo --exec "${APPWEB_CMD}"
         else 
@@ -81,18 +82,19 @@ stop() {
         fi
         RETVAL=$?
         [ ${RETVAL} = 0 ] && rm -f /var/lock/$APPWEB
+        if [ ${RETVAL} = 0 ] ; then
+            echo "OK"
+        else
+            echo "FAILED"
+        fi
     elif type killproc >/dev/null 2>&1 ; then
         # Note: killproc exists on debian also.
         echo -n $"Stopping ${APPWEB_NAME}: "
         killproc $APPWEB_CMD
         RETVAL=$?
         [ ${RETVAL} = 0 ] && rm -f /var/lock/subsys/$APPWEB
+        echo
     fi
-#    if [ ${RETVAL} = 0 ] ; then
-#        echo "OK"
-#    else
-#        echo "FAILED"
-#    fi
 }
 
 

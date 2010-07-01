@@ -11,12 +11,7 @@
 #		make compile				# Compiles the source
 #		make depend					# Generates the make dependencies
 #		make test 					# Runs unit tests
-#		make leakTest 				# Runs memory leak tests
-#		make loadTest 				# Runs load tests
-#		make benchmark 				# Runs benchmarks
 #		make package				# Creates an installable package
-#		make startService			# Starts an installed instance of the app
-#		make stopService			# Stops an installed instance of the app
 #
 #	Installation targets. Use "make ROOT_DIR=myDir" to do a custom local install:
 #
@@ -64,7 +59,7 @@ diff import sync:
 config:
 	$(call log) "[Config]" "configure"
 	./configure
-	make depend clean >/dev/null
+	$(MAKE) depend clean >/dev/null
 
 rom:
 	./configure --host=i686-apple-darwin --build=x86_64-apple-darwin --rom --static --without-ssl --without-php --without-ejs
@@ -241,24 +236,19 @@ uclinuxCheck:
 		BLD_PRODUCT=appweb ; \
 		echo "    ln -s $$BLD_PRODUCT/uclinux.defaults build/buildConfig.defaults" ;\
 		ln -s $$BLD_PRODUCT/uclinux.defaults build/buildConfig.defaults ; \
-		if [ ! -f build/buildConfig.cache -o ../../.config -nt buildConfig.make ] ; \
-		then \
-			if [ "$$CONFIG_USER_APPWEB_DYNAMIC" = "y" ] ; \
-			then \
+		if [ ! -f build/buildConfig.cache -o ../../.config -nt buildConfig.make ] ; then \
+			if [ "$$CONFIG_USER_APPWEB_DYNAMIC" = "y" ] ; then \
 				SW="$$SW" ; \
 			else \
 				SW="$$SW --static" ; \
 			fi ; \
-			if [ "$$CONFIG_USER_APPWEB_MULTITHREAD" = "y" ] ; \
-			then \
+			if [ "$$CONFIG_USER_APPWEB_MULTITHREAD" = "y" ] ; then \
 				SW="$$SW --enable-multi-thread" ; \
 			else SW="$$SW --disable-multi-thread" ; \
 			fi ; \
-			if [ "$$CONFIG_USER_APPWEB_SSL" = "y" ] ; \
-			then \
+			if [ "$$CONFIG_USER_APPWEB_SSL" = "y" ] ; then \
 				SW="$$SW --with-openssl=../../lib/libssl" ; \
-			elif [ "$$CONFIG_USER_APPWEB_MATRIXSSL" = "y" ] ; \
-			then \
+			elif [ "$$CONFIG_USER_APPWEB_MATRIXSSL" = "y" ] ; then \
 				SW="$$SW --with-matrixssl=../../lib/matrixssl" ; \
 			else SW="$$SW --without-ssl" ; \
 			fi ; \
@@ -277,13 +267,11 @@ uclinuxCheck:
 	fi
 endif
 
-redo:
-	hg pull ; hg update -C
-	make TRACE=0 release clean depend compile install-binary test
+testExtra: test-projects
 
-update:
-	hg pull ; hg update -C
-	make TRACE=0 clean depend compile install-binary test
-
-debug:
-	open  projects/MACOSX/appweb-all/*.xcodeproj
+test-projects:
+ifeq    ($(BLD_HOST_OS),WIN)
+	if [ "$(BUILD_DEPTH)" -ge 3 ] ; then \
+		$(BLD_TOOLS_DIR)/nativeBuild ; \
+	fi
+endif

@@ -1,5 +1,4 @@
-#!/bin/sh -e
-#
+#!/bin/sh
 # 	prerm -- Pre removal script for appweb-src
 #
 #	Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.

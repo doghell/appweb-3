@@ -194,7 +194,7 @@ If no session exists, this call has no effect.</dd></dl>
 <div class='apiDetail'>
 <p>Transform a string to be safe for output into an HTML web page.</p>
 <dl><dt>Description</dt><dd>It does this by changing the
-">", "<" and '"' characters into their ampersand HTML equivalents.</dd></dl>
+"&", ">", "<" and '"' characters into their ampersand HTML equivalents.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>s: <a href='intrinsic-String.html'>String</a> </td><td>Input string.</td></tr></table></dd>
@@ -402,8 +402,8 @@ values.</dd></dl>
 </div>
 <div class='apiDetail'>
 <p>Of the format "keyword: value".</p>
-<dl><dt>Description</dt><dd>If a header has already been defined and a allowMultiple is false, 
-the header will be overwritten. If a allowMultiple is true, the new header will be appended to the 
+<dl><dt>Description</dt><dd>If a header has already been defined and \a allowMultiple is false, 
+the header will be overwritten. If \a allowMultiple is true, the new header will be appended to the 
 response headers and the existing header will also be output. NOTE: case does not matter in the header keyword.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>

@@ -24,10 +24,6 @@ static bool parseRequest(MaConn *conn, MaPacket *packet);
 static bool processContent(MaConn *conn, MaPacket *packet);
 static void setIfModifiedDate(MaConn *conn, MprTime when, bool ifMod);
 
-#if BLD_DEBUG
-static void traceContent(MaConn *conn, MaPacket *packet, int len);
-#endif
-
 /*********************************** Code *************************************/
 
 MaRequest *maCreateRequest(MaConn *conn)
@@ -64,7 +60,16 @@ MaRequest *maCreateRequest(MaConn *conn)
 
 int destroyRequest(MaRequest *req)
 {
-    maPrepConnection(req->conn);
+    MaConn  *conn;
+
+    conn = req->conn;
+    maPrepConnection(conn);
+    if (conn->input) {
+        /* Left over packet */
+        if (mprGetParent(conn->input) != conn) {
+            conn->input = maSplitPacket(conn, conn->input, 0);
+        }
+    }
     return 0;
 }
 
@@ -162,7 +167,10 @@ static bool parseRequest(MaConn *conn, MaPacket *packet)
         maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, "Header too big");
         return 0;
     }
+#if UNUSED
     *end = '\0'; mprLog(conn, 3, "\n@@@ Request =>\n%s\n", start); *end = '\r';
+#endif
+
     if (parseFirstLine(conn, packet)) {
         parseHeaders(conn, packet);
     } else {
@@ -205,14 +213,15 @@ static bool parseFirstLine(MaConn *conn, MaPacket *packet)
 {
     MaRequest   *req;
     MaResponse  *resp;
+    MaHost      *host;
+    MprBuf      *content;
+    cchar       *endp;
     char        *methodName, *uri, *httpProtocol;
-    int         method;
+    int         method, len;
 
     req = conn->request = maCreateRequest(conn);
     resp = conn->response = maCreateResponse(conn);
-
-    mprLog(req, 4, "New request from %s:%d to %s:%d", conn->remoteIpAddr, conn->remotePort, conn->sock->ipAddr, 
-        conn->sock->port);
+    host = conn->host;
 
     methodName = getToken(conn, " ");
     if (*methodName == '\0') {
@@ -300,11 +309,22 @@ static bool parseFirstLine(MaConn *conn, MaPacket *packet)
     req->methodName = methodName;
     req->httpProtocol = httpProtocol;
     
-    mprLog(conn, 2, "%s %s %s", methodName, uri, httpProtocol);
-
     if (maSetRequestUri(conn, uri) < 0) {
         maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Bad URL format");
         return 0;
+    }
+    if ((conn->trace = maSetupTrace(host, conn->response->extension)) != 0) {
+        if (maShouldTrace(conn, MA_TRACE_REQUEST | MA_TRACE_HEADERS)) {
+            mprLog(req, host->traceLevel, "\n@@@ New request from %s:%d to %s:%d\n%s %s %s", 
+                conn->remoteIpAddr, conn->remotePort, conn->sock->ipAddr, conn->sock->port,
+                methodName, uri, httpProtocol);
+            content = packet->content;
+            endp = strstr((char*) content->start, "\r\n\r\n");
+            len = (endp) ? (endp - mprGetBufStart(content) + 4) : 0;
+            maTraceContent(conn, packet, len, 0, MA_TRACE_REQUEST | MA_TRACE_HEADERS);
+        }
+    } else {
+        mprLog(conn, 2, "%s %s %s", methodName, uri, httpProtocol);
     }
     return 1;
 }
@@ -674,11 +694,13 @@ static bool processContent(MaConn *conn, MaPacket *packet)
     MaRequest       *req;
     MaResponse      *resp;
     MaQueue         *q;
+    MaHost          *host;
     MprBuf          *content;
     int             nbytes, remaining;
 
     req = conn->request;
     resp = conn->response;
+    host = conn->host;
     q = &resp->queue[MA_QUEUE_RECEIVE];
 
     mprAssert(packet);
@@ -700,31 +722,28 @@ static bool processContent(MaConn *conn, MaPacket *packet)
     }
     nbytes = min(remaining, mprGetBufLength(content));
     mprAssert(nbytes >= 0);
-
-#if BLD_DEBUG
     mprLog(conn, 7, "processContent: packet of %d bytes, remaining %d", mprGetBufLength(content), remaining);
-    if (mprGetLogLevel(conn) >= 5) {
-        traceContent(conn, packet, nbytes);
-    }
-#endif
 
+    if (maShouldTrace(conn, MA_TRACE_REQUEST | MA_TRACE_BODY)) {
+        maTraceContent(conn, packet, 0, 0, MA_TRACE_REQUEST | MA_TRACE_BODY);
+    }
     if (nbytes > 0) {
         mprAssert(maGetPacketLength(packet) > 0);
         remaining -= nbytes;
         req->remainingContent -= nbytes;
         req->receivedContent += nbytes;
 
-        if (req->receivedContent >= conn->host->limits->maxBody) {
+        if (req->receivedContent >= host->limits->maxBody) {
             conn->keepAliveCount = 0;
             maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, 
                 "Request content body is too big %d vs limit %d", 
-                req->receivedContent, conn->host->limits->maxBody);
+                req->receivedContent, host->limits->maxBody);
             return 1;
         } 
 
         if (packet == req->headerPacket) {
             /* Preserve headers if more data to come. Otherwise handlers may free the packet and destory the headers */
-            packet = maSplitPacket(conn, packet, 0);
+            packet = maSplitPacket(resp, packet, 0);
         } else {
             mprStealBlock(resp, packet);
         }
@@ -735,6 +754,7 @@ static bool processContent(MaConn *conn, MaPacket *packet)
              */
             mprLog(conn, 7, "processContent: Split packet of %d at %d", maGetPacketLength(packet), nbytes);
             conn->input = maSplitPacket(conn, packet, nbytes);
+            mprAssert(mprGetParent(conn->input) == conn);
         }
         if ((q->count + maGetPacketLength(packet)) > q->max) {
             conn->keepAliveCount = 0;
@@ -796,6 +816,7 @@ bool maProcessCompletion(MaConn *conn)
     if (mprGetParent(packet) != conn) {
         if (more) {
             conn->input = maSplitPacket(conn, packet, 0);
+            mprAssert(mprGetParent(conn->input) == conn);
         } else {
             conn->input = 0;
         }
@@ -805,35 +826,77 @@ bool maProcessCompletion(MaConn *conn)
      *  This will free the request, response, pipeline and call maPrepConnection to reset the state.
      */
     mprFree(req->arena);
-    conn->freePackets = NULL;
     return (conn->disconnected) ? 0 : more;
 }
 
 
-#if BLD_DEBUG
-static void traceContent(MaConn *conn, MaPacket *packet, int len)
+static void traceBuf(MaConn *conn, cchar *buf, int len, int mask)
 {
-    char    *data, *buf;
-    int     i, printable;
+    cchar   *cp, *tag, *digits;
+    char    *data, *dp;
+    int     level, i, printable;
 
-    buf = mprGetBufStart(packet->content);
+    level = conn->host->traceLevel;
 
     for (printable = 1, i = 0; i < len; i++) {
         if (!isascii(buf[i])) {
             printable = 0;
         }
     }
+    tag = (mask & MA_TRACE_RESPONSE) ? "Response" : "Request";
     if (printable) {
         data = mprAlloc(conn, len + 1);
         memcpy(data, buf, len);
         data[len] = '\0';
-        mprRawLog(conn, 5, "@@@ Content =>\n%s\n", data);
+        mprRawLog(conn, level, "%s packet, conn %d, len %d >>>>>>>>>>\n%s", tag, conn->seqno, len, data);
         mprFree(data);
     } else {
-        mprRawLog(conn, 5, "@@@ Content => Binary\n");
+        mprRawLog(conn, level, "%s packet, conn %d, len %d >>>>>>>>>> (binary)\n", tag, conn->seqno, len);
+        data = mprAlloc(conn, len * 3 + ((len / 16) + 1) + 1);
+        digits = "0123456789ABCDEF";
+        for (i = 0, cp = buf, dp = data; cp < &buf[len]; cp++) {
+            *dp++ = digits[(*cp >> 4) & 0x0f];
+            *dp++ = digits[*cp++ & 0x0f];
+            *dp++ = ' ';
+            if ((++i % 16) == 0) {
+                *dp++ = '\n';
+            }
+        }
+        *dp++ = '\n';
+        *dp = '\0';
+        mprRawLog(conn, level, "%s", data);
+    }
+    mprRawLog(conn, level, "<<<<<<<<<< %s packet end, conn %d\n\n", tag, conn->seqno);
+}
+
+
+void maTraceContent(MaConn *conn, MaPacket *packet, int size, int offset, int mask)
+{
+    MaHost  *host;
+    int     len;
+
+    mprAssert(conn->trace);
+    host = conn->host;
+
+    if (offset >= host->traceMaxLength) {
+        mprLog(conn, conn->host->traceLevel, "Abbreviating response trace for conn %d", conn->seqno);
+        conn->trace = 0;
+        return;
+    }
+    if (size <= 0) {
+        size = INT_MAX;
+    }
+    if (packet->prefix) {
+        len = mprGetBufLength(packet->prefix);
+        len = min(len, size);
+        traceBuf(conn, mprGetBufStart(packet->prefix), len, mask);
+    }
+    if (packet->content) {
+        len = mprGetBufLength(packet->content);
+        len = min(len, size);
+        traceBuf(conn, mprGetBufStart(packet->content), len, mask);
     }
 }
-#endif
 
 
 static void reportFailure(MaConn *conn, int code, cchar *fmt, va_list args)
@@ -1162,7 +1225,6 @@ bool maMatchEtag(MaConn *conn, char *requestedEtag)
     if (requestedEtag == 0) {
         return 0;
     }
-
     for (next = 0; (tag = mprGetNextItem(req->etags, &next)) != 0; ) {
         if (strcmp(tag, requestedEtag) == 0) {
             return (req->ifMatch) ? 0 : 1;
@@ -1221,6 +1283,8 @@ static char *getToken(MaConn *conn, cchar *delim)
     MprBuf  *buf;
     char    *token, *nextToken;
     int     len;
+
+    mprAssert(mprGetParent(conn->input) == conn);
 
     buf = conn->input->content;
     len = mprGetBufLength(buf);

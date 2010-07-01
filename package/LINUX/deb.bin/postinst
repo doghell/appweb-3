@@ -1,5 +1,4 @@
-#!/bin/sh -e
-#
+#!/bin/sh
 # 	postinst -- Post installation script for appweb
 #
 #	Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
@@ -7,6 +6,7 @@
 
 BLD_PRODUCT=!!BLD_PRODUCT!!
 BLD_NAME="!!BLD_NAME!!"
+BLD_BIN_PREFIX="!!ORIG_BLD_BIN_PREFIX!!"
 BLD_LIB_PREFIX="!!ORIG_BLD_LIB_PREFIX!!"
 BLD_MOD_PREFIX="!!ORIG_BLD_MOD_PREFIX!!"
 
@@ -69,13 +69,14 @@ configureService() {
 		;;
 
 	install)
+        "$BLD_BIN_PREFIX/linkup" Install
         if which ldconfig >/dev/null 2>&1 ; then
             ldconfig -n $BLD_LIB_PREFIX
             ldconfig -n $BLD_MOD_PREFIX
         fi
 		if which chkconfig >/dev/null 2>&1 ; then
-			/sbin/chkconfig --add $BLD_PRODUCT
-			/sbin/chkconfig --level 5 $BLD_PRODUCT on
+			chkconfig --add $BLD_PRODUCT
+			chkconfig --level 5 $BLD_PRODUCT on
 		elif which update-rc.d >/dev/null 2>&1 ; then
 			update-rc.d $BLD_PRODUCT defaults 90 10 >/dev/null || true
         elif [ -f /etc/init.d/$BLD_PRODUCT ] ; then
@@ -103,7 +104,8 @@ case $action in
 	configure)							# when new
 		oldVersion=$2
 		install
-		echo -e "\n$BLD_NAME installation successful."
+		echo
+		echo "$BLD_NAME installation successful."
 		;;
 	abort-upgrade)						# when old
 		;;

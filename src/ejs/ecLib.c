@@ -4,7 +4,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.0.
+ *  Embedthis Ejscript 1.0.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -44,7 +44,7 @@
 
 static void     addGlobalProperty(EcCompiler *cp, EcNode *np, EjsName *qname);
 static void     addScope(EcCompiler *cp, EjsBlock *block);
-static void     allocName(Ejs *ejs, EjsName *qname);
+static EjsName  *allocName(Ejs *ejs, EjsName *qname);
 static void     astBinaryOp(EcCompiler *cp, EcNode *np);
 static void     astBindName(EcCompiler *cp, EcNode *np);
 static void     astBlock(EcCompiler *cp, EcNode *np);
@@ -731,6 +731,7 @@ static void astClass(EcCompiler *cp, EcNode *np)
     state->currentClass = type;
     state->currentClassName = type->qname;
     state->inClass = 1;
+    state->inFunction = 0;
 
     /*
      *  Add the type to the scope chain and the static initializer if present. Use push frame to make it eaiser to
@@ -3527,13 +3528,11 @@ static EjsNamespace *resolveNamespace(EcCompiler *cp, EcNode *np, EjsVar *block,
     if (namespace == 0 || !ejsIsNamespace(namespace)) {
         namespace = ejsLookupNamespace(cp->ejs, np->qname.space);
     }
-
     if (namespace == 0) {
         if (strcmp(cp->state->namespace, np->qname.space) == 0) {
             namespace = ejsCreateNamespace(ejs, np->qname.space, np->qname.space);
         }
     }
-
     if (namespace == 0) {
         if (!np->literalNamespace) {
             astError(cp, np, "Can't find namespace \"%s\"", qname.name);
@@ -3557,7 +3556,6 @@ static EjsNamespace *resolveNamespace(EcCompiler *cp, EcNode *np, EjsVar *block,
             }
         }
     }
-
     return namespace;
 }
 
@@ -3832,7 +3830,7 @@ static EjsNamespace *createHoistNamespace(EcCompiler *cp, EjsVar *obj)
     char            *spaceName;
 
     ejs = cp->ejs;
-    spaceName = mprAsprintf(cp, -1, "-hoisted-%d", ejsGetPropertyCount(ejs, obj));
+    spaceName = mprAsprintf(ejs, -1, "-hoisted-%d", ejsGetPropertyCount(ejs, obj));
     namespace = ejsCreateNamespace(ejs, spaceName, spaceName);
 
     letBlockNode = cp->state->letBlockNode;
@@ -3994,10 +3992,11 @@ int ecLookupVar(EcCompiler *cp, EjsVar *vp, EjsName *name, bool anySpace)
 }
 
 
-static void allocName(Ejs *ejs, EjsName *qname)
+static EjsName *allocName(Ejs *ejs, EjsName *qname)
 {
     qname->space = mprStrdup(ejs, qname->space);
     qname->name = mprStrdup(ejs, qname->name);
+    return qname;
 }
 
 /*
@@ -4082,8 +4081,8 @@ static EcCodeGen *allocCodeBuffer(EcCompiler *cp);
 static void     badNode(EcCompiler *cp, EcNode *np);
 static void     copyCodeBuffer(EcCompiler *cp, EcCodeGen *dest, EcCodeGen *code);
 static void     createInitializer(EcCompiler *cp, EjsModule *mp);
-static void     emitNamespace(EcCompiler *cp, EjsNamespace *nsp);
 static void     discardStackItems(EcCompiler *cp, int preserve);
+static void     emitNamespace(EcCompiler *cp, EjsNamespace *nsp);
 static int      flushModule(MprFile *file, EcCodeGen *code);
 static void     genBinaryOp(EcCompiler *cp, EcNode *np);
 static void     genBlock(EcCompiler *cp, EcNode *np);
@@ -4943,7 +4942,13 @@ static void genCallSequence(EcCompiler *cp, EcNode *np)
             popStack(cp, 1);
             
         } else {
+#if POSSIBLE_BUG || 1
             ecEncodeOpcode(cp, EJS_OP_LOAD_GLOBAL);
+#else
+            //  See master branch for fix
+            processNodeGetValue(cp, left);
+            ecEncodeOpcode(cp, EJS_OP_DUP);
+#endif
             pushStack(cp, 1);
             processNodeGetValue(cp, left);
             argc = genCallArgs(cp, right);
@@ -5198,6 +5203,7 @@ static void genClass(EcCompiler *cp, EcNode *np)
     mprAssert(type);
 
     state->inClass = 1;
+    state->inFunction = 0;
 
     /*
      *  Op code to define the class. This goes into the module code buffer. DefineClass will capture the current scope
@@ -5221,8 +5227,8 @@ static void genClass(EcCompiler *cp, EcNode *np)
      *  module buffer (cp->currentModule) and will be run when the module is loaded. 
      *  BUG - CLASS INITIALIZATION ORDERING.
      */
-    mprAssert(state->code == state->currentModule->code);
-
+    state->code = state->currentModule->code;
+ 
     /*
      *  Create a code buffer for static initialization code and set it as the default buffer
      */
@@ -5570,12 +5576,9 @@ static void genDo(EcCompiler *cp, EcNode *np)
         processNode(cp, np->forLoop.body);
         discardStackItems(cp, mark);
     }
-
     if (np->forLoop.cond) {
         np->forLoop.condCode = state->code = allocCodeBuffer(cp);
         processNode(cp, np->forLoop.cond);
-        /* Leaves one item on the stack */
-        mprAssert(state->code->stackCount == 1);
     }
 
     /*
@@ -5696,9 +5699,10 @@ static void genFor(EcCompiler *cp, EcNode *np)
         np->forLoop.condCode = state->code = allocCodeBuffer(cp);
         state->needsValue = 1;
         processNode(cp, np->forLoop.cond);
-        /* Leaves one item on the stack */
         state->needsValue = 0;
-        mprAssert(cp->state->code->stackCount >= 1);
+        /* Leaves one item on the stack. But this will be cleared when compared */
+        mprAssert(state->code->stackCount >= 1);
+        popStack(cp, 1);
     }
 
     if (np->forLoop.body) {
@@ -5768,8 +5772,6 @@ static void genFor(EcCompiler *cp, EcNode *np)
      */
     setCodeBuffer(cp, code);
     if (np->forLoop.condCode) {
-        mprAssert(np->forLoop.condCode->stackCount >= 1);
-        setStack(cp, np->forLoop.condCode->stackCount);
         copyCodeBuffer(cp, state->code, np->forLoop.condCode);
         len = bodyLen + perLoopLen;
         if (condShortJump) {
@@ -5779,7 +5781,6 @@ static void genFor(EcCompiler *cp, EcNode *np)
             ecEncodeOpcode(cp, EJS_OP_BRANCH_FALSE);
             ecEncodeWord(cp, len);
         }
-        popStack(cp, 1);
     }
 
     /*
@@ -5918,10 +5919,10 @@ static void genForIn(EcCompiler *cp, EcNode *np)
         EJS_EX_CATCH | EJS_EX_ITERATION);
 
     /*
-     *  Patch break/continue statements
+     *  Patch break/continue statements.
      */
-    breakLabel = mprGetBufLength(state->code->buf);
     discardStackItems(cp, startMark);
+    breakLabel = mprGetBufLength(state->code->buf);
 
     patchJumps(cp, EC_JUMP_BREAK, breakLabel);
     patchJumps(cp, EC_JUMP_CONTINUE, 0);
@@ -6329,7 +6330,6 @@ static void genLiteral(EcCompiler *cp, EcNode *np)
          */
         ip = (EjsNumber*) np->literal.var;
 #if BLD_FEATURE_FLOATING_POINT
-        n = (int64) floor(ip->value);
         if (ip->value != floor(ip->value) || ip->value <= -MAXINT || ip->value >= MAXINT) {
             ecEncodeOpcode(cp, EJS_OP_LOAD_DOUBLE);
             ecEncodeDouble(cp, ip->value);
@@ -6761,7 +6761,6 @@ static void genSwitch(EcCompiler *cp, EcNode *np)
          */
         if (caseItem->caseLabel.kind == EC_SWITCH_KIND_CASE) {
             ecEncodeOpcode(cp, EJS_OP_COMPARE_STRICTLY_EQ);
-
             if (caseItem->jumpLength < 0x7f && cp->optimizeLevel > 0) {
                 ecEncodeOpcode(cp, EJS_OP_BRANCH_FALSE_8);
                 ecEncodeByte(cp, caseItem->jumpLength);
@@ -6863,7 +6862,6 @@ static void genTry(EcCompiler *cp, EcNode *np)
     int         next, len, numStack;
 
     ENTER(cp);
-
 
     state = cp->state;
     fun = state->currentFunction;
@@ -8103,8 +8101,7 @@ static void addModule(EcCompiler *cp, EjsModule *mp)
 }
 
 
-//  8
-static int level = 2;
+static int level = 8;
 
 static void pushStack(EcCompiler *cp, int count)
 {
@@ -9370,7 +9367,7 @@ static int decodeNumber(EcInput *input, int radix, int length)
             }
         } else if (radix == 16) {
             lowerc = tolower(c);
-            if (!isdigit(c) && !('a' <= c && c <= 'f')) {
+            if (!isdigit(lowerc) && !('a' <= lowerc && lowerc <= 'f')) {
                 break;
             }
         }
@@ -9513,9 +9510,10 @@ static void setTokenCurrentLine(EcToken *tp)
     tp->currentLine = tp->stream->currentLine;
     tp->lineNumber = tp->stream->lineNumber;
     /*
-     *  The column is less one because we have already consumed one character.
+        The column is less one because we have already consumed one character.
      */
-    tp->column = tp->stream->column - 1;
+    tp->column = max(tp->stream->column - 1, 0);
+    mprAssert(tp->column >= 0);
     tp->filename = tp->stream->name;
 }
 
@@ -9612,6 +9610,7 @@ static void putBackChar(EcStream *stream, int c)
         if (c == '\n') {
             stream->currentLine = stream->lastLine;
             stream->column = stream->lastColumn + 1;
+            mprAssert(stream->column >= 0);
             stream->lineNumber--;
             mprAssert(stream->lineNumber >= 0);
         }
@@ -9831,7 +9830,7 @@ static int  createPropertySection(EcCompiler *cp, EjsVar *block, int slotNum, Ej
 static int  createSection(EcCompiler *cp, EjsVar *block, int slotNum);
 static int  reserveRoom(EcCompiler *cp, int room);
 static int  sum(cchar *name, int value);
-static int  swapShort(EcCompiler *cp, int word);
+static int  swapWord(EcCompiler *cp, int word);
 
 #if BLD_FEATURE_EJS_DOC
 static int  createDocSection(EcCompiler *cp, EjsVar *block, int slotNum, EjsTrait *trait);
@@ -9845,8 +9844,8 @@ int ecCreateModuleHeader(EcCompiler *cp)
     EjsModuleHdr    hdr;
 
     memset(&hdr, 0, sizeof(hdr));
-    hdr.magic = swapShort(cp, EJS_MODULE_MAGIC);
-    hdr.fileVersion = EJS_MODULE_VERSION;
+    hdr.magic = swapWord(cp, EJS_MODULE_MAGIC);
+    hdr.fileVersion = swapWord(cp, EJS_MODULE_VERSION);
 
     if (cp->empty) {
         hdr.flags |= EJS_MODULE_INTERP_EMPTY;
@@ -10857,7 +10856,7 @@ int ecEncodeDouble(EcCompiler *cp, double value)
         mprAssert(0);
         return EJS_ERR;
     }
-    len = ejsEncodeDouble((uchar*) mprGetBufEnd(buf), value);
+    len = ejsEncodeDouble(cp->ejs, (uchar*) mprGetBufEnd(buf), value);
     mprAdjustBufEnd(buf, len);
     return 0;
 }
@@ -10958,6 +10957,7 @@ void ecAdjustCodeLength(EcCompiler *cp, int adj)
 }
 
 
+#if UNUSED
 static int swapShort(EcCompiler *cp, int word)
 {
     if (mprGetEndian(cp) == MPR_LITTLE_ENDIAN) {
@@ -10966,9 +10966,8 @@ static int swapShort(EcCompiler *cp, int word)
     word = ((word & 0xFFFF) << 16) | ((word & 0xFFFF0000) >> 16);
     return ((word & 0xFF) << 8) | ((word & 0xFF00) >> 8);
 }
+#endif
 
-
-#if UNUSED
 static int swapWord(EcCompiler *cp, int word)
 {
     if (mprGetEndian(cp) == MPR_LITTLE_ENDIAN) {
@@ -10976,7 +10975,6 @@ static int swapWord(EcCompiler *cp, int word)
     }
     return ((word & 0xFF000000) >> 24) | ((word & 0xFF0000) >> 8) | ((word & 0xFF00) << 8) | ((word & 0xFF) << 24);
 }
-#endif
 
 /*
  *  Simple checksum of name and slots. Not meant to be rigorous.
@@ -13386,9 +13384,13 @@ struct EcNode *parseXMLAttributes(EcCompiler *cp, EcNode *np)
             return LEAVE(cp, expected(cp, "}"));
         }
 
-    } else while (tid == T_COLON || tid == T_ID) {
-        np = parseXMLAttribute(cp, np);
-        tid = peekToken(cp);
+    } else {
+        while (tid != T_GT && tid != T_SLASH_GT) {
+            if ((np = parseXMLAttribute(cp, np)) == 0) {
+                break;
+            }
+            tid = peekToken(cp);
+        }
     }
     return LEAVE(cp, np);
 }
@@ -13839,6 +13841,7 @@ static EcNode *parsePropertyOperator(EcCompiler *cp)
         case T_ID:
         case T_STRING:
         case T_RESERVED_NAMESPACE:
+        case T_MUL:
             if (cp->token->groupMask & G_RESERVED) {
                 np = appendNode(np, parseIdentifier(cp));
             } else {
@@ -16361,7 +16364,7 @@ static EcNode *parseReturnStatement(EcCompiler *cp)
 
     } else {
         if (cp->state->currentFunctionNode == 0) {
-            np = parseError(cp, "Return statemeout outside function");
+            np = parseError(cp, "Return statement outside function");
 
         } else {
             np = createNode(cp, N_RETURN);
@@ -17045,6 +17048,7 @@ static EcNode *parseAnnotatableDirective(EcCompiler *cp, EcNode *attributes)
         break;
 
     case T_CLASS:
+#if OLD && UNUSED
         if (state->inClass == 0) {
             /* Nested classes are not supported */
             np = parseClassDefinition(cp, attributes);
@@ -17052,6 +17056,9 @@ static EcNode *parseAnnotatableDirective(EcCompiler *cp, EcNode *attributes)
             getToken(cp);
             np = unexpected(cp);
         }
+#else
+        np = parseClassDefinition(cp, attributes);
+#endif
         break;
 
     case T_INTERFACE:
@@ -17160,7 +17167,7 @@ static EcNode *parseAttribute(EcCompiler *cp)
     np = 0;
     inClass = (cp->state->inClass) ? 1 : 0;
 
-    if (state->currentFunctionNode /* || inInterface */) {
+    if (state->inFunction) {
         np = parseNamespaceAttribute(cp);
         return LEAVE(cp, np);
     }
@@ -17297,6 +17304,7 @@ static EcNode *parseNamespaceAttribute(EcCompiler *cp)
     switch (cp->peekToken->tokenId) {
     case T_RESERVED_NAMESPACE:
         if (!inClass && (subId == T_PRIVATE || subId ==  T_PROTECTED)) {
+            getToken(cp);
             return LEAVE(cp, unexpected(cp));
         }
         qualifier = parseReservedNamespace(cp);
@@ -18563,6 +18571,7 @@ static EcNode *parseClassBody(EcCompiler *cp)
     EcNode      *np;
 
     ENTER(cp);
+    cp->state->inFunction = 0;
 
     if (peekToken(cp) != T_LBRACE) {
         getToken(cp);
@@ -19594,12 +19603,13 @@ static char *makeHighlight(EcCompiler *cp, char *src, int col)
     /*
      *  Cover the case where the ^ must go after the end of the input
      */
-    dest[col] = '^';
-    if (p == &dest[col]) {
-        ++p;
+    if (col >= 0) {
+        dest[col] = '^';
+        if (p == &dest[col]) {
+            ++p;
+        }
+        *p = '\0';
     }
-    *p = '\0';
-
     return dest;
 }
 
@@ -19839,7 +19849,6 @@ static EcNode *createNode(EcCompiler *cp, int kind)
         }
         np->lineNumber = token->lineNumber;
         np->column = token->column;
-
         mprLog(np, 9, "At line %d, token \"%s\", line %s", token->lineNumber, token->text, np->currentLine);
     }
 

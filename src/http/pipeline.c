@@ -135,7 +135,7 @@ void maCreatePipeline(MaConn *conn)
         mprAddItem(resp->outputPipeline, resp->handler);
         for (next = 0; (filter = mprGetNextItem(location->outputStages, &next)) != 0; ) {
             if (filter->stage == http->authFilter) {
-                if (req->auth->type == 0 && req->auth->type == 0) {
+                if (req->auth->type == 0) {
                     continue;
                 }
             }
@@ -164,10 +164,11 @@ void maCreatePipeline(MaConn *conn)
     connector = location->connector;
 #if BLD_FEATURE_SEND
     if (resp->handler == http->fileHandler && connector == http->netConnector && 
-            http->sendConnector && !req->ranges && !host->secure && resp->chunkSize <= 0) {
+            http->sendConnector && !req->ranges && !host->secure && resp->chunkSize <= 0 && !conn->trace) {
         /*
-         *  Switch (transparently) to the send connector if serving whole static file content via the net connector
-         */
+            Switch (transparently) to the send connector if serving whole static file content via the net connector
+            and not tracing.
+        */
         connector = http->sendConnector;
     }
 #endif
@@ -802,7 +803,7 @@ static void setEnv(MaConn *conn)
             mprGetPathInfo(conn, resp->filename, info);
         }
         if (info->valid) {
-            resp->etag = mprAsprintf(resp, -1, "%x-%Lx-%Lx", info->inode, info->size, info->mtime);
+            resp->etag = mprAsprintf(resp, -1, "\"%x-%Lx-%Lx\"", info->inode, info->size, info->mtime);
         }
     }
 

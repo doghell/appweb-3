@@ -75,7 +75,7 @@ class EjsWeb {
             config = {}
         }
         ejsweb = basename(App.args[0]).trimEnd(".exe").toString()
-        if (ejsweb == "ejsweb") {
+        if (ejsweb == "ejsweb" || ejsweb == "ejsweb.mod") {
             compiler = "ejsc"
         } else {
             compiler = "ajsc"
@@ -93,7 +93,7 @@ class EjsWeb {
              *  Be smart and map ajsc/ejsc to the right program for use by Appweb or Ejscript
              *  Just do for debug
              */
-            if (ejsweb == "ejsweb") {
+            if (ejsweb == "ejsweb" || ejsweb == "ejsweb.mod") {
                 config.compiler["debug"].command = config.compiler["debug"].command.replace(/ajsc/, "ejsc")
             } else {
                 config.compiler["debug"].command = config.compiler["debug"].command.replace(/ejsc/, "ajsc")
@@ -418,14 +418,14 @@ class EjsWeb {
 
         default:
             for each (f in args) {
-                compileItem(Path(f).relative)
+                compileItem(Path(f).relative.normalize)
             }
         }
     }
 
     function compileItem(file: Path) {
         if (file.isDir) {
-            for each (f in file.files(true)) {
+            for each (f in file.normalize.files(true)) {
                 compileItem(f)
             }
         } else {
@@ -495,7 +495,10 @@ class EjsWeb {
     }
 
     function buildWebPage(file: Path, compile: Boolean = true, isView: Boolean = false): String {
-        file = file.portable
+        /*
+            CHANGE - not for windows
+            file = file.portable
+         */
         let ext = file.extension
         if (ext == "") {
             file = file.joinExt("ejs")
@@ -878,6 +881,7 @@ class EjsWeb {
         }
 
         for each (f in files) {
+            if (f == null) break
             let base = basename(f).toString()
             if (!base.match(/^([0-9]+).*es/)) {
                 continue
@@ -1106,6 +1110,8 @@ class EjsWeb {
             data = data.replace(/NEXT_ACTION/, actionData + "NEXT_ACTION")
         }
         data = data.replace(/NEXT_ACTION/, "")
+        data = data.replace(/\${MODEL}/g, name.toPascal())
+        data = data.replace(/\${LOWER_MODEL}/g, name.toLower())
         makeFile(path, data, "Controller")
     }
 
@@ -2048,7 +2054,7 @@ class EjsParser {
 
         if (layoutPage != undefined && layoutPage != file) {
             let layoutText: String = new EjsParser().parse(layoutPage, appBaseDir, layoutPage)
-            return layoutText.replace(ContentPattern, out.toString())
+            return layoutText.replace(ContentPattern, out.toString().replace(/\$/g, "$$$$"))
         }
         return out.toString()
     }

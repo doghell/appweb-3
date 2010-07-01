@@ -140,7 +140,7 @@ static void addPacketForNet(MaQueue *q, MaPacket *packet)
     MaResponse  *resp;
     MaConn      *conn;
     MprIOVec    *iovec;
-    int         index;
+    int         index, mask;
 
     conn = q->conn;
     resp = conn->response;
@@ -155,6 +155,10 @@ static void addPacketForNet(MaQueue *q, MaPacket *packet)
     }
     if (maGetPacketLength(packet) > 0) {
         addToNetVector(q, mprGetBufStart(packet->content), mprGetBufLength(packet->content));
+    }
+    mask = MA_TRACE_RESPONSE | ((packet->flags & MA_PACKET_HEADER) ? MA_TRACE_HEADERS : MA_TRACE_BODY);
+    if (maShouldTrace(conn, mask)) {
+        maTraceContent(conn, packet, 0, resp->bytesWritten, mask);
     }
 }
 

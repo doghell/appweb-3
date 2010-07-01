@@ -35,7 +35,7 @@ for: comparison, concatenation, copying, searching, conversion, matching, replac
 <table class='itemTable' summary='properties'>
    <tr><th>Qualifiers</th><th>Property</th><th>Type</th><th width='95%'>Description</th></tr>
 <a name='isAlpha'></a>
-   <tr><td nowrap align='left'>public get </td><td>isAlpha</td><td><a href='intrinsic-Boolean.html'>Boolean</a></td><td>Is there is at least one character in the string and all characters are alphabetic. </td></tr>
+   <tr><td nowrap align='left'>public get </td><td>isAlpha</td><td><a href='intrinsic-Boolean.html'>Boolean</a></td><td>Is there is at least one character in the string and all characters are alphabetic. Uses latin-1 for comparisions.</td></tr>
 <a name='isDigit'></a>
    <tr><td nowrap align='left'>public get </td><td>isDigit</td><td><a href='intrinsic-Boolean.html'>Boolean</a></td><td>Is there is at least one character in the string and all characters are digits. </td></tr>
 <a name='isLower'></a>
@@ -84,10 +84,10 @@ for: comparison, concatenation, copying, searching, conversion, matching, replac
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toCamel'><b>toCamel</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Copy the string into a new string and lower case the first character if there is one.</td></tr>
    <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toJSON'><b>toJSON</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to an equivalent JSON encoding.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#tokenize'><b>tokenize</b></a>(format: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Scan the input and tokenize according to a string format specifier.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toLower'><b>toLower</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to lower case.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toLower'><b>toLower</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to lower case.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toPascal'><b>toPascal</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Copy the string into a new string and capitalize the first character if there is one.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>This function converts an object to a string representation.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toUpper'><b>toUpper</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to upper case.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>This function converts an object to a string representation.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#toUpper'><b>toUpper</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the string to upper case.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#trim'><b>trim</b></a>(str: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Returns a trimmed copy of the string.</td></tr>
 </table>
 
@@ -105,7 +105,7 @@ for: comparison, concatenation, copying, searching, conversion, matching, replac
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>arg: <a href='intrinsic-Object.html'>Object</a> </td><td>The argument to format. Pass an array if multiple arguments are required.</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
-<dd>-1 if less than, zero if equal and 1 if greater than.</dd></dl>
+<dd>Formatted string.</dd></dl>
 <dl><dt>Specified</dt>
 <dd>ejscript-1.0</dd></dl>
 <dl><dt>Example</dt>
@@ -225,12 +225,13 @@ for: comparison, concatenation, copying, searching, conversion, matching, replac
 </div>
 <div class='apiDetail'>
 <p>Format arguments as a string.</p>
-<dl><dt>Description</dt><dd>Use the string as a format specifier.</dd></dl>
+<dl><dt>Description</dt><dd>Use the string as a format specifier. The format specifier has the form:
+%[-+ #,][width][precision][type]. See printf(1) for the meaning of the various fields.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>args: <a href='intrinsic-Array.html'>Array</a> </td><td>Array containing the data to format.</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
-<dd>-1 if less than, zero if equal and 1 if greater than.</dd></dl>
+<dd>Formatted string.</dd></dl>
 <dl><dt>Specified</dt>
 <dd>ejscript-1.0</dd></dl>
 <dl><dt>Example</dt>
@@ -301,7 +302,7 @@ the specified element.</dd></dl>
 <p>Search right to left for a substring starting at a given index.</p>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>pattern: <a href='intrinsic-String.html'>String</a> </td><td>The string to search for.</td></tr><tr class='param'><td class='param'>location: <a href='intrinsic-Number.html'>Number</a> </td><td>The integer starting to start the search or a range to search in. [default: -1]</td></tr></table></dd>
+<tr class='param'><td class='param'>pattern: <a href='intrinsic-String.html'>String</a> </td><td>The string to search for.</td></tr><tr class='param'><td class='param'>location: <a href='intrinsic-Number.html'>Number</a> </td><td>The character index at which to start the search. [default: -1]</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>Return the starting index of the last match found.</dd></dl>
 </div>
@@ -342,7 +343,7 @@ the specified element.</dd></dl>
 </div>
 <div class='apiDetail'>
 <p>Create a new string with all nonprintable characters replaced with unicode hexadecimal equivalents (e.g.</p>
-<dl><dt>Description</dt><dd>uNNNN).</dd></dl>
+<dl><dt>Description</dt><dd>\uNNNN).</dd></dl>
 <dl><dt>Returns</dt>
 <dd>The new string.</dd></dl>
 <dl><dt>Specified</dt>
@@ -367,10 +368,10 @@ the specified element.</dd></dl>
 </div>
 <div class='apiDetail'>
 <p>Remove characters from a string.</p>
-<dl><dt>Description</dt><dd>Remove the elements from.</dd></dl>
+<dl><dt>Description</dt><dd>Remove the elements from <a href='#start'>start</a> to <a href='#end'>end</a> inclusive.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>start: <a href='intrinsic-Number.html'>Number</a> </td><td>Numeric index of the first element to remove. Negative indicies measure from the end of the string. -1 is the last character element.</td></tr><tr class='param'><td class='param'>end: <a href='intrinsic-Number.html'>Number</a> </td><td>Numeric index of one past the last element to remove. [default: -1]</td></tr></table></dd>
+<tr class='param'><td class='param'>start: <a href='intrinsic-Number.html'>Number</a> </td><td>Numeric index of the first element to remove. Negative indicies measure from the end of the string. The -1 index refers to the last character element.</td></tr><tr class='param'><td class='param'>end: <a href='intrinsic-Number.html'>Number</a> </td><td>Numeric index of one past the last element to remove. [default: -1]</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>A new string with the characters removed.</dd></dl>
 <dl><dt>Specified</dt>
@@ -431,10 +432,7 @@ and replace it with the replace text. If the pattern is a string, only the first
 <p>Extract a substring.</p>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>start: <a href='intrinsic-Number.html'>Number</a> </td><td>The position of the first character to slice.</td></tr><tr class='param'><td class='param'>end: <a href='intrinsic-Number.html'>Number</a> </td><td>The position one after the last character. Negative indicies are measured from the end of the string. [default: -1 ]</td></tr><tr class='param'><td class='param'>step: <a href='intrinsic-Number.html'>Number</a> </td><td>Extract every "step" character. [default: 1]</td></tr></table></dd>
-</dl><dl><dt>Throws</dt><dd>
-<a href='intrinsic-OutOfBoundsError.html'>OutOfBoundsError</a>: If the range boundaries exceed the string limits.  
-</dd>
+<tr class='param'><td class='param'>start: <a href='intrinsic-Number.html'>Number</a> </td><td>The position of the first character to slice.</td></tr><tr class='param'><td class='param'>end: <a href='intrinsic-Number.html'>Number</a> </td><td>The position one after the last character. Negative indicies are measured from the end of the string. [default: -1 ]</td></tr><tr class='param'><td class='param'>step: <a href='intrinsic-Number.html'>Number</a> </td><td>Extract every "step" character. Step can be negative. [default: 1]</td></tr></table></dd>
 </dl></div>
 </div>
 <hr />
@@ -492,16 +490,14 @@ and replace it with the replace text. If the pattern is a string, only the first
 </div>
 <div class='apiDetail'>
 <p>Extract a substring.</p>
-<dl><dt>Description</dt><dd>Similar to slice but only allows positive indicies.</dd></dl>
+<dl><dt>Description</dt><dd>Similar to slice but only allows positive indicies.
+If the end index is larger than start, then the effect of substring is as if the two arguments were swapped.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
 <tr class='param'><td class='param'>startIndex: <a href='intrinsic-Number.html'>Number</a> </td><td>Integer location to start copying.</td></tr><tr class='param'><td class='param'>end: <a href='intrinsic-Number.html'>Number</a> </td><td>Postitive index of one past the last character to extract. [default: -1]</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>Returns a new string.</dd></dl>
-<dl><dt>Throws</dt><dd>
-<a href='intrinsic-OutOfBoundsError.html'>OutOfBoundsError</a>: If the starting index and/or the length exceed the string's limits.  
-</dd>
-</dl></div>
+</div>
 </div>
 <hr />
 <a name='times'></a>
@@ -573,14 +569,11 @@ character is not a character or if it is already lower there is no change.</dd><
 <hr />
 <a name='toLower'></a>
 <div class='api'>
-<div class='apiSig'>  public  toLower(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>  public  toLower(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>Convert the string to lower case.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>Returns a new lower case version of the string.</dd></dl>
 <dl><dt>Specified</dt>
 <dd>ejscript-1.0</dd></dl>
@@ -604,30 +597,24 @@ character is not a character or if it is already capitalized there is no change.
 <hr />
 <a name='toString'></a>
 <div class='api'>
-<div class='apiSig'>override   public  toString(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>override   public  toString(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>This function converts an object to a string representation.</p>
 <dl><dt>Description</dt><dd>Types typically override this to provide 
 the best string representation.</dd></dl>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>A string representation of the object. For Objects "[object className]" will be returned,  where className is set to the name of the class on which the object was based.</dd></dl>
 </div>
 </div>
 <hr />
 <a name='toUpper'></a>
 <div class='api'>
-<div class='apiSig'>  public  toUpper(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>  public  toUpper(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>Convert the string to upper case.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>Returns a new upper case version of the string.</dd></dl>
 <dl><dt>Specified</dt>
 <dd>ejscript-1.0</dd></dl>

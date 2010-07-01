@@ -158,8 +158,9 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
     }
     resp->headerSize = mprGetBufLength(buf);
     resp->flags |= MA_RESP_HEADERS_CREATED;
-
+#if UNUSED
     mprLog(conn, 3, "\n@@@ Response => \n%s", mprGetBufStart(buf));
+#endif
 }
 
 
@@ -406,7 +407,7 @@ void maSetCookie(MaConn *conn, cchar *name, cchar *value, cchar *path, cchar *co
     if (lifetime > 0) {
         mprDecodeUniversalTime(resp, &tm, conn->time + (lifetime * MPR_TICKS_PER_SEC));
         expiresAtt = "; expires=";
-        expires = mprFormatTime(resp, MPR_RFC_DATE, &tm);
+        expires = mprFormatTime(resp, MPR_HTTP_DATE, &tm);
 
     } else {
         expires = expiresAtt = "";

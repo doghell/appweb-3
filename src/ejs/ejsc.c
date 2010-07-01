@@ -4,7 +4,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.0.
+ *  Embedthis Ejscript 1.0.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -35,7 +35,11 @@
 static int preloadModules(EcCompiler *cp, MprList *modules);
 
 
-MAIN(ejscMain, int argc, char **argv)
+#if BLD_APPWEB_PRODUCT
+    MAIN(ajscMain, int argc, char **argv)
+#else
+    MAIN(ejscMain, int argc, char **argv)
+#endif
 {
     Mpr             *mpr;
     Ejs             *ejs;
@@ -314,6 +318,12 @@ MAIN(ejscMain, int argc, char **argv)
     if (cp->errorCount > 0) {
         err++;
     }
+#if VXWORKS
+    mprFree(ejs);
+    if (mprStop(mpr)) {
+        mprFree(mpr);
+    }
+#endif
     return err;
 }
 

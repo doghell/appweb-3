@@ -546,14 +546,16 @@ int maParseConfig(MaServer *server, cchar *configFile)
          *  matching directory.
          */
         for (nextAlias = 0; (alias = mprGetNextItem(hp->aliases, &nextAlias)) != 0; ) {
-            // mprLog(hp, 0, "Alias \"%s\" %s", alias->prefix, alias->filename);
-            path = maMakePath(hp, alias->filename);
-            bestDir = maLookupBestDir(hp, path);
-            if (bestDir == 0) {
-                bestDir = maCreateDir(hp, alias->filename, stack[0].dir);
-                maInsertDir(hp, bestDir);
+            if (alias->filename) {
+                // mprLog(hp, 0, "Alias \"%s\" %s", alias->prefix, alias->filename);
+                path = maMakePath(hp, alias->filename);
+                bestDir = maLookupBestDir(hp, path);
+                if (bestDir == 0) {
+                    bestDir = maCreateDir(hp, alias->filename, stack[0].dir);
+                    maInsertDir(hp, bestDir);
+                }
+                mprFree(path);
             }
-            mprFree(path);
         }
 
         /*
@@ -601,7 +603,8 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
     MprHash         *hp;
     char            ipAddrPort[MPR_MAX_IP_ADDR_PORT];
     char            *name, *path, *prefix, *cp, *tok, *ext, *mimeType, *url, *newUrl, *extensions, *codeStr, *hostName;
-    int             port, rc, code, processed, num, flags, colonCount, len;
+    char            *items, *include, *exclude;
+    int             port, rc, code, processed, num, flags, colonCount, len, mask, level;
 
     mprAssert(state);
     mprAssert(key);
@@ -1055,6 +1058,41 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
 #endif
             return 1;
 
+        } else if (mprStrcmpAnyCase(key, "LogTrace") == 0) {
+            cp = mprStrTok(value, " \t", &tok);
+            level = atoi(cp);
+            if (level < 0 || level > 9) {
+                mprError(server, "Bad LogTrace level %d, must be 0-9", level);
+                return MPR_ERR_BAD_SYNTAX;
+            }
+            items = mprStrTok(0, "\n", &tok);
+            mprStrLower(items);
+            mask = 0;
+            if (strstr(items, "headers")) {
+                mask |= MA_TRACE_HEADERS;
+            }
+            if (strstr(items, "body")) {
+                mask |= MA_TRACE_BODY;
+            }
+            if (strstr(items, "request")) {
+                mask |= MA_TRACE_REQUEST;
+            }
+            if (strstr(items, "response")) {
+                mask |= MA_TRACE_RESPONSE;
+            }
+            maSetHostTrace(host, level, mask);
+            return 1;
+
+        } else if (mprStrcmpAnyCase(key, "LogTraceFilter") == 0) {
+            cp = mprStrTok(value, " \t", &tok);
+            len = atoi(cp);
+            include = mprStrTok(0, " \t", &tok);
+            exclude = mprStrTok(0, " \t", &tok);
+            include = mprStrTrim(include, "\"");
+            exclude = mprStrTrim(exclude, "\"");
+            maSetHostTraceFilter(host, len, include, exclude);
+            return 1;
+
         } else if (mprStrcmpAnyCase(key, "LoadModulePath") == 0) {
             value = mprStrTrim(value, "\"");
             path = mprStrcat(server, -1, value, MPR_SEARCH_SEP, mprGetAppDir(server), NULL);
@@ -1397,24 +1435,25 @@ char *maReplaceReferences(MaHost *host, cchar *str)
     char    *result;
 
     buf = mprCreateBuf(host, 0, 0);
+    if (str) {
+        for (src = (char*) str; *src; ) {
+            if (*src == '$') {
+                ++src;
+                if (matchRef("DOCUMENT_ROOT", &src) && host->documentRoot) {
+                    mprPutStringToBuf(buf, host->documentRoot);
+                    continue;
 
-    for (src = (char*) str; *src; ) {
-        if (*src == '$') {
-            ++src;
-            if (matchRef("DOCUMENT_ROOT", &src) && host->documentRoot) {
-                mprPutStringToBuf(buf, host->documentRoot);
-                continue;
+                } else if (matchRef("SERVER_ROOT", &src) && host->server->serverRoot) {
+                    mprPutStringToBuf(buf, host->server->serverRoot);
+                    continue;
 
-            } else if (matchRef("SERVER_ROOT", &src) && host->server->serverRoot) {
-                mprPutStringToBuf(buf, host->server->serverRoot);
-                continue;
-
-            } else if (matchRef("PRODUCT", &src)) {
-                mprPutStringToBuf(buf, BLD_PRODUCT);
-                continue;
+                } else if (matchRef("PRODUCT", &src)) {
+                    mprPutStringToBuf(buf, BLD_PRODUCT);
+                    continue;
+                }
             }
+            mprPutCharToBuf(buf, *src++);
         }
-        mprPutCharToBuf(buf, *src++);
     }
     mprAddNullToBuf(buf);
     result = mprStealBuf(host, buf);

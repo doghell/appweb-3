@@ -657,6 +657,11 @@ typedef struct MaMimeType {
 #define MA_HOST_NAMED_VHOST     0x4         /* Named virtual host */
 #define MA_HOST_NO_TRACE        0x40        /* Prevent use of TRACE */
 
+#define MA_TRACE_REQUEST        0x1         /* Trace requests */
+#define MA_TRACE_RESPONSE       0x2         /* Trace responses */
+#define MA_TRACE_HEADERS        0x4         /* Trace headers */
+#define MA_TRACE_BODY           0x8         /* Trace body */
+
 /**
  *  Host Object
  *  A Host object represents a single listening HTTP connection endpoint. This may be a default server or a
@@ -699,6 +704,13 @@ typedef struct MaHost {
     int             keepAliveTimeout;       /**< Timeout for keep-alive */
     int             maxKeepAlive;           /**< Max keep-alive requests */
 
+    int             connCount;              /**< Connect sequence number */
+    int             traceLevel;             /**< Trace activation level */
+    int             traceMaxLength;         /**< Maximum trace file length (if known) */
+    int             traceMask;              /**< Request/response trace mask */
+    MprHashTable    *traceInclude;          /**< Extensions to include in trace */
+    MprHashTable    *traceExclude;          /**< Extensions to exclude from trace */
+
     MprHashTable    *mimeTypes;             /**< Hash table of mime types (key is extension) */
     MprTime         now;                    /**< When was the current date last computed */
     char            *currentDate;           /**< Date string for HTTP response headers */
@@ -734,21 +746,25 @@ extern int          maAddLocation(MaHost *host, MaLocation *newLocation);
 extern int          maInsertDir(MaHost *host, MaDir *newDir);
 extern int          maOpenMimeTypes(MaHost *host, cchar *path);
 extern void         maRemoveConn(MaHost *host, struct MaConn *conn);
+extern int          maSetupTrace(MaHost *host, cchar *ext);
 extern void         maSetMaxKeepAlive(MaHost *host, int timeout);
-extern int          maSetMimeActionProgram(MaHost *host, cchar *mimetype, cchar *actionProgram);
-extern int          maStartHost(MaHost *host);
-extern int          maStopHost(MaHost *host);
 extern void         maSetDocumentRoot(MaHost *host, cchar *dir) ;
+extern void         maSetHostFilter(MaHost *host, int length, cchar *include, cchar *exclude);
 extern void         maSetHostIpAddrPort(MaHost *host, cchar *ipAddrPort);
 extern void         maSetHostName(MaHost *host, cchar *name);
+extern void         maSetHostTrace(MaHost *host, int level, int mask);
+extern void         maSetHostTraceFilter(MaHost *host, int len, cchar *include, cchar *exclude);
 extern void         maSetHttpVersion(MaHost *host, int version);
 extern void         maSetKeepAlive(MaHost *host, bool on);
 extern void         maSetKeepAliveTimeout(MaHost *host, int timeout);
+extern int          maSetMimeActionProgram(MaHost *host, cchar *mimetype, cchar *actionProgram);
 extern void         maSetNamedVirtualHost(MaHost *host);
 extern void         maSecureHost(MaHost *host, struct MprSsl *ssl);
 extern void         maSetTimeout(MaHost *host, int timeout);
 extern void         maSetTraceMethod(MaHost *host, bool on);
 extern void         maSetVirtualHost(MaHost *host);
+extern int          maStartHost(MaHost *host);
+extern int          maStopHost(MaHost *host);
 
 /******************************************************************************/
 /**
@@ -885,14 +901,14 @@ extern int maJoinPacket(MaPacket *packet, MaPacket *other);
  *      stages can digest their contents. If a packet is too large for the queue maximum size, it should be split.
  *      When the packet is split, a new packet is created containing the data after the offset. Any suffix headers
  *      are moved to the new packet.
- *  @param conn MaConn connection object
+ *  @param ctx A conn or request memory context object to own the packet.
  *  @param packet Packet to split
  *  @param offset Location in the original packet at which to split
  *  @return New MaPacket object containing the data after the offset. No need to free, unless you have a very long
  *      running request. Otherwise the packet memory will be released automatically when the request completes.
  *  @ingroup MaPacket
  */
-extern MaPacket *maSplitPacket(struct MaConn *conn, MaPacket *packet, int offset);
+extern MaPacket *maSplitPacket(MprCtx ctx, MaPacket *packet, int offset);
 
 #if DOXYGEN
 /**
@@ -1524,7 +1540,6 @@ typedef struct MaConn {
     MprSocket       *sock;                  /**< Underlying socket handle */
     MaHost          *originalHost;          /**< Owning host for this connection. May be changed by Host header  */
     MaPacket        *input;                 /**< Header packet */
-    MaPacket        *freePackets;           /**< Free list of packets */
     char            *remoteIpAddr;          /**< Remote client IP address (REMOTE_ADDR) */
     MprTime         started;                /**< When the connection started */
     MprTime         expire;                 /**< When the connection should expire */
@@ -1534,7 +1549,9 @@ typedef struct MaConn {
     int             keepAliveCount;         /**< Count of remaining keep alive requests for this connection */
     int             protocol;               /**< HTTP protocol version 0 == HTTP/1.0, 1 == HTTP/1.1*/
     int             remotePort;             /**< Remote client IP port number */
+    int             seqno;                  /**< Unique connection sequence number */
     int             timeout;                /**< Timeout period in msec */
+    int             trace;                  /**< Current request should be traced */
 #if BLD_FEATURE_MULTITHREAD
     MprMutex        *mutex;                 /**< Optional multi-thread sync */
 #endif
@@ -1559,6 +1576,9 @@ extern bool maServiceQueues(MaConn *conn);
 extern void maSetRangeDimensions(MaConn *conn, int length);
 extern void maSetRequestGroup(MaConn *conn, cchar *group);
 extern void maSetRequestUser(MaConn *conn, cchar *user);
+
+#define maShouldTrace(conn, mask) ((conn->trace & (mask)) == (mask))
+extern void maTraceContent(MaConn *conn, MaPacket *packet, int size, int offset, int mask);
 
 /********************************** MaRequest *********************************/
 /*
@@ -1602,8 +1622,7 @@ typedef struct MaRequest {
     MprHeap         *arena;                 /**< Request memory arena */
     struct MaConn   *conn;                  /**< Connection object */
     MaPacket        *headerPacket;          /**< HTTP headers */
-    MaPacket        *packet;                /**< Current input packet */
-
+    MaPacket        *freePackets;           /**< List of free packets */
     int             length;                 /**< Declared content length (ENV: CONTENT_LENGTH) */
     int             chunkState;             /**< Chunk encoding state */
     int             chunkSize;              /**< Size of the next chunk */
@@ -1811,7 +1830,6 @@ typedef struct MaResponse {
     MaStage         *handler;               /**< Response handler */
     MaStage         *connector;             /**< Response connector */
     MprList         *outputPipeline;        /**< Output processing */
-    MaPacket        *freePackets;           /**< List of free packets */
     void            *handlerData;           /**< Data reserved for the handler */
 
     int             flags;                  /**< Response flags */
@@ -1844,7 +1862,7 @@ typedef struct MaResponse {
 
 } MaResponse;
 
-//DDD
+
 /**
  *  Set a response cookie
  *  @description Define a cookie to send in the response Http header

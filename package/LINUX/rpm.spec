@@ -4,13 +4,13 @@
 Summary: !!BLD_NAME!! -- Embeddable HTTP Web Server
 Name: !!BLD_PRODUCT!!
 Version: !!BLD_VERSION!!
-Release: !!BLD_NUMBER!!
+Release: !!BLD_NUMBER_ONLY!!
 License: Dual GPL/commercial
 Group: Applications/Internet
 URL: http://www.appwebserver.org
 Distribution: Embedthis
 Vendor: Embedthis Software
-BuildRoot: !!ROOT_DIR!!/RPM/BUILDROOT/!!BLD_PRODUCT!!-!!BLD_VERSION!!-!!BLD_NUMBER!!.!!BLD_CPU!!
+BuildRoot: !!ROOT_DIR!!/RPM/BUILDROOT/!!BLD_PRODUCT!!-!!BLD_VERSION!!-!!BLD_NUMBER_ONLY!!.!!BLD_CPU!!
 AutoReqProv: no
 
 %description
@@ -21,9 +21,9 @@ Embedthis Appweb is an embeddable HTTP Web Server
 %build
 
 %install
-    mkdir -p !!ROOT_DIR!!/RPM/BUILDROOT/!!BLD_PRODUCT!!-!!BLD_VERSION!!-!!BLD_NUMBER!!.!!BLD_CPU!!
+    mkdir -p !!ROOT_DIR!!/RPM/BUILDROOT/!!BLD_PRODUCT!!-!!BLD_VERSION!!-!!BLD_NUMBER_ONLY!!.!!BLD_CPU!!
     for dir in BIN DEV SRC ; do
-        cp -r !!ROOT_DIR!!/${dir}/*  !!ROOT_DIR!!/RPM/BUILDROOT/!!BLD_PRODUCT!!-!!BLD_VERSION!!-!!BLD_NUMBER!!.!!BLD_CPU!!
+        cp -r !!ROOT_DIR!!/${dir}/*  !!ROOT_DIR!!/RPM/BUILDROOT/!!BLD_PRODUCT!!-!!BLD_VERSION!!-!!BLD_NUMBER_ONLY!!.!!BLD_CPU!!
     done
 
 %clean
@@ -39,7 +39,7 @@ if [ -x /usr/bin/chcon ] ; then
 		done
 	fi
 fi
-!!ORIG_BLD_BIN_PREFIX!!/linkup Install
+!!ORIG_BLD_BIN_PREFIX!!/linkup Install /
 ldconfig -n !!ORIG_BLD_LIB_PREFIX!!
 
 %preun
@@ -71,3 +71,4 @@ Prefix: !!ORIG_BLD_SRC_PREFIX!!
 Source code for !!ORIG_BLD_NAME!!
 
 %files src -f srcFiles.txt
+

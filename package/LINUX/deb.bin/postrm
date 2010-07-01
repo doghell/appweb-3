@@ -1,5 +1,4 @@
-#!/bin/sh -e
-#
+#!/bin/sh
 # 	postrm -- Post removal script for appweb
 #
 #	Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
@@ -10,6 +9,7 @@ BLD_NAME="!!BLD_NAME!!"
 BLD_CFG_PREFIX=!!ORIG_BLD_CFG_PREFIX!!
 BLD_MOD_PREFIX=!!ORIG_BLD_MOD_PREFIX!!
 BLD_LIB_PREFIX=!!ORIG_BLD_LIB_PREFIX!!
+BLD_BIN_PREFIX=!!ORIG_BLD_BIN_PREFIX!!
 
 remove() {
 	local cdir=`pwd`

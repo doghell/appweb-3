@@ -59,7 +59,7 @@ than 0 the length is set to zero.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#filter'><b>filter</b></a>(match: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Find all matching elements.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#find'><b>find</b></a>(match: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Object.html'>Object</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Find the first matching element.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#findAll'><b>findAll</b></a>(match: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Find all matching elements.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#forEach'><b>forEach</b></a>(modifier: <a href='intrinsic-Function.html'>Function</a>, thisObj: <a href='intrinsic-Object.html'>Object</a> = null): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Transform all elements.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#forEach'><b>forEach</b></a>(modifier: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Transform all elements.</td></tr>
    <tr class='apiDef'><td class='apiType'>iterator override </td><td><a href='#get'><b>get</b></a>(): <a href='iterator-Iterator.html'>Iterator</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Iterator for this array to be used by "for (v in array)".</td></tr>
    <tr class='apiDef'><td class='apiType'>iterator override </td><td><a href='#getValues'><b>getValues</b></a>(): <a href='iterator-Iterator.html'>Iterator</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Iterator for this array to be used by "for each (v in array)".</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#indexOf'><b>indexOf</b></a>(element: <a href='intrinsic-Object.html'>Object</a>, startIndex: <a href='intrinsic-Number.html'>Number</a> = 0): <a href='intrinsic-Number.html'>Number</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Search for an item using strict equality "===".</td></tr>
@@ -76,13 +76,13 @@ from the mapper.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#shift'><b>shift</b></a>(): <a href='intrinsic-Object.html'>Object</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Remove and return the first element in the array.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#slice'><b>slice</b></a>(start: <a href='intrinsic-Number.html'>Number</a>, end: <a href='intrinsic-Number.html'>Number</a> = -1 , step: <a href='intrinsic-Number.html'>Number</a> = 1): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Create a new array subset by taking a slice from an array.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#some'><b>some</b></a>(match: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Determine if some elements match.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#sort'><b>sort</b></a>(compare: <a href='intrinsic-Function.html'>Function</a> = null , order: <a href='intrinsic-Number.html'>Number</a> = 1): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Sort the array using the supplied compare function.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#sort'><b>sort</b></a>(compare: <a href='intrinsic-Function.html'>Function</a> = null , order: <a href='intrinsic-Number.html'>Number</a> = 1): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Sort the array.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#splice'><b>splice</b></a>(start: <a href='intrinsic-Number.html'>Number</a>, deleteCount: <a href='intrinsic-Number.html'>Number</a>, values: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Insert, remove or replace array elements.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the array to a single string each member of the array has toString called on it and the resulting 
+   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the array to a single string each member of the array has toString called on it and the resulting 
 strings are concatenated.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#transform'><b>transform</b></a>(mapper: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Transform all elements.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#unique'><b>unique</b></a>(): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Remove duplicate elements and make the array unique.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#unshift'><b>unshift</b></a>(items: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Object.html'>Object</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Insert the items at the front of the array.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#unshift'><b>unshift</b></a>(items: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Insert the items at the front of the array.</td></tr>
 </table>
 
 <p class='inheritedLink'><a href='intrinsic-Object.html#Methods'><i>Inherited Methods</i></a></p>
@@ -265,7 +265,7 @@ function match(element: Object, elementIndex: Number, arr: Array): Boolean.</dd>
 <hr />
 <a name='forEach'></a>
 <div class='api'>
-<div class='apiSig'>  public  forEach(modifier: <a href='intrinsic-Function.html'>Function</a>, thisObj: <a href='intrinsic-Object.html'>Object</a> = null): <a href='intrinsic-Void.html'>Void</a>
+<div class='apiSig'>  public  forEach(modifier: <a href='intrinsic-Function.html'>Function</a>): <a href='intrinsic-Array.html'>Array</a>
 </div>
 <div class='apiDetail'>
 <p>Transform all elements.</p>
@@ -275,9 +275,9 @@ function match(element: Object, elementIndex: Number, arr: Array): Boolean
 This method is identical to the.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>modifier: <a href='intrinsic-Function.html'>Function</a> </td><td>Transforming function.</td></tr><tr class='param'><td class='param'>thisObj: <a href='intrinsic-Object.html'>Object</a> </td><td> [default: null]</td></tr></table></dd>
+<tr class='param'><td class='param'>modifier: <a href='intrinsic-Function.html'>Function</a> </td><td>Transforming function.</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
-<dd>Returns a new array of transformed elements.</dd></dl>
+<dd>Returns the original (transformed) array.</dd></dl>
 </div>
 </div>
 <hr />
@@ -473,7 +473,7 @@ to undefined as the delete operator will do. Indicies are renumbered. NOTE: this
 <p>Create a new array subset by taking a slice from an array.</p>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>start: <a href='intrinsic-Number.html'>Number</a> </td><td>The array index at which to begin. Negative indicies will measure from the end so that -1 will  specify the last element. If start is greater than or equal to end, the call returns an empty array.</td></tr><tr class='param'><td class='param'>end: <a href='intrinsic-Number.html'>Number</a> </td><td>The array index at which to end. This is one beyond the index of the last element to extract. If  end is negative, it is measured from the end of the array, so use -1 to mean up to but not including the  last element of the array. [default: -1 ]</td></tr><tr class='param'><td class='param'>step: <a href='intrinsic-Number.html'>Number</a> </td><td>Slice every step (nth) element. The step value may be negative. [default: 1]</td></tr></table></dd>
+<tr class='param'><td class='param'>start: <a href='intrinsic-Number.html'>Number</a> </td><td>The array index at which to begin. Negative indicies will measure from the end so that -1 will  specify the last element. If start is greater than or equal to end, the call returns an empty array.</td></tr><tr class='param'><td class='param'>end: <a href='intrinsic-Number.html'>Number</a> </td><td>The array index at which to end. This is one beyond the index of the last element to extract. If  end is negative, it is measured from the end of the array, so use -1 to mean up to but not including the  last element of the array. [default: -1 ]</td></tr><tr class='param'><td class='param'>step: <a href='intrinsic-Number.html'>Number</a> </td><td>Slice every step (nth) element. If the step value is negative, the copying begins at the start index down to the (and not including) the end index. [default: 1]</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>A new array that is a subset of the original array.</dd></dl>
 </div>
@@ -502,10 +502,11 @@ function match(element: Object, elementIndex: Number, arr: Array): Boolean.</dd>
 <div class='apiSig'>  public  sort(compare: <a href='intrinsic-Function.html'>Function</a> = null , order: <a href='intrinsic-Number.html'>Number</a> = 1): <a href='intrinsic-Array.html'>Array</a>
 </div>
 <div class='apiDetail'>
-<p>Sort the array using the supplied compare function.</p>
+<p>Sort the array.</p>
+<dl><dt>Description</dt><dd>The array is sorted in lexical order. A compare function may be supplied.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>compare: <a href='intrinsic-Function.html'>Function</a> </td><td>Function to use to compare. A null comparator will use a text compare. [default: null ]</td></tr><tr class='param'><td class='param'>order: <a href='intrinsic-Number.html'>Number</a> </td><td>If order is >= 0, then an ascending order is used. Otherwise descending. [default: 1]</td></tr></table></dd>
+<tr class='param'><td class='param'>compare: <a href='intrinsic-Function.html'>Function</a> </td><td>Function to use to compare. A null comparator will use a text compare. [default: null ]</td></tr><tr class='param'><td class='param'>order: <a href='intrinsic-Number.html'>Number</a> </td><td>If order is >= 0, then an ascending lexical order is used. Otherwise descending. [default: 1]</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>The sorted array reference type Comparator = (function (*,,*)): AnyNumber | undefined).</dd></dl>
 <dl><dt>Specified</dt>
@@ -530,15 +531,12 @@ function match(element: Object, elementIndex: Number, arr: Array): Boolean.</dd>
 <hr />
 <a name='toString'></a>
 <div class='api'>
-<div class='apiSig'>override   public  toString(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>override   public  toString(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>Convert the array to a single string each member of the array has toString called on it and the resulting 
 strings are concatenated.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>A string.</dd></dl>
 </div>
 </div>
@@ -577,7 +575,7 @@ equality, not strict equality).</dd></dl>
 <hr />
 <a name='unshift'></a>
 <div class='api'>
-<div class='apiSig'>  public  unshift(items: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Object.html'>Object</a>
+<div class='apiSig'>  public  unshift(items: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Array.html'>Array</a>
 </div>
 <div class='apiDetail'>
 <p>Insert the items at the front of the array.</p>

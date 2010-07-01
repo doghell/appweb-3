@@ -58,7 +58,7 @@ from the current <a href='#readPosition'>readPosition</a> up to the current writ
 <a name='input'></a>
    <tr><td nowrap align='left'>public set </td><td>input</td><td>&nbsp;</td><td>Input callback function when read data is required. The input callback should write to the supplied buffer.</td></tr>
 <a name='output'></a>
-   <tr><td nowrap align='left'>public get </td><td>output</td><td><a href='intrinsic-Function.html'>Function</a></td><td> </td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>output</td><td><a href='intrinsic-Function.html'>Function</a></td><td>Output function to process (output) data. The output callback should read from the supplied buffer.</td></tr>
 <a name='readPosition'></a>
    <tr><td nowrap align='left'>public get  set</td><td>readPosition</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Current read position offset. </td></tr>
 <a name='room'></a>
@@ -93,7 +93,7 @@ from the current <a href='#readPosition'>readPosition</a> up to the current writ
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#readString'><b>readString</b></a>(count: <a href='intrinsic-Number.html'>Number</a> = -1): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Read a data from the array as a string.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#readXML'><b>readXML</b></a>(): <a href='intrinsic-XML.html'>XML</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Read an XML document from the array.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#reset'><b>reset</b></a>(): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Reset the read and <a href='#writePosition'>writePosition</a> pointers if there is no available data.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the data in the byte array between the <a href='#readPosition'>readPosition</a> and <a href='#writePosition'>writePosition</a> offsets.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toString'><b>toString</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the data in the byte array between the <a href='#readPosition'>readPosition</a> and <a href='#writePosition'>writePosition</a> offsets.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#write'><b>write</b></a>(data: <a href='intrinsic-Array.html'>Array</a>): <a href='intrinsic-Number.html'>Number</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Write data to the array.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#writeByte'><b>writeByte</b></a>(data: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Write a byte to the array.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#writeDouble'><b>writeDouble</b></a>(data: <a href='intrinsic-Number.html'>Number</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Write a double to the array.</td></tr>
@@ -137,8 +137,8 @@ from the current <a href='#readPosition'>readPosition</a> up to the current writ
 </div>
 <div class='apiDetail'>
 <p>Compact available data down and adjust the read/write positions accordingly.</p>
-<dl><dt>Description</dt><dd>This moves available room to
-the end of the byte array.</dd></dl>
+<dl><dt>Description</dt><dd>This sets the read pointer 
+to the zero index and adjusts the write pointer by the corresponding amount.</dd></dl>
 </div>
 </div>
 <hr />
@@ -386,14 +386,11 @@ Data is read from the current read <a href='#position'>position</a> pointer.</dd
 <hr />
 <a name='toString'></a>
 <div class='api'>
-<div class='apiSig'>override   public  toString(locale: <a href='intrinsic-String.html'>String</a> = null): <a href='intrinsic-String.html'>String</a>
+<div class='apiSig'>override   public  toString(): <a href='intrinsic-String.html'>String</a>
 </div>
 <div class='apiDetail'>
 <p>Convert the data in the byte array between the <a href='#readPosition'>readPosition</a> and <a href='#writePosition'>writePosition</a> offsets.</p>
-<dl><dt>Parameters</dt>
-<dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>locale: <a href='intrinsic-String.html'>String</a> </td><td> [default: null]</td></tr></table></dd>
-</dl><dl><dt>Returns</dt>
+<dl><dt>Returns</dt>
 <dd>A string.</dd></dl>
 </div>
 </div>

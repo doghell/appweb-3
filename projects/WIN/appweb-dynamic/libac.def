@@ -1,5 +1,6 @@
 LIBRARY libac.dll
 EXPORTS
+
   ecAddBlockConstants
   ecAddConstant
   ecAddFunctionConstants

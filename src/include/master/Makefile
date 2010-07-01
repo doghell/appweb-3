@@ -21,3 +21,7 @@ dependExtra:
 endif
 
 cleanExtra: dependExtra
+
+import:
+	cp ../ejs.slots.h .
+

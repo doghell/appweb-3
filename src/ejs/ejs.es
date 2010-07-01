@@ -2,7 +2,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.0.
+ *  Embedthis Ejscript 1.0.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -175,10 +175,11 @@ module ejs {
          *      function match(element: Object, elementIndex: Number, arr: Array): Boolean
          *  This method is identical to the @transform method.
          *  @param modifier Transforming function
-         *  @return Returns a new array of transformed elements.
+         *  @return Returns the original (transformed) array.
          */
-        function forEach(modifier: Function, thisObj: Object = null): Void {
+        function forEach(modifier: Function): Array {
             transform(modifier)
+            return this
         }
 
         /**
@@ -331,7 +332,8 @@ module ejs {
             @param end The array index at which to end. This is one beyond the index of the last element to extract. If 
                 end is negative, it is measured from the end of the array, so use -1 to mean up to but not including the 
                 last element of the array.
-            @param step Slice every step (nth) element. The step value may be negative.
+            @param step Slice every step (nth) element. If the step value is negative, the copying begins at the start
+                index down to the (and not including) the end index.
             @return A new array that is a subset of the original array.
          */
         native function slice(start: Number, end: Number = -1, step: Number = 1): Array 
@@ -356,9 +358,9 @@ module ejs {
         }
 
         /**
-         *  Sort the array using the supplied compare function
+         *  Sort the array. The array is sorted in lexical order. A compare function may be supplied.
          *  @param compare Function to use to compare. A null comparator will use a text compare
-         *  @param order If order is >= 0, then an ascending order is used. Otherwise descending.
+         *  @param order If order is >= 0, then an ascending lexical order is used. Otherwise descending.
          *  @return the sorted array reference
          *      type Comparator = (function (*,*): AnyNumber | undefined)
          *  @spec ejs Added the order argument.
@@ -391,7 +393,7 @@ module ejs {
          *  strings are concatenated.
          *  @return A string
          */
-        override native function toString(locale: String = null): String 
+        override native function toString(): String 
 
         /**
          *  Transform all elements.
@@ -420,8 +422,7 @@ module ejs {
          *  @param items to insert
          *  @return Returns the array reference
          */
-        function unshift(...items): Object
-            insert(0, items)
+        native function unshift(...items): Array
 
         /**
          *  Array intersection. Return the elements that appear in both arrays. 
@@ -724,8 +725,8 @@ module ejs {
         }
 
         /**
-         *  Compact available data down and adjust the read/write positions accordingly. This moves available room to
-         *  the end of the byte array.
+         *  Compact available data down and adjust the read/write positions accordingly. This sets the read pointer 
+         *  to the zero index and adjusts the write pointer by the corresponding amount.
          */
         native function compact(): Void
 
@@ -808,15 +809,16 @@ module ejs {
         #FUTURE
         native function get MD5(): Number
 
-        /**
-         *  Define an output function to process (output) data. The output callback should read from the supplied buffer.
+        /** 
+         *  Output function to process (output) data. The output callback should read from the supplied buffer.
          *  @param callback Function to invoke when the byte array is full or flush() is called.
          *      function outputCallback(buffer: ByteArray): Number
          */
-        native function set output(callback: Function): Void
-
-        /** */
         native function get output(): Function
+
+        /**
+         */
+        native function set output(callback: Function): Void
 
         /**
          *  Read data from the array into another byte array. Data is read from the current read $position pointer toward
@@ -927,7 +929,7 @@ module ejs {
          *  Convert the data in the byte array between the $readPosition and $writePosition offsets.
          *  @return A string
          */
-        override native function toString(locale: String = null): String 
+        override native function toString(): String 
 
         /**
          *  Uncompress the array
@@ -983,8 +985,6 @@ module ejs {
         native function get writePosition(): Number
 
         /**
-         *  Set the current write position offset.
-         *  @param position the new write  position
          */
         native function set writePosition(position: Number): Void
     }
@@ -1055,7 +1055,7 @@ module ejs {
         /**
             Construct a new date object. Permissible constructor forms:
             <ul>
-                <li>Date()</li>
+                <li>Date() This is the default and it constructs a date instance for the current time.</li>
                 <li>Date(milliseconds) where (seconds sincde 1 Jan 1970 00:00:00 UTC))</li>
                 <li>Date(dateString) where (In a format recognized by parse())</li>
                 <li>Date(year, month, date) where (Four digit year, month: 0-11, date: 1-31)</li>
@@ -1066,41 +1066,26 @@ module ejs {
 
         /**
             The day of the week (0 - 6, where 0 is Sunday) in local time. 
+            If a value outside the range is given, the date is adjusted without error.
             @spec ejs
          */
         native function get day(): Number 
-
-        /**
-            The day of the week (0 - 6, where 0 is Sunday) in local time. 
-            @param day Day of the week
-            @spec ejs
-         */
         native function set day(day: Number): Void
 
         /**
             The day of the year (0 - 365) in local time.
+            If a value outside the range is given, the date is adjusted without error.
             @spec ejs
          */
         native function get dayOfYear(): Number 
-
-        /**
-            The day of the year (0 - 365) in local time.
-            @param day Day of the year
-            @spec ejs
-         */
         native function set dayOfYear(day: Number): Void
 
         /**
             The day of the month (1-31).
+            If a value outside the range is given, the date is adjusted without error.
             @spec ejs
          */
         native function get date(): Number 
-
-        /**
-            The day of the month (1-31).
-            @param date integer day of the month (1-31)
-            @spec ejs
-         */
         native function set date(date: Number): Void
 
         /**
@@ -1112,6 +1097,7 @@ module ejs {
         /**
             Format a date using a format specifier in local time. This routine is implemented by calling 
             the O/S strftime routine and so not all the format specifiers are available on all platforms.
+            For full details, consult your platform API manual for strftime.
 
             The format specifiers are:
             <ul>
@@ -1119,17 +1105,12 @@ module ejs {
             <li>%a    national representation of the abbreviated weekday name.</li>
             <li>%B    national representation of the full month name.</li>
             <li>%b    national representation of the abbreviated month name.</li>
-            <li>%C    (year / 100) as decimal number; single digits are preceded by a zero.</li>
+            <li>%C    (year / 100) as decimal number; single digits are preceded by a zero. </li>
             <li>%c    national representation of time and date.</li>
-            <li>%D    is equivalent to ``%m/%d/%y''.</li>
+            <li>%D    is equivalent to %m/%d/%y.</li>
             <li>%d    the day of the month as a decimal number (01-31).</li>
-            <li>%E*   POSIX locale extensions. The sequences %Ec %EC %Ex %EX %Ey %EY are supposed to provide alternate 
-                      representations. NOTE: these are not available on some platforms.</li>
             <li>%e    the day of month as a decimal number (1-31); single digits are preceded by a blank.</li>
-            <li>%F    is equivalent to ``%Y-%m-%d''.</li>
-            <li>%G    a year as a decimal number with century. This year is the one that contains the greater part of
-                      the week (Monday as the first day of the week).</li>
-            <li>%g    the same year as in ``%G'', but as a decimal number without century (00-99).</li>
+            <li>%F    is equivalent to %Y-%m-%d.</li>
             <li>%H    the hour (24-hour clock) as a decimal number (00-23).</li>
             <li>%h    the same as %b.</li>
             <li>%I    the hour (12-hour clock) as a decimal number (01-12).</li>
@@ -1140,24 +1121,17 @@ module ejs {
             <li>%M    the minute as a decimal number (00-59).</li>
             <li>%m    the month as a decimal number (01-12).</li>
             <li>%n    a newline.</li>
-            <li>%O*   POSIX locale extensions. The sequences %Od %Oe %OH %OI %Om %OM %OS %Ou %OU %OV %Ow %OW %Oy are 
-                      supposed to provide alternate representations. Additionly %OB implemented to represent alternative 
-                      months names (used standalone, without day mentioned). NOTE: these are not available on some 
-                      platforms.</li>
             <li>%P    Lower case national representation of either "ante meridiem" or "post meridiem" as appropriate.</li>
             <li>%p    national representation of either "ante meridiem" or "post meridiem" as appropriate.</li>
-            <li>%R    is equivalent to ``%H:%M''.</li>
-            <li>%r    is equivalent to ``%I:%M:%S %p''.</li>
+            <li>%R    is equivalent to %H:%M.</li>
+            <li>%r    is equivalent to %I:%M:%S %p.</li>
             <li>%S    the second as a decimal number (00-60).</li>
-            <li>%s    the number of seconds since the Epoch, UTC (see mktime(3)).</li>
-            <li>%T    is equivalent to ``%H:%M:%S''.</li>
+            <li>%s    the number of seconds since the January 1, 1970 UTC.</li>
+            <li>%T    is equivalent to %H:%M:%S.</li>
             <li>%t    a tab.</li>
             <li>%U    the week number of the year (Sunday as the first day of the week) as a decimal number (00-53).</li>
             <li>%u    the weekday (Monday as the first day of the week) as a decimal number (1-7).</li>
-            <li>%V    the week number of the year (Monday as the first day of the week) as a decimal
-                      number (01-53).  If the week containing January 1 has four or more days in the new year, then it
-                      is week 1; otherwise it is the last week of the previous year, and the next week is week 1.</li>
-            <li>%v    is equivalent to ``%e-%b-%Y''.</li>
+            <li>%v    is equivalent to %e-%b-%Y.</li>
             <li>%W    the week number of the year (Monday as the first day of the week) as a decimal number (00-53).</li>
             <li>%w    the weekday (Sunday as the first day of the week) as a decimal number (0-6).</li>
             <li>%X    national representation of the time.</li>
@@ -1173,7 +1147,21 @@ module ejs {
             <li>%%    Literal percent.</li>
             </ul>
         
-            @param layout Format layout string using the above format specifiers. Similar to a C language printf() string.
+         Some platforms may also support the following format extensions:
+            <ul>
+            <li>%E*   POSIX locale extensions. Where "*" is one of the characters: c, C, x, X, y, Y.
+            <li>%G    a year as a decimal number with century. This year is the one that contains the greater part of
+                      the week (Monday as the first day of the week).</li>
+            <li>%g    the same year as in %G, but as a decimal number without century (00-99).</li>
+            <li>%O*   POSIX locale extensions. Where "*" is one of the characters: d e H I m M S u U V w W y.
+                      supposed to provide alternate representations. Additionly %OB implemented to represent alternative 
+                      months names (used standalone, without day mentioned).
+            <li>%V    the week number of the year (Monday as the first day of the week) as a decimal
+                      number (01-53).  If the week containing January 1 has four or more days in the new year, then it
+                      is week 1; otherwise it is the last week of the previous year, and the next week is week 1.</li>
+            </ul>
+
+            @param layout Format layout string using the above format specifiers. See strftime(3) for more information.
             @return string representation of the date.
             @spec ejs
          */
@@ -1194,12 +1182,6 @@ module ejs {
             @spec ejs
          */
         native function get fullYear(): Number 
-
-        /**
-            Set the year as four digits in local time.
-            @param year Year to set.
-            @spec ejs
-         */
         native function set fullYear(year: Number): void
 
         /**
@@ -1323,57 +1305,34 @@ module ejs {
 
         /**
             The current hour (0 - 23) in local time.
+            If a value outside the range is given, the date is adjusted without error.
             @spec ejs
          */
         native function get hours(): Number 
-
-        /**
-            The current hour (0 - 23) in local time
-            @param hour The hour as an integer
-            @spec ejs
-         */
         native function set hours(hour: Number): void
 
         /**
             The current millisecond (0 - 999) in local time.
-            @return The number of milliseconds as an integer
+            If a value outside the range is given, the date is adjusted without error.
             @spec ejs
          */
         native function get milliseconds(): Number 
-
-        /**
-            Set the current millisecond (0 - 999) in local time.
-            @param ms The millisecond as an integer
-            @spec ejs
-         */
         native function set milliseconds(ms: Number): void
 
         /**
             The current minute (0 - 59) in local time.
-            @return The number of minutes as an integer
+            If a value outside the range is given, the date is adjusted without error.
             @spec ejs
          */
         native function get minutes(): Number 
-
-        /**
-            Set the current minute (0 - 59) in local time.
-            @param min The minute as an integer
-            @spec ejs
-         */
         native function set minutes(min: Number): void
 
         /**
             The current month (0 - 11) in local time.
-            @return The month number as an integer
+            If a value outside the range is given, the date is adjusted without error.
             @spec ejs
          */
         native function get month(): Number 
-
-        /**
-            Set the current month (0 - 11) in local time.
-            @param month The month as an integer
-            @spec ejs
-         */
         native function set month(month: Number): void
 
         /**
@@ -1402,6 +1361,22 @@ module ejs {
                 the date string will be interpreted as a local date/time.  This is similar to parse() but it returns a
                 date object.
             @param dateString The date string to parse.
+            The date parsing logic uses heuristics and attempts to intelligently parse a range of dates. Some of the
+            possible formats are:
+            <ul>
+                <li>07/28/2010</li>
+                <li>07/28/08</li>
+                <li>Jan/28/2010</li>
+                <li>Jaunuary-28-2010</li>
+                <li>28-jan-2010</li>
+                <li>[29] Jan [15] [2010]</li>
+                <li>dd/mm/yy, dd.mm.yy, dd-mm-yy</li>
+                <li>mm/dd/yy, mm.dd.yy, mm-dd-yy</li>
+                <li>yyyy/mm/dd, yyyy.mm.dd, yyyy-mm-dd</li>
+                <li>10:52[:23]</li>
+                <li>2009-05-21t16:06:05.000z (ISO date)</li>
+                <li>[GMT|UTC][+-]NN[:]NN (timezone)</li>
+            </ul>
             @param defaultDate Default date to use to fill out missing items in the date string.
             @return Return a new Date.
             @spec ejs
@@ -1411,7 +1386,7 @@ module ejs {
         /**
             Parse a date string and Return a new Date object. If $dateString does not contain a timezone,
                 the date string will be interpreted as a UTC date/time.
-            @param dateString UTC date string to parse.
+            @param dateString UTC date string to parse. See $parseDate for supported formats.
             @param defaultDate Default date to use to fill out missing items in the date string.
             @return Return a new Date.
             @spec ejs
@@ -1421,27 +1396,22 @@ module ejs {
         /**
             Parse a date string and return the number of milliseconds since midnight, January 1st, 1970 UTC. 
             If $dateString does not contain a timezone, the date string will be interpreted as a local date/time.
-            @param dateString The string to parse
+            @param dateString The string to parse. See $parseDate for supported formats.
             @return Return a new date number.
          */
         static native function parse(dateString: String): Number
 
         /**
             The current second (0 - 59) in local time.
-            @return The number of seconds as an integer
+            If a value outside the range is given, the date is adjusted without error.
             @spec ejs
          */
         native function get seconds(): Number 
-
-        /**
-            Set the current second (0 - 59) in local time.
-            @param sec The second as an integer
-            @spec ejs
-         */
         native function set seconds(sec: Number): void
 
         /**
-            Set the date of the month (0 - 31)
+            Set the date of the month (1 - 31)
+            If a value outside the range is given, the date is adjusted without error.
             @param d Date of the month
          */
         function setDate(d: Number): void
@@ -1455,7 +1425,8 @@ module ejs {
             year = y
 
         /**
-            Set the current hour (0 - 59) in local time.
+            Set the current hour (0 - 23) in local time.
+            If a value outside the range is given, the date is adjusted without error.
             @param h The hour as an integer
          */
         function setHours(h: Number): void
@@ -1463,6 +1434,7 @@ module ejs {
 
         /**
             Set the current millisecond (0 - 999) in local time.
+            If a value outside the range is given, the date is adjusted without error.
             @param ms The millisecond as an integer
          */
         function setMilliseconds(ms: Number): void
@@ -1470,6 +1442,7 @@ module ejs {
 
         /**
             Set the current minute (0 - 59) in local time.
+            If a value outside the range is given, the date is adjusted without error.
             @param min The minute as an integer
          */
         function setMinutes(min: Number): void
@@ -1477,6 +1450,7 @@ module ejs {
 
         /**
             Set the current month (0 - 11) in local time.
+            If a value outside the range is given, the date is adjusted without error.
             @param mon The month as an integer
          */
         function setMonth(mon: Number): void
@@ -1484,6 +1458,7 @@ module ejs {
 
         /**
             Set the current second (0 - 59) in local time.
+            If a value outside the range is given, the date is adjusted without error.
             @param sec The second as an integer
             @param msec Optional milliseconds as an integer
          */
@@ -1503,6 +1478,7 @@ module ejs {
 
         /**
             Set the date of the month (0 - 31) in UTC time.
+            If a value outside the range is given, the date is adjusted without error.
             @param d The date to set
          */
         native function setUTCDate(d: Number): void
@@ -1514,31 +1490,36 @@ module ejs {
         native function setUTCFullYear(y: Number): void
 
         /**
-            Set the current hour (0 - 59) in UTC time.
+            Set the current hour (0 - 23) in UTC time.
+            If a value outside the range is given, the date is adjusted without error.
             @param h The hour as an integer
          */
         native function setUTCHours(h: Number): void
 
         /**
             Set the current millisecond (0 - 999) in UTC time.
+            If a value outside the range is given, the date is adjusted without error.
             @param ms The millisecond as an integer
          */
         native function setUTCMilliseconds(ms: Number): void
 
         /**
             Set the current minute (0 - 59) in UTC time.
+            If a value outside the range is given, the date is adjusted without error.
             @param min The minute as an integer
          */
         native function setUTCMinutes(min: Number): void
 
         /**
             Set the current month (0 - 11) in UTC time.
+            If a value outside the range is given, the date is adjusted without error.
             @param mon The month as an integer
          */
         native function setUTCMonth(mon: Number): void
 
         /**
             Set the current second (0 - 59) in UTC time.
+            If a value outside the range is given, the date is adjusted without error.
             @param sec The second as an integer
             @param msec Optional milliseconds as an integer
          */
@@ -1550,12 +1531,6 @@ module ejs {
             @spec ejs
          */
         native function get time(): Number 
-
-        /**
-            Set the number of milliseconds since midnight, January 1st, 1970 UTC.
-            @param value The number of milliseconds as a number
-            @spec ejs
-         */
         native function set time(value: Number): Void 
 
         /**
@@ -1586,7 +1561,7 @@ module ejs {
             Return a localized string containing the date portion excluding the time portion of the date in local time.
             Note: You should not rely on the format of the output as the exact format will depend on the platform
             and locale.
-            Sample: "Fri, 15 Dec 2006 GMT-0800". (Note: Other platforms render as:
+            Sample: "Fri 15 Dec 2006 GMT-0800". (Note: Other platforms render as:
             V8  format: "Fri, 15 Dec 2006 GMT-0800"
             JS  format: "01/15/2010"
             JSC format: "January 15, 2010")
@@ -1598,7 +1573,7 @@ module ejs {
         /**
             Return a localized string containing the date. This formats the date using the operating system's locale
             conventions.
-            Sample:  "Fri, 15 Dec 2006 23:45:09 GMT-0800 (PST)". (Note: Other platforms render as:
+            Sample:  "Fri 15 Dec 2006 23:45:09 GMT-0800 (PST)". (Note: Other JavaScript platforms render as:
             V8 format:  "Fri, 15 Dec 2006 23:45:09 GMT-0800 (PST)"
             JS format:  "Fri Jan 15 13:09:02 2010"
             JSC format: "January 15, 2010 1:09:06 PM PST"
@@ -1609,7 +1584,7 @@ module ejs {
 
         /**
             Return a string containing the time portion of the date in local time.
-            Sample:  "13:08:57". Note: Other platforms render as:
+            Sample:  "13:08:57". Note: Other JavaScript platforms render as:
             V8 format:  "13:08:57"
             JS format:  "13:09:02"
             JSC format: "1:09:06 PM PST"
@@ -1620,7 +1595,7 @@ module ejs {
 
         /**
             Return a string representing the date in local time. The format is American English.
-            Sample: "Fri, 15 Dec 2006 23:45:09 GMT-0800 (PST)"
+            Sample: "Fri 15 Dec 2006 23:45:09 GMT-0800 (PST)"
             @return A string representing the date.
          */
         override native function toString(): String 
@@ -1635,14 +1610,14 @@ module ejs {
 
         /**
             Return a string containing the date in UTC time.
-            Sample: "Sat, 16 Dec 2006 08:06:21 GMT"
+            Sample: "Sat 16 Dec 2006 08:06:21 GMT"
             @return A string representing the date.
          */
         function toUTCString(): String 
             formatUTC("%a, %d %b %Y %T GMT")
 
         /**
-            Construct a new date object interpreting its arguments in UTC rather than local time.
+            Calculate the number of milliseconds since the epoch for a UTC time.
             Date(year, month, date [, hour, minute, second, msec])</li>
             @param year Year
             @param month Month of year
@@ -1651,9 +1626,10 @@ module ejs {
             @param minutes Minute of hour
             @param seconds Secods of minute
             @param milliseconds Milliseconds of second
+            @return The number of milliseconds since January 1, 1970 00:00:00 UTC.
          */
         native static function UTC(year: Number, month: Number, day: Number, hours: Number = 0, 
-                minutes: Number = 0, seconds: Number = 0, milliseconds: Number = 0): Date
+            minutes: Number = 0, seconds: Number = 0, milliseconds: Number = 0): Number
 
         /**
             Return the primitive value of the object
@@ -1667,12 +1643,6 @@ module ejs {
             @spec ejs
          */
         native function get year(): Number 
-
-        /**
-            Set the current year as two digits in local time.
-            @param year Year to set.
-            @spec ejs
-         */
         native function set year(year: Number): void
 
         /**
@@ -1756,7 +1726,6 @@ module ejs {
 
     /**
      *  Arithmetic error exception class. Thrown when the system cannot perform an arithmetic operation, 
-     *  e.g. on divide by zero.
      *  @spec ejs
      *  @stability evolving
      */
@@ -2219,6 +2188,7 @@ module ejs {
 
     /**
      *  The public namespace used to make entities visible accross modules.
+     *  @hide
      */
     public namespace public
 
@@ -2239,6 +2209,7 @@ module ejs {
 
     /**
      *  The CONFIG namespace used to defined conditional compilation directives.
+     *  @hide
      */
     public namespace CONFIG
 
@@ -2255,21 +2226,25 @@ module ejs {
 
     /** 
      *  Conditional compilation constant. Used to disable compilation of certain elements.
+     *  @hide
      */  
     const FUTURE: Boolean = false
 
     /** 
      *  Conditional compilation constant. Used to disable compilation of certain elements.
+     *  @hide
      */  
     const ASC: Boolean = false
 
     /** 
      *  Conditional compilation constant. Used to enable the compilation of elements only for creating the API documentation.
+     *  @hide
      */  
     const DOC_ONLY: Boolean = false
 
     /** 
      *  Conditional compilation constant. Used to deprecate elements.
+     *  @hide
      */  
     const DEPRECATED: Boolean = false
 
@@ -2290,6 +2265,7 @@ module ejs {
 
     /**
      *  Alias for the Number type
+     *  @hide
      *  @spec ejs
      */
     native const num: Type = Number
@@ -2359,10 +2335,10 @@ module ejs {
      *  Assert a condition is true. This call tests if a condition is true by testing to see if the supplied 
      *  expression is true. If the expression is false, the interpreter will throw an exception.
      *  @param condition JavaScript expression evaluating or castable to a Boolean result.
-     *  @return True if the condition is.
+     *  @throws AssertError if the condition is false.
      *  @spec ejs
      */
-    native function assert(condition: Boolean): Boolean
+    native function assert(condition: Boolean): Void
 
     /**
      *  Convenient way to trap to the debugger
@@ -2373,6 +2349,7 @@ module ejs {
      *  Replace the base type of a type with an exact clone. 
      *  @param klass Class in which to replace the base class.
      *  @spec ejs
+     *  @hide
      */
     native function cloneBase(klass: Type): Void
 
@@ -2492,6 +2469,7 @@ module ejs {
      *  Print variables for debugging.
      *  @param args Variables to print
      *  @spec ejs
+     *  @hide 
      */
     native function printv(...args): void
 
@@ -2528,8 +2506,7 @@ module ejs {
 /*
     Added to ease forward compatibility
  */
-module ejs.unix {
-}
+module ejs.unix { }
 
 
 /*
@@ -3490,11 +3467,11 @@ module ejs {
         use default namespace public
 
         /**
-         *  Clone the array and all its elements.
+         *  Clone the object and all its elements.
          *  @param deep If true, do a deep copy where all object references are also copied, and so on, recursively.
          *  @spec ejs
          */
-        native function clone(deep: Boolean = true) : Array
+        native function clone(deep: Boolean = true): Object
 
         /**
          *  Get an iterator for this object to be used by "for (v in obj)"
@@ -3692,12 +3669,11 @@ module ejs {
 
     /**
      *  Regular expressions per ECMA-262. The following special characters are supported:
-     *  @spec evolving
      *  <table class="itemTable">
      *      <tr><td>\\</td><td>Reverse whether a character is treated literally or not.</td></tr>
      *      <tr><td>^</td><td>Match to the start of input. If matching multiline, match starting after a line break.</td></tr>
      *      <tr><td>\$ </td><td>Match to the end of input. If matching multiline, match before after a line break.</td></tr>
-     *      <tr><td>*</td><td>Match the preceding item zero or more times.</td></tr>
+     *      <tr><td>* </td><td>Match the preceding item zero or more times.</td></tr>
      *      <tr><td>+</td><td>Match the preceding item one or more times.</td></tr>
      *      <tr><td>?</td><td>Match the preceding item zero or one times.</td></tr>
      *      <tr><td>(mem)</td><td>Match inside the parenthesis (i.e. "mem") and store the match.</td></tr>
@@ -3730,6 +3706,7 @@ module ejs {
      *      <tr><td>\xYY</td><td>Match the character code YY.</td></tr>
      *      <tr><td>\xYYYY</td><td>Match the character code YYYY.</td></tr>
      *  </table>
+     *  @spec evolving
      */
     native final class RegExp {
 
@@ -4001,7 +3978,7 @@ module ejs {
 
 /*
     String.es -- String class
- *
+ 
     Copyright (c) All Rights Reserved. See details at the end of the file.
  */
 
@@ -4075,9 +4052,10 @@ module ejs {
         native function endsWith(test: String): Boolean
 
         /**
-            Format arguments as a string. Use the string as a format specifier.
+            Format arguments as a string. Use the string as a format specifier. The format specifier has the form:
+            %[-+ #,][width][precision][type]. See printf(1) for the meaning of the various fields.
             @param args Array containing the data to format. 
-            @return -1 if less than, zero if equal and 1 if greater than.
+            @return Formatted string.
             @example
                 "%5.3f".format(num)
             \n\n
@@ -4121,7 +4099,8 @@ module ejs {
         native function get isDigit(): Boolean
 
         /**
-            Is there is at least one character in the string and all characters are alphabetic.
+            Is there is at least one character in the string and all characters are alphabetic. 
+            Uses latin-1 for comparisions.
             @spec ejs
          */
         native function get isAlpha(): Boolean
@@ -4147,7 +4126,7 @@ module ejs {
         /**
             Search right to left for a substring starting at a given index.
             @param pattern The string to search for
-            @param location The integer starting to start the search or a range to search in.
+            @param location The character index at which to start the search.
             @return Return the starting index of the last match found.
          */
         native function lastIndexOf(pattern: String, location: Number = -1): Number
@@ -4204,9 +4183,9 @@ module ejs {
         native function quote(): String
 
         /**
-            Remove characters from a string. Remove the elements from @start to @end inclusive. 
+            Remove characters from a string. Remove the elements from $start to $end inclusive. 
             @param start Numeric index of the first element to remove. Negative indicies measure from the end of the string.
-            -1 is the last character element.
+            The -1 index refers to the last character element.
             @param end Numeric index of one past the last element to remove
             @return A new string with the characters removed
             @spec ejs
@@ -4241,8 +4220,7 @@ module ejs {
             Extract a substring.
             @param start The position of the first character to slice.
             @param end The position one after the last character. Negative indicies are measured from the end of the string.
-            @param step Extract every "step" character.
-            @throws OutOfBoundsError If the range boundaries exceed the string limits.
+            @param step Extract every "step" character. Step can be negative.
          */ 
         native function slice(start: Number, end: Number = -1, step: Number = 1): String
 
@@ -4264,10 +4242,10 @@ module ejs {
 
         /**
             Extract a substring. Similar to slice but only allows positive indicies.
-            @param startIndex Integer location to start copying
+            If the end index is larger than start, then the effect of substring is as if the two arguments were swapped.
+            @param startIndex Integer location to start copying. 
             @param end Postitive index of one past the last character to extract.
             @return Returns a new string
-            @throws OutOfBoundsError If the starting index and/or the length exceed the string's limits.
          */
         native function substring(startIndex: Number, end: Number = -1): String
 
@@ -4310,7 +4288,7 @@ module ejs {
             @return Returns a new lower case version of the string.
             @spec ejs
          */
-        native function toLower(locale: String = null): String
+        native function toLower(): String
 
         /**
             This function converts an object to a string representation. Types typically override this to provide 
@@ -4318,14 +4296,14 @@ module ejs {
             @returns a string representation of the object. For Objects "[object className]" will be returned, 
             where className is set to the name of the class on which the object was based.
          */ 
-        override native function toString(locale: String = null): String
+        override native function toString(): String
 
         /**
             Convert the string to upper case.
             @return Returns a new upper case version of the string.
             @spec ejs
          */
-        native function toUpper(locale: String = null): String
+        native function toUpper(): String
 
         /**
             Returns a trimmed copy of the string. Normally used to trim white space, but can be used to trim any 
@@ -4347,6 +4325,9 @@ module ejs {
          */
         function - (str: String): String {
             var i: Number = indexOf(str)
+            if (i < 0) {
+                return this
+            }
             return remove(i, i + str.length)
         }
         
@@ -4386,16 +4367,15 @@ module ejs {
         /**
             Format arguments as a string. Use the string as a format specifier.
             @param arg The argument to format. Pass an array if multiple arguments are required.
-            @return -1 if less than, zero if equal and 1 if greater than.
+            @return Formatted string.
             @example
                 "%5.3f" % num
             <br/>
                 "Arg1 %d, arg2 %d" % [1, 2]
             @spec ejs
          */
-        function % (arg: Object): String {
-            return format(arg)
-        }
+        function % (arg: Object): String
+            format(arg)
     }
 }
 
@@ -4631,18 +4611,16 @@ module ejs.db {
          */
         function Database(adapter: String, connectionString: String) {
             if (adapter == "sqlite3") adapter = "sqlite"
-            try {
-                _name = basename(connectionString)
-                _connection = connectionString
-                let adapterClass = adapter.toPascal()
-                if (global."ejs.db"::[adapterClass] == undefined) {
-                    load("ejs.db." + adapter + ".mod")
-                }
-                _adapter = new global."ejs.db"::[adapterClass](connectionString)
-            } catch (e) {
-                print(e)
+            _name = basename(connectionString)
+            _connection = connectionString
+            let adapterClass = adapter.toPascal()
+            if (global."ejs.db"::[adapterClass] == undefined) {
+                load("ejs.db." + adapter + ".mod")
+            }
+            if (!global."ejs.db"::[adapterClass]) {
                 throw "Can't find database connector for " + adapter
             }
+            _adapter = new global."ejs.db"::[adapterClass](connectionString)
         }
 
         /**
@@ -4787,7 +4765,7 @@ module ejs.db {
          *  @returns the count of rows in a table in the currently opened database.
          */
         function getNumRows(table: String): Number
-            _adapter.getNumRows()
+            _adapter.getNumRows(table)
 
         /**
          *  The database name defined via the connection string or constructor.
@@ -4853,7 +4831,7 @@ module ejs.db {
         /**
          *  Execute a SQL command on the database. This is a low level SQL command interface that bypasses logging.
          *      Use @query instead.
-         *  @param cmd SQL command string
+            @param cmd SQL command to issue. Note: "SELECT" is automatically prepended and ";" is appended for you.
          *  @returns An array of row results where each row is represented by an Object hash containing the column 
          *      names and values
          */
@@ -5410,6 +5388,7 @@ module ejs.db {
          */
         function error(field: String, msg: String): Void {
             field ||= ""
+            _errors ||= {}
             _errors[field] = msg
         }
 
@@ -5876,11 +5855,10 @@ module ejs.db {
                 return value
 
             case Date:
-                return "%Ld".format((new Date(value)).time)
+                return "%d".format((new Date(value)).time)
 
             case Number:
                 return value cast Number
-                // return "%Ld".format(value cast Number)
              
             case String:
                 return Database.quote(value)
@@ -6028,7 +6006,7 @@ module ejs.db {
 
         /**
             Run an SQL statement and return selected records.
-            @param cmd SQL command to issue
+            @param cmd SQL command to issue. Note: "SELECT" is automatically prepended and ";" is appended for you.
             @returns An array of objects. Each object represents a matching row with fields for each column.
          */
         static function sql(cmd: String, count: Number = null): Array {
@@ -6184,13 +6162,16 @@ module ejs.db {
      */
     function mapType(value: Object): String {
         if (value is Date) {
-            return "%Ld".format((new Date(value)).time)
+            return "%d".format((new Date(value)).time)
         } else if (value is Number) {
-            return "%Ld".format(value)
+            return "%d".format(value)
         }
         return value
     }
 }
+
+/* To ease forward compatibility */
+module ejs.db.mapper {}
 
 
 /*
@@ -7396,7 +7377,8 @@ module ejs.io {
          *      Options can be either a mode string or can be an options hash. 
          *  @options mode optional file access mode string. Use "r" for read, "w" for write, "a" for append to existing
          *      content, "+" never truncate. Defaults to "r".
-         *  @options permissions optional Posix permissions number mask. Defaults to 0664.
+         *  @options permissions Number containing the Posix permissions value. Note: this is a number and not a string
+         *      representation of an octal posix number.
          *  @return the File object. This permits method chaining.
          *  @throws IOError if the path or file cannot be created.
          */
@@ -7558,8 +7540,7 @@ module ejs.io {
         native function FileSystem(path: Object)
 
         /**
-         *  Do path names have drive specifications (C:).
-         *  @return True if the file path has a drive spec
+         *  Do path names on this file system support drive specifications.
          */
         native function get hasDrives(): Boolean 
 
@@ -7569,8 +7550,6 @@ module ejs.io {
         native function get newline(): String 
 
         /**
-         *  @duplicate FileSystem.newline
-         *  @param terminator the new line termination characters Usually "\n" or "\r\n"
          */
         native function set newline(terminator: String): Void
 
@@ -7585,8 +7564,6 @@ module ejs.io {
         native function get separators(): String 
 
         /**
-         *  @duplicate FileSystem.separators
-         *  @param sep the new path segment separators. Usually "/" or "/\\". The first characters is the default separator.
          */
         native function set separators(sep: String): Void 
     }
@@ -7654,47 +7631,195 @@ module ejs.io {
 
         use default namespace public
 
-        /** HTTP status code */     static const Continue           : Number    = 100
-        /** HTTP status code */     static const Ok                 : Number    = 200
-        /** HTTP status code */     static const Created            : Number    = 201
-        /** HTTP status code */     static const Accepted           : Number    = 202
-        /** HTTP status code */     static const NotAuthoritative   : Number    = 203
-        /** HTTP status code */     static const NoContent          : Number    = 204
-        /** HTTP status code */     static const Reset              : Number    = 205
-        /** HTTP status code */     static const Partial            : Number    = 206
-        /** HTTP status code */     static const MultipleChoice     : Number    = 300
-        /** HTTP status code */     static const MovedPermanently   : Number    = 301
-        /** HTTP status code */     static const MovedTemporarily   : Number    = 302
-        /** HTTP status code */     static const SeeOther           : Number    = 303
-        /** HTTP status code */     static const NotModified        : Number    = 304
-        /** HTTP status code */     static const UseProxy           : Number    = 305
-        /** HTTP status code */     static const BadRequest         : Number    = 400
-        /** HTTP status code */     static const Unauthorized       : Number    = 401
-        /** HTTP status code */     static const PaymentRequired    : Number    = 402
-        /** HTTP status code */     static const Forbidden          : Number    = 403
-        /** HTTP status code */     static const NotFound           : Number    = 404
-        /** HTTP status code */     static const BadMethod          : Number    = 405
-        /** HTTP status code */     static const NotAccepted        : Number    = 406
-        /** HTTP status code */     static const ProxyAuth          : Number    = 407
-        /** HTTP status code */     static const ClientTimeout      : Number    = 408
-        /** HTTP status code */     static const Conflict           : Number    = 409
-        /** HTTP status code */     static const Gone               : Number    = 410
-        /** HTTP status code */     static const LengthRequired     : Number    = 411
-        /** HTTP status code */     static const PrecondFailed      : Number    = 412
-        /** HTTP status code */     static const EntityTooLarge     : Number    = 413
-        /** HTTP status code */     static const ReqTooLong         : Number    = 414
-        /** HTTP status code */     static const UnsupportedType    : Number    = 415
-        /** HTTP status code */     static const ServerError        : Number    = 500
-        /** HTTP status code */     static const NotImplemented     : Number    = 501
-        /** HTTP status code */     static const BadGateway         : Number    = 502
-        /** HTTP status code */     static const Unavailable        : Number    = 503
-        /** HTTP status code */     static const GatewayTimeout     : Number    = 504
-        /** HTTP status code */     static const Version            : Number    = 505
+        /** 
+          HTTP Continue Status (100)
+         */     
+        static const Continue : Number = 100
+
+        /** 
+            HTTP Success Status (200) 
+         */     
+        static const Ok : Number = 200
+
+        /** 
+            HTTP Created Status (201) 
+         */     
+        static const Created : Number = 201
+
+        /** 
+            HTTP Accepted Status (202) 
+         */     
+        static const Accepted : Number = 202
+
+        /** 
+            HTTP Non-Authoritative Information Status (203) 
+         */     
+        static const NotAuthoritative : Number = 203
+
+        /** 
+            HTTP No Content Status (204)  
+         */     
+        static const NoContent : Number = 204
+
+        /** 
+            HTTP Reset Content Status (205) 
+         */     
+        static const Reset : Number = 205
+
+        /** 
+            HTTP Partial Content Status (206) 
+         */     
+        static const PartialContent : Number = 206
+
+        /** 
+            HTTP Multiple Choices Status (300) 
+         */     
+        static const MultipleChoice : Number = 300
+
+        /** 
+            HTTP Moved Permanently Status (301) 
+         */     
+        static const MovedPermanently : Number = 301
+
+        /** 
+            HTTP Found but Moved Temporily Status (302) 
+         */     
+        static const MovedTemporarily : Number = 302
+
+        /** 
+            HTTP See Other Status (303) 
+         */     
+        static const SeeOther : Number = 303
+
+        /** 
+            HTTP Not Modified Status (304)     
+         */
+        static const NotModified : Number = 304
+
+        /** 
+            HTTP Use Proxy Status (305) 
+         */     
+        static const UseProxy : Number = 305
+
+        /** 
+            HTTP Bad Request Status(400) 
+         */     
+        static const BadRequest : Number = 400
+
+        /** 
+            HTTP Unauthorized Status (401) 
+         */     
+        static const Unauthorized : Number = 401
+
+        /** 
+            HTTP Payment Required Status (402) 
+         */     
+        static const PaymentRequired : Number = 402
+
+        /** 
+            HTTP Forbidden Status (403)  
+         */     
+        static const Forbidden : Number = 403
+
+        /** 
+            HTTP Not Found Status (404) 
+         */     
+        static const NotFound : Number = 404
+
+        /** 
+            HTTP Method Not Allowed Status (405) 
+         */     
+        static const BadMethod : Number = 405
+
+        /** 
+            HTTP Not Acceptable Status (406) 
+         */     
+        static const NotAcceptable : Number = 406
+
+        /** 
+            HTTP ProxyAuthentication Required Status (407) 
+         */     
+        static const ProxyAuthRequired : Number = 407
+
+        /** 
+            HTTP Request Timeout Status (408) 
+         */     
+        static const RequestTimeout : Number = 408
+
+        /** 
+            HTTP Conflict Status (409) 
+         */     
+        static const Conflict : Number = 409
+
+        /** 
+            HTTP Gone Status (410) 
+         */     
+        static const Gone : Number = 410
+
+        /** 
+            HTTP Length Required Status (411) 
+         */     
+        static const LengthRequired : Number = 411
+        
+        /** 
+            HTTP Precondition Failed Status (412) 
+         */     
+        static const PrecondFailed : Number = 412
+
+        /** 
+            HTTP Request Entity Too Large Status (413) 
+         */     
+        static const EntityTooLarge : Number = 413
+
+        /** 
+            HTTP Request URI Too Long Status (414)  
+         */     
+        static const UriTooLong : Number = 414
+
+        /** 
+            HTTP Unsupported Media Type (415) 
+         */     
+        static const UnsupportedMedia : Number = 415
+
+        /** 
+            HTTP Requested Range Not Satisfiable (416) 
+         */     
+        static const BadRange : Number = 416
+
+        /** 
+            HTTP Server Error Status (500) 
+         */     
+        static const ServerError : Number = 500
+
+        /** 
+            HTTP Not Implemented Status (501) 
+         */     
+        static const NotImplemented : Number = 501
+
+        /** 
+            HTTP Bad Gateway Status (502) 
+         */     
+        static const BadGateway : Number   = 502
+
+        /** 
+            HTTP Service Unavailable Status (503) 
+         */     
+        static const ServiceUnavailable : Number = 503
+
+        /** 
+            HTTP Gateway Timeout Status (504) 
+         */     
+        static const GatewayTimeout : Number = 504
+
+        /** 
+            HTTP Http Version Not Supported Status (505) 
+         */     
+        static const VersionNotSupported: Number = 505
 
         /**
             Callback event mask for readable events
          */
-        static const Read: Number  = 2
+        static const Read: Number = 2
 
         /**
             Callback event mask for writeable events
@@ -8338,27 +8463,33 @@ module ejs.io {
             @param recurse Set to true to examine sub-directories. 
             @return Return a list of matching files
          */
-        function find(glob: String = null, recurse: Boolean = true): Array {
-            function recursiveFind(path: Path, pattern: RegExp): Array {
+        function find(glob: String = "*", recurse: Boolean = true): Array {
+            function recursiveFind(path: Path, pattern: RegExp, level: Number): Array {
                 let result: Array = []
-                if (path.isDir) {
-                    for each (f in Path(path).files(true)) {
-                        let got: Array = recursiveFind(f, pattern)
+                if (path.isDir && (recurse || level == 0)) {
+                    for each (f in path.files(true)) {
+                        let got: Array = recursiveFind(f, pattern, level + 1)
                         for each (i in got) {
                             result.append(i)
                         }
                     }
                 }
-                if (path.basename.toString().match(pattern)) {
-                    result.append(path)
+                if (Config.OS == "WIN") {
+                    if (path.basename.toString().toLower().match(pattern)) {
+                        result.append(path)
+                    }
+                } else {
+                    if (path.basename.toString().match(pattern)) {
+                        result.append(path)
+                    }
                 }
                 return result
             }
-            if (glob == null) {
-                glob = "*"
+            if (Config.OS == "WIN") {
+                glob = glob.toLower()
             }
             pattern = RegExp("^" + glob.replace(/\./g, "\\.").replace(/\*/g, ".*") + "$")
-            return recursiveFind(this, pattern)
+            return recursiveFind(this, pattern, 0)
         }
 
         /**
@@ -8479,7 +8610,7 @@ module ejs.io {
             mime type.
             @returns The mime type string
          */
-        native function mimeType(): String
+        native function get mimeType(): String
 
         /**
             When the file was created or last modified. Set to null the file does not exist.
@@ -8553,15 +8684,12 @@ module ejs.io {
         native function get parent(): Path
 
         /**
-            The file permissions of a path. Set to the Posix style permissions mask or null if the file does not exist.
+            The file permissions of a path. This number contains the Posix style permissions value or null if the file 
+            does not exist. NOTE: this is not a string representation of an octal posix mask. 
          */
         native function get perms(): Number
 
-        /**
-            @duplicate Path.perms
-            @param perms the new Posix style permissions mask
-            @throws IOError if the path does not exist as a file.
-         */
+        /** */
         native function set perms(perms: Number): Void
 
         /**
@@ -8668,11 +8796,18 @@ module ejs.io {
             this.trimExt().joinExt(ext)
 
         /**
-            Resolve paths relative to this path
-            Resolve each other path and return the last path resolved. Each path is resolved by joined the 
-            directory containing the prior path to the next path under consideration. If the next path is an 
-            absolute path, it is used unmodified. The effect is to find the given paths with a virtual current
-            directory set to the directory containing the prior path.
+            Resolve paths in the neighborhood of this path. Resolve operates like join, except that it joins the 
+            given paths to the directory portion of the current ("this") path. For example: if "path" is set to
+            "/usr/bin/ejs/bin", then path.resolve("lib") will return "/usr/lib/ejs/lib". i.e. it will return the
+            sibling directory "lib".
+
+            Resolve operations by accumulating a virtual current directory, starting with "this" path. It then
+            successively joins the given paths. If the next path is an absolute path, it is used unmodified. 
+            The effect is to find the given paths with a virtual current directory set to the directory containing 
+            the prior path.
+
+            Resolve is useful for creating paths in the region of the current path and gracefully handles both 
+            absolute and relative path segments.
             @return A new Path object that is resolved against the prior path. 
          */
         native function resolve(...otherPaths): Path
@@ -9274,7 +9409,8 @@ module ejs.io {
             @param user Optional user name if authentication is required.
             @param password Optional password if authentication is required.
          */
-        function open(method: String, url: String, async: Boolean = false, user: String = null, password: String = null): Void {
+        function open(method: String, url: String, async: Boolean = false, user: String = null, 
+                password: String = null): Void {
             hp.method = method
             hp.uri = url
             if (user && password) {
@@ -10594,15 +10730,18 @@ module ejs.sys {
     /**
      *  Set the permissions of a file or directory
      *  @param path File or directory to modify
-     *  @param perms New Posix style permission mask
+     *  @param perms Posix style permission mask
      */
     function chmod(path: String, perms: Number): Void
         Path(path).perms = perms
 
+    //  DEPRECATED 1.0.2
     /**
      *  Close the file and free up all associated resources.
      *  @param file Open file object previously opened via $open or $File
      *  @param graceful if true, then close the file gracefully after writing all pending data.
+     *  @hide
+     *  @deprecated
      */
     function close(file: File, graceful: Boolean = true): Void
         file.close(graceful)
@@ -10633,20 +10772,13 @@ module ejs.sys {
         Path(path).exists
 
     /**
-     *  Get the file extension portion of the file name. The file extension is the portion starting with the last "."
-     *  in the path. It thus includes "." as the first charcter.
+     *  Get the file extension portion of the file name. The file extension is the portion after the last "."
+     *  in the path.
      *  @param path Filename path to examine
-     *  @return String containing the file extension. It includes "." as the first character.
+     *  @return String containing the file extension. It does not include "." as the first character.
      */
     function extension(path: String): String
         Path(path).extension
-
-    /**
-     *  Return the free space in the file system.
-     *  @return The number of 1M blocks (1024 * 1024 bytes) of free space in the file system.
-     */
-    function freeSpace(path: String = null): Number
-        FileSystem(path).freeSpace()
 
     /**
      *  Is a file a directory. Return true if the specified path exists and is a directory
@@ -10656,13 +10788,16 @@ module ejs.sys {
     function isDir(path: String): Boolean
         Path(path).isDir
 
+    //  DEPRECATED 1.0.2
     /**
      *  Kill a process
      *  @param pid Process ID to kill
      *  @param signal Signal number to issue to kill the process
+     *  @hide
+     *  @deprecated
      */
     function kill(pid: Number, signal: Number = 2): Void {
-        if (Config.OS == "WIN") {
+        if (Config.OS == "WIN" || Config.OS == "CYGWIN") {
             Cmd.run("/bin/kill -f -" + signal + " " + pid)
         } else {
             Cmd.run("/bin/kill -" + signal + " " + pid)
@@ -10717,17 +10852,22 @@ module ejs.sys {
     function mv(fromFile: String, toFile: String): void
         Path(fromFile).rename(toFile)
 
+    //  DEPRECATED 1.0.2
     /**
-     *  Open or create a file
+     *  Open or create a file. 
      *  @param path Filename path to open
-     *  @param mode optional file access mode with values ored from: Read, Write, Append, Create, Open, Truncate. 
+     *  @param mode optional file access mode with values values from: Read, Write, Append, Create, Open, Truncate. 
      *      Defaults to Read.
-     *  @param permissions optional permissions. Defaults to App.permissions
+     *  @param permissions optional permissions. Defaults to App.permissions.
      *  @return a File object which implements the Stream interface
      *  @throws IOError if the path or file cannot be opened or created.
+     *  @hide
+     *  @deprecated
      */
-    function open(path: String, mode: Number = Read, permissions: Number = 0644): File
-        new File(path, { mode: mode, permissions: permissions})
+    function open(path: String, mode: String = "r", permissions: Number = App.permissions): File {
+        print("IN OPEN")
+        return new File(path, { mode: mode, permissions: permissions})
+    }
 
     /**
      *  Get the current working directory
@@ -10736,12 +10876,15 @@ module ejs.sys {
     function pwd(): Path
         App.dir
 
+    //  DEPRECATED 1.0.2
     /**
      *  Read data bytes from a file and return a byte array containing the data.
      *  @param file Open file object previously opened via $open or $File
-        @param count Number of bytes to read
+     *  @param count Number of bytes to read
      *  @return A byte array containing the read data
      *  @throws IOError if the file could not be read.
+     *  @hide
+     *  @deprecated
      */
     function read(file: File, count: Number): ByteArray
         file.read(count)
@@ -10779,8 +10922,9 @@ module ejs.sys {
      *  @returns a closed File object after creating an empty temporary file.
      */
     function tempname(directory: String = null): File
-        FileSystem.makeTemp(directory)
+        Path(directory).makeTemp()
 
+    //  DEPRECATED 1.0.2
     /**
      *  Write data to the file. If the stream is in sync mode, the write call blocks until the underlying stream or 
      *  endpoint absorbes all the data. If in async-mode, the call accepts whatever data can be accepted immediately 
@@ -10791,6 +10935,8 @@ module ejs.sys {
      *  the BinaryStream class to write Numbers.
      *  @returns the number of bytes written.  
      *  @throws IOError if the file could not be written.
+     *  @hide
+     *  @deprecated
      */
     function write(file: File, ...items): Number
         file.write(items)
@@ -10985,12 +11131,13 @@ module ejs.sys {
 
     /**
      *  Reference to the Worker object for use inside a worker script
-     *  @returns a Worker object
+        This is only present inside Worker scripts.
      */
     var self: Worker
 
     /**
      *  Exit the worker
+        This is only valid inside Worker scripts.
      *  @spec ejs
      */
     function exit(): Void
@@ -10999,20 +11146,20 @@ module ejs.sys {
     /**
      *  Post a message to the Worker's parent
      *  @param data Data to pass to the worker's onmessage callback.
-     *  @param ports Not implemented
+     *  This is only valid inside Worker scripts.
      */
-    function postMessage(data: Object, ports: Array = null): Void
-        self.postMessage(data, ports)
+    function postMessage(data: Object): Void
+        self.postMessage(data, null)
 
     /**
      *  The error callback function
+     *  This is the callback function to receive incoming data from postMessage() calls.
+     *  This is only valid inside Worker scripts.
      */
     function get onerror(): Function
         self.onerror
 
     /**
-     *  Set the error callback function
-     *  @param fun Callback function to receive incoming data from postMessage() calls.
      */
     function set onerror(fun: Function): Void {
         self.onerror = fun
@@ -11020,13 +11167,13 @@ module ejs.sys {
 
     /**
      *  The callback function configured to receive incoming messages. 
+     *  This is the callback function to receive incoming data from postMessage() calls.
+     *  This is only valid inside Worker scripts.
      */
     function get onmessage(): Function
         self.onmessage
 
     /**
-     *  Set the callback function to receive incoming messages. 
-     *  @param fun Callback function to receive incoming data from postMessage() calls.
      */
     function set onmessage(fun: Function): Void {
         self.onmessage = fun
@@ -11525,8 +11672,12 @@ module ejs.web {
          *  @duplicate ejs.web::View.buttonLink
          */
 		function buttonLink(text: String, url: String, options: Object): Void {
-			// write('<a href="' + url + '"><button>' + text + '</button></a>')
-			write('<button onclick="window.location=\'' + url + '\';">' + text + '</button></a>')
+            if (options["data-remote"]) {
+                let attributes = getDataAttributes(options)
+                write('<button ' + attributes + '>' + text + '</button></a>')
+            } else {
+                write('<button onclick="window.location=\'' + url + '\';">' + text + '</button></a>')
+            }
         }
 
         /**
@@ -11644,7 +11795,7 @@ module ejs.web {
          *      list("stockId", Stock.stockList) 
          *      list("low", ["low", "med", "high"])
          *      list("low", [["low", "3"], ["med", "5"], ["high", "9"]])
-         *      list("low", [{low: 3{, {med: 5}, {high: 9}])
+         *      list("low", [{low: 3}, {med: 5}, {high: 9}])
          *      list("Stock Type")                          Will invoke StockType.findAll() to do a table lookup
          */
 		function list(field: String, choices: Object, defaultValue: String, options: Object): Void {
@@ -11666,8 +11817,8 @@ module ejs.web {
                             }
                         }
                     } else {
-                        isSelected = (i == defaultValue) ? 'selected="yes"' : ''
-                        write('  <option value="' + i + '"' + isSelected + '>' + choice + '</option>')
+                        isSelected = (choice == defaultValue) ? 'selected="yes"' : ''
+                        write('  <option value="' + choice + '"' + isSelected + '>' + choice + '</option>')
                     }
                 }
                 i++
@@ -11757,7 +11908,11 @@ module ejs.web {
             for each (t in initialData) {
                 for (name in t) {
                     let url = t[name]
-                    write('      <li onclick="window.location=\'' + url + '\'"><a href="' + url + '">' + name + '</a></li>\r\n')
+                    if (options["data-remote"]) {
+                        write('      <li data-remote="' + url + '">' + name + '</li>\r\n')
+                    } else {
+                        write('      <li onclick="window.location=\'' + url + '\'"><a href="' + url + '">' + name + '</a></li>\r\n')
+                    }
                 }
             }
             write('    </ul>')
@@ -11844,6 +11999,7 @@ module ejs.web {
             let sortOrder = options.sortOrder || ""
             let sort = options.sort
             if (sort == undefined) sort = true
+            let attributes = getDataAttributes(options)
 
             if (!options.ajax) {
                 let url = (data is String) ? data : null
@@ -11856,14 +12012,15 @@ module ejs.web {
                     '  </script>\r\n')
                 if (data is String) {
                     /* Data is an action method */
-                    write('<table id="' + tableId + '" class="-ejs-table"></table>\r\n')
+                    write('<table id="' + tableId + '" class="-ejs-table"' + attributes + '></table>\r\n')
                     return
                 }
             } else {
                 write('  <script type="text/javascript">$("#' + tableId + '").eTableSetOptions({ refresh: ' + refresh +
                     ', sort: "' + sort + '", sortOrder: "' + sortOrder + '"})' + ';</script>\r\n')
             }
-			write('  <table id="' + tableId + '" class="-ejs-table ' + (options.styleTable || "" ) + '">\r\n')
+			write('  <table id="' + tableId + '" class="-ejs-table ' + (options.styleTable || "" ) + '"' + 
+                attributes + '>\r\n')
 
             /*
              *  Table title and column headings
@@ -11925,7 +12082,8 @@ module ejs.web {
                     write('    <tr class="' + styleRow + 
                         '" onclick="window.location=\'' + url + '\';">\r\n')
                 } else {
-                    write('    <tr class="' + styleRow + '">\r\n')
+                let dataId = (options["data-remote"] && r.id) ? (' data-id="' + r.id + '"') : ''
+                    write('    <tr class="' + styleRow + '"' + dataId + '>\r\n')
                 }
 
                 let col = 0
@@ -12058,6 +12216,20 @@ module ejs.web {
 
         private function write(str: String): Void
             view.write(str)
+
+        private function getDataAttributes(options): String {
+            let attributes = ""
+            if (options["data-remote"]) {
+                attributes += ' data-remote="' + options["data-remote"] + '"'
+            }
+            if (options["data-apply"]) {
+                attributes += ' data-apply="' + options["data-apply"] + '"'
+            }
+            if (options["data-id"]) {
+                attributes += ' data-id="' + options["data-id"] + '"'
+            }
+            return attributes
+        }
 	}
 }
 
@@ -12453,7 +12625,7 @@ module ejs.web {
 
         /**
          *  Transform a string to be safe for output into an HTML web page. It does this by changing the
-         *  ">", "<" and '"' characters into their ampersand HTML equivalents.
+         *  "&", ">", "<" and '"' characters into their ampersand HTML equivalents.
          *  @param s input string
          *  @returns a transformed HTML escaped string
          */
@@ -12637,9 +12809,10 @@ module ejs.web {
                 viewName = actionName
             }
             
+            let viewClass: String
             try {
                 let name = Reflect(this).name
-                let viewClass: String = name.trim("Controller") + "_" + viewName + "View"
+                viewClass = name.trim("Controller") + "_" + viewName + "View"
                 if (global[viewClass] == undefined) {
                     loadView(viewName)
                 }
@@ -12738,7 +12911,7 @@ module ejs.web {
          *  @returns a transformed string
          */
         function unescapeHtml(s: String): String
-            s.replace(/&amp/g,'&;').replace(/&gt/g,'>').replace(/&lt/g,'<').replace(/&quot/g,'"')
+            s.replace(/&amp;/g,'&').replace(/&gt;/g,'>').replace(/&lt;/g,'<').replace(/&quot;/g,'"')
 
         /**
          *  Send a warning message back to the client for display in the flash area. This is just a convenience instead of
@@ -13011,6 +13184,7 @@ module ejs.web {
 
         /**
          *  Authentication access control list
+         *  @hide
          */
         native var authAcl: String
 
@@ -13087,8 +13261,7 @@ module ejs.web {
         native var mimeType: String
 
         /**
-         *  The portion of the path after the script name if extra path processing is being used. See the ExtraPath 
-         *  directive.
+         *  The portion of the path after the script name if extra path processing is being used.
          */
         native var pathInfo: String
 
@@ -13548,11 +13721,6 @@ module ejs.web {
             @option url String Use a URL rather than action and controller for the target url.
          */
         function form(action: String, record: Object = null, options: Object = {}): Void {
-            /*
-            if (record == null) {
-                record = new LocalModel
-            }
-            */
             currentModel = record
             formErrors(record)
             options = setOptions("form", options)
@@ -13684,8 +13852,8 @@ module ejs.web {
                 input element. If used inside a model form, it is the field name in the model containing the list item to
                 select. If used without a model, the value to select should be passed via options.value. 
             @param choices Choices to select from. This can be an array list where each element is displayed and the value 
-                returned is an element index (origin zero). It can also be an array of array tuples where the first 
-                tuple entry is the value to display and the second is the value to send to the app. Or it can be an 
+                returned is an element index (origin zero). It can also be an array of array tuples where the second 
+                tuple entry is the value to display and the first is the value to send to the app. Or it can be an 
                 array of objects such as those returned from a table lookup. If choices is null, the $field value is 
                 used to construct a model class name to use to return a data grid containing an array of row objects. 
                 The first non-id field is used as the value to display.
@@ -13693,7 +13861,7 @@ module ejs.web {
             Examples:
                 list("stockId", Stock.stockList) 
                 list("low", ["low", "med", "high"])
-                list("low", [["low", "3"], ["med", "5"], ["high", "9"]])
+                list("low", [["3", "low"], ["5", "med"], ["9", "high"]])
                 list("low", [{low: 3{, {med: 5}, {high: 9}])
                 list("Stock Type")                          Will invoke StockType.findAll() to do a table lookup
          */
@@ -13847,7 +14015,7 @@ module ejs.web {
             @option styleOddRow String CSS style to use for odd data rows in the table
             @option styleEvenRow String CSS style to use for even data rows in the table
             @option title String Table title
-         *
+         
             Column options:
             <ul>
             <li>align</li>
@@ -13859,7 +14027,7 @@ module ejs.web {
                 Defaults to ascending.</li>
             <li>style</li>
             </ul>
-         *
+        
             @example
                 <% table("getData", { refresh: 2, pivot: true" }) %>
                 <% table(gridData, { click: "edit" }) %>
@@ -14300,6 +14468,7 @@ module ejs.web {
         private static const htmlOptions: Object = { 
             background: "", color: "", id: "", height: "", method: "", size: "", 
             style: "class", visible: "", width: "",
+            "remote": "data-remote",
         }
 
         /**
@@ -14337,6 +14506,9 @@ module ejs.web {
                         mapped = option
                     }
                     result += ' ' +  mapped + '="' + options[option] + '"'
+
+                } else if (option.startsWith("data-")) {
+                    result += ' ' +  option + '="' + options[option] + '"'
                 }
             }
             return result + " "
@@ -14525,15 +14697,15 @@ module ejs {
          *  @param name The name to search on.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attribute(name: String): XMLList
+        function attribute(name: String): XMLList
+            this["@" + name]
 
         /**
          *  Get an XMLList containing all of the attributes of this object.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attributes(): XMLList
+        function attributes(): XMLList
+            this.@*
         
         /**
          *  Get an XMLList containing the list of children (properties) in this XML object with the given name.
@@ -14605,8 +14777,8 @@ module ejs {
          *  @param name The (optional) name to search on.
          *  @return The list of elements.
          */
-        # FUTURE
-        native function elements(name: String = "*"): XMLList
+        function elements(name: String = "*"): XMLList
+            this[name]
 
         /**
          *  Get an iterator for this node to be used by "for (v in node)"
@@ -14714,7 +14886,6 @@ module ejs {
          *  Get the parent of this XML object.
          *  @return The parent.
          */
-        # FUTURE
         native function parent(): XML
 
         /**
@@ -14912,15 +15083,15 @@ module ejs {
          *  @param name The name to search on.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attribute(name: String): XMLList
+        function attribute(name: String): XMLList
+            this["@" + name]
 
         /**
          *  Get an XMLList containing all of the attributes of this object.
          *  @return An XMLList with all the attributes (zero or more).
          */
-        # FUTURE
-        native function attributes(): XMLList
+        function attributes(): XMLList
+            this.@*
 
         /**
          *  Get an XMLList containing the list of children (properties) in this XML object with the given name.
@@ -14991,8 +15162,8 @@ module ejs {
          *  @param name The (optional) name to search on.
          *  @return The list of elements.
          */
-        # FUTURE
-        native function elements(name: String = "*"): XMLList
+        function elements(name: String = "*"): XMLList
+            this[name]
 
         /**
          *  Get an iterator for this node to be used by "for (v in node)"
@@ -15103,7 +15274,6 @@ module ejs {
          *  Get the parent of this XML object.
          *  @return The parent.
          */
-        # FUTURE
         native function parent(): XML
 
         /**

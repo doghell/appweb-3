@@ -23,7 +23,7 @@ char *maGetDateString(MprCtx ctx, MprPath *sbuf)
         when = (MprTime) sbuf->mtime * MPR_TICKS_PER_SEC;
     }
     mprDecodeUniversalTime(ctx, &tm, when);
-    return mprFormatTime(ctx, MPR_RFC_DATE, &tm);
+    return mprFormatTime(ctx, MPR_HTTP_DATE, &tm);
 }
 
 /*

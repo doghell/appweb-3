@@ -28,7 +28,7 @@
 #
 ################################################################################
 #
-#	NOTE: We require a saved setup file exist in $BLD_CFG_PREFIX/{PRODUCT}Install.conf
+#	NOTE: We require a saved setup file exist in $BLD_PRD_PREFIX/install.conf
 #	This is created by install.
 #
 
@@ -52,6 +52,7 @@ BLD_INC_PREFIX="!!ORIG_BLD_INC_PREFIX!!"
 BLD_LIB_PREFIX="!!ORIG_BLD_LIB_PREFIX!!"
 BLD_MAN_PREFIX="!!ORIG_BLD_MAN_PREFIX!!"
 BLD_MOD_PREFIX="!!ORIG_BLD_MOD_PREFIX!!"
+BLD_PRD_PREFIX="!!ORIG_BLD_PRD_PREFIX!!"
 BLD_SAM_PREFIX="!!ORIG_BLD_SAM_PREFIX!!"
 BLD_SRC_PREFIX="!!ORIG_BLD_SRC_PREFIX!!"
 BLD_WEB_PREFIX="!!ORIG_BLD_WEB_PREFIX!!"
@@ -111,7 +112,7 @@ configureService() {
                 fi
             fi
 		elif which launchctl >/dev/null 2>&1 ; then
-            local company=`echo $BLD_COMPANY | tr '[A-Z]' '[a-z']`
+            local company=`echo $BLD_COMPANY | tr '[:upper:]' '[:lower:']`
             if [ $action = start ] ; then
                 launchctl start com.${company}.${BLD_PRODUCT}
             else
@@ -132,11 +133,11 @@ configureService() {
 				"$BLD_BIN_PREFIX/angel" --install $BLD_BIN_PREFIX/$BLD_PRODUCT
 			fi
 		elif which launchctl >/dev/null 2>&1 ; then
-            local company=`echo $BLD_COMPANY | tr '[A-Z]' '[a-z']`
+            local company=`echo $BLD_COMPANY | tr '[:upper:]' '[:lower:']`
             launchctl load /Library/LaunchDaemons/com.${company}.${BLD_PRODUCT}.plist
 		elif which chkconfig >/dev/null 2>&1 ; then
-			/sbin/chkconfig --add $BLD_PRODUCT >/dev/null
-			/sbin/chkconfig --level 5 $BLD_PRODUCT on >/dev/null
+			chkconfig --add $BLD_PRODUCT >/dev/null
+			chkconfig --level 5 $BLD_PRODUCT on >/dev/null
 
 		elif which update-rc.d >/dev/null 2>&1 ; then
 			update-rc.d $BLD_PRODUCT defaults 90 10 >/dev/null
@@ -149,10 +150,10 @@ configureService() {
 				"$BLD_BIN_PREFIX/angel" --uninstall $BLD_BIN_PREFIX/$BLD_PRODUCT
 			fi
 		elif which launchctl >/dev/null 2>&1 ; then
-            local company=`echo $BLD_COMPANY | tr '[A-Z]' '[a-z']`
+            local company=`echo $BLD_COMPANY | tr '[:upper:]' '[:lower:']`
             launchctl unload -w /Library/LaunchDaemons/com.${company}.${BLD_PRODUCT}.plist 2>/dev/null
 		elif which chkconfig >/dev/null 2>&1 ; then
-			/sbin/chkconfig --del $BLD_PRODUCT >/dev/null 2>&1
+			chkconfig --del $BLD_PRODUCT >/dev/null 2>&1
 		elif which update-rc.d >/dev/null 2>&1 ; then
 			update-rc.d -f $BLD_PRODUCT remove >/dev/null
 		fi
@@ -219,7 +220,7 @@ removeTarFiles() {
 
 	pkg=$1
 
-	[ $pkg = bin ] && prefix="$BLD_CFG_PREFIX"
+	[ $pkg = bin ] && prefix="$BLD_PRD_PREFIX"
 	[ $pkg = dev ] && prefix="$BLD_INC_PREFIX"
 	[ $pkg = doc ] && prefix="$BLD_DOC_PREFIX"
 
@@ -247,7 +248,8 @@ preClean() {
 	if [ "$removebin" = "Y" ] ; then
 		cd "$BLD_CFG_PREFIX"
 		removeIntermediateFiles access.log error.log '*.log.old' .dummy $BLD_PRODUCT.conf make.log
-		cd "$cdir"
+		cd "$BLD_PRD_PREFIX"
+		removeIntermediateFiles access.log error.log '*.log.old' .dummy $BLD_PRODUCT.conf make.log
 		cd "$BLD_LIB_PREFIX"
 		removeIntermediateFiles access.log error.log '*.log.old' .dummy $BLD_PRODUCT.conf make.log
 		cd "$cdir"
@@ -269,27 +271,28 @@ postClean() {
 
 	echo
 
-    /tmp/linkup$$ Remove
+    /tmp/linkup$$ Remove /
     rm -f /tmp/linkup$$
 
+    # Legacy
 	rm -f "${BLD_CFG_PREFIX}/${BLD_PRODUCT}Install.conf"
-
-	if [ "$removebin" = "Y" ] ; then
-		cleanDir "$BLD_CFG_PREFIX"
-		cleanDir "$BLD_LIB_PREFIX"
-		cleanDir "$BLD_WEB_PREFIX"
-
-		if [ -d "$BLD_MAN_PREFIX" ] ; then
-			rm -f "$BLD_MAN_PREFIX/${BLD_PRODUCT}.1.gz"
-		fi
-	fi
+	rm -f "${BLD_PRD_PREFIX}/install.conf"
 
 	if [ "$removedev" = "Y" ] ; then
+		if [ -d "$BLD_MAN_PREFIX" ] ; then
+			rm -rf "$BLD_MAN_PREFIX"/man*
+		fi
+		cleanDir "$BLD_MAN_PREFIX"
 		cleanDir "$BLD_SAM_PREFIX"
 		cleanDir "$BLD_INC_PREFIX"
 		cleanDir "$BLD_DOC_PREFIX"
 	fi
-
+	if [ "$removebin" = "Y" ] ; then
+		cleanDir "$BLD_LIB_PREFIX"
+		cleanDir "$BLD_WEB_PREFIX"
+        cleanDir "$BLD_PRD_PREFIX"
+        cleanDir "$BLD_CFG_PREFIX"
+	fi
 	if [ $BLD_HOST_OS != WIN ] ; then
         if [ -x /usr/share/$BLD_PRODUCT ] ; then
             cleanDir /usr/share/$BLD_PRODUCT
@@ -298,7 +301,11 @@ postClean() {
             cleanDir /var/$BLD_PRODUCT
         fi
         rmdir /usr/share/${BLD_PRODUCT} >/dev/null 2>&1
-        rmdir $BLD_CFG_PREFIX >/dev/null 2>&1
+        rmdir "$BLD_WEB_PREFIX" >/dev/null 2>&1
+        rmdir "$BLD_MAN_PREFIX" >/dev/null 2>&1
+        rmdir "$BLD_DOC_PREFIX" >/dev/null 2>&1
+        rmdir "$BLD_PRD_PREFIX" >/dev/null 2>&1
+        rmdir "$BLD_CFG_PREFIX" >/dev/null 2>&1
     fi
 }
 
@@ -401,11 +408,11 @@ setup() {
 	#
 	#	Get defaults from the installation configuration file
 	#
-    if [ -f "${BLD_CFG_PREFIX}/${BLD_PRODUCT}Install.conf" ] ; then
-		.  "${BLD_CFG_PREFIX}/${BLD_PRODUCT}Install.conf"
+    if [ -f "${BLD_PRD_PREFIX}/install.conf" ] ; then
+		.  "${BLD_PRD_PREFIX}/install.conf"
 	fi
 	
-	binDir=${binDir:-$BLD_CFG_PREFIX}
+	binDir=${binDir:-$BLD_PRD_PREFIX}
 	devDir=${devDir:-$BLD_INC_PREFIX}
 	srcDir=${srcDir:-$BLD_SRC_PREFIX}
 

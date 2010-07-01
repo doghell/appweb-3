@@ -4,7 +4,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.0.
+ *  Embedthis Ejscript 1.0.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -24,7 +24,7 @@
 /**
  *  ejsweb.c - Ejs Web Framework Application Manager and Generator
  *
- *  This is provided for windows to make it easier to run the ejsweb.es script.
+ *  This command is now deprecated. Windows uses ejs.cmd.
  *
  *  Copyright (c) All Rights Reserved. See details at the end of the file.
  */
@@ -33,7 +33,11 @@
 
 #if BLD_FEATURE_EJS_WEB
 
-MAIN(ejswebMain, int argc, char **argv)
+#if BLD_APPWEB_PRODUCT
+    MAIN(ajswebMain, int argc, char **argv)
+#else
+    MAIN(ejswebMain, int argc, char **argv)
+#endif
 {
     EjsService  *vm;
     EcCompiler  *cp;
@@ -64,6 +68,12 @@ MAIN(ejswebMain, int argc, char **argv)
         ejsReportError(ejs, EJS_EJSWEB);
         return EJS_ERR;
     }
+#if VXWORKS
+    mprFree(ejs);
+    if (mprStop(mpr)) {
+        mprFree(mpr);
+    }
+#endif
     return (rc == 0) ? 0 : 1;
 }
 

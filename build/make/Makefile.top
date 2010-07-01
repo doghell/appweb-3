@@ -32,9 +32,10 @@
 #
 
 BLD_TOP		:= .
+BUILD_DEPTH	?= 2
 BUILD_CHECK	:= buildCheck
 FIRST		:= first
-SHELL		:= /bin/bash
+SHELL		:= bash
 IMG_NAME	= $(BLD_PRODUCT)-$(BLD_VERSION)-$(BLD_NUMBER)
 SRC_NAME	= $(BLD_PRODUCT)-src-$(BLD_VERSION)-$(BLD_NUMBER)
 
@@ -143,7 +144,7 @@ upload:
 		do \
 			chmod 664 $$name ; \
 			echo http --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
-			http --log stdout:5 -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
+			http -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
 		done ; \
 	fi
 
@@ -158,6 +159,6 @@ uploadSource:
 		do \
 			chmod 664 $$name ; \
 			echo http --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
-			http --log stdout:5 -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
+			http -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
 		done ; \
 	fi

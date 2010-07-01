@@ -42,6 +42,7 @@
         <div class="contentRight">
             <h2>Quick Nav</h2>
             <ul>
+                <li><a href="#r102">Release 1.0.2</a></li>
                 <li><a href="#r101">Release 1.0.1</a></li>
                 <li><a href="#r100">Release 1.0.0</a></li>
                 <li><a href="#r100B3">Release 1.0.0.B3</a></li>
@@ -59,9 +60,35 @@
         <div class="contentLeft">
             <h1>Ejscript Change Log</h1>
             <p>This change log chronicles the features and fixes in each Ejscript release. </p>
+            <p>See the Ejscript <a href="http://github.com/embedthis/ejs-1/issues">issue database</a> for full 
+                details of fixes.</p>
+
+            <a name="r102" id="r102"></a>
+            <h2 class="section">Changes in 1.0.2</h2>
+            <h3>Minor Features</h3>
+            <ul>
+                <li>Solaris and FreeBSD ports</li>
+                <li>Http request and response body tracing</li>
+            </ul>
+            <h3>Key Fixes</h3>
+            <ul>
+                <li>Fix freeing memory on exiting ejs and ejsc. (Fix to mprFree(mpr))</li>
+                <li>Fix Path.mimeTypes</li>
+                <li>Fix for unicode constants in strings</li>
+                <li>Date fixes for dates outside 2038 and prior to 1970</li>
+                <li>Fix PPC encoding of floating point numbers in module files</li>
+                <li>Fix linking in uClinux</li>
+                <li>Documentation updates</li>
+                <li>Debian package improvements</li>
+            </ul>
+            <h3><strong>API Changes</strong></h3>
+            <ul>
+                <li>None</li>
+            </ul>
+
             <a name="r101" id="r101"></a>
             <h2 class="section">Changes in 1.0.1</h2>
-            <h3><strong>Fixes</strong></h3>
+            <h3>Key Fixes</h3>
             <ul>
                 <li>Math.random()</li>
                 <li>String.caseCompare</li>
@@ -70,11 +97,13 @@
                 <li>Windows delimiters in Path class</li>
                 <li>Build fixes for va_list</li>
                 <li>Documentation corrections</li>
+                <li>Fix for loading modules on ARM systems</li>
             </ul>
             <h3><strong>API Changes</strong></h3>
             <ul>
                 <li>None</li>
             </ul>
+
             <a name="r100" id="r100"></a>
             <h2 class="section">Changes in 1.0.0</h2>
             <h3><strong>Fixes</strong></h3>

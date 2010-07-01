@@ -34,7 +34,7 @@
 #						in buildConfig.make and buildConfig.sh
 #		PRE_DIRS		Directories to recurse before the current directory
 #		POST_DIRS		Directories to recurse after the current directory
-#		MAKE_XXFLAGS    These are specified in user makes. Valid for IFLAGS,
+#		MAKE_XXFLAGS    These are specified in user makefiles. Valid for IFLAGS,
 #                       CFLAGS and LDFLAGS
 #       _XXFLAGS        Flags from the make.* per O/S configuration files.
 #
@@ -57,7 +57,8 @@ export 	MAKE_CFLAGS MAKE_DFLAGS MAKE_IFLAGS MAKE_LDFLAGS EXPORT_OBJECTS BUILDING
 #
 #	Compute the directory path for display purposes
 #
-_DPATH_			?=	.
+_DPATH_			?= .
+BUILD_DEPTH     ?= 2
 BUILDING_CROSS 	:= 0
 MAKE			:= $(BLD_MAKE)
 ifeq ($(TRACE),)
@@ -367,27 +368,33 @@ projectsDirs:
 projectsExtra:
 
 
-PACKAGE = 0
+DO_PACKAGE = 0
 ifeq    ($(BLD_OS),LINUX)
-PACKAGE = 1
+DO_PACKAGE = 1
 endif
 ifeq    ($(BLD_OS),WIN)
-PACKAGE = 1
+DO_PACKAGE = 1
 endif
 ifeq    ($(BLD_OS),MACOSX)
-PACKAGE = 1
+DO_PACKAGE = 1
 endif
 
 #
 #	Create a redistributable package
 #
+ifeq    ($(DO_PACKAGE),1)
 package: $(BUILD_CHECK) packagePriv packageDirs packageExtra
 
 packagePriv:
 
 packageDirs:
-ifeq    ($(PACKAGE),1)
-	@+T=package ; D="$(PRE_DIRS)" ; $(DO_RECURSE) ; D="$(POST_DIRS)" ; $(DO_RECURSE)
+	if [ "$(BLD_CROSS)" = 0 -o "$(BUILDING_CROSS)" = 1 ] ; then \
+		if [ "$(BUILD_DEPTH)" -ge 2 ] ; then \
+			T=package ; D="$(PRE_DIRS)" ; $(DO_RECURSE) ; D="$(POST_DIRS)" ; $(DO_RECURSE) ; \
+		fi ; \
+	 fi
+else
+package:
 endif
 
 packageExtra:

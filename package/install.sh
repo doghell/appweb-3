@@ -264,8 +264,8 @@ saveSetup() {
     local firstChar
 
     mkdir -p "$BLD_CFG_PREFIX"
-    echo -e "FMT=$FMT\nbinDir=\"${BLD_CFG_PREFIX}\"\ninstallbin=$installbin\ninstalldev=$installdev\nrunDaemon=$runDaemon\nhttpPort=$HTTP_PORT\nsslPort=$SSL_PORT\nusername=$username\ngroupname=$groupname\nhostname=$HOSTNAME" \
-        >"$BLD_CFG_PREFIX/${BLD_PRODUCT}Install.conf"
+    echo -e "FMT=$FMT\nbinDir=\"${BLD_PRD_PREFIX}\"\ninstallbin=$installbin\ninstalldev=$installdev\nrunDaemon=$runDaemon\nhttpPort=$HTTP_PORT\nsslPort=$SSL_PORT\nusername=$username\ngroupname=$groupname\nhostname=$HOSTNAME" \
+        >"$BLD_PRD_PREFIX/install.conf"
 }
 
 #
@@ -292,7 +292,7 @@ patchAppwebConf()
 
     if [ -f "$ssl" ] ; then
         sed -e "
-            s![ 	][ 	]*Listen.*!    Listen ${BLD_SSL_PORT}!
+            s![     ][  ]*Listen.*!    Listen ${BLD_SSL_PORT}!
             s!DocumentRoot.*!DocumentRoot \"${BLD_WEB_PREFIX}\"!
             s!<VirtualHost .*!<VirtualHost *:${BLD_SSL_PORT}>!" <"$ssl" >"$ssl.new"
         [ $? = 0 ] && mv "$ssl.new" "$ssl"
@@ -307,7 +307,7 @@ patchAppwebConf()
 
     if [ -f "$doc" ] ; then
         sed -e "
-            s![ 	][ 	]*Alias /doc/.*!    Alias /doc/ \"${docPrefix}\/\"!" <"$doc" >"$doc.new"
+            s![     ][  ]*Alias /doc/.*!    Alias /doc/ \"${docPrefix}\/\"!" <"$doc" >"$doc.new"
         [ $? = 0 ] && mv "$doc.new" "$doc"
     fi
 
@@ -354,7 +354,7 @@ configureService() {
                 fi
             fi
         elif which launchctl >/dev/null 2>&1 ; then
-            local company=`echo $BLD_COMPANY | tr '[A-Z]' '[a-z']`
+            local company=`echo $BLD_COMPANY | tr '[:upper:]' '[:lower:']`
             if [ $action = start ] ; then
                 launchctl start com.${company}.${BLD_PRODUCT}
             else
@@ -373,12 +373,12 @@ configureService() {
                 "$BLD_BIN_PREFIX/angel" --install $BLD_BIN_PREFIX/$BLD_PRODUCT
             fi
         elif which launchctl >/dev/null 2>&1 ; then
-            local company=`echo $BLD_COMPANY | tr '[A-Z]' '[a-z']`
+            local company=`echo $BLD_COMPANY | tr '[:upper:]' '[:lower:']`
             launchctl unload /Library/LaunchDaemons/com.${company}.${BLD_PRODUCT}.plist 2>/dev/null
             launchctl load -w /Library/LaunchDaemons/com.${company}.${BLD_PRODUCT}.plist
         elif which chkconfig >/dev/null 2>&1 ; then
-            /sbin/chkconfig --add $BLD_PRODUCT >/dev/null
-            /sbin/chkconfig --level 5 $BLD_PRODUCT on >/dev/null
+            chkconfig --add $BLD_PRODUCT >/dev/null
+            chkconfig --level 5 $BLD_PRODUCT on >/dev/null
 
         elif which update-rc.d >/dev/null 2>&1 ; then
             update-rc.d $BLD_PRODUCT defaults 90 10 >/dev/null
@@ -391,10 +391,10 @@ configureService() {
                 "$BLD_BIN_PREFIX/angel" --uninstall $BLD_BIN_PREFIX/$BLD_PRODUCT
             fi
         elif which launchctl >/dev/null 2>&1 ; then
-            local company=`echo $BLD_COMPANY | tr '[A-Z]' '[a-z']`
+            local company=`echo $BLD_COMPANY | tr '[:upper:]' '[:lower:']`
             launchctl unload -w /Library/LaunchDaemons/com.${company}.${BLD_PRODUCT}.plist 2>/dev/null
         elif which chkconfig >/dev/null 2>&1 ; then
-            /sbin/chkconfig --del $BLD_PRODUCT >/dev/null
+            chkconfig --del $BLD_PRODUCT >/dev/null
         elif which update-rc.d >/dev/null 2>&1 ; then
             update-rc.d -f $BLD_PRODUCT remove >/dev/null
         fi
@@ -411,7 +411,7 @@ installFiles() {
         
         doins=`eval echo \\$install${pkg}`
         if [ "$doins" = Y ] ; then
-            upper=`echo $pkg | tr '[a-z]' '[A-Z]'`
+            upper=`echo $pkg | tr '[:lower:]' '[:upper:]'`
             suffix="-${pkg}"
             #
             #   RPM doesn't give enough control on error codes. So best to
@@ -425,8 +425,8 @@ installFiles() {
                 echo -e "dpkg -i $NAME"
                 dpkg -i $HOME/$NAME >/dev/null
             else
-                echo tar xfz "$HOME/${NAME}.gz" --strip-components 1 -C /
-                tar xfz "$HOME/${NAME}.gz" --strip-components 1 -C /
+                echo tar xfz "$HOME/${NAME}.gz" --strip-components 1 -P -C /
+                tar xfz "$HOME/${NAME}.gz" --strip-components 1 -P -C /
             fi
         fi
     done
@@ -439,12 +439,17 @@ installFiles() {
         fi
     fi
 
+    if [ "$BLD_HOST_OS" = "FREEBSD" ] ; then
+        LDCONFIG_OPT=-m
+    else
+        LDCONFIG_OPT=-n
+    fi
     if which ldconfig >/dev/null 2>&1 ; then
         ldconfig /usr/lib/lib$BLD_PRODUCT.so.?.?.?
-        ldconfig -n /usr/lib/$BLD_PRODUCT
-        ldconfig -n /usr/lib/$BLD_PRODUCT/modules
+        ldconfig $LDCONFIG_OPT /usr/lib/$BLD_PRODUCT
+        ldconfig $LDCONFIG_OPT /usr/lib/$BLD_PRODUCT/modules
     fi
-    "$BLD_BIN_PREFIX/linkup" Install
+    "$BLD_BIN_PREFIX/linkup" Install /
 
     if [ $BLD_HOST_OS = WIN ] ; then
         echo -e "\nSetting file permissions ..."
@@ -485,8 +490,8 @@ startBrowser() {
         return
     fi
     #
-	#	Conservative delay to allow appweb to start and initialize
-	#
+    #   Conservative delay to allow appweb to start and initialize
+    #
     sleep 5
     echo -e "\nStarting browser to view the $BLD_NAME Home Page."
     if [ $BLD_HOST_OS = WIN ] ; then

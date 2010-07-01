@@ -2,7 +2,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.0.
+ *  Embedthis Ejscript 1.0.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -1231,13 +1231,13 @@ extern EjsService *ejsCreateService(MprCtx ctx);
 extern Ejs *ejsCreate(MprCtx ctx, struct Ejs *master, cchar *searchPath, int flags);
 
 /**
- *  Prepend to the module search path
- *  @description Prepend a path to the ejs module search path.
+ *  Append to the module search path
+ *  @description Append a path to the ejs module search path.
  *  @param ejs Ejs interpreter
  *  @param ejsPath Search path. This is a colon (or semicolon on Windows) separated string of directories.
  *  @ingroup Ejs
  */
-extern void ejsPrependSearchPath(Ejs *ejs, cchar *ejsPath);
+extern void ejsAppendSearchPath(Ejs *ejs, cchar *ejsPath);
 
 /**
  *  Set the module search path
@@ -1657,6 +1657,8 @@ typedef BLD_FEATURE_NUM_TYPE MprNumber;
  *  Compare if a variable is an instance or sub-type of a given type described by the type's global slot.
  */
 #define ejsIs(vp, slot)             _ejsIs((EjsVar*) vp, slot)
+
+extern int _ejsIs(struct EjsVar *vp, int slot);
 
 /**
  *  List type
@@ -4022,24 +4024,6 @@ extern void     ejsSetSqliteMemCtx(MprThreadLocal *tls, MprCtx ctx);
 extern void     ejsSetSqliteTls(MprThreadLocal *tls);
 
 
-inline static int _ejsIs(struct EjsVar *vp, int slot)
-{
-    EjsType     *tp;
-
-    if (vp == 0) {
-        return 0;
-    }
-    if (vp->type->id == slot) {
-        return 1;
-    }
-    for (tp = ((EjsVar*) vp)->type->baseType; tp; tp = tp->baseType) {
-        if (tp->id == slot) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
 #ifdef __cplusplus
 }
 #endif
@@ -4415,12 +4399,12 @@ extern int          ejsModuleReadType(struct Ejs *ejs, EjsModule *module, EjsTyp
                         EjsName *typeName, int *slotNum);
 extern int          ejsSetModuleConstants(struct Ejs *ejs, EjsModule *mp, cchar *pool, int poolSize);
 
-extern double       ejsDecodeDouble(uchar **pp);
+extern double       ejsDecodeDouble(Ejs *ejs, uchar **pp);
 extern int64        ejsDecodeNum(uchar **pp);
 extern int          ejsDecodeWord(uchar **pp);
 extern int          ejsEncodeNum(uchar *pos, int64 number);
 extern int          ejsEncodeWord(uchar *pos, int number);
-extern int          ejsEncodeDouble(uchar *pos, double number);
+extern int          ejsEncodeDouble(Ejs *ejs, uchar *pos, double number);
 extern int          ejsEncodeByteAtPos(uchar *pos, int value);
 extern int          ejsEncodeUint(uchar *pos, int number);
 extern int          ejsEncodeWordAtPos(uchar *pos, int value);
@@ -4552,13 +4536,18 @@ extern EjsDoc       *ejsCreateDoc(struct Ejs *ejs, EjsBlock *block, int slotNum,
 
 
 #if BLD_APPWEB_PRODUCT
+    #define EJS_EJS             "ajs"       /* Ejscript interpreter */
     #define EJS_EJSWEB          "ajsweb"    /* Ejscript framework generator */
 #else
+    #define EJS_EJS             "ejs"       /* Ejscript interpreter */
     #define EJS_EJSWEB          "ejsweb"    /* Ejscript framework generator */
 #endif
 
+#define EJS_EJS_EXE             EJS_EJS BLD_EXE
+#define EJS_EJS_MOD             EJS_EJS EJS_MODULE_EXT
 #define EJS_EJSWEB_EXE          EJS_EJSWEB BLD_EXE
 #define EJS_EJSWEB_MOD          EJS_EJSWEB EJS_MODULE_EXT
+
 #define EJS_WEB_EXT             ".ejs"      /* Web page extension */
 #define EJS_SESSION             "-ejs-session-"
 #define EJS_SERVER_NAME         "Embedthis-Ejscript/" BLD_VERSION

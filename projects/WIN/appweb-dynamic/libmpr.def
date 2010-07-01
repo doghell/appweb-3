@@ -23,6 +23,7 @@ EXPORTS
   dtoa
   freedtoa
   gethex
+  gettimeofday
   mprActivateWorker
   mprAddDuplicateHash
   mprAddFileSystem
@@ -226,6 +227,7 @@ EXPORTS
   mprGetTempPath
   mprGetThreadData
   mprGetTime
+  mprGetTimeZoneOffset
   mprGetTransformedPath
   mprGetUsedMemory
   mprGetWordTok
@@ -446,6 +448,7 @@ EXPORTS
   mprStopModuleService
   mprStopOsService
   mprStopSocketService
+  mprStopThreadService
   mprStopWorkerService
   mprStrLower
   mprStrTok
@@ -508,3 +511,4 @@ EXPORTS
   mprXmlSetParseArg
   mprXmlSetParserHandler
   print
+  universalTime

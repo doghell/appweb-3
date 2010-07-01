@@ -17,7 +17,7 @@ endif
 compileExtra: 	$(NAME)$(BLD_EXE)
 
 $(NAME)$(BLD_EXE): $(OBJECTS)
-	@bld --exe $(NAME)$(BLD_EXE) --search "$(BLD_LIB_DIR)/modules" --modules "$(MODS)" --libs "$(LIBS)" $(OBJECTS)
+	@bld --exe $(NAME)$(BLD_EXE) --search "$(BLD_LIB_DIR)" --modules "$(MODS)" --libs "$(LIBS)" $(OBJECTS)
 
 run:
 	$(call setlibpath) ; ./$(NAME)$(BLD_EXE)

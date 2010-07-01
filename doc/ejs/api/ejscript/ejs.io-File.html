@@ -152,7 +152,7 @@ information about the file. All I/O is unbuffered and synchronous.</p>
 </dl><dl><dt>Options</dt>
 <dd><table class='parameters' summary ='options'>
 <td class='param'>mode</td><td>Optional file access mode string. Use "r" for read, "w" for write, "a" for append to existing content, "+" never truncate. Defaults to "r".</td></tr>
-<td class='param'>permissions</td><td>Optional Posix permissions number mask. Defaults to 0664.</td></tr>
+<td class='param'>permissions</td><td>Number containing the Posix permissions value. Note: this is a number and not a string representation of an octal posix number.</td></tr>
 </table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>The File object. This permits method chaining.</dd></dl>

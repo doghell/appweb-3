@@ -71,13 +71,16 @@ directory elements and excluding the base name. On some systems, it will include
 <a name='linkTarget'></a>
    <tr><td nowrap align='left'>public get </td><td>linkTarget</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The target pointed to if this path is a symbolic link. Not available on some platforms such as Windows and 
 VxWorks. If the path is not a symbolic link, it is set to null.</td></tr>
+<a name='mimeType'></a>
+   <tr><td nowrap align='left'>public get </td><td>mimeType</td><td><a href='intrinsic-String.html'>String</a></td><td>Get the mime type for a path or extension string. The path's extension is used to lookup the corresponding
+mime type.</td></tr>
 <a name='modified'></a>
    <tr><td nowrap align='left'>public get </td><td>modified</td><td><a href='intrinsic-Date.html'>Date</a></td><td>When the file was created or last modified. Set to null the file does not exist.</td></tr>
 <a name='name'></a>
    <tr><td nowrap align='left'>public get </td><td>name</td><td><a href='intrinsic-String.html'>String</a></td><td>Name of the Path as a string. This is the same as toString().</td></tr>
 <a name='natural'></a>
    <tr><td nowrap align='left'>public get </td><td>natural</td><td><a href='ejs.io-Path.html'>Path</a></td><td>Natural (native) respresentation of the path. This uses the default O/S file system path separator, 
-this is "" on windows and "/" on unix and is normalized.</td></tr>
+this is "\" on windows and "/" on unix and is normalized.</td></tr>
 <a name='normalize'></a>
    <tr><td nowrap align='left'>public get </td><td>normalize</td><td><a href='ejs.io-Path.html'>Path</a></td><td>Normalized representation of the path. This removes "segment/.." and "./" components. Separators are made 
 uniform by converting all separators to be the same as the first separator found in the path. Note: the 
@@ -85,7 +88,8 @@ value is not converted to an absolute path.</td></tr>
 <a name='parent'></a>
    <tr><td nowrap align='left'>public get </td><td>parent</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The parent directory of path. This may be an absolute path if there are no parent directories in the path.</td></tr>
 <a name='perms'></a>
-   <tr><td nowrap align='left'>public get  set</td><td>perms</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The file permissions of a path. Set to the Posix style permissions mask or null if the file does not exist.</td></tr>
+   <tr><td nowrap align='left'>public get  set</td><td>perms</td><td><a href='intrinsic-Number.html'>Number</a></td><td>The file permissions of a path. This number contains the Posix style permissions value or null if the file 
+does not exist. NOTE: this is not a string representation of an octal posix mask.</td></tr>
 <a name='portable'></a>
    <tr><td nowrap align='left'>public get </td><td>portable</td><td><a href='ejs.io-Path.html'>Path</a></td><td>The path in a portable (like Unix) representation. This uses "/" separators. The value is is normalized and 
 the separators are mapped to "/".</td></tr>
@@ -94,8 +98,8 @@ the separators are mapped to "/".</td></tr>
 <a name='separator'></a>
    <tr><td nowrap align='left'>public get </td><td>separator</td><td><a href='intrinsic-String.html'>String</a></td><td>The path separator for this path. This will return the first valid path separator used by the path
 or the default file system path separator if the path has no separators. On Windows, a path may contain
-"/" and "" separators.  This will be set to a string containing the first separator found in the path.
-Will typically be either "/" or "/\" depending on the path, platform and file system.
+"/" and "\" separators.  This will be set to a string containing the first separator found in the path.
+Will typically be either "/" or "/\\" depending on the path, platform and file system.
 Use <a href='#natural'>natural</a> or <a href='#portable'>portable</a> to create a new path with different path separators.</td></tr>
 <a name='size'></a>
    <tr><td nowrap align='left'>public get </td><td>size</td><td><a href='intrinsic-Number.html'>Number</a></td><td>Size of the file associated with this Path object. Set to number of bytes in the file or -1 if the size
@@ -113,7 +117,7 @@ determination failed.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#copy'><b>copy</b></a>(target: <a href='intrinsic-Object.html'>Object</a>, options: <a href='intrinsic-Object.html'>Object</a> = null): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Copy a file.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#endsWith'><b>endsWith</b></a>(suffix: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Return true if the path ends with the given suffix.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#files'><b>files</b></a>(enumDirs: <a href='intrinsic-Boolean.html'>Boolean</a> = false): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get a list of files in a directory.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#find'><b>find</b></a>(glob: <a href='intrinsic-String.html'>String</a> = null , recurse: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Find matching files.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#find'><b>find</b></a>(glob: <a href='intrinsic-String.html'>String</a> = * , recurse: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Array.html'>Array</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Find matching files.</td></tr>
    <tr class='apiDef'><td class='apiType'>iterator override </td><td><a href='#get'><b>get</b></a>(): <a href='iterator-Iterator.html'>Iterator</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get iterate over any files contained under this path (assuming it is a directory) "for (v in files)".</td></tr>
    <tr class='apiDef'><td class='apiType'>iterator override </td><td><a href='#getValues'><b>getValues</b></a>(): <a href='iterator-Iterator.html'>Iterator</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get an iterator for this file to be used by "for each (v in obj)".</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#join'><b>join</b></a>(other: <a href='intrinsic-Array.html'>Array</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Join paths.</td></tr>
@@ -122,7 +126,6 @@ determination failed.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#makeLink'><b>makeLink</b></a>(existing: <a href='ejs.io-Path.html'>Path</a>, hard: <a href='intrinsic-Boolean.html'>Boolean</a> = false): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Create a link to a file.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#makeTemp'><b>makeTemp</b></a>(): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Create a temporary file in the path directory.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#map'><b>map</b></a>(separator: <a href='intrinsic-String.html'>String</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get a path after mapping the path directory separator.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#mimeType'><b>mimeType</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Get the mime type for a path or extension string.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#open'><b>open</b></a>(options: <a href='intrinsic-Object.html'>Object</a> = null): <a href='ejs.io-File.html'>File</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Open a path and return a File object.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#openBinaryStream'><b>openBinaryStream</b></a>(options: <a href='intrinsic-Object.html'>Object</a> = null): <a href='ejs.io-BinaryStream.html'>BinaryStream</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Open a file and return a BinaryStream object.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#openTextStream'><b>openTextStream</b></a>(options: <a href='intrinsic-Object.html'>Object</a> = null): <a href='ejs.io-TextStream.html'>TextStream</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Open a file and return a TextStream object.</td></tr>
@@ -137,8 +140,7 @@ If the path is a directory, this call will remove all subdirectories and their c
 directory itself.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#rename'><b>rename</b></a>(target: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Void.html'>Void</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Rename a file.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#replaceExt'><b>replaceExt</b></a>(ext: <a href='intrinsic-String.html'>String</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Replace the path extension and return a new path.</td></tr>
-   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#resolve'><b>resolve</b></a>(otherPaths: <a href='intrinsic-Array.html'>Array</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Resolve paths relative to this path
-Resolve each other path and return the last path resolved.</td></tr>
+   <tr class='apiDef'><td class='apiType'>public </td><td><a href='#resolve'><b>resolve</b></a>(otherPaths: <a href='intrinsic-Array.html'>Array</a>): <a href='ejs.io-Path.html'>Path</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Resolve paths in the neighborhood of this path.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#same'><b>same</b></a>(other: <a href='intrinsic-Object.html'>Object</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Compare two paths test if they represent the same file.</td></tr>
    <tr class='apiDef'><td class='apiType'>public </td><td><a href='#startsWith'><b>startsWith</b></a>(prefix: <a href='intrinsic-String.html'>String</a>): <a href='intrinsic-Boolean.html'>Boolean</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Return true if the path starts with the given prefix.</td></tr>
    <tr class='apiDef'><td class='apiType'>public override </td><td><a href='#toJSON'><b>toJSON</b></a>(): <a href='intrinsic-String.html'>String</a></tr><tr class='apiBrief'><td>&nbsp;</td><td>Convert the path to a JSON string.</td></tr>
@@ -220,14 +222,14 @@ use find().</dd></dl>
 <hr />
 <a name='find'></a>
 <div class='api'>
-<div class='apiSig'>  public  find(glob: <a href='intrinsic-String.html'>String</a> = null , recurse: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Array.html'>Array</a>
+<div class='apiSig'>  public  find(glob: <a href='intrinsic-String.html'>String</a> = * , recurse: <a href='intrinsic-Boolean.html'>Boolean</a> = true): <a href='intrinsic-Array.html'>Array</a>
 </div>
 <div class='apiDetail'>
 <p>Find matching files.</p>
 <dl><dt>Description</dt><dd>Files are listed in depth first order.</dd></dl>
 <dl><dt>Parameters</dt>
 <dd><table class='parameters' summary ='parameters'>
-<tr class='param'><td class='param'>glob: <a href='intrinsic-String.html'>String</a> </td><td>Glob style Pattern that files must match. This is similar to a ls() style pattern. [default: null ]</td></tr><tr class='param'><td class='param'>recurse: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>Set to true to examine sub-directories. [default: true]</td></tr></table></dd>
+<tr class='param'><td class='param'>glob: <a href='intrinsic-String.html'>String</a> </td><td>Glob style Pattern that files must match. This is similar to a ls() style pattern. [default: * ]</td></tr><tr class='param'><td class='param'>recurse: <a href='intrinsic-Boolean.html'>Boolean</a> </td><td>Set to true to examine sub-directories. [default: true]</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>Return a list of matching files.</dd></dl>
 </div>
@@ -349,19 +351,6 @@ the function returns without throwing an exception.</dd></dl>
 <tr class='param'><td class='param'>separator: <a href='intrinsic-String.html'>String</a> </td><td>Path directory separator to use.</td></tr></table></dd>
 </dl><dl><dt>Returns</dt>
 <dd>A new Path after mapping separators.</dd></dl>
-</div>
-</div>
-<hr />
-<a name='mimeType'></a>
-<div class='api'>
-<div class='apiSig'>  public  mimeType(): <a href='intrinsic-String.html'>String</a>
-</div>
-<div class='apiDetail'>
-<p>Get the mime type for a path or extension string.</p>
-<dl><dt>Description</dt><dd>The path's extension is used to lookup the corresponding
-mime type.</dd></dl>
-<dl><dt>Returns</dt>
-<dd>The mime type string.</dd></dl>
 </div>
 </div>
 <hr />
@@ -580,12 +569,15 @@ directory itself.</p>
 <div class='apiSig'>  public  resolve(otherPaths: <a href='intrinsic-Array.html'>Array</a>): <a href='ejs.io-Path.html'>Path</a>
 </div>
 <div class='apiDetail'>
-<p>Resolve paths relative to this path
-Resolve each other path and return the last path resolved.</p>
-<dl><dt>Description</dt><dd>Each path is resolved by joined the 
-directory containing the prior path to the next path under consideration. If the next path is an 
-absolute path, it is used unmodified. The effect is to find the given paths with a virtual current
-directory set to the directory containing the prior path.</dd></dl>
+<p>Resolve paths in the neighborhood of this path.</p>
+<dl><dt>Description</dt><dd>Resolve operates like join, except that it joins the 
+given paths to the directory portion of the current ("this") path. For example: if "path" is set to
+"/usr/bin/ejs/bin", then path.resolve("lib") will return "/usr/lib/ejs/lib". i.e. it will return the
+sibling directory "lib".<br/><br/>Resolve operations by accumulating a virtual current directory, starting with "this" path. It then
+successively joins the given paths. If the next path is an absolute path, it is used unmodified. 
+The effect is to find the given paths with a virtual current directory set to the directory containing 
+the prior path.<br/><br/>Resolve is useful for creating paths in the region of the current path and gracefully handles both 
+absolute and relative path segments.</dd></dl>
 <dl><dt>Returns</dt>
 <dd>A new Path object that is resolved against the prior path.</dd></dl>
 </div>

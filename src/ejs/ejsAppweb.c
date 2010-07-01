@@ -116,7 +116,7 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
      *  Location EjsPaths and the EJSPATH environment variable are optional. APP_EXE_DIR is necessary for windows. The
      *  final "." will equate to the web server ServerRoot.
      *  The SERVER_ROOT/modules is supplied via control->searchPath. ejsCreateWebRequest calls ejsCreate which supplies
-     *  the rest (EJSPATH : APP_EXE_DIR : MOD_DIR : .).
+     *  the rest (EJSPATH : APP_EXE_DIR : MOD_DIR : .)
      */
     searchPath = NULL;
     if (flags & EJS_WEB_FLAG_APP) {

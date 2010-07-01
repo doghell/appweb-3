@@ -19,11 +19,11 @@ LIBS		= ws2_32.lib
 PROJECTS	= libmpr.vcproj libsqlite3.vcproj libmprssl.vcproj libpcre.vcproj libajs.vcproj \
 			  libac.vcproj libappweb.vcproj \
 			  appweb.vcproj angel.vcproj appwebMonitor.vcproj ajsmod.vcproj ajsc.vcproj ajs.vcproj ajssql.vcproj \
-			  ajsweb.vcproj http.vcproj httpPassword.vcproj \
+			  http.vcproj httpPassword.vcproj \
 			  mod_auth.vcproj mod_cgi.vcproj mod_chunk.vcproj mod_dir.vcproj mod_egi.vcproj mod_ejs.vcproj \
               mod_file.vcproj mod_php.vcproj mod_range.vcproj mod_ssl.vcproj mod_upload.vcproj
 
-MAKE_IFLAGS	+= $(BLD_REGEXP_IFLAGS) $(BLD_MPR_IFLAGS)
+MAKE_IFLAGS	= $(BLD_TOP)/src/include/master $(BLD_REGEXP_IFLAGS) $(BLD_MPR_IFLAGS)
 ifeq ($(BLD_FEATURE_OPENSSL),1)
 	SSL_IFLAGS	+= $(BLD_OPENSSL_IFLAGS)
 endif
@@ -37,7 +37,10 @@ endif
 compileExtra: prep $(PROJECTS)
 
 prep:
-	cp ../../../bin/*.def .
+	$(call log) "[Generate]" "appweb-dynamic VS project"
+	if ls ../../../bin/*.def >/dev/null 2>&1 ; then \
+		cp ../../../bin/*.def . ; \
+	fi
 
 libmpr.vcproj: Makefile buildConfig.override
 	@makeVsProj --project libmpr.vcproj --library mpr --dflags "$(DFLAGS)" \
@@ -165,10 +168,6 @@ ajsc.vcproj: Makefile buildConfig.override
 ajssql.vcproj: Makefile buildConfig.override
 	@makeVsProj --project ajssql.vcproj --exe ajssql.exe --search "$(BLD_MPR_LIBPATHS)" --dflags "$(DFLAGS)" \
 		--libs "libmpr.lib $(LIBS)" $(MPR_HDR) $(MPR_SRC) $(SRC)/ejs/ejssql.c $(SRC)/ejs/sqlite3.c
-
-ajsweb.vcproj: Makefile buildConfig.override
-	@makeVsProj --project ajsweb.vcproj --exe ajsweb.exe --search "$(BLD_MPR_LIBPATHS)" --dflags "$(DFLAGS)" \
-		--libs "libmpr.lib libajs.lib libac.lib $(LIBS)" $(MPR_HDR) $(EJS_HDR) $(EC_HDR) $(SRC)/ejs/ejsweb.c
 
 http.vcproj: Makefile buildConfig.override
 	@makeVsProj --project http.vcproj --exe http.exe --search "$(BLD_MPR_LIBPATHS)" --dflags "$(DFLAGS)" \

@@ -4,7 +4,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.0.
+ *  Embedthis Ejscript 1.0.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -926,7 +926,9 @@ static EjsVar *insertArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
         pos = ap->length;
     }
     args = (EjsArray*) argv[1];
-
+    if (args->length <= 0) {
+        return (EjsVar*) ap;
+    }
     oldLen = ap->length;
     if (growArray(ejs, ap, ap->length + args->length) < 0) {
         return 0;
@@ -986,7 +988,7 @@ static EjsVar *joinArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
  *  the end of the array for the specified element.
  *  @return Returns the items index into the array if found, otherwise -1.
  *
- *  function lastIndexOf(element: Object, fromIndex: Number = 0): Number
+ *  function lastIndexOf(element: Object, fromIndex: Number = -1): Number
  */
 static EjsVar *lastArrayIndexOf(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
 {
@@ -1044,7 +1046,9 @@ static EjsVar *setArrayLength(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
     mprAssert(ejsIsArray(ap));
 
     length = (int) ((EjsNumber*) argv[0])->value;
-
+    if (length < 0) {
+        length = 0;
+    }
     if (length > ap->length) {
         if (growArray(ejs, ap, length) < 0) {
             return 0;
@@ -1167,7 +1171,7 @@ static EjsVar *sliceArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
 {
     EjsArray    *result;
     EjsVar      **src, **dest;
-    int         start, end, step, i, j, len;
+    int         start, end, step, i, j, len, size;
 
     mprAssert(1 <= argc && argc <= 3);
 
@@ -1203,11 +1207,12 @@ static EjsVar *sliceArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
     } else if (end >= ap->length) {
         end = ap->length;
     }
+    size = (start < end) ? end - start : start - end;
 
     /*
-     *  This may allocate too many elements if step is > 0, but length will still be correct.
+     *  This may allocate too many elements if abs(step) is > 1, but length will still be correct.
      */
-    result = ejsCreateArray(ejs, end - start);
+    result = ejsCreateArray(ejs, size);
     if (result == 0) {
         ejsThrowMemoryError(ejs);
         return 0;
@@ -1466,6 +1471,40 @@ static EjsVar *uniqueArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
 }
 
 
+/*
+ *  function unshift(...args): Array
+ */
+static EjsVar *unshiftArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
+{
+    EjsArray    *args;
+    EjsVar      **src, **dest;
+    int         i, delta, oldLen, endInsert;
+
+    mprAssert(argc == 1 && ejsIsArray(argv[0]));
+
+    args = (EjsArray*) argv[0];
+    if (args->length <= 0) {
+        return (EjsVar*) ap;
+    }
+    oldLen = ap->length;
+    if (growArray(ejs, ap, ap->length + args->length) < 0) {
+        return 0;
+    }
+    delta = args->length;
+    dest = ap->data;
+    src = args->data;
+
+    endInsert = delta;
+    for (i = ap->length - 1; i >= endInsert; i--) {
+        dest[i] = dest[i - delta];
+    }
+    for (i = 0; i < delta; i++) {
+        dest[i] = src[i];
+    }
+    return (EjsVar*) ap;
+}
+
+
 
 static int growArray(Ejs *ejs, EjsArray *ap, int len)
 {
@@ -1476,7 +1515,6 @@ static int growArray(Ejs *ejs, EjsArray *ap, int len)
     if (len <= 0) {
         return 0;
     }
-
     if (len <= ap->length) {
         return EJS_ERR;
     }
@@ -1515,7 +1553,6 @@ static int growArray(Ejs *ejs, EjsArray *ap, int len)
         }
     }
     ap->length = len;
-
     return 0;
 }
 
@@ -1610,6 +1647,7 @@ void ejsConfigureArrayType(Ejs *ejs)
     ejsBindMethod(ejs, type, ES_Array_sort, (EjsNativeFunction) sortArray);
     ejsBindMethod(ejs, type, ES_Array_splice, (EjsNativeFunction) spliceArray);
     ejsBindMethod(ejs, type, ES_Array_unique, (EjsNativeFunction) uniqueArray);
+    ejsBindMethod(ejs, type, ES_Array_unshift, (EjsNativeFunction) unshiftArray);
 }
 
 
@@ -3419,11 +3457,13 @@ static EjsVar *readDouble(Ejs *ejs, EjsByteArray *ap, int argc, EjsVar **argv)
     if (getInput(ejs, ap, EJS_SIZE_DOUBLE) <= 0) {
         return (EjsVar*) ejs->nullValue;
     }
-
+#if OLD
     value = * (double*) &ap->value[ap->readPosition];
+#else
+    memcpy(&value, (char*) &ap->value[ap->readPosition], sizeof(double));
+#endif
     value = swapDouble(ap, value);
     adjustReadPosition(ap, sizeof(double));
-
     return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) value);
 }
 #endif
@@ -4026,7 +4066,11 @@ static void putDouble(EjsByteArray *ap, double value)
 {
     value = swapDouble(ap, value);
 
+#if OLD
     *((double*) &ap->value[ap->writePosition]) = value;
+#else
+    memcpy((char*) &ap->value[ap->writePosition], &value, sizeof(double));
+#endif
     ap->writePosition += sizeof(double);
 }
 #endif
@@ -4247,6 +4291,7 @@ void ejsConfigureByteArrayType(Ejs *ejs)
 
     Copyright (c) All Rights Reserved. See details at the end of the file.
  */
+
 
 
 
@@ -4539,7 +4584,7 @@ static EjsVar *date_Date(Ejs *ejs, EjsDate *date, int argc, EjsVar **argv)
         tm.tm_isdst = -1;
         vp = ejsGetProperty(ejs, (EjsVar*) args, 0);
         year = getNumber(ejs, vp);
-        if (year < 100) {
+        if (0 <= year && year < 100) {
             year += 1900;
         }
         tm.tm_year = year - 1900;
@@ -4550,6 +4595,8 @@ static EjsVar *date_Date(Ejs *ejs, EjsDate *date, int argc, EjsVar **argv)
         if (args->length > 2) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 2);
             tm.tm_mday = getNumber(ejs, vp);
+        } else {
+            tm.tm_mday = 1;
         }
         if (args->length > 3) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 3);
@@ -4595,13 +4642,15 @@ static EjsVar *date_day(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 static EjsVar *date_set_day(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
-    int         dayDiff, day;
+    MprTime     dayDiff, day;
 
     day = ejsGetNumber(argv[0]);
+#if UNUSED
     if (day < 0 || day > 6) {
         ejsThrowArgError(ejs, "Bad day. Range 0-6");
         return 0;
     }
+#endif
     mprDecodeLocalTime(ejs, &tm, dp->value);
     dayDiff = day - tm.tm_wday;
     dp->value += dayDiff * 86400 * MPR_TICKS_PER_SEC;
@@ -4629,13 +4678,15 @@ static EjsVar *date_dayOfYear(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 static EjsVar *date_set_dayOfYear(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
-    int         dayDiff, day;
+    MprTime     dayDiff, day;
 
     day = ejsGetNumber(argv[0]);
+#if UNUSED
     if (day < 0 || day > 365) {
         ejsThrowArgError(ejs, "Bad day. Range 0-365");
         return 0;
     }
+#endif
     mprDecodeLocalTime(ejs, &tm, dp->value);
     dayDiff = day - tm.tm_yday;
     dp->value += dayDiff * 86400 * MPR_TICKS_PER_SEC;
@@ -4663,13 +4714,15 @@ static EjsVar *date_date(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 static EjsVar *date_set_date(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
-    int         dayDiff, day;
+    MprTime     dayDiff, day;
 
     day = ejsGetNumber(argv[0]);
+#if UNUSED
     if (day < 1 || day > 31) {
         ejsThrowArgError(ejs, "Bad day. Range 1-31");
         return 0;
     }
+#endif
     mprDecodeLocalTime(ejs, &tm, dp->value);
     dayDiff = day - tm.tm_mday;
     dp->value += dayDiff * 86400 * MPR_TICKS_PER_SEC;
@@ -4742,14 +4795,14 @@ static EjsVar *date_set_fullYear(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 /**
     Return the number of minutes between the local computer time and Coordinated Universal Time.
     @return Integer containing the number of minutes between UTC and local time. The offset is positive if
-    local time is behind UTC and negative if it is ahead. E.g. American PST is UTC-8 so 480 will be retured.
-    This value will vary if daylight savings time is in effect.
+    local time is behind UTC and negative if it is ahead. E.g. American PST is UTC-8 so 420/480 will be retured
+    depending on if daylight savings is in effect.
 
     function getTimezoneOffset(): Number
 */
 static EjsVar *date_getTimezoneOffset(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
-    return (EjsVar*) ejsCreateNumber(ejs, -mprGetMpr(ejs)->timezone);
+    return (EjsVar*) ejsCreateNumber(ejs, -mprGetTimeZoneOffset(ejs, dp->value) / (MPR_TICKS_PER_SEC * 60));
 }
 
 
@@ -4959,7 +5012,7 @@ static EjsVar *date_set_month(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
  */
 static EjsVar *date_nextDay(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
-    int64       inc;
+    MprTime     inc;
 
     if (argc == 1) {
         inc = ejsGetNumber(argv[0]);
@@ -5072,13 +5125,15 @@ static EjsVar *date_set_seconds(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 static EjsVar *date_setUTCDate(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
-    int         dayDiff, day;
+    MprTime     dayDiff, day;
 
     day = ejsGetNumber(argv[0]);
+#if UNUSED
     if (day < 1 || day > 31) {
         ejsThrowArgError(ejs, "Bad day. Range 1-31");
         return 0;
     }
+#endif
     mprDecodeUniversalTime(ejs, &tm, dp->value);
     dayDiff = day - tm.tm_mday;
     dp->value += dayDiff * 86400 * MPR_TICKS_PER_SEC;
@@ -5276,10 +5331,16 @@ static EjsVar *date_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 static EjsVar *date_set_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
+    MprNumber   value;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
     tm.tm_year = ejsGetNumber(argv[0]) - 1900;
-    dp->value = mprMakeTime(ejs, &tm);
+    value = mprMakeTime(ejs, &tm);
+    if (value == -1) {
+        ejsThrowArgError(ejs, "Invalid year");
+    } else {
+        dp->value = value;
+    }
     return 0;
 }
 
@@ -5837,7 +5898,7 @@ static EjsName getFunctionPropertyName(Ejs *ejs, EjsFunction *fun, int slotNum)
 {
     EjsName     qname;
 
-    if ((ejs->flags & EJS_FLAG_COMPILER) || fun->loading || fun->isFrame) {
+    if ((ejs->flags & EJS_FLAG_COMPILER) || fun->loading || fun->isFrame || fun->properties == 0) {
         return (ejs->objectHelpers->getPropertyName)(ejs, (EjsVar*) fun, slotNum);
     } else {
         return (ejs->objectHelpers->getPropertyName)(ejs, (EjsVar*) fun->properties, slotNum);
@@ -6170,6 +6231,7 @@ EjsFrame *ejsCreateFrame(Ejs *ejs, EjsFunction *src)
             ejsGrowObject(ejs, (EjsObject*) frame, numSlots);
         }
         memcpy(frame->function.block.obj.slots, src->block.obj.slots, src->block.obj.numProp * sizeof(EjsVar*));
+        frame->function.block.obj.numProp = src->block.obj.numProp;
     }
     ejsSetDebugName(frame, ejsGetDebugName(src));
     mprAssert(frame->argc == 0);
@@ -7569,7 +7631,7 @@ static EjsVar *math_random(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
 #if WIN
         uint seed = (uint) time(0);
         srand(seed);
-#elif !MACOSX
+#elif !MACOSX && !VXWORKS
         srandom(time(0));
 #endif
         initialized = 1;
@@ -7582,7 +7644,7 @@ static EjsVar *math_random(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
 }
 #elif LINUX
     uvalue = random();
-#elif MACOSX
+#elif MACOSX 
     uvalue = arc4random();
 #else
 {
@@ -8252,6 +8314,7 @@ void ejsConfigureNullType(Ejs *ejs)
 #define fixed(n) (n)
 #endif
 
+#if UNUSED
 #if BLD_WIN_LIKE || VXWORKS
 static double localRint(double num)
 {
@@ -8261,6 +8324,8 @@ static double localRint(double num)
 }
 #define rint localRint
 #endif
+#endif
+
 /*
     Cast the operand to the specified type
  */
@@ -8524,7 +8589,7 @@ static EjsVar *nextNumber(Ejs *ejs, EjsIterator *ip, int argc, EjsVar **argv)
 
 
 /*
-    function integral(size: Number: 32): Number
+    function integral(size: Number = 32): Number
  */
 static EjsVar *integral(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
@@ -8535,7 +8600,8 @@ static EjsVar *integral(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 
     result = ((int64) np->value);
     if (size < 64) {
-        mask = (1 << size) - 1;
+        mask = 1;
+        mask = (mask << size) - 1;
         result &= mask;
     }
     return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) result);
@@ -8561,7 +8627,11 @@ static EjsVar *isFinite(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
  */
 static EjsVar *isNaN(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
+#if BLD_FEATURE_NUM_TYPE_DOUBLE
     return (EjsVar*) (mprIsNan(np->value) ? ejs->trueValue : ejs->falseValue);
+#else
+    return (EjsVar*) ejs->falseValue;
+#endif
 }
 
 
@@ -8571,12 +8641,18 @@ static EjsVar *isNaN(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
  */
 static EjsVar *toExponential(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
+#if BLD_FEATURE_NUM_TYPE_DOUBLE
     char    *result;
     int     ndigits;
     
     ndigits = (argc > 0) ? ejsGetInt(argv[0]): 0;
     result = mprDtoa(np, np->value, ndigits, MPR_DTOA_N_DIGITS, MPR_DTOA_EXPONENT_FORM);
     return (EjsVar*) ejsCreateStringAndFree(ejs, result);
+#else
+    char    numBuf[32];
+    mprItoa(numBuf, sizeof(numBuf), (int) np->value, 10);
+    return (EjsVar*) ejsCreateString(ejs, numBuf);
+#endif
 }
 
 
@@ -8587,12 +8663,18 @@ static EjsVar *toExponential(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
  */
 static EjsVar *toFixed(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
+#if BLD_FEATURE_NUM_TYPE_DOUBLE
     char    *result;
     int     ndigits;
     
     ndigits = (argc > 0) ? ejsGetInt(argv[0]) : 0;
     result = mprDtoa(np, np->value, ndigits, MPR_DTOA_N_FRACTION_DIGITS, MPR_DTOA_FIXED_FORM);
     return (EjsVar*) ejsCreateStringAndFree(ejs, result);
+#else
+    char    numBuf[32];
+    mprItoa(numBuf, sizeof(numBuf), (int) np->value, 10);
+    return (EjsVar*) ejsCreateString(ejs, numBuf);
+#endif
 }
 
 
@@ -8602,12 +8684,18 @@ static EjsVar *toFixed(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
  */
 static EjsVar *toPrecision(Ejs *ejs, EjsNumber *np, int argc, EjsVar **argv)
 {
+#if BLD_FEATURE_NUM_TYPE_DOUBLE
     char    *result;
     int     ndigits;
     
     ndigits = (argc > 0) ? ejsGetInt(argv[0]) : 0;
     result = mprDtoa(np, np->value, ndigits, MPR_DTOA_N_DIGITS, 0);
     return (EjsVar*) ejsCreateStringAndFree(ejs, result);
+#else
+    char    numBuf[32];
+    mprItoa(numBuf, sizeof(numBuf), (int) np->value, 10);
+    return (EjsVar*) ejsCreateString(ejs, numBuf);
+#endif
 }
 
 
@@ -8696,7 +8784,7 @@ void ejsCreateNumberType(Ejs *ejs)
     EjsType     *type;
     EjsName     qname;
 #if BLD_FEATURE_NUM_TYPE_DOUBLE
-    static int  zero = 0;
+    static double zero = 0.0;
 #endif
 
     type = ejsCreateCoreType(ejs, ejsName(&qname, EJS_INTRINSIC_NAMESPACE, "Number"), ejs->objectType, sizeof(EjsNumber),
@@ -8989,9 +9077,7 @@ EjsObject *ejsCopyObject(Ejs *ejs, EjsObject *src, bool deep)
     dest->var.noPool = src->var.noPool;
     dest->var.permanent = src->var.permanent;
     dest->var.primitive = src->var.primitive;
-    dest->var.separateSlots = src->var.separateSlots;
     dest->var.survived = src->var.survived;
-    
     ejsSetDebugName(dest, mprGetName(src));
 
     if (numProp <= 0) {
@@ -9006,14 +9092,13 @@ EjsObject *ejsCopyObject(Ejs *ejs, EjsObject *src, bool deep)
         }
     }
 
-    /*
-     *  Must always copy names incase src is GC'd.
-     */
     if (dest->names == NULL && ejsGrowObjectNames(dest, numProp) < 0) {
         return 0;
     }
     for (i = 0; i < numProp && src->names; i++) {
-        dest->names->entries[i] = src->names->entries[i];
+        dest->names->entries[i].qname.space = mprStrdup(dest, src->names->entries[i].qname.space);
+        dest->names->entries[i].qname.name = mprStrdup(dest, src->names->entries[i].qname.name);
+        dest->names->entries[i].nextSlot = src->names->entries[i].nextSlot;
     }
     if (makeHash(dest) < 0) {
         return 0;
@@ -11620,10 +11705,8 @@ static EjsVar *charAt(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 
     index = ejsGetInt(argv[0]);
     if (index < 0 || index >= sp->length) {
-        ejsThrowOutOfBoundsError(ejs, "Bad string subscript");
-        return 0;
+        return (EjsVar*) ejs->emptyStringValue;
     }
-
     return (EjsVar*) ejsCreateStringWithLength(ejs, &sp->value[index], 1);
 }
 
@@ -11633,7 +11716,6 @@ static EjsVar *charAt(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
  *
  *  function charCodeAt(index: Number = 0): Number
  */
-
 static EjsVar *charCodeAt(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 {
     int     index;
@@ -11730,7 +11812,8 @@ static EjsVar *endsWith(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
  *
  *  function format(...args): String
  *
- *  Format:         %[modifier][width][precision][bits][type]
+ *  Format:         %[modifier][width][precision][type]
+    Modifiers:      +- #,
  */
 static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 {
@@ -11738,7 +11821,7 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     EjsString   *result;
     EjsVar      *value;
     char        *buf;
-    char        fmt[16];
+    char        fmt[32];
     int         c, i, len, nextArg, start, kind, last;
 
     mprAssert(argc == 1 && ejsIsArray(argv[0]));
@@ -11772,7 +11855,6 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
         if (c != '%') {
             continue;
         }
-
         if (i > last) {
             catString(ejs, result, &sp->value[last], i - last);
         }
@@ -11781,35 +11863,44 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
          *  Find the end of the format specifier and determine the format type (kind)
          */
         start = i++;
-        i += (int) strspn(&sp->value[i], "-+ #,0*123456789.hlL");
+        i += (int) strspn(&sp->value[i], "-+ #,0*123456789.");
         kind = sp->value[i];
 
         if (strchr("cdefginopsSuxX", kind)) {
             len = i - start + 1;
-            mprMemcpy(fmt, sizeof(fmt), &sp->value[start], len);
+            mprMemcpy(fmt, sizeof(fmt) - 4, &sp->value[start], len);
             fmt[len] = '\0';
 
             value = ejsGetProperty(ejs, (EjsVar*) args, nextArg);
 
             buf = 0;
             switch (kind) {
+            case 'e': case 'g': case 'f':
+#if BLD_FEATURE_FLOATING_POINT
+                value = (EjsVar*) ejsToNumber(ejs, value);
+                buf = mprAsprintf(ejs, -1, fmt, ejsGetNumber(value));
+                break;
+#else
+                //   Fall through to normal number case
+#endif
             case 'd': case 'i': case 'o': case 'u':
                 value = (EjsVar*) ejsToNumber(ejs, value);
-                buf = mprAsprintf(ejs, -1, fmt, (int64) ejsGetNumber(value));
-                break;
 #if BLD_FEATURE_FLOATING_POINT
-            case 'e': case 'g': case 'f':
-                value = (EjsVar*) ejsToNumber(ejs, value);
-                buf = mprAsprintf(ejs, -1, fmt, (double) ejsGetNumber(value));
-                break;
+                /* Convert to floating point format */
+                strcpy(&fmt[len - 1], ".0f");
+                buf = mprAsprintf(ejs, -1, fmt, ejsGetNumber(value));
+#else
+                buf = mprAsprintf(ejs, -1, fmt, (int) ejsGetNumber(value));
 #endif
+                break;
+
             case 's':
                 value = (EjsVar*) ejsToString(ejs, value);
                 buf = mprAsprintf(ejs, -1, fmt, ejsGetString(value));
                 break;
 
             case 'X': case 'x':
-                buf = mprAsprintf(ejs, -1, fmt, (int64) ejsGetNumber(value));
+                buf = mprAsprintf(ejs, -1, fmt, (int) ejsGetNumber(value));
                 break;
 
             case 'n':
@@ -11973,7 +12064,6 @@ static EjsVar *indexOf(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
     } else {
         start = 0;
     }
-
     index = indexof(&sp->value[start], sp->length - start, pattern, patternLength, 1);
     if (index < 0) {
         return (EjsVar*) ejs->minusOneValue;
@@ -12081,8 +12171,8 @@ static EjsVar *lastIndexOf(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
 
     if (argc == 2) {
         start = ejsGetInt(argv[1]);
-        if (start > sp->length) {
-            start = sp->length;
+        if (start >= sp->length) {
+            start = sp->length - 1;
         }
         if (start < 0) {
             start = 0;
@@ -12162,7 +12252,6 @@ static EjsVar *printable(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     if (nonprint == 0) {
         return (EjsVar*) sp;
     }
-
     result = ejsCreateBareString(ejs, sp->length + (nonprint * 6) + 1);
     if (result == 0) {
         return 0;
@@ -12450,7 +12539,7 @@ static EjsVar *searchString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 static EjsVar *sliceString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 {
     EjsString       *result;
-    int             start, end, step, i, j;
+    int             start, end, step, i, j, size;
 
     mprAssert(1 <= argc && argc <= 3);
 
@@ -12465,26 +12554,32 @@ static EjsVar *sliceString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     } else {
         step = 1;
     }
-
     if (start < 0) {
         start += sp->length;
+    }
+    if (start >= sp->length) {
+        start = sp->length - 1;
+    }
+    if (start < 0) {
+        start = 0;
     }
     if (end < 0) {
         end += sp->length;
     }
+    if (end > sp->length) {
+        end = sp->length;
+    }
+    if (end < 0) {
+        end = 0;
+    }
     if (step == 0) {
         step = 1;
     }
-    if (start < 0 || start >= sp->length) {
-        ejsThrowOutOfBoundsError(ejs, "Bad start subscript");
-        return 0;
+    if (end < start) {
+        end = start;
     }
-    if (end < 0 || end > sp->length) {
-        ejsThrowOutOfBoundsError(ejs, "Bad end subscript");
-        return 0;
-    }
-
-    result = ejsCreateBareString(ejs, (end - start) / abs(step));
+    size = (start < end) ? end - start : start - end;
+    result = ejsCreateBareString(ejs, size / abs(step) + 1);
     if (result == 0) {
         return 0;
     }
@@ -12494,14 +12589,18 @@ static EjsVar *sliceString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
         }
 
     } else {
+#if WAS
         for (i = end - 1, j = 0; i >= start; i += step) {
             result->value[j++] = sp->value[i];
         }
+#else
+        for (i = start, j = 0; i > end; i += step) {
+            result->value[j++] = sp->value[i];
+        }
+#endif
     }
-
     result->value[j] = '\0';
     result->length = j;
-
     return (EjsVar*) result;
 }
 
@@ -12580,7 +12679,6 @@ static EjsVar *split(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
         return (EjsVar*) results;
 #endif
     }
-
     ejsThrowTypeError(ejs, "Wrong argument type");
     return 0;
 }
@@ -12620,7 +12718,6 @@ static EjsVar *substring(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     } else {
         end = sp->length;
     }
-
     if (start < 0) {
         start = 0;
     }
@@ -12633,16 +12730,14 @@ static EjsVar *substring(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
     if (end > sp->length) {
         end = sp->length;
     }
-
     /*
-     *  Swap if start is bigger than end
+        Swap if start is bigger than end
      */
     if (start > end) {
         tmp = start;
         start = end;
         end = tmp;
     }
-
     return (EjsVar*) ejsCreateStringWithLength(ejs, &sp->value[start], end - start);
 }
 
@@ -12699,7 +12794,7 @@ static EjsVar *stringToJson(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
 /*
  *  Convert the string to lower case.
  *
- *  function toLower(locale: String = null): String
+ *  function toLower(): String
  */
 static EjsVar *toLower(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
 {
@@ -12752,7 +12847,7 @@ static EjsVar *stringToString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
  *  @return Returns a new upper case version of the string.
  *  @spec ejs-11
  *
- *  function toUpper(locale: String = null): String
+ *  function toUpper(): String
  */
 static EjsVar *toUpper(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
 {
@@ -12879,7 +12974,6 @@ static EjsVar *trimString(Ejs *ejs, EjsString *sp, int argc,  EjsVar **argv)
         }
         end = mark + patternLength;
     }
-
     return (EjsVar*) ejsCreateStringWithLength(ejs, start, (int) (end - start));
 }
 
@@ -16906,8 +17000,8 @@ static EjsVar *getStringHeader(Ejs *ejs, EjsHttp *hp, cchar *key)
 
 
 /*
- *  Prepare form data as a series of key-value pairs. Data is formatted according to www-url-encoded specs by 
- *  mprSetHttpFormData. Objects are flattened into a one level key/value pairs. Keys can have embedded "." separators.
+ *  Prepare form data as a series of key-value pairs. Data is an object with properties becoming keys in a 
+ *  www-url-encoded string. Objects are flattened into a one level key/value pairs by using JSON encoding. 
  *  E.g.  name=value&address=77%20Park%20Lane
  */
 static void prepForm(Ejs *ejs, EjsHttp *hp, char *prefix, EjsVar *data)
@@ -16928,7 +17022,7 @@ static void prepForm(Ejs *ejs, EjsHttp *hp, char *prefix, EjsVar *data)
         if (vp == 0) {
             continue;
         }
-        if (ejsGetPropertyCount(ejs, vp) > 0) {
+        if (ejsGetPropertyCount(ejs, vp) > 0 && !ejsIsArray(vp)) {
             if (prefix) {
                 newPrefix = mprAsprintf(hp, -1, "%s.%s", prefix, qname.name);
                 prepForm(ejs, hp, newPrefix, vp);
@@ -16937,7 +17031,11 @@ static void prepForm(Ejs *ejs, EjsHttp *hp, char *prefix, EjsVar *data)
                 prepForm(ejs, hp, (char*) qname.name, vp);
             }
         } else {
-            value = ejsToString(ejs, vp);
+            if (ejsIsArray(vp)) {
+                value = ejsToJson(ejs, vp);
+            } else {
+                value = ejsToString(ejs, vp);
+            }
             sep = (hp->requestContent) ? "&" : "";
             if (prefix) {
                 newKey = mprStrcat(hp, -1, prefix, ".", key, NULL);
@@ -16948,6 +17046,8 @@ static void prepForm(Ejs *ejs, EjsHttp *hp, char *prefix, EjsVar *data)
             }
             encodedValue = mprUrlEncode(hp, value->value);
             hp->requestContent = mprReallocStrcat(hp, -1, hp->requestContent, sep, encodedKey, "=", encodedValue, NULL);
+            mprFree(encodedKey);
+            mprFree(encodedValue);
         }
     }
 }
@@ -17812,6 +17912,12 @@ static EjsVar *pa_map(Ejs *ejs, EjsPath *fp, int argc, EjsVar **argv)
 }
 
 
+EjsVar *pa_mimeType(Ejs *ejs, EjsPath *fp, int argc, EjsVar **argv)
+{
+    return (EjsVar*) ejsCreateString(ejs, mprLookupMimeType(ejs, fp->path));
+}
+
+
 /*
     Get when the file was created or last modified.
 
@@ -18428,6 +18534,7 @@ void ejsConfigurePathType(Ejs *ejs)
     ejsBindMethod(ejs, type, ES_ejs_io_Path_makeLink, (EjsNativeFunction) makePathLink);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_makeTemp, (EjsNativeFunction) makePathTemp);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_map, (EjsNativeFunction) pa_map);
+    ejsBindMethod(ejs, type, ES_ejs_io_Path_mimeType, (EjsNativeFunction) pa_mimeType);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_modified, (EjsNativeFunction) getModifiedDate);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_name, (EjsNativeFunction) getPathName);
     ejsBindMethod(ejs, type, ES_ejs_io_Path_natural, (EjsNativeFunction) getNaturalPath);
@@ -18895,7 +19002,7 @@ void ejsConfigureConfigType(Ejs *ejs)
         BLD_FEATURE_MULTITHREAD ? (EjsVar*) ejs->trueValue: (EjsVar*) ejs->falseValue);
 
     ejsSetProperty(ejs, vp, ES_ejs_sys_Config_NumberType, 
-        (EjsVar*) ejsCreateString(ejs, MPR_STRINGIFY(BLD_FEATURE_NUM_TYPE)));
+        (EjsVar*) ejsCreateString(ejs, BLD_FEATURE_NUM_TYPE_STRING));
 
     ejsSetProperty(ejs, vp, ES_ejs_sys_Config_OS, (EjsVar*) ejsCreateString(ejs, BLD_OS));
     ejsSetProperty(ejs, vp, ES_ejs_sys_Config_Product, (EjsVar*) ejsCreateString(ejs, BLD_PRODUCT));
@@ -20568,23 +20675,7 @@ static EjsVar   *loadXml(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 static EjsVar   *saveXml(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 static EjsVar   *xmlToString(Ejs *ejs, EjsVar *vp, int argc, EjsVar **argv);
 
-#if KEEP
-static EjsVar   *valueOf(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *toXmlString(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *appendChild(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *attributes(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *child(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *comments(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *decendants(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildAfter(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildBefore(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *replace(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *setName(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *text(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-
-#endif
+static EjsVar   *xml_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 
 static bool allDigitsForXml(cchar *name);
 static bool deepCompare(EjsXML *lhs, EjsXML *rhs);
@@ -21122,6 +21213,64 @@ static int setXmlPropertyByName(Ejs *ejs, EjsXML *xml, EjsName *qname, EjsVar *v
 }
 
 
+#if UNUSED
+/*
+    function attributes(name: String = "*"): XMLList
+ */
+static EjsVar *xml_attributes(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    EjsXML  *result;
+    EjsXML  *item;
+    cchar   *name;
+    int     next;
+
+    name = argc > 0 ? ejsGetString(argv[0]) : "*";
+
+    result = ejsCreateXMLList(ejs, xml, &xml->targetProperty);
+    if (xml->attributes) {
+        for (next = 0; (item = mprGetNextItem(xml->attributes, &next)) != 0; ) {
+            if (name[0] == '*' || strcmp(item->qname.name, name) == 0) {
+                result = ejsAppendToXML(ejs, result, item);
+            }
+        }
+    }
+    return (EjsVar*) result;
+}
+
+
+/*
+    function elements(name: String = "*"): XMLList
+ */
+static EjsVar *xml_elements(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    EjsXML  *result;
+    EjsXML  *item;
+    cchar   *name;
+    int     next;
+
+    name = argc > 0 ? ejsGetString(argv[0]) : "*";
+
+    result = ejsCreateXMLList(ejs, xml, &xml->targetProperty);
+    if (xml->elements) {
+        for (next = 0; (item = mprGetNextItem(xml->elements, &next)) != 0; ) {
+            if (name[0] == '*' || strcmp(item->qname.name, name) == 0) {
+                result = ejsAppendToXML(ejs, result, item);
+            }
+        }
+    }
+    return (EjsVar*) result;
+}
+#endif
+
+
+/*
+    function parent(): XML
+ */
+static EjsVar *xml_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    return (xml->parent && xml != xml->parent) ? (EjsVar*) xml->parent : (EjsVar*) ejs->nullValue;
+}
+
 /*
  *  Deep compare
  */
@@ -21170,17 +21319,24 @@ EjsXML *ejsXMLDescendants(Ejs *ejs, EjsXML *xml, EjsName *qname)
     if (result == 0) {
         return 0;
     }
-
-    if (qname->name[0] == '@') {
+    if (qname->name[0] == '.' && qname->name[1] == '@') {
         if (xml->attributes) {
             for (next = 0; (item = mprGetNextItem(xml->attributes, &next)) != 0; ) {
-                mprAssert(qname->name[0] == '@');
-                if (qname->name[1] == '*' || strcmp(item->qname.name, &qname->name[1]) == 0) {
+                if (qname->name[2] == '*' || strcmp(item->qname.name, &qname->name[2]) == 0) {
                     result = ejsAppendToXML(ejs, result, item);
+#if UNUSED
+                } else {
+                    result = ejsAppendToXML(ejs, result, ejsXMLDescendants(ejs, item, qname));
+#endif
                 }
             }
         }
-
+        if (xml->elements) {
+            for (next = 0; (item = mprGetNextItem(xml->elements, &next)) != 0; ) {
+                result = ejsAppendToXML(ejs, result, ejsXMLDescendants(ejs, item, qname));
+            }
+        }
+        
     } else {
         if (xml->elements) {
             for (next = 0; (item = mprGetNextItem(xml->elements, &next)) != 0; ) {
@@ -21709,6 +21865,8 @@ void ejsConfigureXMLType(Ejs *ejs)
     ejsBindMethod(ejs, type, ES_XML_save, (EjsNativeFunction) saveXml);
     ejsBindMethod(ejs, type, ES_XML_name, (EjsNativeFunction) getXmlNodeName);
 
+    ejsBindMethod(ejs, type, ES_XML_parent, (EjsNativeFunction) xml_parent);
+
     /*
      *  Override these methods
      */
@@ -21782,25 +21940,7 @@ void __ejsXMLDummy() {}
 /*
  *  XMLList methods
  */
-
-#if KEEP
-static EjsVar   *valueOf(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *xlLength(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *toXmlString(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *appendChild(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *attributes(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *child(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *comments(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *decendants(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *elements(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildAfter(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *insertChildBefore(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *replace(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *setName(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-static EjsVar   *text(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv);
-
-#endif
+static EjsVar *xl_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv);
 
 static bool allDigitsForXmlList(cchar *name);
 static EjsXML *resolve(Ejs *ejs, EjsXML *obj);
@@ -21875,6 +22015,9 @@ static EjsVar *xlCast(Ejs *ejs, EjsXML *vp, EjsType *type)
             if (ejsXMLToString(ejs, buf, elt, -1) < 0) {
                 mprFree(buf);
                 return 0;
+            }
+            if (next < vp->elements->length) {
+                mprPutStringToBuf(buf, " ");
             }
         }
         result = (EjsVar*) ejsCreateString(ejs, (char*) buf->start);
@@ -21963,7 +22106,13 @@ static EjsVar *getXmlListPropertyByName(Ejs *ejs, EjsXML *list, EjsName *qname)
 
 static EjsVar *getXmlListNodeName(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
 {
-    return (EjsVar*) ejsCreateString(ejs, xml->qname.name);
+    if (xml->targetProperty.name) {
+        return (EjsVar*) ejsCreateString(ejs, xml->targetProperty.name);
+    } else if (xml->targetObject) {
+        return (EjsVar*) ejsCreateString(ejs, xml->targetObject->qname.name);
+    } else {
+        return ejs->nullValue;
+    }
 }
 
 
@@ -22422,6 +22571,14 @@ static EjsVar *xlLength(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
 }
 
 
+/*
+    function parent(): XML
+ */
+static EjsVar *xl_parent(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
+{
+    return xml->targetObject ? (EjsVar*) xml->targetObject : (EjsVar*) ejs->nullValue;
+}
+
 
 EjsXML *ejsCreateXMLList(Ejs *ejs, EjsXML *targetObject, EjsName *targetProperty)
 {
@@ -22504,6 +22661,8 @@ void ejsConfigureXMLListType(Ejs *ejs)
      */
     ejsBindMethod(ejs, type, ES_XMLList_XMLList, (EjsNativeFunction) xmlListConstructor);
     ejsBindMethod(ejs, type, ES_XMLList_name, (EjsNativeFunction) getXmlListNodeName);
+
+    ejsBindMethod(ejs, type, ES_XMLList_parent, (EjsNativeFunction) xl_parent);
 
     /*
      *  Override these methods
@@ -24196,7 +24355,7 @@ static void callFunction(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, 
 static void callProperty(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, int stackAdjust);
 
 #define GET_BYTE()      *(FRAME)->pc++
-#define GET_DOUBLE()    ejsDecodeDouble(&(FRAME)->pc)
+#define GET_DOUBLE()    ejsDecodeDouble(ejs, &(FRAME)->pc)
 #define GET_INT()       (int) ejsDecodeNum(&(FRAME)->pc)
 #define GET_NUM()       ejsDecodeNum(&(FRAME)->pc)
 #define GET_NAME()      getNameArg(FRAME)
@@ -24214,7 +24373,7 @@ static void callProperty(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, 
     #define traceCode(ejs, opcode) opcode
 #endif
 
-#if LINUX || MACOSX || LINUX || SOLARIS || VXWORKS
+#if BLD_UNIX_LIKE || VXWORKS
     #define CASE(opcode) opcode
     #define BREAK \
         if (1) { \
@@ -24285,7 +24444,7 @@ static void VM(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, int stackA
     uchar           *mark;
     int             i, offset, count, opcode;
 
-#if LINUX || MACOSX || LINUX || SOLARIS || VXWORKS 
+#if BLD_UNIX_LIKE || VXWORKS
     /*
      *  Direct threading computed goto processing. Include computed goto jump table.
      */
@@ -24511,7 +24670,7 @@ static void *opcodeJump[] = {
     FRAME->filename = 0;
     FRAME->lineNumber = 0;
 
-#if LINUX || MACOSX || LINUX || SOLARIS || VXWORKS 
+#if BLD_UNIX_LIKE || VXWORKS
     /*
      *  Direct threading computed goto processing. Include computed goto jump table.
      */
@@ -25785,6 +25944,9 @@ static void *opcodeJump[] = {
          */
         CASE (EJS_OP_POP):
             ejs->result = pop(ejs);
+#if MACOSX || UNUSED
+            mprAssert(ejs->result != (void*) 0xf7f7f7f7f7f7f7f7);
+#endif
             mprAssert(ejs->exception || ejs->result);
             BREAK;
 
@@ -26532,7 +26694,7 @@ static void *opcodeJump[] = {
             mprAssert(0);
             BREAK;
 
-#if !LINUX && !MACOSX && !LINUX && !SOLARIS && !VXWORKS
+#if !BLD_UNIX_LIKE && !VXWORKS
         }
         if (ejs->attention && !payAttention(ejs)) {
             goto done;
@@ -27305,6 +27467,8 @@ static void createExceptionBlock(Ejs *ejs, EjsEx *ex, int flags)
         for (i = 0; i < count; i++) {
             ejsPopBlock(ejs);
         }
+        count = (state->stack - fp->stackReturn - fp->argc);
+        state->stack -= (count - ex->numStack);
     }
     
     /*
@@ -27434,7 +27598,7 @@ int ejsInitStack(Ejs *ejs)
     /*
      *  This will allocate memory virtually for systems with virutal memory. Otherwise, it will just use malloc.
      */
-    state->stackBase = mprMapAlloc(state->stackSize, MPR_MAP_READ | MPR_MAP_WRITE);
+    state->stackBase = mprMapAlloc(ejs, state->stackSize, MPR_MAP_READ | MPR_MAP_WRITE);
     if (state->stackBase == 0) {
         mprSetAllocError(ejs);
         return EJS_ERR;
@@ -27778,7 +27942,7 @@ static EjsOpCode traceCode(Ejs *ejs, EjsOpCode opcode)
         }
         optable = ejsGetOptable(ejs);
         mprLog(ejs, 7, "%04d: [%d] %02x: %-35s # %s:%d %s",
-            (uint) (fp->pc - fp->function.body.code.byteCode) - 1, (int) (state->stack - fp->stackReturn + 1),
+            (uint) (fp->pc - fp->function.body.code.byteCode) - 1, (int) (state->stack - fp->stackReturn),
             (uchar) opcode, optable[opcode].name, fp->filename, fp->lineNumber, fp->currentLine);
         if (stop && once++ == 0) {
             mprSleep(ejs, 0);
@@ -28367,7 +28531,7 @@ static char *makeModuleName(MprCtx ctx, cchar *name);
 static int  readNumber(Ejs *ejs, MprFile *file, int *number);
 static int  readWord(Ejs *ejs, MprFile *file, int *number);
 static char *search(Ejs *ejs, char *filename, int minVersion, int maxVersion);
-static int  swapShort(Ejs *ejs, int word);
+static double swapDoubleWord(Ejs *ejs, double a);
 static int  swapWord(Ejs *ejs, int word);
 static char *tokenToString(EjsModule *mp, int   token);
 
@@ -29405,8 +29569,7 @@ static int loadScriptModule(Ejs *ejs, MprFile *file, cchar *path, int flags)
         ejsThrowIOError(ejs, "Error reading module file %s, corrupt header", path);
         return EJS_ERR;
     }
-
-    if ((int) swapShort(ejs, hdr.magic) != EJS_MODULE_MAGIC) {
+    if ((int) swapWord(ejs, hdr.magic) != EJS_MODULE_MAGIC) {
         ejsThrowIOError(ejs, "Bad module file format in %s", path);
         return EJS_ERR;
     }
@@ -29981,11 +30144,12 @@ static int readNumber(Ejs *ejs, MprFile *file, int *number)
 
 
 #if BLD_FEATURE_FLOATING_POINT
-double ejsDecodeDouble(uchar **pp)
+double ejsDecodeDouble(Ejs *ejs, uchar **pp)
 {
     double   value;
 
     memcpy(&value, *pp, sizeof(double));
+    value = swapDoubleWord(ejs, value);
     *pp += sizeof(double);
     return value;
 }
@@ -30069,12 +30233,10 @@ int ejsEncodeWord(uchar *pos, int number)
 }
 
 
-int ejsEncodeDouble(uchar *pos, double number)
+int ejsEncodeDouble(Ejs *ejs, uchar *pos, double number)
 {
-    double   *ptr;
-
-    ptr = (double*) pos;
-    *ptr = number;
+    number = swapDoubleWord(ejs, number);
+    memcpy(pos, &number, sizeof(double));
     return sizeof(double);
 }
 
@@ -30165,6 +30327,7 @@ EjsDoc *ejsCreateDoc(Ejs *ejs, EjsBlock *block, int slotNum, cchar *docString)
 #endif
 
 
+#if UNUSED && KEEP
 static int swapShort(Ejs *ejs, int word)
 {
     if (mprGetEndian(ejs) == MPR_LITTLE_ENDIAN) {
@@ -30173,7 +30336,7 @@ static int swapShort(Ejs *ejs, int word)
     word = ((word & 0xFFFF) << 16) | ((word & 0xFFFF0000) >> 16);
     return ((word & 0xFF) << 8) | ((word & 0xFF00) >> 8);
 }
-
+#endif
 
 static int swapWord(Ejs *ejs, int word)
 {
@@ -30182,6 +30345,21 @@ static int swapWord(Ejs *ejs, int word)
     }
     return ((word & 0xFF000000) >> 24) | ((word & 0xFF0000) >> 8) | ((word & 0xFF00) << 8) | ((word & 0xFF) << 24);
 }
+
+
+static double swapDoubleWord(Ejs *ejs, double a)
+{
+    int64   low, high;
+
+    if (mprGetEndian(ejs) == MPR_LITTLE_ENDIAN) {
+        return a;
+    }
+    low = ((int64) a) & 0xFFFFFFFF;
+    high = (((int64) a) >> 32) & 0xFFFFFFFF;
+    return  (double) ((low & 0xFF) << 24 | (low & 0xFF00 << 8) | (low & 0xFF0000 >> 8) | (low & 0xFF000000 >> 16) |
+            ((high & 0xFF) << 24 | (high & 0xFF00 << 8) | (high & 0xFF0000 >> 8) | (high & 0xFF000000 >> 16)) << 32);
+}
+
 
 /*
  *  @copy   default
@@ -30682,11 +30860,6 @@ static int configureWebModule(Ejs *ejs, EjsModule *mp, cchar *path);
 #endif
 
 /*
- *  Global singleton for the Ejs service
- */
-EjsService *_globalEjsService;
-
-/*
  *  Initialize the EJS subsystem
  */
 EjsService *ejsCreateService(MprCtx ctx)
@@ -30697,7 +30870,7 @@ EjsService *ejsCreateService(MprCtx ctx)
     if (sp == 0) {
         return 0;
     }
-    _globalEjsService = sp;
+    mprGetMpr(ctx)->ejsService = sp;
     sp->nativeModules = mprCreateHash(sp, 0);
 
     /*
@@ -30733,7 +30906,7 @@ Ejs *ejsCreate(MprCtx ctx, Ejs *master, cchar *searchPath, int flags)
         return 0;
     }
     mprSetAllocNotifier(ejs, (MprAllocNotifier) allocNotifier);
-    ejs->service = _globalEjsService;
+    ejs->service = mprGetMpr(ctx)->ejsService;
 
     /*
      *  Probably not necessary, but it keeps the objects in one place
@@ -30755,15 +30928,15 @@ Ejs *ejsCreate(MprCtx ctx, Ejs *master, cchar *searchPath, int flags)
     
     /*
      *  The search path consists of:
-     *      searchPath : EJSPATH : APP_EXE_DIR : MOD_DIR : .
+     *      EJSPATH : APP_EXE_DIR : MOD_DIR : . : searchPath
      */
     setDefaultSearchPath(ejs);
     env = getenv("EJSPATH");
     if (env && *env) {
-        ejsPrependSearchPath(ejs, env);
+        ejsAppendSearchPath(ejs, env);
     }
     if (searchPath) {
-        ejsPrependSearchPath(ejs, searchPath);
+        ejsAppendSearchPath(ejs, searchPath);
     }
     ejsSetGeneration(ejs, EJS_GEN_ETERNAL);
 
@@ -31034,7 +31207,10 @@ static int configureWebModule(Ejs *ejs, EjsModule *mp, cchar *path)
  */
 int ejsAddNativeModule(MprCtx ctx, char *name, EjsNativeCallback callback)
 {
-    if (mprAddHash(_globalEjsService->nativeModules, name, callback) == 0) {
+    EjsService  *sp;
+
+    sp = mprGetMpr(ctx)->ejsService;
+    if (mprAddHash(sp->nativeModules, name, callback) == 0) {
         return EJS_ERR;
     }
     return 0;
@@ -31252,16 +31428,16 @@ void ejsSetSearchPath(Ejs *ejs, cchar *searchPath)
     mprAssert(searchPath && searchPath);
 
     setDefaultSearchPath(ejs);
-    ejsPrependSearchPath(ejs, searchPath);
+    ejsAppendSearchPath(ejs, searchPath);
 
     mprLog(ejs, 4, "ejs: Set search path to %s", ejs->ejsPath);
 }
 
 
 /*
- *  Prepend a search path to the system defaults
+ *  Append a search path to the system defaults
  */
-void ejsPrependSearchPath(Ejs *ejs, cchar *searchPath)
+void ejsAppendSearchPath(Ejs *ejs, cchar *searchPath)
 {
     char    *oldPath;
 
@@ -31271,7 +31447,7 @@ void ejsPrependSearchPath(Ejs *ejs, cchar *searchPath)
 
     oldPath = ejs->ejsPath;
     mprAssert(oldPath);
-    ejs->ejsPath = mprAsprintf(ejs, -1, "%s" MPR_SEARCH_SEP "%s", searchPath, oldPath);
+    ejs->ejsPath = mprAsprintf(ejs, -1, "%s" MPR_SEARCH_SEP "%s", oldPath, searchPath);
     mprFree(oldPath);
     mprLog(ejs, 3, "ejs: set search path to %s", ejs->ejsPath);
 }
@@ -32487,8 +32663,6 @@ static bool parseBoolean(Ejs *ejs, cchar *s)
  */
 static MprNumber parseNumber(Ejs *ejs, cchar *str)
 {
-    MprNumber   n;
-    cchar       *cp;
     int64       num;
     int         radix, c, negative;
 
@@ -32510,9 +32684,11 @@ static MprNumber parseNumber(Ejs *ejs, cchar *str)
     }
 
     /*
-        Floatng format: [DIGITS].[DIGITS][(e|E)[+|-]DIGITS]
+        Floating format: [DIGITS].[DIGITS][(e|E)[+|-]DIGITS]
      */
     if (!(*str == '0' && tolower((int) str[1]) == 'x')) {
+        MprNumber   n;
+        cchar       *cp;
         for (cp = str; *cp; cp++) {
             if (*cp == '.' || tolower((int) *cp) == 'e') {
                 n = atof(str);
@@ -32575,6 +32751,25 @@ static MprNumber parseNumber(Ejs *ejs, cchar *str)
         return (MprNumber) (0 - num);
     }
     return (MprNumber) num;
+}
+
+
+int _ejsIs(struct EjsVar *vp, int slot)
+{
+    EjsType     *tp;
+
+    if (vp == 0) {
+        return 0;
+    }
+    if (vp->type->id == slot) {
+        return 1;
+    }
+    for (tp = ((EjsVar*) vp)->type->baseType; tp; tp = tp->baseType) {
+        if (tp->id == slot) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /*
@@ -33773,8 +33968,8 @@ static EjsWebControl *webControl;
 #endif
 
 #if AUTO_COMPILE
-static int  compile(EjsWeb *web, cchar *compiler, cchar *kind, cchar *name);
-static char *locateCompiler(EjsWeb *web);
+static int  compile(EjsWeb *web, cchar *shell, cchar *kind, cchar *name);
+static char *locateShell(EjsWeb *web);
 #endif
 
 static void createCookie(Ejs *ejs, EjsVar *cookies, cchar *name, cchar *value, cchar *domain, cchar *path);
@@ -34212,7 +34407,7 @@ static int loadComponent(EjsWeb *web, cchar *kind, cchar *name, cchar *sourceExt
              *  Solo web pages
              */
             module = mprJoinPathExt(web, mprJoinPath(web, web->appDir, name), EJS_MODULE_EXT);
-            soloPage = mprJoinPathExt(web, name, sourceExtension);
+            soloPage = mprJoinPathExt(web, mprGetNativePath(web, name), sourceExtension);
             rc = build(web, kind, soloPage, module, sourceExtension, retry);
             mprFree(soloPage);
         }
@@ -34238,11 +34433,11 @@ static int loadComponent(EjsWeb *web, cchar *kind, cchar *name, cchar *sourceExt
 
 #if AUTO_COMPILE
 /*
- *  Find the ejsweb program
+ *  Find the ejs program
  */
-static char *locateCompiler(EjsWeb *web)
+static char *locateShell(EjsWeb *web)
 {
-    return mprSearchPath(web, EJS_EJSWEB_EXE, MPR_SEARCH_EXE, 
+    return mprSearchPath(web, EJS_EJS_EXE, MPR_SEARCH_EXE, 
         mprGetAppDir(web),      //  Search in same dir as application (or override module path) (Windows)
 #if BLD_DEBUG && !WIN
         BLD_ABS_BIN_DIR,
@@ -34258,25 +34453,31 @@ static char *locateCompiler(EjsWeb *web)
 /*
  *  Compile a component into a loadable module. Return true if the compile succeeded.
  */
-static int compile(EjsWeb *web, cchar *compiler, cchar *kind, cchar *name)
+static int compile(EjsWeb *web, cchar *shell, cchar *kind, cchar *name)
 {
     Ejs         *ejs;
     MprCmd      *cmd;
-    char        *commandLine, *err;
+    char        *commandLine, *err, *dir, *ejsweb;
     int         status;
 
     cmd = mprCreateCmd(web);
     mprSetCmdDir(cmd, web->appDir);
 
+    dir = mprGetPathDir(web, shell);
+#if WIN
+    ejsweb = mprJoinPath(web, dir, EJS_EJSWEB EJS_MODULE_EXT);
+#else
+    ejsweb = mprJoinPath(web, dir, "../modules/" EJS_EJSWEB EJS_MODULE_EXT);
+#endif
+
     if (strcmp(kind, "view") == 0) {
         name = mprJoinPath(cmd, "views", name);
     }
     if (strcmp(kind, "app") == 0) {
-        commandLine = mprAsprintf(web, -1, "\"%s\" --quiet compile app", compiler);
+        commandLine = mprAsprintf(web, -1, "\"%s\" \"%s\" --quiet compile app", shell, ejsweb);
     } else {
-        commandLine = mprAsprintf(web, -1, "\"%s\" --quiet compile %s \"%s\"", compiler, kind, name);
+        commandLine = mprAsprintf(web, -1, "\"%s\" \"%s\" --quiet compile %s \"%s\"", shell, ejsweb, kind, name);
     }
-
     ejs = (web->ejs->master) ? web->ejs->master : web->ejs;
 
     /*
@@ -34311,7 +34512,7 @@ static int build(EjsWeb *web, cchar *kind, cchar *name, cchar *module, cchar *so
 #if AUTO_COMPILE
 {
     MprPath     sourceInfo;
-    char        *source, *compiler;
+    char        *source, *shell;
 
     if (strcmp(kind, "app") == 0) {
         source = mprJoinPath(web, web->appDir, "src/App.es");
@@ -34335,15 +34536,15 @@ static int build(EjsWeb *web, cchar *kind, cchar *name, cchar *module, cchar *so
 
     } else {
         /* Either module out of date or not present with source present or forced rebuild */
-        if ((compiler = locateCompiler(web)) == 0) {
+        if ((shell = locateShell(web)) == 0) {
             if (!moduleInfo.valid) {
-                mprError(web, "Can't find compiler: %s to compile %s", EJS_EJSWEB_EXE, source);
+                mprError(web, "Can't find shell: %s to compile %s", EJS_EJSWEB_EXE, source);
                 return MPR_ERR_CANT_ACCESS;
             }
-            mprLog(web, 5, "Using module %s - missing compiler", module);
-            /* Use existing module even though out of date -- no compiler */
+            mprLog(web, 5, "Using module %s - missing shell", module);
+            /* Use existing module even though out of date -- no shell */
 
-        } else if (compile(web, compiler, kind, name) != 0) {
+        } else if (compile(web, shell, kind, name) != 0) {
             rc = MPR_ERR_BAD_STATE;
         }
     }
@@ -34514,11 +34715,11 @@ static void createCookie(Ejs *ejs, EjsVar *cookies, cchar *name, cchar *value, c
 /*
  *  Define a form variable as an ejs property in the params[] collection. Support a.b.c syntax
  */
-void ejsDefineWebParam(Ejs *ejs, cchar *key, cchar *value)
+void ejsDefineWebParam(Ejs *ejs, cchar *key, cchar *svalue)
 {
     EjsName     qname;
     EjsWeb      *web;
-    EjsVar      *where, *vp;
+    EjsVar      *where, *vp, *value;
     char        *subkey, *end;
     int         slotNum;
 
@@ -34527,12 +34728,18 @@ void ejsDefineWebParam(Ejs *ejs, cchar *key, cchar *value)
     where = web->params;
     mprAssert(where);
 
+    if (*svalue == '[') {
+        value = ejsDeserialize(ejs, ejsCreateString(ejs, svalue));
+    } else {
+        value = (EjsVar*) ejsCreateString(ejs, svalue);
+    }
+
     /*
      *  name.name.name
      */
     if (strchr(key, '.') == 0) {
         ejsName(&qname, "", key);
-        ejsSetPropertyByName(ejs, where, &qname, (EjsVar*) ejsCreateString(ejs, value));
+        ejsSetPropertyByName(ejs, where, &qname, value);
 
     } else {
         subkey = mprStrdup(ejs, key);
@@ -34544,12 +34751,11 @@ void ejsDefineWebParam(Ejs *ejs, cchar *key, cchar *value)
                 slotNum = ejsSetPropertyByName(ejs, where, &qname, (EjsVar*) ejsCreateObject(ejs, ejs->objectType, 0));
                 vp = ejsGetProperty(ejs, where, slotNum);
             }
-
             where = vp;
         }
         mprAssert(where);
         ejsName(&qname, "", subkey);
-        ejsSetPropertyByName(ejs, where, &qname, (EjsVar*) ejsCreateString(ejs, value));
+        ejsSetPropertyByName(ejs, where, &qname, value);
     }
 }
 

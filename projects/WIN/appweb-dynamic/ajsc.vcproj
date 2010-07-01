@@ -27,8 +27,8 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Build Ejscript Modules"
-				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)/ajs.mod $(ProjectDir)/../../../src/ejs/ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)/../../../src/include/ejs.slots.h $(IntDir)/ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)/ajsweb.mod $(ProjectDir)/../../../src/ejs/ejsweb.es&#x0D;&#x0A;"
-				Outputs="$(IntDir)/ajs.mod"
+				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)\ajs.mod $(ProjectDir)\..\..\..\src\ejs\ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)\..\..\..\src\include\ejs.slots.h $(IntDir)\ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)\ajsweb.mod $(ProjectDir)\..\..\..\src\ejs\ejsweb.es&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.cmd echo Copying ajsweb.cmd &amp; copy $(ProjectDir)\..\..\..\src\ejs\ajsweb.cmd $(IntDir)\ajsweb.cmd&#x0D;&#x0A;if not exist $(IntDir)\ajsweb echo Copying ajsweb &amp; copy $(ProjectDir)\..\..\..\src\ejs\ejsweb.es $(IntDir)\ajsweb&#x0D;&#x0A;"
+				Outputs="$(IntDir)\ajs.mod"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -44,7 +44,7 @@
 				Optimization="1"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../../..;../../../src/include"
+				AdditionalIncludeDirectories="../../../src/include/master;../../..;../../../src/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;_REENTRANT;_MT"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -113,8 +113,8 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Build Ejscript Modules"
-				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)/ajs.mod $(ProjectDir)/../../../src/ejs/ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)/../../../src/include/ejs.slots.h $(IntDir)/ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)/ajsweb.mod $(ProjectDir)/../../../src/ejs/ejsweb.es&#x0D;&#x0A;"
-				Outputs="$(IntDir)/ajs.mod"
+				CommandLine="if not exist $(IntDir)\ajs.mod echo Building ajs.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --empty --out $(IntDir)\ajs.mod $(ProjectDir)\..\..\..\src\ejs\ejs.es&#x0D;&#x0A;$(IntDir)\ajsmod --showBuiltin --showDebug --empty --listing --out $(ProjectDir)\..\..\..\src\include\ejs.slots.h $(IntDir)\ajs.mod&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.mod echo Building ajsweb.mod &amp; $(IntDir)\ajsc --debug --optimize 9 --bind --out $(IntDir)\ajsweb.mod $(ProjectDir)\..\..\..\src\ejs\ejsweb.es&#x0D;&#x0A;if not exist $(IntDir)\ajsweb.cmd echo Copying ajsweb.cmd &amp; copy $(ProjectDir)\..\..\..\src\ejs\ajsweb.cmd $(IntDir)\ajsweb.cmd&#x0D;&#x0A;if not exist $(IntDir)\ajsweb echo Copying ajsweb &amp; copy $(ProjectDir)\..\..\..\src\ejs\ejsweb.es $(IntDir)\ajsweb&#x0D;&#x0A;"
+				Outputs="$(IntDir)\ajs.mod"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -129,7 +129,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../../..;../../../src/include"
+				AdditionalIncludeDirectories="../../../src/include/master;../../..;../../../src/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;_REENTRANT;_MT"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -191,7 +191,7 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{bc1c5c84-8931-4520-a1e4-633e401fee47}"
+			UniqueIdentifier="{29b3fba3-84c9-49ef-9576-89f1cc93cee2}"
 			>
 			<File
 				RelativePath="..\..\..\buildConfig.h"
@@ -225,7 +225,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{f6db43bf-8ac9-4249-b0ba-50ac0004d56a}"
+			UniqueIdentifier="{eede6c88-1147-4e6d-894b-4f8abb904537}"
 			>
 			<File
 				RelativePath="..\..\..\src\ejs\ejsc.c"

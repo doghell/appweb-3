@@ -2,7 +2,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.0.
+ *  Embedthis Ejscript 1.0.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -52,7 +52,7 @@
 #define SQLITE_ENABLE_COLUMN_METADATA   1
 #define SQLITE_THREADSAFE               BLD_FEATURE_MULTITHREAD
 
-#if MACOSX || LINUX || SOLARIS
+#if MACOSX || LINUX || SOLARIS || FREEBSD
 #define STDC_HEADERS        1
 #define HAVE_SYS_TYPES_H    1
 #define HAVE_SYS_STAT_H     1

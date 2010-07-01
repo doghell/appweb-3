@@ -2,7 +2,7 @@
  * jquery.ejs.js - Ejscript jQuery support
  * http://www.ejscript.com/
  *
- * Copyright (c) 2009 Michael O'Brien
+ * Copyright (c) 2009 Embedthis Software
  * Dual licensed under GPL licenses and the Embedthis commercial license.
  * See http://www.embedthis.com/ for further licensing details.
  */

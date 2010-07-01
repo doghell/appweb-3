@@ -17,50 +17,50 @@
 <table class='classHead' summary='RegExp'>
    <tr><td><strong>Module</strong></td><td>ejs</td></tr>
    <tr><td><strong>Definition</strong></td><td>final  class RegExp</td></tr>
-   <tr><td><strong>Inheritance</strong></td><td>RegExp <img src='images/inherit.gif' alt='inherit'/> <a href='intrinsic-Object.html'>Object</a><tr><td><strong>Specified</strong></td><td>evolving
-<table class="itemtable">
-<tr><td>\\</td><td>reverse whether a character is treated literally or not.</td></tr>
-<tr><td>^</td><td>match to the start of input. if matching multiline, match starting after a line break.</td></tr>
-<tr><td>\$ </td><td>match to the end of input. if matching multiline, match before after a line break.</td></tr>
-<tr><td>*<</td><td>match the preceding item zero or more times.</td></tr>
-<tr><td>+</td><td>match the preceding item one or more times.</td></tr>
-<tr><td>?</td><td>match the preceding item zero or one times.</td></tr>
-<tr><td>(mem)</td><td>match inside the parenthesis (i.e. "mem") and store the match.</td></tr>
-<tr><td>(?:nomem)</td><td>match "nomem" and do not store the match.</td></tr>
-<tr><td>oper(?=need)</td><td>match "oper" only if it is  followed by "need".</td></tr>
-<tr><td>oper(?!not)</td><td>match "oper" only if it is not followed by "not".</td></tr>
-<tr><td>either|or</td><td>match "either" or "or".</td></tr>
-<tr><td>{int}</td><td>match exactly int occurences of the preceding item.</td></tr>
-<tr><td>{int,}</td><td>match at least int occurences of the preceding item.</td></tr>
-<tr><td>{int1,int2}</td><td>match at least int1 occurences of the preceding item but no more then int2.</td></tr>
-<tr><td>[pqr]</td><td>match any one of the enclosed characters. use a hyphen to specify a range of characters.</td></tr>
-<tr><td>[^pqr]</td><td>match anything except the characters in brackets.</td></tr>
-<tr><td>[\b]</td><td>match a backspace.</td></tr>
-<tr><td>\b</td><td>match a word boundary.</td></tr>
-<tr><td>\b</td><td>match a non-word boundary.</td></tr>
-<tr><td>\cq</td><td>match a control string, e.g. control-q</td></tr>
-<tr><td>\d</td><td>match a digit.</td></tr>
-<tr><td>\d</td><td>match any non-digit character.</td></tr>
-<tr><td>\f</td><td>match a form feed.</td></tr>
-<tr><td>\n</td><td>match a line feed.</td></tr>
-<tr><td>\r</td><td>match a carriage return.</td></tr>
-<tr><td>\s</td><td>match a single white space.</td></tr>
-<tr><td>\s</td><td>match a non-white space.</td></tr>
-<tr><td>\t</td><td>match a tab.</td></tr>
-<tr><td>\v</td><td>match a vertical tab.</td></tr>
-<tr><td>\w</td><td>match any alphanumeric character.</td></tr>
-<tr><td>\w</td><td>match any non-word character.</td></tr>
-<tr><td>\int</td><td>a reference back int matches.</td></tr>
-<tr><td>\0</td><td>match a null character.</td></tr>
-<tr><td>\xyy</td><td>match the character code yy.</td></tr>
-<tr><td>\xyyyy</td><td>match the character code yyyy.</td></tr>
-</table></td></tr>
+   <tr><td><strong>Inheritance</strong></td><td>RegExp <img src='images/inherit.gif' alt='inherit'/> <a href='intrinsic-Object.html'>Object</a><tr><td><strong>Specified</strong></td><td>evolving</td></tr>
        </td></tr>
 </table>
 
 <p class='classBrief'>Regular expressions per ECMA-262.</p>
 
-<p class='classDescription'>The following special characters are supported:.</p>
+<p class='classDescription'>The following special characters are supported:
+<table class="itemTable">
+<tr><td>\\</td><td>Reverse whether a character is treated literally or not.</td></tr>
+<tr><td>^</td><td>Match to the start of input. If matching multiline, match starting after a line break.</td></tr>
+<tr><td>\</td><td>Match to the end of input. If matching multiline, match before after a line break.</td></tr>
+<tr><td>*  </td><td>Match the preceding item zero or more times.</td></tr>
+<tr><td>+</td><td>Match the preceding item one or more times.</td></tr>
+<tr><td>?</td><td>Match the preceding item zero or one times.</td></tr>
+<tr><td>(mem)</td><td>Match inside the parenthesis (i.e. "mem") and store the match.</td></tr>
+<tr><td>(?:nomem)</td><td>Match "nomem" and do not store the match.</td></tr>
+<tr><td>oper(?=need)</td><td>Match "oper" only if it is  followed by "need".</td></tr>
+<tr><td>oper(?!not)</td><td>Match "oper" only if it is not followed by "not".</td></tr>
+<tr><td>either|or</td><td>Match "either" or "or".</td></tr>
+<tr><td>{int}</td><td>Match exactly int occurences of the preceding item.</td></tr>
+<tr><td>{int,}</td><td>Match at least int occurences of the preceding item.</td></tr>
+<tr><td>{int1,int2}</td><td>Match at least int1 occurences of the preceding item but no more then int2.</td></tr>
+<tr><td>[pqr]</td><td>Match any one of the enclosed characters. Use a hyphen to specify a range of characters.</td></tr>
+<tr><td>[^pqr]</td><td>Match anything except the characters in brackets.</td></tr>
+<tr><td>[\b]</td><td>Match a backspace.</td></tr>
+<tr><td>\b</td><td>Match a word boundary.</td></tr>
+<tr><td>\B</td><td>Match a non-word boundary.</td></tr>
+<tr><td>\cQ</td><td>Match a control string, e.g. Control-Q</td></tr>
+<tr><td>\d</td><td>Match a digit.</td></tr>
+<tr><td>\D</td><td>Match any non-digit character.</td></tr>
+<tr><td>\f</td><td>Match a form feed.</td></tr>
+<tr><td>\n</td><td>Match a line feed.</td></tr>
+<tr><td>\r</td><td>Match a carriage return.</td></tr>
+<tr><td>\s</td><td>Match a single white space.</td></tr>
+<tr><td>\S</td><td>Match a non-white space.</td></tr>
+<tr><td>\t</td><td>Match a tab.</td></tr>
+<tr><td>\v</td><td>Match a vertical tab.</td></tr>
+<tr><td>\w</td><td>Match any alphanumeric character.</td></tr>
+<tr><td>\W</td><td>Match any non-word character.</td></tr>
+<tr><td>\int</td><td>A reference back int matches.</td></tr>
+<tr><td>\0</td><td>Match a null character.</td></tr>
+<tr><td>\xYY</td><td>Match the character code YY.</td></tr>
+<tr><td>\xYYYY</td><td>Match the character code YYYY.</td></tr>
+</table></p>
 
 </div>
 
