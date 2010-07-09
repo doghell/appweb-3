@@ -4,7 +4,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.0.2.
+ *  Embedthis Ejscript 1.0.3.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -7610,11 +7610,18 @@ static EjsVar *math_min(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
  */
 static EjsVar *math_pow(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
 {
-    MprNumber   x, y;
+    MprNumber   x, y, result;
     
     x = ejsGetNumber(argv[0]);
     y = ejsGetNumber(argv[1]);
-    return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) pow(x,y));
+    result = pow(x, y);
+#if CYGWIN
+    /* Cygwin computes (0.0 / -1) == -Infinity */
+    if (result < 0 && x == 0.0) {
+        result = -result;
+    }
+#endif
+    return (EjsObj*) ejsCreateNumber(ejs, (MprNumber) result);
 }
 
 

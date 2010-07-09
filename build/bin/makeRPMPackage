@@ -11,9 +11,6 @@ RPM_DIR=$ROOT_DIR/RPM
 RPM_SPEC_FILE=
 BLD_DATE=`date '+%c'`
 
-echo TOP 
-env
-
 ################################################################################
 
 setupRPM() {
@@ -45,8 +42,6 @@ createSpecFile() {
     #   Binary RPM
     #
     cd ${ROOT_DIR}/BIN
-echo MOB create createSpecFile: makeRPMPackage
-echo RPM_DIR $RPM_DIR
     echo '%defattr(-,root,root)' >$RPM_DIR/BUILD/binFiles.txt
     find . -type d -print | sed -e 's!\.!!' | grep ${BLD_PRODUCT} | sed -e "s!^!%dir !" >>$RPM_DIR/BUILD/binFiles.txt
     find . -type f -print | sed -e "s/.//" | sed 's/.*/"&"/' >>$RPM_DIR/BUILD/binFiles.txt
@@ -93,9 +88,6 @@ echo RPM_DIR $RPM_DIR
 makeRPMPackage() {
     local f
 
-echo XXXXXXXXXXXXXXX HOME IS $HOME
-echo YYYYYYYYYYYYYYYY TILDE is ~
-echo CREATING ~/.rpmmacros
     cat <<!MACROS_EOF > ~/.rpmmacros
 %_topdir $RPM_DIR
 

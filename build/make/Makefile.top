@@ -117,6 +117,8 @@ cleanExtra:
 clobberExtra:
 	rm -f buildConfig.* 
 
+combo:
+
 buildConfig.sh buildConfig.h buildConfig.make:
 
 #
