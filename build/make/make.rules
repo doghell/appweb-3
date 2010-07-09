@@ -102,6 +102,9 @@ ifneq ($(BLD_OS),WIN)
     else
         setlibpath = export LD_LIBRARY_PATH="$(BLD_BUILD_LIB_DIR):$(BLD_BUILD_MOD_DIR)"
     endif
+    ifeq ($(BLD_OS),CYGWIN)
+        export PATH:="$(BLD_TOP)/modules:$(PATH)"
+    endif
 else
 	setlibpath  = true
     CYGWIN      += nodosfilewarning
@@ -343,7 +346,6 @@ cleanDirs:
 	@+T=clean ; D="$(PRE_DIRS)" ; $(DO_RECURSE) ; D="$(POST_DIRS)" ; $(DO_RECURSE)
 
 cleanExtra:
-
 
 #
 #	Do an extra thorough clean and remove all generated files
