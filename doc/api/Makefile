@@ -6,7 +6,7 @@
 
 include		.makedep
 
-doc: prep mpr.html ejs.html appweb.html
+gen doc: prep mpr.html ejs.html appweb.html
 
 prep:
 	rm -f prep mpr.html ejs.html appweb.html

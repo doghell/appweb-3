@@ -44,14 +44,14 @@
 <td class="apiName"><a href="#group___ma_mime_type" class="nameRef">MaMimeType</a></td>
 <td class="apiBrief">Mime Type hash table entry (the URL extension is the key).</td></tr>
 <tr class="apiDef">
+<td class="apiName"><a href="#group___ma_queue" class="nameRef">MaQueue</a></td>
+<td class="apiBrief">Queue Head.</td></tr>
+<tr class="apiDef">
 <td class="apiName"><a href="#group___ma_range" class="nameRef">MaRange</a></td>
 <td class="apiBrief">Content range structure.</td></tr>
 <tr class="apiDef">
 <td class="apiName"><a href="#group___ma_request" class="nameRef">MaRequest</a></td>
 <td class="apiBrief">Http Requests.</td></tr>
-<tr class="apiDef">
-<td class="apiName"><a href="#group___ma_response" class="nameRef">MaResponse</a></td>
-<td class="apiBrief">Http Response.</td></tr>
 <tr class="apiDef">
 <td class="apiName"><a href="#group___ma_server" class="nameRef">MaServer</a></td>
 <td class="apiBrief">Http Server Control An application may have any number of HTTP servers, each managed by an instance of the Server class.</td></tr>
@@ -80,6 +80,72 @@
 <td class="apiType">int</td><td><a href="#group___ma_http_1gcf91964d3b2b00dc63e2a4daffc0c723" class="nameRef">maStopHttp</a>(<a href="#group___ma_http" class="ref">MaHttp</a> *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Stop Http services.</td></tr>
 <tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="nameRef">maDisableQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Disable a queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="nameRef">maDiscardData</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  bool removePackets)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Discard all data from the queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="nameRef">maEnableQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Enable a queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">MaPacket*</td><td><a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="nameRef">maGet</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Get the next packet from a queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="nameRef">maGetQueueRoom</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Get the room in the queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">bool</td><td><a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="nameRef">maIsQueueEmpty</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Determine if the queue is empty.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="nameRef">maJoinForService</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet,  bool serviceQ)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Join a packet onto the service queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">bool</td><td><a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="nameRef">maPacketTooBig</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Test if a packet is too big.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="nameRef">maPut</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Put a packet onto a queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="nameRef">maPutBack</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Put a packet back onto a queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="nameRef">maPutForService</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet,  bool serviceQ)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Put a packet onto the service queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="nameRef">maPutNext</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Put a packet onto the next queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="nameRef">maRemoveQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Remove a queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="nameRef">maResizePacket</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet,  int size)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Resize a packet.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="nameRef">maScheduleQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Schedule a queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="nameRef">maSendEndPacket</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Send an end packet.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="nameRef">maSendPackets</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Send all queued packets.</td></tr>
+<tr class="apiDef">
+<td class="apiType">void</td><td><a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="nameRef">maServiceQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Service a queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">bool</td><td><a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="nameRef">maWillNextQueueAccept</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Determine if the downstream queue will accept this packet.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="nameRef">maWrite</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  cchar *fmt, ...)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Write a formatted string.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="nameRef">maWriteBlock</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  cchar *buf,  int size,  bool block)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Write a block of data to the queue.</td></tr>
+<tr class="apiDef">
+<td class="apiType">int</td><td><a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="nameRef">maWriteString</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  cchar *s)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Write a string of data to the queue.</td></tr>
+<tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___ma_request_1g84747a5a50d80576d3c24fe917ef3583" class="nameRef">maAddVars</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  cchar *buf,  int len)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Add query and post form variables.</td></tr>
 <tr class="apiDef">
@@ -106,33 +172,6 @@
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="nameRef">maTestFormVar</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  cchar *var)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Test if a form variable is defined.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_response_1g0fc2e324e7bc07b0cbbfe41e6f8bd32e" class="nameRef">maDontCacheResponse</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Dont cache the response.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="nameRef">maFailRequest</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  int code,  cchar *fmt, ...)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Fail a request.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_response_1g36d93becc818990d715d265f48bb427a" class="nameRef">maFillHeaders</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  MaPacket *packet)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Create the response headers.</td></tr>
-<tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="nameRef">maFormatBody</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  cchar *title,  cchar *fmt, ...)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Format an alternate response body.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_response_1g1f571cb3b688c6e44d4107b77fceac67" class="nameRef">maRedirect</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  int code,  cchar *uri)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Redirect the client.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="nameRef">maSetCookie</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  cchar *name,  cchar *value,  cchar *path,  cchar *domain,  int lifetime,  bool secure)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Set a response cookie.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_response_1ga27b43bad295e5f928fe2f8e5878cf42" class="nameRef">maSetHeader</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  bool allowMultiple,  cchar *key,  cchar *fmt, ...)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Set a response header.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_response_1gb822baf3fa6b7b3d8f68ec858a3fd65c" class="nameRef">maSetResponseCode</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  int code)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Set a Http response code.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_response_1g63f6f2038aca9e41d71e99a00f880f6d" class="nameRef">maSetResponseMimeType</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  cchar *mimeType)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Set the response mime type.</td></tr>
 <tr class="apiDef">
 <td class="apiType">int</td><td><a href="#group___ma_server_1gcf1e50889d272eb52266be2b5f0705b9" class="nameRef">maConfigureServer</a>(MprCtx ctx,  MaHttp *http,  MaServer *server,  cchar *configFile,  cchar *ipAddr,  int port,  cchar *documentRoot)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Configure a web server.</td></tr>
@@ -521,7 +560,7 @@ Redirect to a uri.
     <dl><dt><b>Description</b>:</dt><dd>The MaConn object represents a TCP/IP connection to the client. A connection object is created for each socket connection initiated by the client. One MaConn object may service many Http requests due to HTTP/1.1 keep-alive.</dd></dl>
     <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#struct_ma_stage" class="ref">MaStage</a></dd></dl>
+    <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#struct_ma_stage" class="ref">MaStage</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
     <tr><td class="param">MaHostAddress *</td><td><td>address</td><td>
@@ -545,9 +584,6 @@ When the connection should expire.
 </td>
     <tr><td class="param">int</td><td><td>flags</td><td>
 Connection flags.
-</td>
-    <tr><td class="param">MaPacket *</td><td><td>freePackets</td><td>
-Free list of packets.
 </td>
     <tr><td class="param">MaHost *</td><td><td>host</td><td>
 Owning host for this request.
@@ -868,42 +904,6 @@ Http server user name.
     <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
     <dl><dt>See Also:</dt><dd>
     </dd></dl>
-    <dl><dt>Fields:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">int</td><td><td>maxBody</td><td>
-Max size of an incoming request.
-</td>
-    <tr><td class="param">int</td><td><td>maxChunkSize</td><td>
-Max chunk size for transfer encoding.
-</td>
-    <tr><td class="param">int</td><td><td>maxHeader</td><td>
-Max size of the total header.
-</td>
-    <tr><td class="param">int</td><td><td>maxNumHeaders</td><td>
-Max number of lines of header.
-</td>
-    <tr><td class="param">int</td><td><td>maxResponseBody</td><td>
-Max size of generated response content.
-</td>
-    <tr><td class="param">int</td><td><td>maxStageBuffer</td><td>
-Max buffering by any pipeline stage.
-</td>
-    <tr><td class="param">int</td><td><td>maxThreads</td><td>
-Max number of pool threads.
-</td>
-    <tr><td class="param">int</td><td><td>maxUploadSize</td><td>
-Max size of an uploaded file.
-</td>
-    <tr><td class="param">int</td><td><td>maxUrl</td><td>
-Max size of a URL.
-</td>
-    <tr><td class="param">int</td><td><td>minThreads</td><td>
-Min number of pool threads.
-</td>
-    <tr><td class="param">int</td><td><td>threadStackSize</td><td>
-Stack size for each pool thread.
-</td>
-    </table></dd></dl>
   </div>
 </div>
 <h1>MaListen</h1>
@@ -1017,6 +1017,534 @@ Upload directory.
     </table></dd></dl>
   </div>
 </div>
+<h1>MaQueue</h1>
+<a name="group___ma_queue"></a>
+<div class="api">
+  <div class="prototype">MaQueue</div>
+  <div class="apiDetail">
+<p>Queue Head.</p>
+    <dl><dt><b>Description</b>:</dt><dd>The request pipeline consists of a full-duplex pipeline of stages. Each stage has two queues, one for outgoing data and one for incoming. A MaQueue object manages the data flow for a request stage and has the ability to queue and process data, manage flow control and schedule packets for service. <br/><br/>
+ Queue&apos;s provide open, close, put and service methods. These methods manage and respond to incoming packets. A queue can respond immediately to an incoming packet by processing or dispatching a packet in its put() method. Alternatively, the queue can defer processing by queueing the packet on it&apos;s service queue and then waiting for it&apos;s service() method to be invoked. <br/><br/>
+ If a queue does not define a put() method, the default put method will be used which queues data onto the service queue. The default incoming put() method joins incoming packets into a single packet on the service queue.</dd></dl>
+    <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+    <dl><dt>Fields:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">MaQueueClose</td><td><td>close</td><td>
+Close the queue.
+</td>
+    <tr><td class="param">struct MaConn *</td><td><td>conn</td><td>
+Connection ownning this queue.
+</td>
+    <tr><td class="param">int</td><td><td>count</td><td>
+Bytes in queue.
+</td>
+    <tr><td class="param">int</td><td><td>direction</td><td>
+Flow direction.
+</td>
+    <tr><td class="param">MaPacket *</td><td><td>first</td><td>
+First packet in queue (singly linked).
+</td>
+    <tr><td class="param">int</td><td><td>flags</td><td>
+Queue flags.
+</td>
+    <tr><td class="param">int</td><td><td>ioCount</td><td>
+Count of bytes in iovec.
+</td>
+    <tr><td class="param">int</td><td><td>ioFileEntry</td><td>
+Has file entry in iovec.
+</td>
+    <tr><td class="param">int</td><td><td>ioFileOffset</td><td>
+The next file position to use.
+</td>
+    <tr><td class="param">int</td><td><td>ioIndex</td><td>
+Next index into iovec.
+</td>
+    <tr><td class="param">MaPacket *</td><td><td>last</td><td>
+Last packet in queue (tail pointer).
+</td>
+    <tr><td class="param">int</td><td><td>low</td><td>
+Low water mark for flow control.
+</td>
+    <tr><td class="param">int</td><td><td>max</td><td>
+Maxiumum queue size.
+</td>
+    <tr><td class="param">struct MaQueue *</td><td><td>nextQ</td><td>
+Downstream queue for next stage.
+</td>
+    <tr><td class="param">MaQueueOpen</td><td><td>open</td><td>
+Open the queue.
+</td>
+    <tr><td class="param">cchar *</td><td><td>owner</td><td>
+Name of owning stage.
+</td>
+    <tr><td class="param">int</td><td><td>packetSize</td><td>
+Maximum acceptable packet size.
+</td>
+    <tr><td class="param">struct MaQueue *</td><td><td>pair</td><td>
+Queue for the same stage in the opposite direction.
+</td>
+    <tr><td class="param">MaPacket *</td><td><td>pending</td><td>
+Packets pending more dynamic data output.
+</td>
+    <tr><td class="param">struct MaQueue *</td><td><td>prevQ</td><td>
+Upstream queue for prior stage.
+</td>
+    <tr><td class="param">MaQueueData</td><td><td>put</td><td>
+Put a message on the queue.
+</td>
+    <tr><td class="param">void *</td><td><td>queueData</td><td>
+Stage instance data.
+</td>
+    <tr><td class="param">struct MaQueue *</td><td><td>scheduleNext</td><td>
+Next linkage when queue is on the service queue.
+</td>
+    <tr><td class="param">struct MaQueue *</td><td><td>schedulePrev</td><td>
+Previous linkage when queue is on the service queue.
+</td>
+    <tr><td class="param">MaQueueService</td><td><td>service</td><td>
+Service the queue.
+</td>
+    <tr><td class="param">struct MaStage *</td><td><td>stage</td><td>
+Stage owning this queue.
+</td>
+    <tr><td class="param">MaQueueStart</td><td><td>start</td><td>
+Start the queue, run after all opens have completed.
+</td>
+    </table></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g89df8a2c0754e9740cb982948227c080"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maDisableQueue
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Disable a queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Mark a queue as disabled so that it will not be scheduled for service.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maDiscardData
+(MaQueue *q, bool removePackets)
+  </div>
+  <div class="apiDetail">
+<p>Discard all data from the queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Discard data from the queue. If removePackets (not yet implemented) is true, then remove the packets otherwise, just discard the data and preserve the packets.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">removePackets</td><td>If true, the data packets will be removed from the queue.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maEnableQueue
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Enable a queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Enable a queue for service and schedule it to run. This will cause the service routine to run as soon as possible.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85"></a>
+<div class="api">
+  <div class="prototype">
+    MaPacket *
+    maGet
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Get the next packet from a queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Get the next packet. This will remove the packet from the queue and adjust the queue counts accordingly. If the queue was full and upstream queues were blocked, they will be enabled.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>The packet removed from the queue.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    maGetQueueRoom
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Get the room in the queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Get the amount of data the queue can accept before being full.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>A count of bytes that can be written to the queue.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8"></a>
+<div class="api">
+  <div class="prototype">
+    bool
+    maIsQueueEmpty
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Determine if the queue is empty.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Determine if the queue has no packets queued. This does not test if the queue has no data content.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>True if there are no packets queued.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g008879575307745c34a0d3a3807522a2"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maJoinForService
+(MaQueue *q, MaPacket *packet, bool serviceQ)
+  </div>
+  <div class="apiDetail">
+<p>Join a packet onto the service queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Add a packet to the service queue. If the queue already has data, then this packet will be joined (aggregated) into the existing packet. If serviceQ is true, the queue will be scheduled for service.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to join to the queue.</td>
+    <tr><td class="param">serviceQ</td><td>If true, schedule the queue for service.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0"></a>
+<div class="api">
+  <div class="prototype">
+    bool
+    maPacketTooBig
+(MaQueue *q, MaPacket *packet)
+  </div>
+  <div class="apiDetail">
+<p>Test if a packet is too big.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Test if a packet is too big to fit downstream. If the packet content exceeds the downstream queue&apos;s maximum or exceeds the downstream queue&apos;s requested packet size -- then this routine will return true.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to test.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>True if the packet is too big for the downstream queue.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gd565107ef6abf6c845724d05391580b8"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maPut
+(MaQueue *q, MaPacket *packet)
+  </div>
+  <div class="apiDetail">
+<p>Put a packet onto a queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Put the packet onto the end of queue by calling the queue&apos;s put() method.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to put.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g122d3cbab1cab19d402841dacf367e71"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maPutBack
+(MaQueue *q, MaPacket *packet)
+  </div>
+  <div class="apiDetail">
+<p>Put a packet back onto a queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Put the packet back onto the front of the queue. The queue&apos;s put() method is not called. This is typically used by the queue&apos;s service routine when a packet cannot complete processing.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to put back.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maPutForService
+(MaQueue *q, MaPacket *packet, bool serviceQ)
+  </div>
+  <div class="apiDetail">
+<p>Put a packet onto the service queue.</p>
+Put a packet onto a service queue
+    <dl><dt><b>Description</b>:</dt><dd>Add a packet to the service queue. If serviceQ is true, the queue will be scheduled for service.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to join to the queue.</td>
+    <tr><td class="param">serviceQ</td><td>If true, schedule the queue for service.</td>
+    </table></dd></dl>
+    <dl><dt><b>Description</b>:</dt><dd>Put the packet onto the service queue and optionally schedule the queue for service.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to put.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maPutNext
+(MaQueue *q, MaPacket *packet)
+  </div>
+  <div class="apiDetail">
+<p>Put a packet onto the next queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Put a packet onto the next downstream queue by calling the downstreams queue&apos;s put() method.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference. The packet will not be queued on this queue, but rather on the queue downstream.</td>
+    <tr><td class="param">packet</td><td>Packet to put.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maRemoveQueue
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Remove a queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Remove a queue from the request/response pipeline. This will remove a queue so that it does not participate in the pipeline, effectively removing the processing stage from the pipeline. This is useful to remove unwanted filters and to speed up pipeline processing.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    maResizePacket
+(MaQueue *q, MaPacket *packet, int size)
+  </div>
+  <div class="apiDetail">
+<p>Resize a packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Resize a packet if required so that it fits in the downstream queue. This may split the packet if it is too big to fit in the downstream queue. If it is split, the tail portion is put back on the queue.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to put.</td>
+    <tr><td class="param">size</td><td>If size is &gt; 0, then also ensure the packet is not larger than this size.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>Zero if successful, otherwise a negative Mpr error code.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maScheduleQueue
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Schedule a queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Schedule a queue by adding it to the schedule queue. Queues are serviced FIFO.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maSendEndPacket
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Send an end packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Create and send an end-of-stream packet downstream.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maSendPackets
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Send all queued packets.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Send all queued packets downstream.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2"></a>
+<div class="api">
+  <div class="prototype">
+    void
+    maServiceQueue
+(MaQueue *q)
+  </div>
+  <div class="apiDetail">
+<p>Service a queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Service a queue by invoking its service() routine.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    </table></dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27"></a>
+<div class="api">
+  <div class="prototype">
+    bool
+    maWillNextQueueAccept
+(MaQueue *q, MaPacket *packet)
+  </div>
+  <div class="apiDetail">
+<p>Determine if the downstream queue will accept this packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Test if the downstream queue will accept a packet. The packet will be resized if required in an attempt to get the downstream queue to accept it. If the downstream queue is full, disable this queue and mark the downstream queue as full and service it immediately to try to relieve the congestion.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to put.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>True if the downstream queue will accept the packet. Use <a class="ref" href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0">maPutNext</a> to send the packet downstream.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    maWrite
+(MaQueue *q, cchar *fmt, ...)
+  </div>
+  <div class="apiDetail">
+<p>Write a formatted string.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Write a formatted string of data into packets onto the end of the queue. Data packets will be created as required to store the write data. This call may block waiting for the downstream queue to drain if it is or becomes full.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">fmt</td><td>Printf style formatted string.</td>
+    <tr><td class="param">...</td><td>Arguments for fmt.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>A count of the bytes actually written.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    maWriteBlock
+(MaQueue *q, cchar *buf, int size, bool block)
+  </div>
+  <div class="apiDetail">
+<p>Write a block of data to the queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Write a block of data into packets onto the end of the queue. Data packets will be created as required to store the write data.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">buf</td><td>Buffer containing the write data.</td>
+    <tr><td class="param">size</td><td>of the data in buf.</td>
+    <tr><td class="param">block</td><td>Set to true to block and wait for data to drain if the downstream queue is full. If false, the call may return not having written all the data. The return value indicates how many bytes were actually written.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>A count of the bytes actually written.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+  </div>
+</div>
+<a name="group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac"></a>
+<div class="api">
+  <div class="prototype">
+    int
+    maWriteString
+(MaQueue *q, cchar *s)
+  </div>
+  <div class="apiDetail">
+<p>Write a string of data to the queue.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Write a string of data into packets onto the end of the queue. Data packets will be created as required to store the write data. This call may block waiting for the downstream queue to drain if it is or becomes full.</dd></dl>
+    <dl><dt>Parameters:</dt><dd>
+    <table class="parameters" summary="Parameters">
+    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">s</td><td>String containing the data to write.</td>
+    </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>A count of the bytes actually written.</dd></dl>
+    <dl><dt>See Also:</dt><dd>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a></dd></dl>
+  </div>
+</div>
 <h1>MaRange</h1>
 <a name="group___ma_range"></a>
 <div class="api">
@@ -1038,160 +1566,9 @@ Upload directory.
     <dl><dt><b>Description</b>:</dt><dd>Most of the APIs in the Request group still take a MaConn object as their first parameter. This is to make the API easier to remember - APIs take a connection object rather than a request or response object.</dd></dl>
     <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">char *</td><td><td>accept</td><td>
-Accept header.
-</td>
-    <tr><td class="param">char *</td><td><td>acceptCharset</td><td>
-Accept-Charset header.
-</td>
-    <tr><td class="param">char *</td><td><td>acceptEncoding</td><td>
-Accept-Encoding header.
-</td>
-    <tr><td class="param">MaAlias *</td><td><td>alias</td><td>
-Matching alias.
-</td>
-    <tr><td class="param">MprHeap *</td><td><td>arena</td><td>
-Request memory arena.
-</td>
-    <tr><td class="param">MaAuth *</td><td><td>auth</td><td>
-Set to either dir or location auth information.
-</td>
-    <tr><td class="param">char *</td><td><td>authType</td><td>
-Authorization type (basic|digest) (ENV: AUTH_TYPE).
-</td>
-    <tr><td class="param">int</td><td><td>chunkRemainingData</td><td>
-Remaining chunk data to read.
-</td>
-    <tr><td class="param">int</td><td><td>chunkSize</td><td>
-Size of the next chunk.
-</td>
-    <tr><td class="param">int</td><td><td>chunkState</td><td>
-Chunk encoding state.
-</td>
-    <tr><td class="param">struct MaConn *</td><td><td>conn</td><td>
-Connection object.
-</td>
-    <tr><td class="param">char *</td><td><td>connection</td><td>
-Connection header.
-</td>
-    <tr><td class="param">char *</td><td><td>contentLengthStr</td><td>
-Content length string value.
-</td>
-    <tr><td class="param">char *</td><td><td>cookie</td><td>
-Request cookie header.
-</td>
-    <tr><td class="param">MaDir *</td><td><td>dir</td><td>
-Best matching dir (PTR only).
-</td>
-    <tr><td class="param">MprList *</td><td><td>etags</td><td>
-Document etag to uniquely identify the document version.
-</td>
-    <tr><td class="param">MprHashTable *</td><td><td>files</td><td>
-Uploaded files. 
-Managed by the upload filter.
-</td>
-    <tr><td class="param">int</td><td><td>flags</td><td>
-Request modifiers.
-</td>
-    <tr><td class="param">MprHashTable *</td><td><td>formVars</td><td>
-Query and post data variables.
-</td>
-    <tr><td class="param">char *</td><td><td>forwarded</td><td>
-Forwarded header.
-</td>
-    <tr><td class="param">char *</td><td><td>group</td><td>
-Supplied via basic / digest auth.
-</td>
-    <tr><td class="param">MaPacket *</td><td><td>headerpacket</td><td>
-Packet containing all headers ( == conn-&gt;input).
-</td>
-    <tr><td class="param">MaPacket *</td><td><td>headerPacket</td><td>
-HTTP headers.
-</td>
-    <tr><td class="param">MprHashTable *</td><td><td>headers</td><td>
-Header variables.
-</td>
-    <tr><td class="param">MaHost *</td><td><td>host</td><td>
-Owning host for this request.
-</td>
-    <tr><td class="param">char *</td><td><td>hostName</td><td>
-Client supplied host name.
-</td>
-    <tr><td class="param">char *</td><td><td>httpProtocol</td><td>
-HTTP/1.0 or HTTP/1.1.
-</td>
-    <tr><td class="param">bool</td><td><td>ifMatch</td><td>
-If-Match processing requested.
-</td>
-    <tr><td class="param">bool</td><td><td>ifModified</td><td>
-If-Modified processing requested.
-</td>
-    <tr><td class="param">MprList *</td><td><td>inputPipeline</td><td>
-Input processing.
-</td>
-    <tr><td class="param">MaRange *</td><td><td>inputRange</td><td>
-Specified range for input (post) data.
-</td>
-    <tr><td class="param">int</td><td><td>length</td><td>
-Declared content length (ENV: CONTENT_LENGTH).
-</td>
-    <tr><td class="param">MaLocation *</td><td><td>location</td><td>
-Location block.
-</td>
-    <tr><td class="param">int</td><td><td>method</td><td>
-Request method.
-</td>
-    <tr><td class="param">char *</td><td><td>methodName</td><td>
-Protocol method GET|PUT. 
-(ENV: REQUEST_METHOD).
-</td>
-    <tr><td class="param">char *</td><td><td>mimeType</td><td>
-Mime type of the request payload (ENV: CONTENT_TYPE).
-</td>
-    <tr><td class="param">MaPacket *</td><td><td>packet</td><td>
-Current input packet.
-</td>
-    <tr><td class="param">MprUri *</td><td><td>parsedUri</td><td>
-Parsed query string. 
-parsedUri-&gt;query is the query string.
-</td>
-    <tr><td class="param">char *</td><td><td>pathInfo</td><td>
-Extra path information (ENV: PATH_INFO).
-</td>
-    <tr><td class="param">char *</td><td><td>pathTranslated</td><td>
-Mapped extraPath to storage (ENV: PATH_TRANSLATED).
-</td>
-    <tr><td class="param">char *</td><td><td>pragma</td><td>
-Pragma header.
-</td>
-    <tr><td class="param">MaRange *</td><td><td>ranges</td><td>
-Requested ranges for response data.
-</td>
-    <tr><td class="param">int</td><td><td>receivedContent</td><td>
-Length of content actually received.
-</td>
-    <tr><td class="param">char *</td><td><td>referer</td><td>
-Refering URL.
-</td>
-    <tr><td class="param">int</td><td><td>remainingContent</td><td>
-Remaining content data to read.
-</td>
-    <tr><td class="param">MprTime</td><td><td>since</td><td>
-If-Modified date.
-</td>
-    <tr><td class="param">char *</td><td><td>url</td><td>
-Decoded URL. 
-Doesn&apos;t include scheme, host, extra path, query or fragments.
-</td>
-    <tr><td class="param">char *</td><td><td>user</td><td>
-Remote user (ENV: REMOTE_USER).
-</td>
-    <tr><td class="param">char *</td><td><td>userAgent</td><td>
-User-Agent header.
-</td>
     </table></dd></dl>
   </div>
 </div>
@@ -1212,7 +1589,7 @@ User-Agent header.
     <tr><td class="param">len</td><td>Length of buf.</td>
     </table></dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
   </div>
 </div>
 <a name="group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5"></a>
@@ -1233,7 +1610,7 @@ User-Agent header.
     </table></dd></dl>
     <dl><dt>Returns:</dt><dd>True if the value matches.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
   </div>
 </div>
 <a name="group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555"></a>
@@ -1252,7 +1629,7 @@ User-Agent header.
     </table></dd></dl>
     <dl><dt>Returns:</dt><dd>Return a string containing the cookies sent in the Http header of the last request.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
   </div>
 </div>
 <a name="group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9"></a>
@@ -1273,7 +1650,7 @@ User-Agent header.
     </table></dd></dl>
     <dl><dt>Returns:</dt><dd>String containing the form variable&apos;s value. Caller should not free.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
   </div>
 </div>
 <a name="group___ma_request_1g47566765cffb453045d103b07a3ffdc6"></a>
@@ -1294,7 +1671,7 @@ User-Agent header.
     </table></dd></dl>
     <dl><dt>Returns:</dt><dd>Integer containing the form variable&apos;s value.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
   </div>
 </div>
 <a name="group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55"></a>
@@ -1313,7 +1690,7 @@ User-Agent header.
     </table></dd></dl>
     <dl><dt>Returns:</dt><dd>String containing the request query string. Caller should not free.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
   </div>
 </div>
 <a name="group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0"></a>
@@ -1333,7 +1710,7 @@ User-Agent header.
     <tr><td class="param">value</td><td>Default value to return if the variable is not defined. Can be null.</td>
     </table></dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
   </div>
 </div>
 <a name="group___ma_request_1g5de91ec793b3a728c142c017f89c8310"></a>
@@ -1353,7 +1730,7 @@ User-Agent header.
     <tr><td class="param">value</td><td>Default value to return if the variable is not defined. Can be null.</td>
     </table></dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6" class="ref">maTestFormVar</a></dd></dl>
   </div>
 </div>
 <a name="group___ma_request_1gc0ca4ed4a140bb47717430c890c070d6"></a>
@@ -1372,284 +1749,7 @@ User-Agent header.
     </table></dd></dl>
     <dl><dt>Returns:</dt><dd>True if the form variable is defined.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a></dd></dl>
-  </div>
-</div>
-<h1>MaResponse</h1>
-<a name="group___ma_response"></a>
-<div class="api">
-  <div class="prototype">MaResponse</div>
-  <div class="apiDetail">
-<p>Http Response.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Most of the APIs in the Response group still take a MaConn object as their first parameter. This is to make the API easier to remember - APIs take a connection object rather than a request or response object.</dd></dl>
-    <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
-    <dl><dt>Fields:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">char *</td><td><td>altBody</td><td>
-Alternate response for errors.
-</td>
-    <tr><td class="param">int</td><td><td>bytesWritten</td><td>
-Bytes written including headers.
-</td>
-    <tr><td class="param">int</td><td><td>chunkSize</td><td>
-Chunk size to use when using transfer encoding.
-</td>
-    <tr><td class="param">int</td><td><td>code</td><td>
-HTTP response code.
-</td>
-    <tr><td class="param">struct MaConn *</td><td><td>conn</td><td>
-Current connection object.
-</td>
-    <tr><td class="param">MaStage *</td><td><td>connector</td><td>
-Response connector.
-</td>
-    <tr><td class="param">MaRange *</td><td><td>currentRange</td><td>
-Current range being fullfilled.
-</td>
-    <tr><td class="param">int</td><td><td>entityLength</td><td>
-Original content length before range subsetting.
-</td>
-    <tr><td class="param">char *</td><td><td>etag</td><td>
-Unique identifier tag.
-</td>
-    <tr><td class="param">cchar *</td><td><td>extension</td><td>
-Filename extension.
-</td>
-    <tr><td class="param">MprFile *</td><td><td>file</td><td>
-File to be served.
-</td>
-    <tr><td class="param">MprPath</td><td><td>fileInfo</td><td>
-File information if there is a real file to serve.
-</td>
-    <tr><td class="param">char *</td><td><td>filename</td><td>
-Name of a real file being served.
-</td>
-    <tr><td class="param">int</td><td><td>flags</td><td>
-Response flags.
-</td>
-    <tr><td class="param">MaPacket *</td><td><td>freePackets</td><td>
-List of free packets.
-</td>
-    <tr><td class="param">MaStage *</td><td><td>handler</td><td>
-Response handler.
-</td>
-    <tr><td class="param">void *</td><td><td>handlerData</td><td>
-Data reserved for the handler.
-</td>
-    <tr><td class="param">char *</td><td><td>header</td><td>
-HTTP response header.
-</td>
-    <tr><td class="param">MprHashTable *</td><td><td>headers</td><td>
-Custom response headers.
-</td>
-    <tr><td class="param">int</td><td><td>headerSize</td><td>
-Size of the header written.
-</td>
-    <tr><td class="param">int</td><td><td>length</td><td>
-Response content length.
-</td>
-    <tr><td class="param">cchar *</td><td><td>mimeType</td><td>
-Mime type of the response document.
-</td>
-    <tr><td class="param">MprList *</td><td><td>outputPipeline</td><td>
-Output processing.
-</td>
-    <tr><td class="param">int</td><td><td>pos</td><td>
-Current I/O position.
-</td>
-    <tr><td class="param">MaQueue</td><td><td>queue[2]</td><td>
-Dummy head for the response queues.
-</td>
-    <tr><td class="param">char *</td><td><td>rangeBoundary</td><td>
-Inter-range boundary.
-</td>
-    </table></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1g0fc2e324e7bc07b0cbbfe41e6f8bd32e"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maDontCacheResponse
-(MaConn *conn)
-  </div>
-  <div class="apiDetail">
-<p>Dont cache the response.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Instruct the client not to cache the response body. This is done by setting the Cache-control Http header.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maFailRequest
-(MaConn *conn, int code, cchar *fmt, ...)
-  </div>
-  <div class="apiDetail">
-<p>Fail a request.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Fail a request with the specified http status code. The formatted message is logged to the appweb error log.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    <tr><td class="param">code</td><td>Http status code.</td>
-    <tr><td class="param">fmt</td><td>Printf style formatted string.</td>
-    <tr><td class="param">...</td><td>Arguments for fmt.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1g36d93becc818990d715d265f48bb427a"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maFillHeaders
-(MaConn *conn, MaPacket *packet)
-  </div>
-  <div class="apiDetail">
-<p>Create the response headers.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Fill the given empty packet with the Http response headers. This should only be called by connectors just prior to sending output to the client. It should be delayed as long as possible if the content length is not yet known to give the pipeline a chance to determine the response length. This way, a non-chunked response can be sent with a content-length header. This is the fastest HTTP response.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    <tr><td class="param">packet</td><td>Packet into which to place the headers.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3"></a>
-<div class="api">
-  <div class="prototype">
-    int
-    maFormatBody
-(MaConn *conn, cchar *title, cchar *fmt, ...)
-  </div>
-  <div class="apiDetail">
-<p>Format an alternate response body.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Format a response body to use instead of data generated by the request processing pipeline. This is typically used to send error responses and redirections.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    <tr><td class="param">title</td><td>Title string to format into the HTML response body.</td>
-    <tr><td class="param">fmt</td><td>Printf style formatted string. This string may contain HTML tags and is not HTML encoded before sending to the user. NOTE: Do not send user input back to the client using this method. Otherwise you open large security holes.</td>
-    <tr><td class="param">...</td><td>Arguments for fmt.</td>
-    </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>A count of the number of bytes in the response body.</dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1g1f571cb3b688c6e44d4107b77fceac67"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maRedirect
-(MaConn *conn, int code, cchar *uri)
-  </div>
-  <div class="apiDetail">
-<p>Redirect the client.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Redirect the client to a new uri.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    <tr><td class="param">code</td><td>Http status code to send with the response.</td>
-    <tr><td class="param">uri</td><td>New uri for the client.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1g56dd2599b39e1252d66057444f75841b"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maSetCookie
-(MaConn *conn, cchar *name, cchar *value, cchar *path, cchar *domain, int lifetime, bool secure)
-  </div>
-  <div class="apiDetail">
-<p>Set a response cookie.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Define a cookie to send in the response Http header.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    <tr><td class="param">name</td><td>Cookie name.</td>
-    <tr><td class="param">value</td><td>Cookie value.</td>
-    <tr><td class="param">path</td><td>URI path to which the cookie applies.</td>
-    <tr><td class="param">domain</td><td>Domain in which the cookie applies. Must have 2-3 dots.</td>
-    <tr><td class="param">lifetime</td><td>Duration for the cookie to persist in seconds.</td>
-    <tr><td class="param">secure</td><td>Set to true if the cookie only applies for SSL based connections.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1ga27b43bad295e5f928fe2f8e5878cf42"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maSetHeader
-(MaConn *conn, bool allowMultiple, cchar *key, cchar *fmt, ...)
-  </div>
-  <div class="apiDetail">
-<p>Set a response header.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Set the response header. If allowMultiple is true, then duplicate keys can be defined. Otherwise, prior key headers are overwritten.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    <tr><td class="param">allowMultiple</td><td>If true, allow duplicate keys of the same value.</td>
-    <tr><td class="param">key</td><td>Http response header key.</td>
-    <tr><td class="param">fmt</td><td>Printf style formatted string to use as the header key value.</td>
-    <tr><td class="param">...</td><td>Arguments for fmt.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1gb822baf3fa6b7b3d8f68ec858a3fd65c"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maSetResponseCode
-(MaConn *conn, int code)
-  </div>
-  <div class="apiDetail">
-<p>Set a Http response code.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Set the Http response code for the request. This defaults to 200 (OK).</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    <tr><td class="param">code</td><td>Http status code.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_response_1g63f6f2038aca9e41d71e99a00f880f6d"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maSetResponseMimeType
-(MaConn *conn, cchar *mimeType)
-  </div>
-  <div class="apiDetail">
-<p>Set the response mime type.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Set the response mime type Http header.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">conn</td><td>MaConn connection object.</td>
-    <tr><td class="param">mimeType</td><td>Mime type string.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#group___ma_response" class="ref">MaResponse</a>, <a href="#group___ma_response_1g830c559dddc9e24c5e9ef7ab6d9c8a15" class="ref">maFailRequest</a>, <a href="#group___ma_response_1g57da0308eae17e287c9cc1dbfaed24c3" class="ref">maFormatBody</a>, <a href="#group___ma_response_1g56dd2599b39e1252d66057444f75841b" class="ref">maSetCookie</a></dd></dl>
+    <a href="#group___ma_conn" class="ref">MaConn</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#group___ma_request_1g37f287f2db074d1f53cd14c4d041f0b5" class="ref">maCompareFormVar</a>, <a href="#group___ma_request_1gfabbafae1edfe71c6961fb7b3517a555" class="ref">maGetCookies</a>, <a href="#group___ma_request_1g8ebdb53755a8a2af8b14b9739ed458f9" class="ref">maGetFormVar</a>, <a href="#group___ma_request_1g47566765cffb453045d103b07a3ffdc6" class="ref">maGetIntFormVar</a>, <a href="#group___ma_request_1gbc322b0f9a0cd9736e63fb5996966d55" class="ref">maGetQueryString</a>, <a href="#group___ma_request_1g8ea727d5e958015dbeeffeeceb6e5be0" class="ref">maSetFormVar</a>, <a href="#group___ma_request_1g5de91ec793b3a728c142c017f89c8310" class="ref">maSetIntFormVar</a></dd></dl>
   </div>
 </div>
 <h1>MaServer</h1>
@@ -1663,30 +1763,6 @@ Inter-range boundary.
     <a href="#group___ma_server_1gcf1e50889d272eb52266be2b5f0705b9" class="ref">maConfigureServer</a>, <a href="#group___ma_server_1g0923ebd7f71a2f83ca9fa87509acd6b8" class="ref">maCreateServer</a>, <a href="#group___ma_server_1geedb92f8e2d67d6c9a4648bbd8b4eb37" class="ref">maCreateWebServer</a>, <a href="#group___ma_server_1g64ceb8a0ea7251a2a2bfdec72586d914" class="ref">maLoadStaticModules</a>, <a href="#group___ma_server_1g6c073bcc4ac2c9f8333a42d3ff4555b4" class="ref">maRunSimpleWebServer</a>, <a href="#group___ma_server_1g4994c273e87409b094418dd7bd370ee4" class="ref">maRunWebServer</a>, <a href="#group___ma_server_1g8bdc0c3f12fd140a4483f44ef2280697" class="ref">maServiceWebServer</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">bool</td><td><td>alreadyLogging</td><td>
-Already logging.
-</td>
-    <tr><td class="param">struct MaHost *</td><td><td>defaultHost</td><td>
-Primary host.
-</td>
-    <tr><td class="param">MprList *</td><td><td>hostAddresses</td><td>
-List of HostAddress objects.
-</td>
-    <tr><td class="param">MprList *</td><td><td>hosts</td><td>
-List of host objects.
-</td>
-    <tr><td class="param">MprList *</td><td><td>listens</td><td>
-List of listening sockets.
-</td>
-    <tr><td class="param">int</td><td><td>maxConcurrentRequests</td><td>
-Maximum number of clients.
-</td>
-    <tr><td class="param">char *</td><td><td>name</td><td>
-Unique name for this server.
-</td>
-    <tr><td class="param">char *</td><td><td>serverRoot</td><td>
-Server root.
-</td>
     </table></dd></dl>
   </div>
 </div>
