@@ -157,7 +157,7 @@ source:
 		if [ "$(BUILD_UPLOAD)" = "" ] ; then \
 			echo "Can't upload: BUILD_UPLOAD is not defined" >&2; \
 			exit 2 ; \
-		fi
+		fi ; \
 		cd releases >/dev/null 2>&1 ; \
 		if ls $(IMG_NAME)* >/dev/null 2>&1 ; then \
 			for name in $(SRC_NAME)* md5-$(SRC_NAME)* ; \
