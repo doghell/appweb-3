@@ -135,7 +135,9 @@ incVersion:
 	sed s/BLD_NUMBER=\"$(BLD_NUMBER)\"/BLD_NUMBER=\"$${num}\"/ </tmp/build$$$$.tmp >build/product.config
 	./configure
 
-upload:
+upload: binary source
+
+binary:
 	if [ "$(BUILD_UPLOAD)" = "" ] ; then \
 		echo "Can't upload: BUILD_UPLOAD is not defined" >&2; \
 		exit 2 ; \
@@ -150,17 +152,19 @@ upload:
 		done ; \
 	fi
 
-uploadSource:
-	if [ "$(BUILD_UPLOAD)" = "" ] ; then \
-		echo "Can't upload: BUILD_UPLOAD is not defined" >&2; \
-		exit 2 ; \
-	fi
-	cd releases >/dev/null 2>&1 ; \
-	if ls $(IMG_NAME)* >/dev/null 2>&1 ; then \
-		for name in $(SRC_NAME)* md5-$(SRC_NAME)* ; \
-		do \
-			chmod 664 $$name ; \
-			echo http --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
-			http -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
-		done ; \
+source:
+	if [ "$(BUILD_UPLOAD_SOURCE)" = "true" ] ; then \
+		if [ "$(BUILD_UPLOAD)" = "" ] ; then \
+			echo "Can't upload: BUILD_UPLOAD is not defined" >&2; \
+			exit 2 ; \
+		fi
+		cd releases >/dev/null 2>&1 ; \
+		if ls $(IMG_NAME)* >/dev/null 2>&1 ; then \
+			for name in $(SRC_NAME)* md5-$(SRC_NAME)* ; \
+			do \
+				chmod 664 $$name ; \
+				echo http --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
+				http -q --upload --form "server=`hostname`&key=$(BUILD_KEY)" $$name $(BUILD_UPLOAD); \
+			done ; \
+		fi ; \
 	fi
