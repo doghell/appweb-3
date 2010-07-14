@@ -9,7 +9,7 @@ defineComponent() {
     search="src/deps:src"
 
     if [ -d src/vm ] ; then
-        path=`probe --path "$path" --partial "src/vm" --emit-dir $name`
+        path=`canonPath "."`
         builtin=--builtin
     elif [ -d src/deps/ejs ] ; then
         builtin=--builtin
