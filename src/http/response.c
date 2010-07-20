@@ -246,7 +246,7 @@ int maFormatBody(MaConn *conn, cchar *title, cchar *fmt, ...)
     body = mprVasprintf(resp, MA_MAX_HEADERS, fmt, args);
 
     resp->altBody = mprAsprintf(resp, -1,
-        "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n"
+        "<!DOCTYPE html>\r\n"
         "<html><head><title>%s</title></head>\r\n"
         "<body>\r\n%s\r\n</body>\r\n</html>\r\n",
         title, body);
@@ -315,9 +315,9 @@ void maRedirect(MaConn *conn, int code, cchar *targetUri)
     maSetHeader(conn, 0, "Location", "%s", targetUri);
     mprAssert(resp->altBody == 0);
     resp->altBody = mprAsprintf(resp, -1,
-        "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n"
+        "<!DOCTYPE html>\r\n"
         "<html><head><title>%s</title></head>\r\n"
-        "<body><h1>%s</h1>\r\n</H1>\r\n<p>The document has moved <a href=\"%s\">here</a>.</p>\r\n"
+        "<body><h1>%s</h1>\r\n<p>The document has moved <a href=\"%s\">here</a>.</p>\r\n"
         "<address>%s at %s Port %d</address></body>\r\n</html>\r\n",
         mprGetHttpCodeString(conn, code), mprGetHttpCodeString(conn, code), targetUri,
         MA_SERVER_NAME, host->name, prev->port);

@@ -953,7 +953,7 @@ static void reportFailure(MaConn *conn, int code, cchar *fmt, va_list args)
              */
             emsg = mprEscapeHtml(resp, msg);
             resp->altBody = mprAsprintf(resp, -1, 
-                "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n"
+                "<!DOCTYPE html>\r\n"
                 "<html><head><title>Document Error: %s</title></head>\r\n"
                 "<body><h2>Access Error: %d -- %s</h2>\r\n<p>%s</p>\r\n</body>\r\n</html>\r\n",
                 status, code, status, emsg);
