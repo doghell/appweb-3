@@ -21,7 +21,7 @@ LIBS		= ws2_32.lib
 PROJECTS	= appweb.vcproj angel.vcproj appwebMonitor.vcproj ajsmod.vcproj ajsc.vcproj ajs.vcproj ajssql.vcproj \
 				http.vcproj httpPassword.vcproj
 
-MAKE_IFLAGS	+= $(BLD_TOP)/src/include/master $(BLD_REGEXP_IFLAGS) $(BLD_MPR_IFLAGS)
+MAKE_IFLAGS	+= -I$(BLD_TOP)/src/include/master $(BLD_REGEXP_IFLAGS) $(BLD_MPR_IFLAGS)
 ifeq ($(BLD_FEATURE_OPENSSL),1)
 	MAKE_IFLAGS	+= $(BLD_OPENSSL_IFLAGS)
 endif
