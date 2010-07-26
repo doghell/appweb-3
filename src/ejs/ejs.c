@@ -304,7 +304,8 @@ static int  preloadModules(EcCompiler *cp, MprList *modules);
         ejsPrintAllocReport(ejs);
     }
 #endif
-#if VXWORKS
+#if VXWORKS || 1
+    mprFree(cp);
     mprFree(ejs);
     if (mprStop(mpr)) {
         mprFree(mpr);

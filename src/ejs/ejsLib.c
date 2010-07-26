@@ -27474,7 +27474,11 @@ static void createExceptionBlock(Ejs *ejs, EjsEx *ex, int flags)
         for (i = 0; i < count; i++) {
             ejsPopBlock(ejs);
         }
+#if OLD
         count = (state->stack - fp->stackReturn - fp->argc);
+#else
+        count = state->stack - fp->stackBase;
+#endif
         state->stack -= (count - ex->numStack);
     }
     
