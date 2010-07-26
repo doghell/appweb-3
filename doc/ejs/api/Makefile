@@ -6,7 +6,7 @@
 
 include		.makedep
 
-doc: prep mpr.html ejs.html
+gen doc: prep mpr.html ejs.html
 
 prep:
 	rm -f mpr.html ejs.html 

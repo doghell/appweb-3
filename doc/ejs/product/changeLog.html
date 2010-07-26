@@ -3,7 +3,7 @@
 <!-- BeginDsi "dsi/head.html" -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Embedthis Ejscript 1.0.0 Documentation</title>
+    <title>Embedthis Ejscript 1.0.3 Documentation</title>
     <meta name="keywords" content="Ejscript, JavaScript, ECMAScript, Server-Side JavaScript, Dynamic languages, 
         Embedded, AJAX, language"/>
 	<meta name="description" content="Ejscript -- Embedded Server-Side JavaScript Language."/>
@@ -30,7 +30,7 @@
                     </p>
                  </form>
               </div>
-            <!--TITLE-->Embedthis Ejscript 1.0.0
+            <!--TITLE-->Embedthis Ejscript 1.0.3
         </div>
         <div class="crumbs">
             <a href="../product/index.html">Home</a>
@@ -42,6 +42,8 @@
         <div class="contentRight">
             <h2>Quick Nav</h2>
             <ul>
+                <li><a href="#r102">Release 1.0.3</a></li>
+                <li><a href="#r103">Release 1.0.3</a></li>
                 <li><a href="#r102">Release 1.0.2</a></li>
                 <li><a href="#r101">Release 1.0.1</a></li>
                 <li><a href="#r100">Release 1.0.0</a></li>
@@ -62,7 +64,23 @@
             <p>This change log chronicles the features and fixes in each Ejscript release. </p>
             <p>See the Ejscript <a href="http://github.com/embedthis/ejs-1/issues">issue database</a> for full 
                 details of fixes.</p>
-
+            <a name="r103" id="r103"></a>
+            <h2 class="section">Changes in 1.0.3</h2>
+            <h3>Key Fixes</h3>
+            <ul>
+                <li>Update date documentation</li>
+                <li>Array.slice with negative indicies</li>
+                <li>Formatted printing of floating point numbers</li>
+                <li>Date/Time calculations for pre 1970 dates</li>
+                <li>Cygwin Math.pow Infinity results</li>
+                <li>Allow JSON encoded arrays in Http form data</li>
+                <li>Bad timezone on HTTP headers in certain locales</li>
+                <li>Exception stack management</li>
+            </ul>
+            <h3><strong>API Changes</strong></h3>
+            <ul>
+                <li>None</li>
+            </ul>
             <a name="r102" id="r102"></a>
             <h2 class="section">Changes in 1.0.2</h2>
             <h3>Minor Features</h3>
@@ -72,12 +90,12 @@
             </ul>
             <h3>Key Fixes</h3>
             <ul>
-                <li>Fix freeing memory on exiting ejs and ejsc. (Fix to mprFree(mpr))</li>
-                <li>Fix Path.mimeTypes</li>
-                <li>Fix for unicode constants in strings</li>
+                <li>Freeing memory on exiting ejs and ejsc. (Fix to mprFree(mpr))</li>
+                <li>Path.mimeTypes</li>
+                <li>for unicode constants in strings</li>
                 <li>Date fixes for dates outside 2038 and prior to 1970</li>
-                <li>Fix PPC encoding of floating point numbers in module files</li>
-                <li>Fix linking in uClinux</li>
+                <li>PPC encoding of floating point numbers in module files</li>
+                <li>linking in uClinux</li>
                 <li>Documentation updates</li>
                 <li>Debian package improvements</li>
             </ul>
@@ -85,7 +103,6 @@
             <ul>
                 <li>None</li>
             </ul>
-
             <a name="r101" id="r101"></a>
             <h2 class="section">Changes in 1.0.1</h2>
             <h3>Key Fixes</h3>
@@ -103,7 +120,6 @@
             <ul>
                 <li>None</li>
             </ul>
-
             <a name="r100" id="r100"></a>
             <h2 class="section">Changes in 1.0.0</h2>
             <h3><strong>Fixes</strong></h3>
@@ -119,14 +135,14 @@
                 <li>Enhanced Math, Number and Date classes</li>
                 <li>Improved documentation</li>
                 <li>Improved configuration and searching for build components</li>
-                <li>Fixed XML.toJSON()</li>
-                <li>Fixed trailing comma in JSON (IE fix)</li>
-                <li>Fixed diagnostics for configure with verbose mode</li>
-                <li>Fixed JSON parsing and encoding</li>
-                <li>Fixed html() escaping</li>
-                <li>Fixed parsing XML literals</li>
-                <li>Fixed ByteArray.copyin with negative count</li>
-                <li>Fixed Config properties to be boolean</li>
+                <li>XML.toJSON()</li>
+                <li>trailing comma in JSON (IE fix)</li>
+                <li>diagnostics for configure with verbose mode</li>
+                <li>JSON parsing and encoding</li>
+                <li>html() escaping</li>
+                <li>parsing XML literals</li>
+                <li>ByteArray.copyin with negative count</li>
+                <li>Config properties to be boolean</li>
             </ul>
             <h3><strong>API Changes</strong></h3>
             <ul>
@@ -161,7 +177,7 @@
             </ul>
             <h3><strong>Fixes</strong></h3>
             <ul>
-                <li>Fix library and module search paths and module resolution</li>
+                <li>library and module search paths and module resolution</li>
                 <li>Improved ECMA standard compliance</li>
                 <li>Error.stack property</li>
                 <li>Hybrid type slot binding</li>
@@ -175,7 +191,7 @@
                 <li>Compiling with ejsweb compile all. Was missing views. Thanks Damien.</li>
                 <li>Optimize memory footprint.</li>
                 <li>Partial support execution from ROM (not all features operational).</li>
-                <li>Fix some parser asserts</li>
+                <li>some parser asserts</li>
             </ul>
             <h3><strong>API Changes</strong></h3>
             <ul>
@@ -235,10 +251,10 @@
                 <li>JSON encoding</li>
                 <li>SQL quoting</li>
                 <li>Compiler warning fixes</li>
-                <li>Fixed regular expression doc</li>
-                <li>Fixed readLines on windows and other platforms</li>
-                <li>Fixed TextStream reader</li>
-                <li>Fixed File.size for open files</li>
+                <li>Regular expression doc</li>
+                <li>TextStream.ReadLines on windows and other platforms</li>
+                <li>TextStream reader</li>
+                <li>File.size for open files</li>
             </ul>
             <h3><strong>API Changes</strong></h3>
             <ul>
@@ -247,7 +263,7 @@
                 <li>Http and Socket classes have new methods and signatures</li>
                 <li>Record class supports hasOne, hasMany. The find and findAll methods have new and better defined 
                     options</li>
-                <li>Fixed Stream.read() API definition. Offsets are now by default 0.</li>
+                <li>Stream.read() API definition. Offsets are now by default 0.</li>
             </ul>
             <a name="r099" id="r099"></a>
             <h2 class="section">Changes in 0.9.9</h2>

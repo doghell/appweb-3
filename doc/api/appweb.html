@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Embedthis Appweb 3.2.2 Documentation</title>
+    <title>Embedthis Appweb 3.2.3 Documentation</title>
     <meta name="keywords" content="embedded web server, web server software, embedded HTTP, application web server, 
         embedded server, small web server, HTTP server, library web server, library HTTP, HTTP library" />
     <meta name="description" content="Embedthis Appweb - embedded web servers for devices and applications." />
@@ -28,7 +28,7 @@
                     </p>
                  </form>
               </div>
-            <!--TITLE-->Embedthis Appweb 3.2.2
+            <!--TITLE-->Embedthis Appweb 3.2.3
         </div>
         <div class="crumbs">
             <a href="../product/index.html">Home</a>
@@ -104,8 +104,8 @@
 <td class="apiName"><a href="#group___ma_mime_type" class="nameRef">MaMimeType</a></td>
 <td class="apiBrief">Mime Type hash table entry (the URL extension is the key).</td></tr>
 <tr class="apiDef">
-<td class="apiName"><a href="#group___ma_queue" class="nameRef">MaQueue</a></td>
-<td class="apiBrief">Queue Head.</td></tr>
+<td class="apiName"><a href="#group___ma_packet" class="nameRef">MaPacket</a></td>
+<td class="apiBrief">Data packet.</td></tr>
 <tr class="apiDef">
 <td class="apiName"><a href="#group___ma_range" class="nameRef">MaRange</a></td>
 <td class="apiBrief">Content range structure.</td></tr>
@@ -140,71 +140,26 @@
 <td class="apiType">int</td><td><a href="#group___ma_http_1gcf91964d3b2b00dc63e2a4daffc0c723" class="nameRef">maStopHttp</a>(<a href="#group___ma_http" class="ref">MaHttp</a> *http)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Stop Http services.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="nameRef">maDisableQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Disable a queue.</td></tr>
+<td class="apiType"><a href="#group___ma_packet" class="ref">MaPacket*</a></td><td><a href="#group___ma_packet_1g5df1a8ee94fca1ff1aa9576abc429b85" class="nameRef">maCreateDataPacket</a>(MprCtx ctx,  int size)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Create a data packet.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="nameRef">maDiscardData</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  bool removePackets)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Discard all data from the queue.</td></tr>
+<td class="apiType"><a href="#group___ma_packet" class="ref">MaPacket*</a></td><td><a href="#group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c" class="nameRef">maCreateEndPacket</a>(MprCtx ctx)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Create an end packet.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="nameRef">maEnableQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Enable a queue.</td></tr>
+<td class="apiType"><a href="#group___ma_packet" class="ref">MaPacket*</a></td><td><a href="#group___ma_packet_1gc4d07f426450d99470479ce71db99803" class="nameRef">maCreateHeaderPacket</a>(MprCtx ctx)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Create a response header packet.</td></tr>
 <tr class="apiDef">
-<td class="apiType">MaPacket*</td><td><a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="nameRef">maGet</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Get the next packet from a queue.</td></tr>
+<td class="apiType"><a href="#group___ma_packet" class="ref">MaPacket*</a></td><td><a href="#group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82" class="nameRef">maCreatePacket</a>(MprCtx ctx,  int size)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Create a data packet.</td></tr>
 <tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="nameRef">maGetQueueRoom</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Get the room in the queue.</td></tr>
+<td class="apiType">int</td><td><a href="#group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd" class="nameRef">maGetPacketLength</a>(<a href="#group___ma_packet" class="ref">MaPacket</a> *packet)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Get the length of the packet data contents.</td></tr>
 <tr class="apiDef">
-<td class="apiType">bool</td><td><a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="nameRef">maIsQueueEmpty</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Determine if the queue is empty.</td></tr>
+<td class="apiType">int</td><td><a href="#group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6" class="nameRef">maJoinPacket</a>(<a href="#group___ma_packet" class="ref">MaPacket</a> *packet,  MaPacket *other)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Join tow packets.</td></tr>
 <tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="nameRef">maJoinForService</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet,  bool serviceQ)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Join a packet onto the service queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">bool</td><td><a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="nameRef">maPacketTooBig</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Test if a packet is too big.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="nameRef">maPut</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Put a packet onto a queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="nameRef">maPutBack</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Put a packet back onto a queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="nameRef">maPutForService</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet,  bool serviceQ)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Put a packet onto the service queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="nameRef">maPutNext</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Put a packet onto the next queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="nameRef">maRemoveQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Remove a queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="nameRef">maResizePacket</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet,  int size)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Resize a packet.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="nameRef">maScheduleQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Schedule a queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="nameRef">maSendEndPacket</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Send an end packet.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="nameRef">maSendPackets</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Send all queued packets.</td></tr>
-<tr class="apiDef">
-<td class="apiType">void</td><td><a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="nameRef">maServiceQueue</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Service a queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">bool</td><td><a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="nameRef">maWillNextQueueAccept</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  MaPacket *packet)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Determine if the downstream queue will accept this packet.</td></tr>
-<tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="nameRef">maWrite</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  cchar *fmt, ...)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Write a formatted string.</td></tr>
-<tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="nameRef">maWriteBlock</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  cchar *buf,  int size,  bool block)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Write a block of data to the queue.</td></tr>
-<tr class="apiDef">
-<td class="apiType">int</td><td><a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="nameRef">maWriteString</a>(<a href="#group___ma_queue" class="ref">MaQueue</a> *q,  cchar *s)</td></tr>
-<tr class="apiBrief"><td>&nbsp;</td><td>Write a string of data to the queue.</td></tr>
+<td class="apiType"><a href="#group___ma_packet" class="ref">MaPacket*</a></td><td><a href="#group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc" class="nameRef">maSplitPacket</a>(MprCtx ctx,  MaPacket *packet,  int offset)</td></tr>
+<tr class="apiBrief"><td>&nbsp;</td><td>Split a data packet.</td></tr>
 <tr class="apiDef">
 <td class="apiType">void</td><td><a href="#group___ma_request_1g84747a5a50d80576d3c24fe917ef3583" class="nameRef">maAddVars</a>(<a href="#group___ma_conn" class="ref">MaConn</a> *conn,  cchar *buf,  int len)</td></tr>
 <tr class="apiBrief"><td>&nbsp;</td><td>Add query and post form variables.</td></tr>
@@ -620,7 +575,7 @@ Redirect to a uri.
     <dl><dt><b>Description</b>:</dt><dd>The MaConn object represents a TCP/IP connection to the client. A connection object is created for each socket connection initiated by the client. One MaConn object may service many Http requests due to HTTP/1.1 keep-alive.</dd></dl>
     <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#struct_ma_stage" class="ref">MaStage</a></dd></dl>
+    <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_request" class="ref">MaRequest</a>, <a href="#struct_ma_response" class="ref">MaResponse</a>, <a href="#struct_ma_stage" class="ref">MaStage</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
     <tr><td class="param">MaHostAddress *</td><td><td>address</td><td>
@@ -1077,532 +1032,158 @@ Upload directory.
     </table></dd></dl>
   </div>
 </div>
-<h1>MaQueue</h1>
-<a name="group___ma_queue"></a>
+<h1>MaPacket</h1>
+<a name="group___ma_packet"></a>
 <div class="api">
-  <div class="prototype">MaQueue</div>
+  <div class="prototype">MaPacket</div>
   <div class="apiDetail">
-<p>Queue Head.</p>
-    <dl><dt><b>Description</b>:</dt><dd>The request pipeline consists of a full-duplex pipeline of stages. Each stage has two queues, one for outgoing data and one for incoming. A MaQueue object manages the data flow for a request stage and has the ability to queue and process data, manage flow control and schedule packets for service. <br/><br/>
- Queue&apos;s provide open, close, put and service methods. These methods manage and respond to incoming packets. A queue can respond immediately to an incoming packet by processing or dispatching a packet in its put() method. Alternatively, the queue can defer processing by queueing the packet on it&apos;s service queue and then waiting for it&apos;s service() method to be invoked. <br/><br/>
- If a queue does not define a put() method, the default put method will be used which queues data onto the service queue. The default incoming put() method joins incoming packets into a single packet on the service queue.</dd></dl>
+<p>Data packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>The request/response pipeline sends data and control information in MaPacket objects. The output stream typically consists of a HEADER packet followed by zero or more data packets and terminated by an END packet. If the request has input data, the input stream is consists of one or more data packets followed by an END packet. <br/><br/>
+ Packets contain data and optional prefix or suffix headers. Packets can be split, joined, filled or emptied. The pipeline stages will fill or transform packet data as required.</dd></dl>
     <dl><dt><b>API</b> Stability:</dt><dd>Evolving.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+    <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c" class="ref">maCreateEndPacket</a>, <a href="#group___ma_packet_1gc4d07f426450d99470479ce71db99803" class="ref">maCreateHeaderPacket</a>, <a href="#group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82" class="ref">maCreatePacket</a>, <a href="#group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd" class="ref">maGetPacketLength</a>, <a href="#group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6" class="ref">maJoinPacket</a>, <a href="#group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc" class="ref">maSplitPacket</a></dd></dl>
     <dl><dt>Fields:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">MaQueueClose</td><td><td>close</td><td>
-Close the queue.
-</td>
-    <tr><td class="param">struct MaConn *</td><td><td>conn</td><td>
-Connection ownning this queue.
-</td>
-    <tr><td class="param">int</td><td><td>count</td><td>
-Bytes in queue.
-</td>
-    <tr><td class="param">int</td><td><td>direction</td><td>
-Flow direction.
-</td>
-    <tr><td class="param">MaPacket *</td><td><td>first</td><td>
-First packet in queue (singly linked).
-</td>
-    <tr><td class="param">int</td><td><td>flags</td><td>
-Queue flags.
-</td>
-    <tr><td class="param">int</td><td><td>ioCount</td><td>
-Count of bytes in iovec.
-</td>
-    <tr><td class="param">int</td><td><td>ioFileEntry</td><td>
-Has file entry in iovec.
-</td>
-    <tr><td class="param">int</td><td><td>ioFileOffset</td><td>
-The next file position to use.
-</td>
-    <tr><td class="param">int</td><td><td>ioIndex</td><td>
-Next index into iovec.
-</td>
-    <tr><td class="param">MaPacket *</td><td><td>last</td><td>
-Last packet in queue (tail pointer).
-</td>
-    <tr><td class="param">int</td><td><td>low</td><td>
-Low water mark for flow control.
-</td>
-    <tr><td class="param">int</td><td><td>max</td><td>
-Maxiumum queue size.
-</td>
-    <tr><td class="param">struct MaQueue *</td><td><td>nextQ</td><td>
-Downstream queue for next stage.
-</td>
-    <tr><td class="param">MaQueueOpen</td><td><td>open</td><td>
-Open the queue.
-</td>
-    <tr><td class="param">cchar *</td><td><td>owner</td><td>
-Name of owning stage.
-</td>
-    <tr><td class="param">int</td><td><td>packetSize</td><td>
-Maximum acceptable packet size.
-</td>
-    <tr><td class="param">struct MaQueue *</td><td><td>pair</td><td>
-Queue for the same stage in the opposite direction.
-</td>
-    <tr><td class="param">MaPacket *</td><td><td>pending</td><td>
-Packets pending more dynamic data output.
-</td>
-    <tr><td class="param">struct MaQueue *</td><td><td>prevQ</td><td>
-Upstream queue for prior stage.
-</td>
-    <tr><td class="param">MaQueueData</td><td><td>put</td><td>
-Put a message on the queue.
-</td>
-    <tr><td class="param">void *</td><td><td>queueData</td><td>
-Stage instance data.
-</td>
-    <tr><td class="param">struct MaQueue *</td><td><td>scheduleNext</td><td>
-Next linkage when queue is on the service queue.
-</td>
-    <tr><td class="param">struct MaQueue *</td><td><td>schedulePrev</td><td>
-Previous linkage when queue is on the service queue.
-</td>
-    <tr><td class="param">MaQueueService</td><td><td>service</td><td>
-Service the queue.
-</td>
-    <tr><td class="param">struct MaStage *</td><td><td>stage</td><td>
-Stage owning this queue.
-</td>
-    <tr><td class="param">MaQueueStart</td><td><td>start</td><td>
-Start the queue, run after all opens have completed.
-</td>
     </table></dd></dl>
   </div>
 </div>
-<a name="group___ma_queue_1g89df8a2c0754e9740cb982948227c080"></a>
+<a name="group___ma_packet_1g5df1a8ee94fca1ff1aa9576abc429b85"></a>
 <div class="api">
   <div class="prototype">
-    void
-    maDisableQueue
-(MaQueue *q)
+    <a href="#group___ma_packet" class="ref">MaPacket</a> *
+    maCreateDataPacket
+(MprCtx ctx, int size)
   </div>
   <div class="apiDetail">
-<p>Disable a queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Mark a queue as disabled so that it will not be scheduled for service.</dd></dl>
+<p>Create a data packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Create a packet and set the MA_PACKET_DATA flag Data packets convey data through the response pipeline.</dd></dl>
     <dl><dt>Parameters:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">ctx</td><td>A conn or request memory context object.</td>
+    <tr><td class="param">size</td><td>Size of the package data storage.</td>
     </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>MaPacket object.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+    <a href="#group___ma_packet" class="ref">MaPacket</a>, <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c" class="ref">maCreateEndPacket</a>, <a href="#group___ma_packet_1gc4d07f426450d99470479ce71db99803" class="ref">maCreateHeaderPacket</a>, <a href="#group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82" class="ref">maCreatePacket</a>, <a href="#group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd" class="ref">maGetPacketLength</a>, <a href="#group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6" class="ref">maJoinPacket</a>, <a href="#group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc" class="ref">maSplitPacket</a></dd></dl>
   </div>
 </div>
-<a name="group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4"></a>
+<a name="group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c"></a>
 <div class="api">
   <div class="prototype">
-    void
-    maDiscardData
-(MaQueue *q, bool removePackets)
+    <a href="#group___ma_packet" class="ref">MaPacket</a> *
+    maCreateEndPacket
+(MprCtx ctx)
   </div>
   <div class="apiDetail">
-<p>Discard all data from the queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Discard data from the queue. If removePackets (not yet implemented) is true, then remove the packets otherwise, just discard the data and preserve the packets.</dd></dl>
+<p>Create an end packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Create an end-of-stream packet and set the MA_PACKET_END flag. The end pack signifies the end of data. It is used on both incoming and outgoing streams through the request/response pipeline.</dd></dl>
     <dl><dt>Parameters:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">removePackets</td><td>If true, the data packets will be removed from the queue.</td>
+    <tr><td class="param">ctx</td><td>A conn or request memory context object.</td>
     </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>MaPacket object.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+    <a href="#group___ma_packet" class="ref">MaPacket</a>, <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_packet_1gc4d07f426450d99470479ce71db99803" class="ref">maCreateHeaderPacket</a>, <a href="#group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82" class="ref">maCreatePacket</a>, <a href="#group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd" class="ref">maGetPacketLength</a>, <a href="#group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6" class="ref">maJoinPacket</a>, <a href="#group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc" class="ref">maSplitPacket</a></dd></dl>
   </div>
 </div>
-<a name="group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9"></a>
+<a name="group___ma_packet_1gc4d07f426450d99470479ce71db99803"></a>
 <div class="api">
   <div class="prototype">
-    void
-    maEnableQueue
-(MaQueue *q)
+    <a href="#group___ma_packet" class="ref">MaPacket</a> *
+    maCreateHeaderPacket
+(MprCtx ctx)
   </div>
   <div class="apiDetail">
-<p>Enable a queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Enable a queue for service and schedule it to run. This will cause the service routine to run as soon as possible.</dd></dl>
+<p>Create a response header packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Create a response header packet and set the MA_PACKET_HEADER flag. A header packet is used by the pipeline to hold the response headers.</dd></dl>
     <dl><dt>Parameters:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">ctx</td><td>A conn or request memory context object.</td>
     </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>MaPacket object.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+    <a href="#group___ma_packet" class="ref">MaPacket</a>, <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c" class="ref">maCreateEndPacket</a>, <a href="#group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82" class="ref">maCreatePacket</a>, <a href="#group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd" class="ref">maGetPacketLength</a>, <a href="#group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6" class="ref">maJoinPacket</a>, <a href="#group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc" class="ref">maSplitPacket</a></dd></dl>
   </div>
 </div>
-<a name="group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85"></a>
+<a name="group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82"></a>
 <div class="api">
   <div class="prototype">
-    MaPacket *
-    maGet
-(MaQueue *q)
+    <a href="#group___ma_packet" class="ref">MaPacket</a> *
+    maCreatePacket
+(MprCtx ctx, int size)
   </div>
   <div class="apiDetail">
-<p>Get the next packet from a queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Get the next packet. This will remove the packet from the queue and adjust the queue counts accordingly. If the queue was full and upstream queues were blocked, they will be enabled.</dd></dl>
+<p>Create a data packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Create a packet of the required size.</dd></dl>
     <dl><dt>Parameters:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">ctx</td><td>A conn or request memory context object.</td>
+    <tr><td class="param">size</td><td>Size of the package data storage.</td>
     </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>The packet removed from the queue.</dd></dl>
+    <dl><dt>Returns:</dt><dd>MaPacket object.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+    <a href="#group___ma_packet" class="ref">MaPacket</a>, <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c" class="ref">maCreateEndPacket</a>, <a href="#group___ma_packet_1gc4d07f426450d99470479ce71db99803" class="ref">maCreateHeaderPacket</a>, <a href="#group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd" class="ref">maGetPacketLength</a>, <a href="#group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6" class="ref">maJoinPacket</a>, <a href="#group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc" class="ref">maSplitPacket</a></dd></dl>
   </div>
 </div>
-<a name="group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586"></a>
+<a name="group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd"></a>
 <div class="api">
   <div class="prototype">
     int
-    maGetQueueRoom
-(MaQueue *q)
+    maGetPacketLength
+(MaPacket *packet)
   </div>
   <div class="apiDetail">
-<p>Get the room in the queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Get the amount of data the queue can accept before being full.</dd></dl>
+<p>Get the length of the packet data contents.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Get the content length of a packet. This does not include the prefix or suffix data length -- just the pure data contents.</dd></dl>
     <dl><dt>Parameters:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">packet</td><td>Packet to examine.</td>
     </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>A count of bytes that can be written to the queue.</dd></dl>
+    <dl><dt>Returns:</dt><dd>Count of bytes contained by the packet.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+    <a href="#group___ma_packet" class="ref">MaPacket</a>, <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c" class="ref">maCreateEndPacket</a>, <a href="#group___ma_packet_1gc4d07f426450d99470479ce71db99803" class="ref">maCreateHeaderPacket</a>, <a href="#group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82" class="ref">maCreatePacket</a>, <a href="#group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6" class="ref">maJoinPacket</a>, <a href="#group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc" class="ref">maSplitPacket</a></dd></dl>
   </div>
 </div>
-<a name="group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8"></a>
-<div class="api">
-  <div class="prototype">
-    bool
-    maIsQueueEmpty
-(MaQueue *q)
-  </div>
-  <div class="apiDetail">
-<p>Determine if the queue is empty.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Determine if the queue has no packets queued. This does not test if the queue has no data content.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>True if there are no packets queued.</dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1g008879575307745c34a0d3a3807522a2"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maJoinForService
-(MaQueue *q, MaPacket *packet, bool serviceQ)
-  </div>
-  <div class="apiDetail">
-<p>Join a packet onto the service queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Add a packet to the service queue. If the queue already has data, then this packet will be joined (aggregated) into the existing packet. If serviceQ is true, the queue will be scheduled for service.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">packet</td><td>Packet to join to the queue.</td>
-    <tr><td class="param">serviceQ</td><td>If true, schedule the queue for service.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0"></a>
-<div class="api">
-  <div class="prototype">
-    bool
-    maPacketTooBig
-(MaQueue *q, MaPacket *packet)
-  </div>
-  <div class="apiDetail">
-<p>Test if a packet is too big.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Test if a packet is too big to fit downstream. If the packet content exceeds the downstream queue&apos;s maximum or exceeds the downstream queue&apos;s requested packet size -- then this routine will return true.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">packet</td><td>Packet to test.</td>
-    </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>True if the packet is too big for the downstream queue.</dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1gd565107ef6abf6c845724d05391580b8"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maPut
-(MaQueue *q, MaPacket *packet)
-  </div>
-  <div class="apiDetail">
-<p>Put a packet onto a queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Put the packet onto the end of queue by calling the queue&apos;s put() method.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">packet</td><td>Packet to put.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1g122d3cbab1cab19d402841dacf367e71"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maPutBack
-(MaQueue *q, MaPacket *packet)
-  </div>
-  <div class="apiDetail">
-<p>Put a packet back onto a queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Put the packet back onto the front of the queue. The queue&apos;s put() method is not called. This is typically used by the queue&apos;s service routine when a packet cannot complete processing.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">packet</td><td>Packet to put back.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maPutForService
-(MaQueue *q, MaPacket *packet, bool serviceQ)
-  </div>
-  <div class="apiDetail">
-<p>Put a packet onto the service queue.</p>
-Put a packet onto a service queue
-    <dl><dt><b>Description</b>:</dt><dd>Add a packet to the service queue. If serviceQ is true, the queue will be scheduled for service.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">packet</td><td>Packet to join to the queue.</td>
-    <tr><td class="param">serviceQ</td><td>If true, schedule the queue for service.</td>
-    </table></dd></dl>
-    <dl><dt><b>Description</b>:</dt><dd>Put the packet onto the service queue and optionally schedule the queue for service.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">packet</td><td>Packet to put.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maPutNext
-(MaQueue *q, MaPacket *packet)
-  </div>
-  <div class="apiDetail">
-<p>Put a packet onto the next queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Put a packet onto the next downstream queue by calling the downstreams queue&apos;s put() method.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference. The packet will not be queued on this queue, but rather on the queue downstream.</td>
-    <tr><td class="param">packet</td><td>Packet to put.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maRemoveQueue
-(MaQueue *q)
-  </div>
-  <div class="apiDetail">
-<p>Remove a queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Remove a queue from the request/response pipeline. This will remove a queue so that it does not participate in the pipeline, effectively removing the processing stage from the pipeline. This is useful to remove unwanted filters and to speed up pipeline processing.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576"></a>
+<a name="group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6"></a>
 <div class="api">
   <div class="prototype">
     int
-    maResizePacket
-(MaQueue *q, MaPacket *packet, int size)
+    maJoinPacket
+(MaPacket *packet, MaPacket *other)
   </div>
   <div class="apiDetail">
-<p>Resize a packet.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Resize a packet if required so that it fits in the downstream queue. This may split the packet if it is too big to fit in the downstream queue. If it is split, the tail portion is put back on the queue.</dd></dl>
+<p>Join tow packets.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Join the contents of one packet to another by copying the data from the other packet into the first packet.</dd></dl>
     <dl><dt>Parameters:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">packet</td><td>Packet to put.</td>
-    <tr><td class="param">size</td><td>If size is &gt; 0, then also ensure the packet is not larger than this size.</td>
+    <tr><td class="param">packet</td><td>Destination packet.</td>
+    <tr><td class="param">other</td><td>Other packet to copy data from.</td>
     </table></dd></dl>
     <dl><dt>Returns:</dt><dd>Zero if successful, otherwise a negative Mpr error code.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
+    <a href="#group___ma_packet" class="ref">MaPacket</a>, <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c" class="ref">maCreateEndPacket</a>, <a href="#group___ma_packet_1gc4d07f426450d99470479ce71db99803" class="ref">maCreateHeaderPacket</a>, <a href="#group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82" class="ref">maCreatePacket</a>, <a href="#group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd" class="ref">maGetPacketLength</a>, <a href="#group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc" class="ref">maSplitPacket</a></dd></dl>
   </div>
 </div>
-<a name="group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c"></a>
+<a name="group___ma_packet_1g33ae09635d8a800aa600a207c8ec16fc"></a>
 <div class="api">
   <div class="prototype">
-    void
-    maScheduleQueue
-(MaQueue *q)
+    <a href="#group___ma_packet" class="ref">MaPacket</a> *
+    maSplitPacket
+(MprCtx ctx, MaPacket *packet, int offset)
   </div>
   <div class="apiDetail">
-<p>Schedule a queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Schedule a queue by adding it to the schedule queue. Queues are serviced FIFO.</dd></dl>
+<p>Split a data packet.</p>
+    <dl><dt><b>Description</b>:</dt><dd>Split a data packet at the specified offset. Packets may need to be split so that downstream stages can digest their contents. If a packet is too large for the queue maximum size, it should be split. When the packet is split, a new packet is created containing the data after the offset. Any suffix headers are moved to the new packet.</dd></dl>
     <dl><dt>Parameters:</dt><dd>
     <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
+    <tr><td class="param">ctx</td><td>A conn or request memory context object to own the packet.</td>
+    <tr><td class="param">packet</td><td>Packet to split.</td>
+    <tr><td class="param">offset</td><td>Location in the original packet at which to split.</td>
     </table></dd></dl>
+    <dl><dt>Returns:</dt><dd>New MaPacket object containing the data after the offset. No need to free, unless you have a very long running request. Otherwise the packet memory will be released automatically when the request completes.</dd></dl>
     <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maSendEndPacket
-(MaQueue *q)
-  </div>
-  <div class="apiDetail">
-<p>Send an end packet.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Create and send an end-of-stream packet downstream.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maSendPackets
-(MaQueue *q)
-  </div>
-  <div class="apiDetail">
-<p>Send all queued packets.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Send all queued packets downstream.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2"></a>
-<div class="api">
-  <div class="prototype">
-    void
-    maServiceQueue
-(MaQueue *q)
-  </div>
-  <div class="apiDetail">
-<p>Service a queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Service a queue by invoking its service() routine.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    </table></dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27"></a>
-<div class="api">
-  <div class="prototype">
-    bool
-    maWillNextQueueAccept
-(MaQueue *q, MaPacket *packet)
-  </div>
-  <div class="apiDetail">
-<p>Determine if the downstream queue will accept this packet.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Test if the downstream queue will accept a packet. The packet will be resized if required in an attempt to get the downstream queue to accept it. If the downstream queue is full, disable this queue and mark the downstream queue as full and service it immediately to try to relieve the congestion.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">packet</td><td>Packet to put.</td>
-    </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>True if the downstream queue will accept the packet. Use <a class="ref" href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0">maPutNext</a> to send the packet downstream.</dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af"></a>
-<div class="api">
-  <div class="prototype">
-    int
-    maWrite
-(MaQueue *q, cchar *fmt, ...)
-  </div>
-  <div class="apiDetail">
-<p>Write a formatted string.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Write a formatted string of data into packets onto the end of the queue. Data packets will be created as required to store the write data. This call may block waiting for the downstream queue to drain if it is or becomes full.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">fmt</td><td>Printf style formatted string.</td>
-    <tr><td class="param">...</td><td>Arguments for fmt.</td>
-    </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>A count of the bytes actually written.</dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5"></a>
-<div class="api">
-  <div class="prototype">
-    int
-    maWriteBlock
-(MaQueue *q, cchar *buf, int size, bool block)
-  </div>
-  <div class="apiDetail">
-<p>Write a block of data to the queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Write a block of data into packets onto the end of the queue. Data packets will be created as required to store the write data.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">buf</td><td>Buffer containing the write data.</td>
-    <tr><td class="param">size</td><td>of the data in buf.</td>
-    <tr><td class="param">block</td><td>Set to true to block and wait for data to drain if the downstream queue is full. If false, the call may return not having written all the data. The return value indicates how many bytes were actually written.</td>
-    </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>A count of the bytes actually written.</dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac" class="ref">maWriteString</a></dd></dl>
-  </div>
-</div>
-<a name="group___ma_queue_1gdabcf6082f3025c5d1602ef9c6fa89ac"></a>
-<div class="api">
-  <div class="prototype">
-    int
-    maWriteString
-(MaQueue *q, cchar *s)
-  </div>
-  <div class="apiDetail">
-<p>Write a string of data to the queue.</p>
-    <dl><dt><b>Description</b>:</dt><dd>Write a string of data into packets onto the end of the queue. Data packets will be created as required to store the write data. This call may block waiting for the downstream queue to drain if it is or becomes full.</dd></dl>
-    <dl><dt>Parameters:</dt><dd>
-    <table class="parameters" summary="Parameters">
-    <tr><td class="param">q</td><td>Queue reference.</td>
-    <tr><td class="param">s</td><td>String containing the data to write.</td>
-    </table></dd></dl>
-    <dl><dt>Returns:</dt><dd>A count of the bytes actually written.</dd></dl>
-    <dl><dt>See Also:</dt><dd>
-    <a href="#group___ma_conn" class="ref">MaConn</a>, MaPacket, <a href="#group___ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_queue_1g89df8a2c0754e9740cb982948227c080" class="ref">maDisableQueue</a>, <a href="#group___ma_queue_1g1defdb2be244b8e7144c5f0b70eba4d4" class="ref">maDiscardData</a>, <a href="#group___ma_queue_1g861e916c603c00b2e0cd41c20328f0d9" class="ref">maEnableQueue</a>, <a href="#group___ma_queue_1ge4ae8e97415719af334f9ae2cf385f85" class="ref">maGet</a>, <a href="#group___ma_queue_1gafeb4b4cdc2db5d4c637f9302da04586" class="ref">maGetQueueRoom</a>, <a href="#group___ma_queue_1g31b1ed4d3426c7bab23f0362b9946cc8" class="ref">maIsQueueEmpty</a>, <a href="#group___ma_queue_1g008879575307745c34a0d3a3807522a2" class="ref">maJoinForService</a>, <a href="#group___ma_queue_1g9f5803bd3fe541a182013dbc79270ae0" class="ref">maPacketTooBig</a>, <a href="#group___ma_queue_1gd565107ef6abf6c845724d05391580b8" class="ref">maPut</a>, <a href="#group___ma_queue_1g122d3cbab1cab19d402841dacf367e71" class="ref">maPutBack</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1gcd68693bae6cf09dd5edbec8ffc38104" class="ref">maPutForService</a>, <a href="#group___ma_queue_1g173a4c117118b3e3d49df64eae9a9db0" class="ref">maPutNext</a>, <a href="#group___ma_queue_1gccb9f17d52a0c12a6a1d8146ef3c6802" class="ref">maRemoveQueue</a>, <a href="#group___ma_queue_1g695e3a780fd92fb9bfed08cada3d4576" class="ref">maResizePacket</a>, <a href="#group___ma_queue_1g5b0f2004a9feb4398d7080b935f8831c" class="ref">maScheduleQueue</a>, <a href="#group___ma_queue_1g995c657ec4d913bc4ecddc98e8d075c6" class="ref">maSendEndPacket</a>, <a href="#group___ma_queue_1g30f58c7ab7a180a70bcbf7fe7b59c166" class="ref">maSendPackets</a>, <a href="#group___ma_queue_1gd25ce1252624d2dc0234d147cce253a2" class="ref">maServiceQueue</a>, <a href="#group___ma_queue_1gcc3dad29937612ebcbfc39491e0e3f27" class="ref">maWillNextQueueAccept</a>, <a href="#group___ma_queue_1gc5d94b33984c18b05cc40e8a2e7c11af" class="ref">maWrite</a>, <a href="#group___ma_queue_1gcc302b0d5ddb16163bdd48b575adcfb5" class="ref">maWriteBlock</a></dd></dl>
+    <a href="#group___ma_packet" class="ref">MaPacket</a>, <a href="#struct_ma_queue" class="ref">MaQueue</a>, <a href="#group___ma_packet_1gf6e524d50d35ee9f7095e85a2c5f7b0c" class="ref">maCreateEndPacket</a>, <a href="#group___ma_packet_1gc4d07f426450d99470479ce71db99803" class="ref">maCreateHeaderPacket</a>, <a href="#group___ma_packet_1ge7a1cc0bbf598580bd1ad8a166a9ba82" class="ref">maCreatePacket</a>, <a href="#group___ma_packet_1g3fbb007c176ea20c68c675bd8dde4efd" class="ref">maGetPacketLength</a>, <a href="#group___ma_packet_1gcfdb85fc6850462b81db3e1da730d2b6" class="ref">maJoinPacket</a></dd></dl>
   </div>
 </div>
 <h1>MaRange</h1>
