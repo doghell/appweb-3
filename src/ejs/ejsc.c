@@ -318,7 +318,7 @@ static int preloadModules(EcCompiler *cp, MprList *modules);
     if (cp->errorCount > 0) {
         err++;
     }
-#if VXWORKS || 1
+#if VXWORKS
     mprFree(cp);
     mprFree(ejs);
     if (mprStop(mpr)) {
