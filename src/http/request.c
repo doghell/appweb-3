@@ -1154,6 +1154,7 @@ bool maContentNotModified(MaConn *conn)
 {
     MaRequest   *req;
     MaResponse  *resp;
+    MprTime     modified;
     bool        same;
 
     req = conn->request;
@@ -1164,7 +1165,8 @@ bool maContentNotModified(MaConn *conn)
          *  If both checks, the last modification time and etag, claim that the request doesn't need to be
          *  performed, skip the transfer.
          */
-        same = maMatchModified(conn, resp->fileInfo.mtime) && maMatchEtag(conn, resp->etag);
+        modified = (MprTime) resp->fileInfo.mtime * MPR_TICKS_PER_SEC;
+        same = maMatchModified(conn, modified) && maMatchEtag(conn, resp->etag);
 
         if (req->ranges && !same) {
             /*
