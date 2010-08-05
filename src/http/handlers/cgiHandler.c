@@ -479,7 +479,13 @@ static void cgiEvent(MaQueue *q, MprCmd *cmd, int channel)
         /*
          *  Read as much data from the CGI as possible
          */
-        while ((space = mprGetBufSpace(buf)) > 0) {
+        do {
+            if ((space = mprGetBufSpace(buf)) == 0) {
+                mprGrowBuf(buf, MA_BUFSIZE);
+                if ((space = mprGetBufSpace(buf)) == 0) {
+                    break;
+                }
+            }
             nbytes = mprReadCmdPipe(cmd, channel, mprGetBufEnd(buf), space);
             if (nbytes < 0) {
                 err = mprGetError();
@@ -504,7 +510,8 @@ static void cgiEvent(MaQueue *q, MprCmd *cmd, int channel)
                 mprAdjustBufEnd(buf, nbytes);
                 traceData(cmd, mprGetBufStart(buf), nbytes);
             }
-        }
+        } while ((space = mprGetBufSpace(buf)) > 0);
+
         if (mprGetBufLength(buf) == 0) {
             return;
         }
@@ -603,7 +610,7 @@ static bool parseHeader(MaConn *conn, MprCmd *cmd)
     MaQueue         *q;
     MprBuf          *buf;
     char            *endHeaders, *headers, *key, *value, *location;
-    int             len;
+    int             fd, len;
 
     resp = conn->response;
     location = 0;
@@ -616,9 +623,13 @@ static bool parseHeader(MaConn *conn, MprCmd *cmd)
      *  Split the headers from the body.
      */
     len = 0;
-    if ((endHeaders = strstr(headers, "\r\n\r\n")) == NULL) {
+    fd = mprGetCmdFd(cmd, MPR_CMD_STDOUT);
+    if (fd >= 0 && (endHeaders = strstr(headers, "\r\n\r\n")) == NULL) {
         if ((endHeaders = strstr(headers, "\n\n")) == NULL) {
-            return 1;
+            if (strlen(headers) < MA_MAX_HEADERS) {
+                /* Not EOF and less than max headers and have not yet seen an end of headers delimiter */
+                return 0;
+            }
         } 
         len = 2;
     } else {

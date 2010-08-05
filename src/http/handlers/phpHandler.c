@@ -315,7 +315,7 @@ static int sendHeaders(sapi_headers_struct *phpHeaders TSRMLS_DC)
 
 
 #if PHP_MAJOR_VERSION >=5 && PHP_MINOR_VERSION >= 3
-static int  writeHeader(sapi_header_struct *sapiHeader, sapi_header_op_enum op, sapi_headers_struct *sapiHeaders TSRMLS_DC)
+static int writeHeader(sapi_header_struct *sapiHeader, sapi_header_op_enum op, sapi_headers_struct *sapiHeaders TSRMLS_DC)
 #else
 static int writeHeader(sapi_header_struct *sapiHeader, sapi_headers_struct *sapi_headers TSRMLS_DC)
 #endif
