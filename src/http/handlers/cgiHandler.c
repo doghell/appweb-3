@@ -617,6 +617,7 @@ static bool parseHeader(MaConn *conn, MprCmd *cmd)
     value = 0;
 
     buf = mprGetCmdBuf(cmd, MPR_CMD_STDOUT);
+    mprAddNullToBuf(buf);
     headers = mprGetBufStart(buf);
 
     /*
@@ -630,8 +631,7 @@ static bool parseHeader(MaConn *conn, MprCmd *cmd)
                 /* Not EOF and less than max headers and have not yet seen an end of headers delimiter */
                 return 0;
             }
-        } 
-        len = 2;
+        } else len = 2;
     } else {
         len = 4;
     }
