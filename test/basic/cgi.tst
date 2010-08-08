@@ -32,6 +32,7 @@ function forms() {
 
     http.get(HTTP + "/cgiProgram.cgi")
     assert(http.code == 200)
+// print("MOB repsonse " + http.response)
     contains("cgiProgram: Output")
 
     if (test.os == "WIN") {
@@ -64,6 +65,7 @@ function alias() {
 
     http.get(HTTP + "/YourScripts/cgiProgram.cgi")
     assert(http.code == 200)
+// print(http.response)
     contains("cgiProgram: Output")
 }
 
