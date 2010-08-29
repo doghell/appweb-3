@@ -11803,12 +11803,12 @@ module ejs.web {
             let i = 0
             for each (choice in choices) {
                 if (choice is Array) {
-                    isSelected = (choice[0] == defaultValue) ? 'selected="yes"' : ''
+                    isSelected = (choice[0] == defaultValue) ? ' selected="yes"' : ''
                     write('  <option value="' + choice[0] + '"' + isSelected + '>' + choice[1] + '</option>')
                 } else {
                     if (choice && choice.id) {
                         for (field in choice) {
-                            isSelected = (choice.id == defaultValue) ? 'selected="yes"' : ''
+                            isSelected = (choice.id == defaultValue) ? ' selected="yes"' : ''
                             if (field != "id") {
                                 write('  <option value="' + choice.id + '"' + isSelected + '>' + choice[field] + '</option>')
                                 done = true
@@ -11816,7 +11816,7 @@ module ejs.web {
                             }
                         }
                     } else {
-                        isSelected = (choice == defaultValue) ? 'selected="yes"' : ''
+                        isSelected = (choice == defaultValue) ? ' selected="yes"' : ''
                         write('  <option value="' + choice + '"' + isSelected + '>' + choice + '</option>')
                     }
                 }
