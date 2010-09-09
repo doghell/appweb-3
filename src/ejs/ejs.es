@@ -13641,7 +13641,8 @@ module ejs.web {
             @param name Form name of button.
             @param options Optional extra options. See $getOptions for a list of the standard options.
             Examples:
-                button("Click Me", "OK")
+                button("OK", "commit")
+                button("Cancel", "commit")
          */
         function button(value: String, buttonName: String = null, options: Object = {}): Void {
             options = setOptions("button", options)

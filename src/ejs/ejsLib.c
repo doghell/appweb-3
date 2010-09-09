@@ -5805,16 +5805,15 @@ static void destroyFunction(Ejs *ejs, EjsFunction *fun)
     ejsFreeVar(ejs, (EjsVar*) fun, fun->isFrame ? ES_Frame : ES_Function);
 }
 
-
 void ejsMarkFunction(Ejs *ejs, EjsVar *parent, EjsFunction *fun)
 {
     ejsMarkBlock(ejs, parent, (EjsBlock*) fun);
 
     if (fun->prototype) {
-        ejsMarkObject(ejs, parent, (EjsObject*) fun->prototype);
+        ejsMarkVar(ejs, parent, (EjsVar*) fun->prototype);
     }
     if (fun->properties) {
-        ejsMarkObject(ejs, parent, fun->properties);
+        ejsMarkVar(ejs, parent, (EjsVar*) fun->properties);
     }
     if (fun->owner) {
         ejsMarkVar(ejs, parent, fun->owner);
@@ -26498,7 +26497,7 @@ static void *opcodeJump[] = {
             } else {
                 if (ejsIsFunction(type)) {
                     fun = (EjsFunction*) type;
-                    if ((type == fun->prototype) == 0) {
+                    if ((type = fun->prototype) == 0) {
                         type = ejsCreatePrototype(ejs, fun, &slotNum);
                     }
                 }
