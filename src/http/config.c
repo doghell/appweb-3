@@ -761,15 +761,6 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
 
         } else if (mprStrcmpAnyCase(key, "DocumentRoot") == 0) {
             path = maMakePath(host, mprStrTrim(value, "\""));
-#if !VXWORKS
-            /*
-             *  VxWorks stat() is broken if using a network FTP server.
-             */
-            if (!mprPathExists(server, path, X_OK)) {
-                mprError(server, "Can't access DocumentRoot directory");
-                return MPR_ERR_BAD_SYNTAX;
-            }
-#endif
             maSetDocumentRoot(host, path);
             maSetDirPath(dir, path);
             mprLog(server, MPR_CONFIG, "DocRoot (%s): \"%s\"", host->name, path);
