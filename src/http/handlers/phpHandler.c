@@ -109,9 +109,49 @@ static sapi_module_struct phpSapiBlock = {
 };
 
 /********************************** Code ***************************/
-/*
- *  Open the queue for a new request
- */
+
+static bool matchPhp(MaConn *conn, MaStage *handler, cchar *url)
+{
+    MaRequest       *req;
+    MaResponse      *resp;
+    MaLocation      *location;
+    MprPath         *info;
+    MprHash         *hp;
+    char            *path, *uri;
+
+    req = conn->request;
+    resp = conn->response;
+    info = &resp->fileInfo;
+    location = req->location;
+
+    if (resp->filename == 0) {
+        resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
+    }
+    info = &resp->fileInfo;
+    if (!info->checked) {
+        mprGetPathInfo(conn, resp->filename, info);
+    }    
+    if (resp->fileInfo.valid) {
+        return 1;
+    }
+    if (location->handler == conn->http->phpHandler) {
+        for (path = 0, hp = 0; (hp = mprGetNextHash(location->extensions, hp)) != 0; ) {
+            if (*hp->key) {
+                path = mprStrcat(resp, -1, resp->filename, ".", hp->key, NULL);
+                if (mprGetPathInfo(conn, path, &resp->fileInfo) == 0) {
+                    resp->filename = path;
+                    uri = mprStrcat(resp, -1, req->url, ".", hp->key, NULL);
+                    maSetRequestUri(conn, uri);
+                    return 1;
+                }
+                mprFree(path);
+            }
+        }
+    }
+	return 0;
+}
+
+
 static void openPhp(MaQueue *q)
 {
     MaRequest       *req;
@@ -141,48 +181,6 @@ static void openPhp(MaQueue *q)
         maFailRequest(q->conn, MPR_HTTP_CODE_BAD_METHOD, "Method not supported by file handler: %s", req->methodName);
         break;
     }
-}
-
-
-static bool matchPhp(MaConn *conn, MaStage *handler, cchar *url)
-{
-    MaRequest       *req;
-    MaResponse      *resp;
-    MaLocation      *location;
-    MprPath         *info;
-    MprHash         *hp;
-    char            *path, *uri;
-
-    req = conn->request;
-    resp = conn->response;
-    info = &resp->fileInfo;
-    location = conn->request->location;
-
-    if (resp->filename == 0) {
-        resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
-    }
-    info = &resp->fileInfo;
-    if (!info->checked) {
-        mprGetPathInfo(conn, resp->filename, info);
-    }    
-    if (resp->fileInfo.valid) {
-        return 1;
-    }
-    if (location->handler == conn->http->phpHandler) {
-        for (path = 0, hp = 0; (hp = mprGetNextHash(location->extensions, hp)) != 0; ) {
-            if (*hp->key) {
-                path = mprStrcat(resp, -1, resp->filename, ".", hp->key, NULL);
-                if (mprGetPathInfo(conn, path, &resp->fileInfo) == 0) {
-                    resp->filename = path;
-                    uri = mprStrcat(resp, -1, req->url, ".", hp->key, NULL);
-                    maSetRequestUri(conn, uri);
-                    return 1;
-                }
-                mprFree(path);
-            }
-        }
-    }
-	return 0;
 }
 
 
@@ -239,7 +237,7 @@ static void runPhp(MaQueue *q)
     } zend_end_try();
 
     /*
-     *  Define the header variables
+     *  Define header variables
      */
     zend_try {
         hp = mprGetFirstHash(req->headers);
