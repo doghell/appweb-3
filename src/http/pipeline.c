@@ -11,12 +11,12 @@
 /***************************** Forward Declarations ***************************/
 
 static char *addIndexToUrl(MaConn *conn, cchar *index);
+static MaStage *checkStage(MaConn *conn, MaStage *stage);
 static char *getExtension(MaConn *conn);
 static MaStage *findHandlerByExtension(MaConn *conn);
-static MaStage *findLocationHandler(MaConn *conn);
-static char *makeFilename(MaConn *conn, MaAlias *alias, cchar *url, bool skipAliasPrefix);
 static bool mapToFile(MaConn *conn, MaStage *handler, bool *rescan);
 static bool matchFilter(MaConn *conn, MaFilter *filter);
+static bool modifyRequest(MaConn *conn);
 static void openQ(MaQueue *q);
 static void processDirectory(MaConn *conn, bool *rescan);
 static void setEnv(MaConn *conn);
@@ -52,15 +52,17 @@ void maMatchHandler(MaConn *conn)
         maRedirect(conn, alias->redirectCode, alias->uri);
         return;
     }
+    location = req->location = maLookupBestLocation(req->host, req->url);
+    mprAssert(location);
+    req->auth = location->auth;
 
     if (conn->requestFailed || conn->request->method & (MA_REQ_OPTIONS | MA_REQ_TRACE)) {
         handler = conn->http->passHandler;
-        location = req->location = maLookupBestLocation(req->host, req->url);
-        mprAssert(location);
-        req->auth = location->auth;        
         return;
     }
-
+    if (modifyRequest(conn)) {
+        return;
+    }
     /*
      *  Get the best (innermost) location block and see if a handler is explicitly set for that location block.
      *  Possibly rewrite the url and retry.
@@ -68,7 +70,7 @@ void maMatchHandler(MaConn *conn)
     loopCount = MA_MAX_REWRITE;
     do {
         rescan = 0;
-        if ((handler = findLocationHandler(conn)) == 0) {
+        if ((handler = checkStage(conn, req->location->handler)) == 0) {
             /*
              *  Didn't find a location block handler, so try to match by extension and by handler match() routines.
              *  This may invoke processDirectory which may redirect and thus require reprocessing -- hence the loop.
@@ -81,7 +83,6 @@ void maMatchHandler(MaConn *conn)
             }
         }
     } while (handler && rescan && loopCount-- > 0);
-
     if (handler == 0) {
         maFailRequest(conn, MPR_HTTP_CODE_BAD_METHOD, "Requested method %s not supported for URL: %s", 
             req->methodName, req->url);
@@ -90,6 +91,48 @@ void maMatchHandler(MaConn *conn)
     resp->handler = handler;
     mprLog(resp, 4, "Select handler: \"%s\" for \"%s\"", handler->name, req->url);
     setEnv(conn);
+}
+
+
+static bool modifyRequest(MaConn *conn)
+{
+    MaStage         *handler;
+    MaLocation      *location;
+    MaResponse      *resp;
+    MaRequest       *req;
+    MprPath         *info;
+    MprHash         *he;
+    int             next;
+
+    req = conn->request;
+    resp = conn->response;
+
+    if (resp->filename == 0) {
+        resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
+    }
+    info = &resp->fileInfo;
+    if (!info->checked) {
+        mprGetPathInfo(conn, resp->filename, info);
+    }
+    location = conn->request->location;
+    if (location) {
+        for (next = 0; (handler = mprGetNextItem(location->handlers, &next)) != 0; ) {
+            if (handler->modify) {
+                if (handler->modify(conn, handler)) {
+                    return 1;
+                }
+            }
+        }
+        for (he = 0; (he = mprGetNextHash(location->extensions, he)) != 0; ) {
+            handler = (MaStage*) he->data;
+            if (handler->modify) {
+                if (handler->modify(conn, handler)) {
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
 }
 
 
@@ -393,30 +436,6 @@ static MaStage *checkStage(MaConn *conn, MaStage *stage)
 }
 
 
-int maRewriteUri(MaConn *conn) { return 0; }
-
-static MaStage *findLocationHandler(MaConn *conn)
-{
-    MaRequest   *req;
-    MaResponse  *resp;
-    MaLocation  *location;
-    int         loopCount;
-
-    req = conn->request;
-    resp = conn->response;
-    loopCount = MA_MAX_REWRITE;
-
-    do {
-        location = req->location = maLookupBestLocation(req->host, req->url);
-        mprAssert(location);
-        req->auth = location->auth;
-        resp->handler = checkStage(conn, location->handler);
-    } while (maRewriteUri(conn) && --loopCount > 0);
-
-    return resp->handler;
-}
-
-
 /*
  *  Get an extension used for mime type matching. NOTE: this does not permit any kind of platform specific filename.
  *  Rather only those suitable as mime type extensions (simple alpha numeric extensions)
@@ -457,6 +476,15 @@ static MaStage *findHandlerByExtension(MaConn *conn)
     location = req->location;
     
     resp->extension = getExtension(conn);
+#if UNUSED
+    if (resp->filename == 0) {
+        resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
+    }
+    info = &resp->fileInfo;
+    if (!info->checked) {
+        mprGetPathInfo(conn, resp->filename, info);
+    }
+#endif
 
     if (*resp->extension) {
         handler = maGetHandlerByExtension(location, resp->extension);
@@ -466,9 +494,8 @@ static MaStage *findHandlerByExtension(MaConn *conn)
     }
 
     /*
-     *  Failed to match by extension, so perform custom handler matching. May need a filename (dir handler)
+     *  Failed to match by extension, so perform custom handler matching
      */
-    resp->filename = makeFilename(conn, req->alias, req->url, 1);
     for (next = 0; (handler = mprGetNextItem(location->handlers, &next)) != 0; ) {
         if (handler->match && handler->match(conn, handler, req->url)) {
             if (checkStage(conn, handler)) {
@@ -498,7 +525,7 @@ static MaStage *findHandlerByExtension(MaConn *conn)
 }
 
 
-static char *makeFilename(MaConn *conn, MaAlias *alias, cchar *url, bool skipAliasPrefix)
+char *maMakeFilename(MaConn *conn, MaAlias *alias, cchar *url, bool skipAliasPrefix)
 {
     char        *cleanPath, *path;
 
@@ -529,7 +556,7 @@ static bool mapToFile(MaConn *conn, MaStage *handler, bool *rescan)
     resp = conn->response;
 
     if (resp->filename == 0) {
-        resp->filename = makeFilename(conn, req->alias, req->url, 1);
+        resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
     }
     req->dir = maLookupBestDir(req->host, resp->filename);
 
@@ -571,7 +598,6 @@ static bool matchFilter(MaConn *conn, MaFilter *filter)
     if (stage->match) {
         return stage->match(conn, stage, req->url);
     }
-
     if (filter->extensions && *resp->extension) {
         return maMatchFilterByExtension(filter, resp->extension);
     }
@@ -705,7 +731,7 @@ static void setPathInfo(MaConn *conn)
     MaRequest   *req;
     MaResponse  *resp;
     char        *last, *start, *cp, *pathInfo;
-    int         found, sep;
+    int         found, sep, offset;
 
     req = conn->request;
     resp = conn->response;
@@ -723,9 +749,7 @@ static void setPathInfo(MaConn *conn)
              */
             last = 0;
             sep = mprGetPathSeparator(req, resp->filename);
-            resp->filename = makeFilename(conn, alias, req->url, 1);
             for (cp = start = &resp->filename[strlen(alias->filename)]; cp; ) {
-                
                 if ((cp = strchr(cp, sep)) != 0) {
                     *cp = '\0';
                 }
@@ -745,12 +769,15 @@ static void setPathInfo(MaConn *conn)
                 }
             }
             if (last) {
-                pathInfo = &req->url[alias->prefixLen + last - start];
-                req->pathInfo = mprStrdup(req, pathInfo);
-                *last = '\0';
-                pathInfo[0] = '\0';
+                offset = alias->prefixLen + last - start;
+                if (offset <= strlen(req->url)) {
+                    pathInfo = &req->url[offset];
+                    req->pathInfo = mprStrdup(req, pathInfo);
+                    *last = '\0';
+                    pathInfo[0] = '\0';
+                }
                 if (req->pathInfo[0]) {
-                    req->pathTranslated = makeFilename(conn, alias, req->pathInfo, 0);
+                    req->pathTranslated = maMakeFilename(conn, alias, req->pathInfo, 0);
                 }
             }
         }
@@ -758,13 +785,12 @@ static void setPathInfo(MaConn *conn)
             req->pathInfo = req->url;
             req->url = "";
 
-            if ((cp = strchr(req->pathInfo, '.')) != 0) {
+            if ((cp = strrchr(req->pathInfo, '.')) != 0) {
                 resp->extension = mprStrdup(req, ++cp);
             } else {
                 resp->extension = "";
             }
-            req->pathTranslated = makeFilename(conn, alias, req->pathInfo, 0); 
-            resp->filename = alias->filename;
+            req->pathTranslated = maMakeFilename(conn, alias, req->pathInfo, 0); 
         }
     }
 }
@@ -787,13 +813,11 @@ static void setEnv(MaConn *conn)
         resp->extension = getExtension(conn);
     }
     if (resp->filename == 0) {
-        resp->filename = makeFilename(conn, req->alias, req->url, 1);
+        resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
     }
-
     if ((resp->mimeType = (char*) maLookupMimeType(conn->host, resp->extension)) == 0) {
         resp->mimeType = (char*) "text/html";
     }
-
     if (!(resp->handler->flags & MA_STAGE_VIRTUAL)) {
         /*
          *  Define an Etag for physical entities. Redo the file info if not valid now that extra path has been removed.
@@ -806,15 +830,16 @@ static void setEnv(MaConn *conn)
             resp->etag = mprAsprintf(resp, -1, "\"%x-%Lx-%Lx\"", info->inode, info->size, info->mtime);
         }
     }
-
     if (handler->flags & MA_STAGE_VARS) {
-        req->formVars = mprCreateHash(req, MA_VAR_HASH_SIZE);
         if (req->parsedUri->query) {
             maAddVars(conn, req->parsedUri->query, (int) strlen(req->parsedUri->query));
         }
     }
     if (handler->flags & MA_STAGE_ENV_VARS) {
         maCreateEnvVars(conn);
+        if (resp->envCallback) {
+            resp->envCallback(conn);
+        }
     }
 }
 
@@ -827,7 +852,7 @@ char *maMapUriToStorage(MaConn *conn, cchar *url)
     if (alias == 0) {
         return 0;
     }
-    return makeFilename(conn, alias, url, 1);
+    return maMakeFilename(conn, alias, url, 1);
 }
 
 

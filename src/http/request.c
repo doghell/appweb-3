@@ -53,6 +53,7 @@ MaRequest *maCreateRequest(MaConn *conn)
     req->remainingContent = 0;
     req->method = 0;
     req->headers = mprCreateHash(req, MA_VAR_HASH_SIZE);
+    req->formVars = mprCreateHash(req, MA_VAR_HASH_SIZE);
     req->httpProtocol = "HTTP/1.1";
     return req;
 }
@@ -278,18 +279,15 @@ static bool parseFirstLine(MaConn *conn, MaPacket *packet)
         maFailConnection(conn, MPR_HTTP_CODE_BAD_METHOD, "Bad method");
         return 0;
     }
-
     uri = getToken(conn, " ");
     if (*uri == '\0') {
         maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Bad HTTP request. Bad URI.");
         return 0;
     }
-
     if ((int) strlen(uri) >= conn->http->limits.maxUrl) {
         maFailRequest(conn, MPR_HTTP_CODE_REQUEST_URL_TOO_LARGE, "Bad request. URI too long.");
         return 0;
     }
-
     httpProtocol = getToken(conn, "\r\n");
     if (strcmp(httpProtocol, "HTTP/1.1") == 0) {
         conn->protocol = 1;
@@ -304,7 +302,6 @@ static bool parseFirstLine(MaConn *conn, MaPacket *packet)
         maFailConnection(conn, MPR_HTTP_CODE_NOT_ACCEPTABLE, "Unsupported HTTP protocol");
         return 0;
     }
-
     req->method = method;
     req->methodName = methodName;
     req->httpProtocol = httpProtocol;

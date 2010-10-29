@@ -59,6 +59,9 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
     MaRange         *range;
     MprHash         *hp;
     MprBuf          *buf;
+    struct tm       tm;
+    char            *hdr;
+    int             expires;
 
     mprAssert(packet->flags == MA_PACKET_HEADER);
 
@@ -86,6 +89,18 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
 
     if (resp->flags & MA_RESP_DONT_CACHE) {
         putHeader(conn, packet, "Cache-Control", "no-cache");
+    } else if (req->location->expires) {
+        expires = PTOI(mprLookupHash(req->location->expires, resp->mimeType));
+        if (expires == 0) {
+            expires = PTOI(mprLookupHash(req->location->expires, ""));
+        }
+        if (expires) {
+            mprDecodeUniversalTime(conn, &tm, mprGetTime(conn) + (expires * MPR_TICKS_PER_SEC));
+            hdr = mprFormatTime(conn, MPR_HTTP_DATE, &tm);
+            putFormattedHeader(conn, packet, "Cache-Control", "max-age=%d", expires);
+            putFormattedHeader(conn, packet, "Expires", "%s", hdr);
+            mprFree(hdr);
+        }
     }
     if (resp->etag) {
         putFormattedHeader(conn, packet, "ETag", "%s", resp->etag);
@@ -275,6 +290,10 @@ void maRedirect(MaConn *conn, int code, cchar *targetUri)
     host = req->host;
 
     mprLog(conn, 3, "redirect %d %s", code, targetUri);
+
+    if (resp->redirectCallback) {
+        targetUri = (resp->redirectCallback)(conn, &code, targetUri);
+    }
 
     uri = 0;
     resp->code = code;
@@ -466,6 +485,18 @@ void maOmitResponseBody(MaConn *conn)
         conn->response->flags |= MA_RESP_NO_BODY;
         // conn->response->mimeType = "";
     }
+}
+
+
+void maSetRedirectCallback(MaConn *conn, MaRedirectCallback redirectCallback)
+{
+    conn->response->redirectCallback = redirectCallback;
+}
+
+
+void maSetEnvCallback(MaConn *conn, MaEnvCallback envCallback)
+{
+    conn->response->envCallback = envCallback;
 }
 
 

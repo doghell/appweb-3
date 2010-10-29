@@ -113,7 +113,6 @@ MaStage *maCreateStage(MaHttp *http, cchar *name, int flags)
     if (stage == 0) {
         return 0;
     }
-
     stage->flags = flags;
     stage->name = mprStrdup(stage, name);
 

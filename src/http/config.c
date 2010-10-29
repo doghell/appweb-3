@@ -39,7 +39,6 @@ int maConfigureServer(MprCtx ctx, MaHttp *http, MaServer *server, cchar *configF
             mprUserError(ctx, "Can't open server on %s", ipAddr);
             return MPR_ERR_CANT_OPEN;
         }
-
         location = host->location;
 
 #if WIN
@@ -803,6 +802,13 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
 #endif
             }
             return 1;
+
+        } else if (mprStrcmpAnyCase(key, "Expires") == 0) {
+            char *when, *mimeTypes;
+            value = mprStrTrim(value, "\"");
+            when = mprStrTok(value, " \t", &mimeTypes);
+            maAddLocationExpiry(location, (MprTime) mprAtoi(when, 10), mimeTypes);
+            return 1;
         }
         break;
 
@@ -1020,7 +1026,6 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
                     }
                 }
             }
-
             mprAddItem(server->listens, maCreateListen(server, hostName, port, flags));
 
             /*
@@ -1238,6 +1243,7 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
         } else if (mprStrcmpAnyCase(key, "SetHandler") == 0) {
             /* Scope: server, host, location */
             name = mprStrTok(value, " \t", &extensions);
+            maResetHandlers(state->location);
             if (maSetHandler(http, host, state->location, name) < 0) {
                 mprError(server, "Can't add handler %s", name);
                 return MPR_ERR_CANT_CREATE;

@@ -1,19 +1,19 @@
 /*
- *  appweb.h -- Primary header for the Embedthis Appweb Library
+ *  customize.h -- Place to override standard product defintions
  *
  *  Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
  */
 
 /********************************** Includes **********************************/
 
-#ifndef _h_APPWEB_h
-#define _h_APPWEB_h 1
+#ifndef _h_CUSTOMIZE_h
+#define _h_CUSTOMIZE_h 1
 
-#include    "mpr.h"
-#include    "http.h"
-#include    "customize.h"
+/*
+    Override definitions here
+ */
 
-#endif /* _h_APPWEB_h */
+#endif /* _h_CUSTOMIZE_h */
 
 
 /*

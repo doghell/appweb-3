@@ -2100,7 +2100,14 @@
 			isa = PBXProject;
 			buildConfigurationList = C9AFCC4D0FC521150080E908 /* Build configuration list for PBXProject "appweb-all" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = C9AFCC480FC521150080E908;
 			productRefGroup = C9AFCC570FC521440080E908 /* Products */;
 			projectDirPath = "";

@@ -212,7 +212,8 @@ static int ioEvent(MaConn *conn, int mask)
     if (mask & MPR_READABLE) {
         readEvent(conn);
     }
-    if (mprIsSocketEof(conn->sock) || conn->disconnected || (conn->request == 0 && conn->keepAliveCount < 0)) {
+    if (mprIsSocketEof(conn->sock) || conn->disconnected || conn->connectionFailed || 
+            (conn->request == 0 && conn->keepAliveCount < 0)) {
         /*
          *  This will close the connection and free all connection resources. NOTE: we compare keepAliveCount with "< 0" 
          *  so that the client can have one more keep alive request. It should respond to the "Connection: close" and 

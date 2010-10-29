@@ -29,7 +29,8 @@ static void openFile(MaQueue *q)
     MaResponse      *resp;
     MaLocation      *location;
     MaConn          *conn;
-    char            *date;
+    MprPath         ginfo;
+    char            *date, *gfile;
 
     conn = q->conn;
     resp = conn->response;
@@ -38,6 +39,16 @@ static void openFile(MaQueue *q)
 
     switch (req->method) {
     case MA_REQ_GET:
+        if (req->acceptEncoding) {
+            if (strstr(req->acceptEncoding, "gzip") != 0) {
+                gfile = mprAsprintf(resp, -1, "%s.gz", resp->filename);
+                if (mprGetPathInfo(resp, gfile, &ginfo) == 0) {
+                    resp->filename = gfile;
+                    resp->fileInfo = ginfo;
+                    maSetHeader(conn, 0, "Content-Encoding", "gzip");
+                }
+            }
+        }
     case MA_REQ_HEAD:
     case MA_REQ_POST:
         if (resp->fileInfo.valid && resp->fileInfo.mtime) {

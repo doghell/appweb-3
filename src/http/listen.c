@@ -23,46 +23,41 @@ MaListen *maCreateListen(MaServer *server, cchar *ipAddr, int port, int flags)
     if (listen == 0) {
         return 0;
     }
-
     listen->server = server;
     listen->flags = flags;
     listen->port = port;
     listen->ipAddr = mprStrdup(listen, ipAddr);
     listen->flags = flags;
-
     return listen;
 }
 
 
 int maStartListening(MaListen *listen)
 {
+    MaHttp      *http;
     cchar       *proto;
     char        *ipAddr;
+    int         rc;
 
-#if BLD_FEATURE_SSL
     listen->sock = mprCreateSocket(listen, listen->ssl);
-#else
-    listen->sock = mprCreateSocket(listen, NULL);
-#endif
-
     if (mprOpenServerSocket(listen->sock, listen->ipAddr, listen->port, (MprSocketAcceptProc) maAcceptConn, listen->server,
             MPR_SOCKET_NODELAY | MPR_SOCKET_THREAD) < 0) {
         mprError(listen, "Can't open a socket on %s, port %d", listen->ipAddr, listen->port);
         return MPR_ERR_CANT_OPEN;
     }
-
-    proto = "HTTP";
-#if BLD_FEATURE_SSL
-    if (mprIsSocketSecure(listen->sock)) {
-        proto = "HTTPS";
-    }
-#endif
+    proto = mprIsSocketSecure(listen->sock) ? "HTTPS" : "HTTP";
     ipAddr = listen->ipAddr;
     if (ipAddr == 0 || *ipAddr == '\0') {
         ipAddr = "*";
     }
     mprLog(listen, MPR_CONFIG, "Listening for %s on %s:%d", proto, ipAddr, listen->port);
 
+    http = listen->server->http;
+    if (http->listenCallback) {
+        if ((rc = (http->listenCallback)(http, listen)) < 0) {
+            return rc;
+        }
+    }
     return 0;
 }
 

@@ -4617,6 +4617,9 @@ typedef struct EjsWeb {
     void            *handle;        /* Web server connection/request handle */
     EjsWebControl   *control;       /* Pointer to control block */
     cchar           *url;           /* App relative url: /controller/action. Starts with "/"  */
+    char            *searchPath;
+    char            *baseUrl;
+    char            *baseDir;
     int             flags;          /* Control flags */
 
     char            *controllerFile;/* Simple controller file name without path */

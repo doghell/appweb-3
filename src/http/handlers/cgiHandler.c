@@ -101,14 +101,12 @@ static void startCmd(MaQueue *q)
     MaResponse      *resp;
     MaConn          *conn;
     MprCmd          *cmd;
-    MprHashTable    *vars;
     MprHash         *hp;
     cchar           *baseName;
     char            **argv, **envv, *fileName;
     int             index, argc, varCount;
 
     argv = 0;
-    vars = 0;
     argc = 0;
 
     conn = q->conn;
@@ -116,6 +114,11 @@ static void startCmd(MaQueue *q)
     resp = conn->response;
 
     cmd = q->queueData = mprCreateCmd(req);
+
+    if (conn->http->forkCallback) {
+        cmd->forkCallback = conn->http->forkCallback;
+        cmd->forkData = conn->http->forkData;
+    }
 
     /*
      *  Build the commmand line arguments
@@ -134,13 +137,12 @@ static void startCmd(MaQueue *q)
     }
 
     /*
-     *  Build environment variablesV
+     *  Build environment variables
      */
-    vars = req->headers;
-    varCount = mprGetHashCount(vars);
+    varCount = mprGetHashCount(req->headers) + mprGetHashCount(req->formVars);
+    envv = (char**) mprAlloc(cmd, (varCount + 1) * sizeof(char*));
 
     index = 0;
-    envv = (char**) mprAlloc(cmd, (varCount + 1) * sizeof(char*));
     hp = mprGetFirstHash(req->headers);
     while (hp) {
         if (hp->data) {
@@ -148,6 +150,14 @@ static void startCmd(MaQueue *q)
             index++;
         }
         hp = mprGetNextHash(req->headers, hp);
+    }
+    hp = mprGetFirstHash(req->formVars);
+    while (hp) {
+        if (hp->data) {
+            envv[index] = mprStrcat(cmd, -1, hp->key, "=", (char*) hp->data, NULL);
+            index++;
+        }
+        hp = mprGetNextHash(req->formVars, hp);
     }
     envv[index] = 0;
     mprAssert(index <= varCount);
@@ -1072,24 +1082,6 @@ static int parseCgi(MaHttp *http, cchar *key, char *value, MaConfigState *state)
 }
 #endif
 
-#if 0
-int maCgiHandlerInit(MaHttp *http, cchar *path)
-{
-    MaStage     *handler;
-
-    handler = maCreateHandler(http, "cgiHandler", MA_STAGE_ALL | MA_STAGE_VARS | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO);
-    if (handler == 0) {
-        return MPR_ERR_MEMORY;
-    }
-    handler->open = openCgi; 
-    handler->close = closeCgi; 
-    handler->outgoingService = outgoingCgiService;
-    handler->incomingData = incomingCgiData; 
-    handler->run = runCgi; 
-    handler->parse = parseCgi; 
-    return 0;
-}
-#endif
 
 /*
  *  Dynamic module initialization
@@ -1099,8 +1091,7 @@ MprModule *maCgiHandlerInit(MaHttp *http, cchar *path)
     MprModule   *module;
     MaStage     *handler;
 
-    module = mprCreateModule(http, "cgiHandler", BLD_VERSION, NULL, NULL, NULL);
-    if (module == 0) {
+    if ((module = mprCreateModule(http, "cgiHandler", BLD_VERSION, NULL, NULL, NULL)) == NULL) {
         return 0;
     }
     handler = maCreateHandler(http, "cgiHandler", MA_STAGE_ALL | MA_STAGE_VARS | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO);
@@ -1108,6 +1099,7 @@ MprModule *maCgiHandlerInit(MaHttp *http, cchar *path)
         mprFree(module);
         return 0;
     }
+    http->cgiHandler = handler;
     handler->open = openCgi; 
     handler->close = closeCgi; 
     handler->outgoingService = outgoingCgiService;

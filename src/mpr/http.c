@@ -333,7 +333,7 @@ static bool parseArgs(Mpr *mpr, int argc, char **argv)
         } else if (strcmp(argp, "--showCode") == 0) {
             showCode++;
 
-        } else if (strcmp(argp, "--showHeaders") == 0) {
+        } else if (strcmp(argp, "--show") == 0 || strcmp(argp, "--showHeaders") == 0) {
             showHeaders++;
 
         } else if (strcmp(argp, "--single") == 0 || strcmp(argp, "-s") == 0) {

@@ -2,6 +2,7 @@
 <head>
 </head>
 <body>
-    <?php sleep(9999); ?>
+    <?php phpinfo(); ?>
+    <?php sleep(60); ?>
 </body>
 </html>

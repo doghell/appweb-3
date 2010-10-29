@@ -28,11 +28,53 @@ static void setHeader(void *handle, bool allowMultiple, cchar *key, cchar *fmt, 
 static int  writeBlock(void *handle, cchar *buf, int size);
 
 /************************************* Code ***********************************/
+
+static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
+{
+    MaRequest       *req;
+    cchar           *ext;
+    char            urlbuf[MPR_MAX_FNAME];
+
+    /*
+     *  Send non-ejs content under web to another handler, typically the file handler.
+     */
+    req = conn->request;
+    ext = conn->response->extension;
+
+    if (ext && strcmp(ext, "mod") == 0) {
+        maFormatBody(conn, "Bad Request", "Can't serve *.mod files");
+        maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Can't server *.mod files");
+    }
+    if (*url == '\0' || strcmp(url, "/") == 0) {
+        mprSprintf(urlbuf, sizeof(urlbuf), "%s/web/index.ejs", req->alias->prefix);
+        maSetRequestUri(conn, urlbuf);
+
+    } else if (strcmp(url, "/favicon.ico") == 0) {
+        mprSprintf(urlbuf, sizeof(urlbuf), "%s/web/favicon.ico", req->alias->prefix);
+        maSetRequestUri(conn, urlbuf);
+        return 0;
+
+    } else if (strncmp(url, "/web/", 5) == 0 || *url == '\0') {
+        if (!(ext && strcmp(ext, "ejs") == 0)) {
+            return 0;
+        }
+    } else {
+        if (req->location->flags & (MA_LOC_APP | MA_LOC_APP_DIR) && ext && strcmp(ext, "ejs") == 0) {
+            maFormatBody(conn, "Bad Request", "Can't serve *.ejs files outside web directory");
+            maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Can't server *.ejs files outside web directory");
+            return 1;
+        }
+    }
+    return 1;
+}
+
+
 /*
  *  When we come here, we've already matched either a location block or an extension
  */
-static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
+static void openEjs(MaQueue *q)
 {
+    MaConn          *conn;
     MaRequest       *req;
     MaResponse      *resp;
     MaLocation      *loc;
@@ -40,33 +82,25 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
     EjsWebControl   *control;
     MprCtx          ctx;
     cchar           *ext;
-    char            urlbuf[MPR_MAX_FNAME];
     MaAlias         *alias;
-    MaLocation      *location;
-    char            *baseDir, *cp, *baseUrl, *searchPath, *appUrl;
-    int             flags, locFlags;
+    char            *url, *baseDir, *cp, *baseUrl, *searchPath, *appUrl;
+    int             flags;
 
     /*
      *  Send non-ejs content under web to another handler, typically the file handler.
      */
+    conn = q->conn;
     req = conn->request;
     resp = conn->response;
     control = conn->http->ejsHandler->stageData;
     loc = req->location;    
     ext = resp->extension;
     alias = req->alias;
-    location = req->location;
-    locFlags = location->flags;
+    url = req->url;
     baseUrl = 0;
     flags = 0;
 
-    if (ext && strcmp(ext, "mod") == 0) {
-        maFormatBody(conn, "Bad Request", "Can't serve *.mod files");
-        maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Can't server *.mod files");
-        return 1;
-    }
-
-    if (locFlags & MA_LOC_APP_DIR) {
+    if (loc->flags & MA_LOC_APP_DIR) {
         flags |= EJS_WEB_FLAG_APP;
         baseDir = mprStrcat(resp, -1, alias->filename, &req->url[alias->prefixLen], NULL);
         if ((cp = strchr(&baseDir[strlen(alias->filename) + 1], '/')) != 0) {
@@ -85,7 +119,7 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
         }
             
     } else {
-        if (locFlags & MA_LOC_APP) {
+        if (loc->flags & MA_LOC_APP) {
             flags |= EJS_WEB_FLAG_APP;
         }
         baseDir = alias->filename;
@@ -100,10 +134,10 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
     }
     appUrl = (flags & EJS_WEB_FLAG_APP) ? baseUrl : 0;
 
-    if (location->flags & MA_LOC_BROWSER) {
+    if (loc->flags & MA_LOC_BROWSER) {
         flags |= EJS_WEB_FLAG_BROWSER_ERRORS;
     }
-    if (location->flags & MA_LOC_AUTO_SESSION) {
+    if (loc->flags & MA_LOC_AUTO_SESSION) {
         flags |= EJS_WEB_FLAG_SESSION;
     }
 
@@ -124,46 +158,22 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
     } else {
         searchPath = mprStrdup(req, baseDir);
     }
-    if (location->ejsPath) {
+    if (loc->ejsPath) {
         searchPath = mprAsprintf(req, -1, "%s" MPR_SEARCH_SEP "%s" MPR_SEARCH_SEP "%s", 
-            searchPath, location->ejsPath, control->searchPath);
+            searchPath, loc->ejsPath, control->searchPath);
     } else {
         searchPath = mprAsprintf(req, -1, "%s" MPR_SEARCH_SEP "%s", searchPath, control->searchPath);
     }
-
-    if (*url == '\0' || strcmp(url, "/") == 0) {
-        mprSprintf(urlbuf, sizeof(urlbuf), "%s/web/index.ejs", appUrl);
-        maSetRequestUri(conn, urlbuf);
-        return 0;
-
-    } else if (strcmp(url, "/favicon.ico") == 0) {
-        mprSprintf(urlbuf, sizeof(urlbuf), "%s/web/favicon.ico", appUrl);
-        maSetRequestUri(conn, urlbuf);
-        return 0;
-
-    } else if (strncmp(url, "/web/", 5) == 0 || *url == '\0') {
-        if (!(ext && strcmp(ext, "ejs") == 0)) {
-            return 0;
-        }
-    } else {
-        if (loc->flags & (MA_LOC_APP | MA_LOC_APP_DIR) && ext && strcmp(ext, "ejs") == 0) {
-            maFormatBody(conn, "Bad Request", "Can't serve *.ejs files outside web directory");
-            maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Can't server *.ejs files outside web directory");
-            return 1;
-        }
-    }
-
     /*
      *  Ejs works best with a heap-based allocator for longer running apps.
      */
     ctx = mprAllocHeap(req, "Ejs Interpreter", 1, 0, NULL);
     web = ejsCreateWebRequest(ctx, control, conn, baseUrl, url, baseDir, searchPath, flags);
     if (web == 0) {
-        maFailRequest(conn, MPR_HTTP_CODE_INTERNAL_SERVER_ERROR, "Can't create Ejs web object for %s", req->url);
-        return 1;
+        maFailRequest(conn, MPR_HTTP_CODE_INTERNAL_SERVER_ERROR, "Can't create Ejs web object for %s", url);
+        return;
     }
     resp->handlerData = web;
-    return 1;
 }
 
 
@@ -878,6 +888,7 @@ MprModule *maEjsHandlerInit(MaHttp *http, cchar *path)
     }
     http->ejsHandler = handler;
     handler->match = matchEjs;
+    handler->open = openEjs;
     handler->run = runEjs;
     handler->incomingData = incomingEjsData;
     handler->parse = parseEjs;

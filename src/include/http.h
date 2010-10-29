@@ -48,6 +48,8 @@ extern "C" {
 
 #if !DOXYGEN
 struct MaConn;
+struct MaHttp;
+struct MaListen;
 struct MaPacket;
 struct MaRequest;
 struct MaResponse;
@@ -87,6 +89,9 @@ typedef struct MaLimits {
 } MaLimits;
 
 
+typedef int (*MaListenCallback)(struct MaHttp *http, struct MaListen *listen);
+
+
 /**
  *  Http Service
  *  @description There is one instance of MaHttp per application. It manages a list of HTTP servers running in
@@ -108,14 +113,20 @@ typedef struct MaHttp {
     struct MaStage  *sendConnector;         /**< Send file connector */
     struct MaStage  *authFilter;            /**< Authorization filter (digest and basic) */
     struct MaStage  *rangeFilter;           /**< Ranged requests filter */
+    struct MaStage  *cgiHandler;            /**< CGI handler */
     struct MaStage  *chunkFilter;           /**< Chunked transfer encoding filter */
     struct MaStage  *dirHandler;            /**< Directory listing handler */
     struct MaStage  *egiHandler;            /**< Embedded Gateway Interface (EGI) handler */
     struct MaStage  *ejsHandler;            /**< Ejscript Web Framework handler */
     struct MaStage  *fileHandler;           /**< Static file handler */
     struct MaStage  *passHandler;           /**< Pass through handler */
+    struct MaStage  *phpHandler;            /**< PHP handler */
 
     void            (*rangeService)(struct MaQueue *q, MaRangeFillProc fill);
+    MaListenCallback listenCallback;        /**< Invoked when creating listeners */
+    MprForkCallback forkCallback;
+    void            *forkData;
+
     char            *username;              /**< Http server user name */
     char            *groupname;             /**< Http server group name */
     int             uid;                    /**< User Id */
@@ -180,6 +191,8 @@ extern int          maApplyChangedUser(MaHttp *http);
 extern struct MaServer *maLookupServer(MaHttp *http, cchar *name);
 extern int          maLoadModule(MaHttp *http, cchar *name, cchar *libname);
 extern void         maSetDefaultServer(MaHttp *http, struct MaServer *server);
+extern void         maSetListenCallback(MaHttp *http, MaListenCallback fn);
+extern void         maSetForkCallback(MaHttp *http, MprForkCallback callback, void *data);
 
 /*
  *  Loadable module entry points
@@ -216,9 +229,7 @@ typedef struct  MaListen {
     int             port;                   /**< Port number to listen on */
     int             flags;                  /**< Listen flags */
     MprSocket       *sock;                  /**< Underlying socket */
-#if BLD_FEATURE_SSL
     struct MprSsl   *ssl;                   /**< SSL configuration */
-#endif
 } MaListen;
 
 
@@ -590,6 +601,7 @@ typedef struct MaLocation {
     struct MaStage  *handler;               /**< Set handler */
     void            *handlerData;           /**< Data reserved for the handler */
     MprHashTable    *extensions;            /**< Hash of handlers by extensions */
+    MprHashTable    *expires;               /**< Expiry of content by mime type */
     MprList         *handlers;              /**< List of handlers for this location */
     MprList         *inputStages;           /**< Input stages */
     MprList         *outputStages;          /**< Output stages */
@@ -615,10 +627,12 @@ extern void maFinalizeLocation(MaLocation *location);
 extern struct MaStage *maGetHandlerByExtension(MaLocation *location, cchar *ext);
 extern cchar *maLookupErrorDocument(MaLocation *location, int code);
 extern void maResetPipeline(MaLocation *location);
+extern void maResetHandlers(MaLocation *location);
 extern void maSetLocationAuth(MaLocation *location, MaAuth *auth);
 extern void maSetLocationHandler(MaLocation *location, cchar *name);
 extern void maSetLocationPrefix(MaLocation *location, cchar *uri);
 extern void maSetLocationFlags(MaLocation *location, int flags);
+extern void maAddLocationExpiry(MaLocation *location, MprTime when, cchar *mimeTypes);
 
 /*********************************** MaAlias **********************************/
 /**
@@ -714,7 +728,6 @@ typedef struct MaHost {
     MprHashTable    *mimeTypes;             /**< Hash table of mime types (key is extension) */
     MprTime         now;                    /**< When was the current date last computed */
     char            *currentDate;           /**< Date string for HTTP response headers */
-    char            *expiresDate;           /**< Convenient expiry date (1 day advanced) */
 
 #if BLD_FEATURE_MULTITHREAD
     MprMutex        *mutex;
@@ -1304,6 +1317,16 @@ typedef struct MaStage {
     int             (*parse)(MaHttp *http, cchar *key, char *value, MaConfigState *state);
 
     /**
+     *  Modify a request
+     *  @description This method is invoked to potentially modify a request. 
+     *  @param conn MaConn connection object
+     *  @param stage Stage object
+     *  @return True if the stage wishes to process this request.
+     *  @ingroup MaStage
+     */
+    bool            (*modify)(struct MaConn *conn, struct MaStage *stage);
+
+    /**
      *  Match a request
      *  @description This method is invoked to see if the stage wishes to handle the request. If a stage denies to
      *      handle a request, it will be removed from the pipeline.
@@ -1544,6 +1567,7 @@ typedef struct MaConn {
     MprTime         started;                /**< When the connection started */
     MprTime         expire;                 /**< When the connection should expire */
     MprTime         time;                   /**< Cached current time */
+    void            *data;                  /**< Connection data for stages */
 
     int             canProceed;             /**< State machine should continue to process the request */
     int             keepAliveCount;         /**< Count of remaining keep alive requests for this connection */
@@ -1816,6 +1840,9 @@ extern void         maSetEtag(MaConn *conn, MprPath *info);
 #define MA_RESP_NO_BODY             0x4     /**< No respose body, only return headers to client */
 #define MA_RESP_HEADERS_CREATED     0x8     /**< Response headers have been created */
 
+typedef cchar *(*MaRedirectCallback)(MaConn *conn, int *code, cchar *uri);
+typedef void (*MaEnvCallback)(MaConn *conn);
+
 /**
  *  Http Response
  *  @description Most of the APIs in the Response group still take a MaConn object as their first parameter. This is
@@ -1859,6 +1886,9 @@ typedef struct MaResponse {
 
     MaRange         *currentRange;          /**< Current range being fullfilled */
     char            *rangeBoundary;         /**< Inter-range boundary */
+
+    MaRedirectCallback redirectCallback;    /**< Redirect callback */
+    MaEnvCallback   envCallback;            /**< SetEnv callback */
 
 } MaResponse;
 
@@ -1985,6 +2015,10 @@ extern void         maSetAccessLog(MaHost *host, cchar *path, cchar *format);
 extern void         maSetLogHost(MaHost *host, MaHost *logHost);
 extern void         maTraceOptions(MaConn *conn);
 extern void         maWriteAccessLogEntry(MaHost *host, cchar *buf, int len);
+extern char         *maMakeFilename(MaConn *conn, MaAlias *alias, cchar *url, bool skipAliasPrefix);
+
+extern void         maSetRedirectCallback(MaConn *conn, MaRedirectCallback redirectCallback);
+extern void         maSetEnvCallback(MaConn *conn, MaEnvCallback envCallback);
 
 /************************************ CGI *************************************/
 

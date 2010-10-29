@@ -99,6 +99,7 @@
     #include    <sys/times.h>
     #include    <sys/utsname.h>
     #include    <sys/uio.h>
+    #include    <sys/un.h>
     #include    <sys/wait.h>
     #include    <unistd.h>
 #if LINUX && !__UCLIBC__
@@ -216,6 +217,7 @@
     #include    <sys/times.h>
     #include    <sys/types.h>
     #include    <sys/uio.h>
+    #include    <sys/un.h>
     #include    <sys/utsname.h>
     #include    <sys/wait.h>
     #include    <unistd.h>
@@ -271,6 +273,7 @@
     #include    <sys/wait.h>
     #include    <sys/mman.h>
     #include    <sys/sysctl.h>
+    #include    <sys/un.h>
     #include    <unistd.h>
     #include    <poll.h>
 #if BLD_FEATURE_FLOATING_POINT
@@ -1465,6 +1468,7 @@ struct  Mpr;
 struct  MprBlk;
 struct  MprBuf;
 struct  MprCond;
+struct  MprCmd;
 struct  MprDispatcher;
 struct  MprEvent;
 struct  MprFile;
@@ -1488,6 +1492,9 @@ struct  MprThreadService;
 struct  MprWorker;
 struct  MprWorkerService;
 #endif
+
+
+#undef UNUSED
 
 /**
  *  Standard MPR return and error codes
@@ -1598,6 +1605,16 @@ struct  MprWorkerService;
  *  @ingroup Mpr
  */
 extern void mprBreakpoint();
+
+#if BLD_DEBUG && DEBUG_IDE
+    #if BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64
+        #if BLD_WIN_LIKE
+            #define BREAKPOINT __asm { int 3 };
+        #else
+            #define BREAKPOINT asm("int $03");
+        #endif
+    #endif
+#endif
 
 #if BLD_FEATURE_ASSERT
     #define mprAssert(C)    if (C) ; else mprStaticAssert(MPR_LOC, #C)
@@ -1897,6 +1914,8 @@ extern char *mprStrnstr(cchar *str, cchar *pattern, int len);
  *  @ingroup MprString
  */
 extern int mprStrcmp(cchar *str1, cchar *str2);
+extern int mprStrcmpCount(cchar *str1, cchar *str2, int len);
+extern int mprStrStartsWith(cchar *str1, cchar *str2);
 
 /**
  *  Compare strings ignoring case.
@@ -1941,7 +1960,6 @@ extern int mprStrlen(cchar *src, int max);
  *  @ingroup MprString
  */
 extern char *mprStrLower(char *str);
-
 
 /**
  *  Convert a string to upper case.
@@ -3916,6 +3934,7 @@ extern int mprSearchForModule(MprCtx ctx, cchar *module, char **path);
  *  @ingroup MprModule
  */
 extern MprModule *mprLookupModule(MprCtx ctx, cchar *name);
+extern void *mprLookupModuleData(MprCtx ctx, cchar *name);
 
 /**
  *  Unload a module
@@ -3965,6 +3984,7 @@ typedef struct MprEvent {
 
 #define MPR_DISPATCHER_WAIT_EVENTS      0x1
 #define MPR_DISPATCHER_WAIT_IO          0x2
+#define MPR_DISPATCHER_DO_EVENT         0x4
 
 /*
  *  Event Dispatcher
@@ -5522,6 +5542,8 @@ typedef struct MprSocketProvider {
 } MprSocketProvider;
 
 
+typedef int (*MprSocketPrebind)(struct MprSocket *sock);
+
 /*
  *  Mpr socket service class
  */
@@ -5533,6 +5555,7 @@ typedef struct MprSocketService {
 
     MprSocketProvider *standardProvider;
     MprSocketProvider *secureProvider;
+    MprSocketPrebind prebind;                   /**< Pre-bind callback */
 
 #if BLD_FEATURE_MULTITHREAD
     MprMutex        *mutex;
@@ -5601,8 +5624,7 @@ extern int mprSetMaxSocketClients(MprCtx ctx, int max);
  */
 typedef struct MprSocket {
     MprSocketService *service;          /**< Socket service */
-    MprSocketAcceptProc
-                    acceptCallback;     /**< Accept callback */
+    MprSocketAcceptProc acceptCallback;     /**< Accept callback */
     void            *acceptData;        /**< User accept callback data */
     int             currentEvents;      /**< Mask of ready events (FD_x) */
     int             error;              /**< Last error */
@@ -5947,6 +5969,11 @@ extern MprModule *mprLoadSsl(MprCtx ctx, bool lazy);
  */
 extern void mprConfigureSsl(struct MprSsl *ssl);
 #endif
+
+extern int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protocol, struct sockaddr **addr, 
+    socklen_t *addrlen);
+extern int mprAcceptProc(MprSocket *listen, int mask);
+extern void mprSetSocketPrebindCallback(MprCtx ctx, MprSocketPrebind callback);
 
 #if BLD_FEATURE_MULTITHREAD
 
@@ -6942,6 +6969,17 @@ extern int mprWriteHttpUploadData(MprHttp *http, MprList *formData, MprList *fil
 /* ********************************* MprCmd ************************************/
 #if BLD_FEATURE_CMD
 
+typedef void (*MprForkCallback)(void *arg);
+
+typedef struct MprCmdService {
+    MprList         *cmds;              /* List of all commands */
+#if BLD_FEATURE_MULTITHREAD
+    MprMutex        *mutex;             /* Multithread sync */
+#endif
+} MprCmdService;
+
+extern MprCmdService *mprCreateCmdService(struct Mpr *mpr);
+
 /*
  *  Child status structure. Designed to be async-thread safe.
  */
@@ -6987,6 +7025,7 @@ typedef struct MprCmdFile {
 #endif
 } MprCmdFile;
 
+
 /**
  *  Command execution Service
  *  @description The MprCmd service enables execution of local commands. It uses three full-duplex pipes to communicate
@@ -7008,14 +7047,16 @@ typedef struct MprCmd {
     int             flags;              /* Control flags (userFlags not here) */
     int             eofCount;           /* Count of end-of-files */
     int             requiredEof;        /* Number of EOFs required for an exit */
-    MprTime         timestamp;          /**< Timeout timestamp for last I/O  */
-    int             timeoutPeriod;      /**< Timeout value */
-    int             timedout;           /**< Request has timedout */
+    MprTime         timestamp;          /* Timeout timestamp for last I/O  */
+    int             timeoutPeriod;      /* Timeout value */
+    int             timedout;           /* Request has timedout */
     MprCond         *completeCond;      /* Completion condition */
     MprCmdFile      files[MPR_CMD_MAX_PIPE]; /* Stdin, stdout for the command */
     MprWaitHandler  *handlers[MPR_CMD_MAX_PIPE];
     MprCmdProc      callback;           /* Handler for client output and completion */
     void            *callbackData;
+    MprForkCallback forkCallback;       /* Forked client callback */
+    void            *forkData;
     MprBuf          *stdoutBuf;         /* Standard output from the client */
     MprBuf          *stderrBuf;         /* Standard error output from the client */
     MprTime         lastActivity;       /* Time of last I/O */
@@ -7267,6 +7308,8 @@ extern int mprWriteCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize);
 #define MPR_STARTED                 0x4     /* Mpr services started */
 #define MPR_SSL_PROVIDER_LOADED     0x8     /* SSL provider loaded */
 
+typedef bool (*MprIdleCallback)(MprCtx ctx);
+
 /**
  *  Primary MPR application control structure
  *  @description The Mpr structure stores critical application state information and is the root memory allocation
@@ -7322,7 +7365,9 @@ typedef struct Mpr {
 #endif
 
     struct MprModuleService *moduleService; /**< Module service object */
-    void            *ejsService;            /**< Ejscript service */
+    void                    *ejsService;    /**< Ejscript service */
+    void                    *appwebHttpService; /**< Appweb HTTP service object */
+    MprIdleCallback         idleCallback;   /**< Invoked to determine if the process is idle */
 
 #if BLD_FEATURE_MULTITHREAD
     struct MprThreadService *threadService; /**< Thread service object */
@@ -7435,6 +7480,8 @@ extern void mprSignalExit(MprCtx ctx);
  */
 extern bool mprIsExiting(MprCtx ctx);
 
+extern bool mprIsComplete(MprCtx ctx);
+
 /**
  *  Set the application name, title and version
  *  @param ctx Any memory context allocated by the MPR.
@@ -7463,6 +7510,11 @@ extern void     mprSetDomainName(MprCtx ctx, cchar *s);
 extern cchar    *mprGetDomainName(MprCtx ctx);
 extern void     mprSetIpAddr(MprCtx ctx, cchar *s);
 extern cchar    *mprGetIpAddr(MprCtx ctx);
+
+//  DOC
+extern bool     mprServicesAreIdle(MprCtx ctx);
+extern bool     mprIsIdle(MprCtx ctx);
+MprIdleCallback mprSetIdleCallback(MprCtx ctx, MprIdleCallback idleCallback);
 
 /**
  *  Get the debug mode.

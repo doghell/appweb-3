@@ -4362,6 +4362,7 @@ Mpr *mprCreateEx(int argc, char **argv, MprAllocNotifier cback, void *shell)
     mpr->name = mprStrdup(mpr, BLD_PRODUCT);
     mpr->title = mprStrdup(mpr, BLD_NAME);
     mpr->version = mprStrdup(mpr, BLD_VERSION);
+    mpr->idleCallback = mprServicesAreIdle;
 
     if (mprCreateTimeService(mpr) < 0) {
         goto error;
@@ -4400,6 +4401,9 @@ Mpr *mprCreateEx(int argc, char **argv, MprAllocNotifier cback, void *shell)
         goto error;
     }
     if ((mpr->dispatcher = mprCreateDispatcher(mpr)) == 0) {
+        goto error;
+    }
+    if ((mpr->cmdService = mprCreateCmdService(mpr)) == 0) {
         goto error;
     }
 #if BLD_FEATURE_MULTITHREAD
@@ -4606,6 +4610,49 @@ bool mprIsExiting(MprCtx ctx)
         return 1;
     }
     return mpr->flags & MPR_EXITING;
+}
+
+
+bool mprIsComplete(MprCtx ctx)
+{
+    Mpr *mpr;
+
+    mpr = mprGetMpr(ctx);
+    if (mpr == 0) {
+        return 1;
+    }
+    return (mpr->flags & MPR_EXITING) && mprIsIdle(ctx);
+}
+
+
+/*
+    Just the Mpr services are idle. Use mprIsIdle to determine if the entire process is idle
+ */
+bool mprServicesAreIdle(MprCtx ctx)
+{
+    Mpr     *mpr;
+    
+    mpr = mprGetMpr(ctx);
+    return mprGetListCount(mpr->workerService->busyThreads) == 0 && mprGetListCount(mpr->cmdService->cmds) == 0 && 
+       !(mpr->dispatcher->flags & MPR_DISPATCHER_DO_EVENT);
+}
+
+
+bool mprIsIdle(MprCtx ctx)
+{
+    return (mprGetMpr(ctx)->idleCallback)(ctx);
+}
+
+
+MprIdleCallback mprSetIdleCallback(MprCtx ctx, MprIdleCallback idleCallback)
+{
+    MprIdleCallback old;
+    Mpr             *mpr;
+    
+    mpr = mprGetMpr(ctx);
+    old = mpr->idleCallback;
+    mpr->idleCallback = idleCallback;
+    return old;
 }
 
 
@@ -8392,6 +8439,7 @@ void mprResetBufIfEmpty(MprBuf *bp)
 
 #if BLD_FEATURE_CMD
 
+static void closeFiles(MprCmd *cmd);
 static int  cmdDestructor(MprCmd *cmd);
 static int  makeChannel(MprCmd *cmd, int index);
 static void resetCmd(MprCmd *cmd);
@@ -8407,6 +8455,23 @@ static char **fixenv(MprCmd *cmd);
 typedef int (*MprCmdTaskFn)(int argc, char **argv, char **envp);
 static void cmdTaskEntry(char *program, MprCmdTaskFn entry, int cmdArg);
 #endif
+
+
+MprCmdService *mprCreateCmdService(Mpr *mpr)
+{
+    MprCmdService   *cs;
+
+    cs = (MprCmdService*) mprAllocObjWithDestructorZeroed(mpr, MprCmd, cmdDestructor);
+    if (cs == 0) {
+        return 0;
+    }
+    cs->cmds = mprCreateList(cs);
+#if BLD_FEATURE_MULTITHREAD
+    cs->mutex = mprCreateLock(cs);
+#endif
+    return cs;
+}
+
 
 /*
  *  Create a new command object
@@ -8424,6 +8489,7 @@ MprCmd *mprCreateCmd(MprCtx ctx)
     cmd->completeCond = mprCreateCond(cmd);
     cmd->timeoutPeriod = MPR_TIMEOUT_CMD;
     cmd->timestamp = mprGetTime(cmd);
+    cmd->forkCallback = (MprForkCallback) closeFiles;
 
 #if VXWORKS
     cmd->startCond = semCCreate(SEM_Q_PRIORITY, SEM_EMPTY);
@@ -9640,9 +9706,7 @@ static int startProcess(MprCmd *cmd)
                 close(2);
             }
         }
-        for (i = 3; i < MPR_MAX_FILE; i++) {
-            close(i);
-        }
+        cmd->forkCallback(cmd->forkData);
         if (cmd->env) {
             rc = execve(cmd->program, cmd->argv, fixenv(cmd));
         } else {
@@ -9876,6 +9940,15 @@ static int makeChannel(MprCmd *cmd, int index)
     return 0;
 }
 #endif /* VXWORKS */
+
+
+static void closeFiles(MprCmd *cmd)
+{
+    int     i;
+    for (i = 3; i < MPR_MAX_FILE; i++) {
+        close(i);
+    }
+}
 
 
 #if BLD_UNIX_LIKE
@@ -11277,9 +11350,11 @@ MprEvent *mprCreateEvent(MprDispatcher *dispatcher, MprEventProc proc, int perio
 {
     MprEvent        *event;
 
+#if UNUSED
     if (mprIsExiting(dispatcher)) {
         return 0;
     }
+#endif
     event = mprAllocObjWithDestructor(dispatcher, MprEvent, eventDestructor);
     if (event == 0) {
         return 0;
@@ -11492,8 +11567,8 @@ int mprServiceEvents(MprDispatcher *dispatcher, int timeout, int flags)
                 continue;
             }
         } 
-        if (mprIsExiting(dispatcher)) {
-            return 0;
+        if (mprIsComplete(dispatcher)) {
+            break;
         }
         if (flags & MPR_SERVICE_IO) {
             dispatcher->now = mprGetTime(dispatcher);
@@ -11508,7 +11583,7 @@ int mprServiceEvents(MprDispatcher *dispatcher, int timeout, int flags)
 #endif
         }
         remaining = mprGetRemainingTime(dispatcher, mark, timeout);
-    } while (remaining > 0 && !mprIsExiting(dispatcher) && !(flags & MPR_SERVICE_ONE_THING));
+    } while (remaining > 0 && !mprIsComplete(dispatcher) && !(flags & MPR_SERVICE_ONE_THING));
 
     mprSpinLock(dispatcher->spin);
     dispatcher->flags &= ~MPR_DISPATCHER_WAIT_IO;
@@ -11545,7 +11620,15 @@ void mprDoEvent(MprEvent *event, void *workerThread)
      *  The callback can delete the event. NOTE: callback events MUST NEVER block.
      */
     if (event->proc) {
+        mprSpinLock(dispatcher->spin);
+        dispatcher->flags |= MPR_DISPATCHER_DO_EVENT;
+        mprSpinUnlock(dispatcher->spin);
+
         (*event->proc)(event->data, event);
+
+        mprSpinLock(dispatcher->spin);
+        dispatcher->flags &= ~MPR_DISPATCHER_DO_EVENT;
+        mprSpinUnlock(dispatcher->spin);
     }
 }
 
@@ -11616,7 +11699,6 @@ static void appendEvent(MprEvent *prior, MprEvent *event)
     prior->next->prev = event;
     prior->next = event;
 }
-
 
 
 /*
@@ -16467,6 +16549,17 @@ MprModule *mprLookupModule(MprCtx ctx, cchar *name)
 }
 
 
+void *mprLookupModuleData(MprCtx ctx, cchar *name)
+{
+    MprModule   *module;
+
+    if ((module = mprLookupModule(ctx, name)) == NULL) {
+        return NULL;
+    }
+    return module->moduleData;
+}
+
+
 /*
  *  Update the module search path
  */
@@ -19999,11 +20092,14 @@ int mprInitSelectWait(MprWaitService *ws)
         fcntl(breakSock, F_SETFD, FD_CLOEXEC);
 #endif
         ws->breakAddress.sin_family = AF_INET;
+#if CYGWIN
         /*
             Cygwin doesn't work with INADDR_ANY
          */
-        // ws->breakAddress.sin_addr.s_addr = INADDR_ANY;
         ws->breakAddress.sin_addr.s_addr = inet_addr("127.0.0.1");;
+#else
+        ws->breakAddress.sin_addr.s_addr = INADDR_ANY;
+#endif
         ws->breakAddress.sin_port = htons((short) breakPort);
         rc = bind(breakSock, (struct sockaddr *) &ws->breakAddress, sizeof(ws->breakAddress));
         if (breakSock >= 0 && rc == 0) {
@@ -20382,7 +20478,6 @@ void __dummyMprSelectWait() {}
 #endif
 
 
-static int acceptProc(MprSocket *sp, int mask);
 static MprSocket *acceptSocket(MprSocket *sp, bool invokeCallback);
 static void closeSocket(MprSocket *sp, bool gracefully);
 static int  connectSocket(MprSocket *sp, cchar *host, int port, int initialFlags);
@@ -20390,7 +20485,6 @@ static MprSocket *createSocket(MprCtx ctx, struct MprSsl *ssl);
 static MprSocketProvider *createStandardProvider(MprSocketService *ss);
 static void disconnectSocket(MprSocket *sp);
 static int  flushSocket(MprSocket *sp);
-static int  getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sockaddr **addr, socklen_t *addrlen);
 static int  getSocketIpAddr(MprCtx ctx, struct sockaddr *addr, int addrlen, char *ipAddr, int size, int *port);
 static int  ioProc(MprSocket *sp, int mask);
 static int  listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptProc acceptFn, void *data, int initialFlags);
@@ -20635,16 +20729,15 @@ static int listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptPro
 {
     struct sockaddr     *addr;
     socklen_t           addrlen;
-    int                 datagram, family, rc;
+    int                 datagram, family, protocol, rc;
 
     lock(sp);
 
     if (host == 0 || *host == '\0') {
-        mprLog(sp, 6, "mprSocket: openServer *:%d, flags %x", port, initialFlags);
+        mprLog(sp, 6, "listenSocket: *:%d, flags %x", port, initialFlags);
     } else {
-        mprLog(sp, 6, "mprSocket: openServer %s:%d, flags %x", host, port, initialFlags);
+        mprLog(sp, 6, "listenSocket: %s:%d, flags %x", host, port, initialFlags);
     }
-
     resetSocket(sp);
 
     sp->ipAddr = mprStrdup(sp, host);
@@ -20655,17 +20748,13 @@ static int listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptPro
     sp->flags = (initialFlags &
         (MPR_SOCKET_BROADCAST | MPR_SOCKET_DATAGRAM | MPR_SOCKET_BLOCK |
          MPR_SOCKET_LISTENER | MPR_SOCKET_NOREUSE | MPR_SOCKET_NODELAY | MPR_SOCKET_THREAD));
-
     datagram = sp->flags & MPR_SOCKET_DATAGRAM;
 
-    if (getSocketInfo(sp, host, port, &family, &addr, &addrlen) < 0) {
+    if (mprGetSocketInfo(sp, host, port, &family, &protocol, &addr, &addrlen) < 0) {
         return MPR_ERR_NOT_FOUND;
     }
 
-    /*
-     *  Create the O/S socket
-     */
-    sp->fd = (int) socket(family, datagram ? SOCK_DGRAM: SOCK_STREAM, 0);
+    sp->fd = (int) socket(family, datagram ? SOCK_DGRAM: SOCK_STREAM, protocol);
     if (sp->fd < 0) {
         unlock(sp);
         return MPR_ERR_CANT_OPEN;
@@ -20684,7 +20773,15 @@ static int listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptPro
         setsockopt(sp->fd, SOL_SOCKET, SO_REUSEADDR, (char*) &rc, sizeof(rc));
     }
 #endif
-
+    if (sp->service->prebind) {
+        if ((sp->service->prebind)(sp) < 0) {
+            mprFree(addr);
+            closesocket(sp->fd);
+            sp->fd = -1;
+            unlock(sp);
+            return MPR_ERR_CANT_OPEN;
+        }
+    }
     rc = bind(sp->fd, addr, addrlen);
     if (rc < 0) {
         rc = errno;
@@ -20706,7 +20803,7 @@ static int listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptPro
             return MPR_ERR_CANT_OPEN;
         }
         sp->handlerMask |= MPR_SOCKET_READABLE;
-        sp->handler = mprCreateWaitHandler(sp, sp->fd, MPR_SOCKET_READABLE, (MprWaitProc) acceptProc, sp, 
+        sp->handler = mprCreateWaitHandler(sp, sp->fd, MPR_SOCKET_READABLE, (MprWaitProc) mprAcceptProc, sp, 
             sp->handlerPriority, (sp->flags & MPR_SOCKET_THREAD) ? MPR_WAIT_THREAD : 0);
     }
 
@@ -20749,7 +20846,7 @@ static int connectSocket(MprSocket *sp, cchar *host, int port, int initialFlags)
 {
     struct sockaddr     *addr;
     socklen_t           addrlen;
-    int                 broadcast, datagram, family, rc, err;
+    int                 broadcast, datagram, family, protocol, rc, err;
 
     lock(sp);
 
@@ -20772,7 +20869,7 @@ static int connectSocket(MprSocket *sp, cchar *host, int port, int initialFlags)
     }
     datagram = sp->flags & MPR_SOCKET_DATAGRAM;
 
-    if (getSocketInfo(sp, host, port, &family, &addr, &addrlen) < 0) {
+    if (mprGetSocketInfo(sp, host, port, &family, &protocol, &addr, &addrlen) < 0) {
         err = mprGetSocketError(sp);
         closesocket(sp->fd);
         sp->fd = -1;
@@ -20782,7 +20879,7 @@ static int connectSocket(MprSocket *sp, cchar *host, int port, int initialFlags)
     /*
      *  Create the O/S socket
      */
-    sp->fd = (int) socket(family, datagram ? SOCK_DGRAM: SOCK_STREAM, 0);
+    sp->fd = (int) socket(family, datagram ? SOCK_DGRAM: SOCK_STREAM, protocol);
     if (sp->fd < 0) {
         err = mprGetSocketError(sp);
         unlock(sp);
@@ -20979,7 +21076,7 @@ static void closeSocket(MprSocket *sp, bool gracefully)
 /*
  *  Accept wait handler. May be called directly if single-threaded or on a worker thread.
  */
-static int acceptProc(MprSocket *listen, int mask)
+int mprAcceptProc(MprSocket *listen, int mask)
 {
     if (listen->provider) {
         listen->provider->acceptSocket(listen, 1);
@@ -21193,7 +21290,7 @@ static int writeSocket(MprSocket *sp, void *buf, int bufsize)
 {
     struct sockaddr     *addr;
     socklen_t           addrlen;
-    int                 family, sofar, errCode, len, written;
+    int                 family, protocol, sofar, errCode, len, written;
 
     mprAssert(buf);
     mprAssert(bufsize >= 0);
@@ -21202,7 +21299,7 @@ static int writeSocket(MprSocket *sp, void *buf, int bufsize)
     lock(sp);
 
     if (sp->flags & (MPR_SOCKET_BROADCAST | MPR_SOCKET_DATAGRAM)) {
-        if (getSocketInfo(sp, sp->ipAddr, sp->port, &family, &addr, &addrlen) < 0) {
+        if (mprGetSocketInfo(sp, sp->ipAddr, sp->port, &family, &protocol, &addr, &addrlen) < 0) {
             unlock(sp);
             return MPR_ERR_NOT_FOUND;
         }
@@ -21701,7 +21798,8 @@ int mprGetSocketError(MprSocket *sp)
  *  Get a socket address from a host/port combination. If a host provides both IPv4 and IPv6 addresses, 
  *  prefer the IPv4 address.
  */
-static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sockaddr **addr, socklen_t *addrlen)
+int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protocol, struct sockaddr **addr, 
+    socklen_t *addrlen)
 {
     MprSocketService    *ss;
     struct addrinfo     hints, *res;
@@ -21726,39 +21824,31 @@ static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct 
         hints.ai_flags |= AI_PASSIVE;           /* Bind to 0.0.0.0 and :: */
     }
     hints.ai_socktype = SOCK_STREAM;
+    hints.ai_family = AF_UNSPEC;
 
     mprItoa(portBuf, sizeof(portBuf), port, 10);
 
-    hints.ai_family = AF_INET;
-    res = 0;
-
-    /*
-     *  Try to sleuth the address to avoid duplicate address lookups. Then try IPv4 first then IPv6.
-     */
     rc = -1;
+    res = 0;
     if (host == NULL || strchr(host, ':') == 0) {
         /* 
-         *  Looks like IPv4. Map localhost to 127.0.0.1 to avoid crash bug in MAC OS X.
+            Looks like IPv4. Map localhost to 127.0.0.1 to avoid crash bug in MAC OS X.
          */
         if (host && strcmp(host, "localhost") == 0) {
             host = "127.0.0.1";
         }
-        rc = getaddrinfo(host, portBuf, &hints, &res);
     }
+    rc = getaddrinfo(host, portBuf, &hints, &res);
     if (rc != 0) {
-        hints.ai_family = AF_INET6;
-        rc = getaddrinfo(host, portBuf, &hints, &res);
-        if (rc != 0) {
-            mprUnlock(ss->mutex);
-            return MPR_ERR_CANT_OPEN;
-        }
+        mprUnlock(ss->mutex);
+        return MPR_ERR_CANT_OPEN;
     }
-
     *addr = (struct sockaddr*) mprAllocObjZeroed(ctx, struct sockaddr_storage);
     mprMemcpy((char*) *addr, sizeof(struct sockaddr_storage), (char*) res->ai_addr, (int) res->ai_addrlen);
 
     *addrlen = (int) res->ai_addrlen;
     *family = res->ai_family;
+    *protocol = res->ai_protocol;
 
     freeaddrinfo(res);
     mprUnlock(ss->mutex);
@@ -21767,7 +21857,7 @@ static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct 
 
 
 #elif MACOSX
-static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sockaddr **addr, socklen_t *addrlen)
+int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sockaddr **addr, socklen_t *addrlen)
 {
     MprSocketService    *ss;
     struct hostent      *hostent;
@@ -21820,7 +21910,7 @@ static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct 
 
 #else
 
-static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sockaddr **addr, socklen_t *addrlen)
+int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sockaddr **addr, socklen_t *addrlen)
 {
     MprSocketService    *ss;
     struct sockaddr_in  *sa;
@@ -21831,7 +21921,6 @@ static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct 
     if (sa == 0) {
         return MPR_ERR_NO_MEMORY;
     }
-
     memset((char*) sa, '\0', sizeof(struct sockaddr_in));
     sa->sin_family = AF_INET;
     sa->sin_port = htons((short) (port & 0xFFFF));
@@ -21843,7 +21932,7 @@ static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct 
     }
 
     /*
-     *  gethostbyname is not thread safe
+     *  gethostbyname is not thread safe on some systems
      */
     mprLock(ss->mutex);
     if (sa->sin_addr.s_addr == INADDR_NONE) {
@@ -21874,7 +21963,6 @@ static int getSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct 
     *addrlen = sizeof(struct sockaddr_in);
     *family = sa->sin_family;
     mprUnlock(ss->mutex);
-
     return 0;
 }
 #endif
@@ -22015,6 +22103,11 @@ bool mprIsSocketSecure(MprSocket *sp)
     return sp->sslSocket != 0;
 }
 
+
+void mprSetSocketPrebindCallback(MprCtx ctx, MprSocketPrebind callback)
+{
+    mprGetMpr(ctx)->socketService->prebind = callback;
+}
 
 /*
  *  @copy   default
@@ -22390,6 +22483,42 @@ int mprStrcmp(cchar *str1, cchar *str2)
         return 1;
     }
     return rc;
+}
+
+
+/*
+ *  Case sensitive string comparison. Limited by length
+ */
+int mprStrcmpCount(cchar *str1, cchar *str2, int len)
+{
+    int     rc;
+
+    if (str1 == 0 || str2 == 0) {
+        return -1;
+    }
+    if (str1 == str2) {
+        return 0;
+    }
+
+    for (rc = 0; len-- > 0 && *str1 && rc == 0; str1++, str2++) {
+        rc = *str1 - *str2;
+    }
+    if (rc || len < 0) {
+        return rc;
+    } else if (*str1 == '\0' && *str2 == '\0') {
+        return 0;
+    } else if (*str1 == '\0') {
+        return -1;
+    } else if (*str2 == '\0') {
+        return 1;
+    }
+    return 0;
+}
+
+
+int mprStrStartsWith(cchar *dest, cchar *pat)
+{
+    return mprStrcmpCount(dest, pat, strlen(pat)) == 0;
 }
 
 
@@ -23830,7 +23959,6 @@ MprThreadService *mprCreateThreadService(Mpr *mpr)
         mprFree(ts);
         return 0;
     }
-
     mpr->serviceThread = mpr->mainOsThread = mprGetCurrentOsThread();
     mpr->threadService = ts;
     ts->stackSize = MPR_DEFAULT_STACK;
@@ -23844,12 +23972,6 @@ MprThreadService *mprCreateThreadService(Mpr *mpr)
         return 0;
     }
     ts->mainThread->isMain = 1;
-#if UNUSED
-    if (mprAddItem(ts->threads, ts->mainThread) < 0) {
-        mprFree(ts);
-        return 0;
-    }
-#endif
     return ts;
 }
 
@@ -23956,7 +24078,6 @@ MprThread *mprCreateThread(MprCtx ctx, cchar *name, MprThreadProc entry, void *d
 #if BLD_WIN_LIKE
     tp->threadHandle = 0;
 #endif
-
     if (ts && ts->threads) {
         mprLock(ts->mutex);
         if (mprAddItem(ts->threads, tp) < 0) {
@@ -24576,10 +24697,9 @@ static void pruneWorkers(MprWorkerService *ws, MprEvent *timer)
     MprWorker     *worker;
     int           index, toTrim;
 
-    if (mprIsExiting(ws) || mprGetDebugMode(ws)) {
+    if (mprGetDebugMode(ws)) {
         return;
     }
-
     /*
      *  Prune half of what we could prune. This gives exponentional decay. We use the high water mark seen in 
      *  the last period.
@@ -24698,7 +24818,7 @@ static void workerMain(MprWorker *worker, MprThread *tp)
 
     mprLock(ws->mutex);
 
-    while (!mprIsExiting(worker) && !(worker->state & MPR_WORKER_PRUNED)) {
+    while (!(worker->state & MPR_WORKER_PRUNED)) {
         if (worker->proc) {
             mprUnlock(ws->mutex);
             mprSetThreadPriority(worker->thread, worker->priority);

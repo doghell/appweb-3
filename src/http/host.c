@@ -18,6 +18,7 @@
 #define lock(host) mprLock(host->mutex)
 #define unlock(host) mprUnlock(host->mutex)
 
+static bool appwebIsIdle(MprCtx ctx);
 static int  getRandomBytes(MaHost *host, char *buf, int bufsize);
 static void hostTimer(MaHost *host, MprEvent *event);
 static void updateCurrentDate(MaHost *host);
@@ -34,7 +35,6 @@ MaHost *maCreateHost(MaServer *server, cchar *ipAddrPort, MaLocation *location)
     if (host == 0) {
         return 0;
     }
-
     host->aliases = mprCreateList(host);
     host->dirs = mprCreateList(host);
     host->connections = mprCreateList(host);
@@ -73,6 +73,7 @@ MaHost *maCreateHost(MaServer *server, cchar *ipAddrPort, MaLocation *location)
 #if BLD_FEATURE_MULTITHREAD
     host->mutex = mprCreateLock(host);
 #endif
+    mprSetIdleCallback(host, appwebIsIdle);
     return host;
 }
 
@@ -700,7 +701,6 @@ void maAddConn(MaHost *host, MaConn *conn)
 
 static void updateCurrentDate(MaHost *host)
 {
-    struct tm   tm;
     char        *oldDate;
 
     oldDate = host->currentDate;
@@ -708,10 +708,13 @@ static void updateCurrentDate(MaHost *host)
     host->currentDate = maGetDateString(host, 0);
     mprFree(oldDate);
 
+#if UNUSED
+    struct tm   tm;
     mprDecodeUniversalTime(host, &tm, host->now + (86400 * 1000));
     oldDate = host->expiresDate;
     host->expiresDate = mprFormatTime(host, MPR_HTTP_DATE, &tm);
     mprFree(oldDate);
+#endif
 }
 
 
@@ -726,6 +729,43 @@ void maRemoveConn(MaHost *host, MaConn *conn)
 }
 
 
+static bool appwebIsIdle(MprCtx ctx)
+{
+    MaHost      *host;
+    MaConn      *conn;
+    MaHttp      *http;
+    MprTime     now;
+    int         nextHost, next;
+    static MprTime lastTrace = 0;
+
+    now = mprGetTime(ctx);
+    http = (MaHttp*) mprGetMpr(ctx)->appwebHttpService;
+    for (nextHost = 0; (host = mprGetNextItem(http->defaultServer->hosts, &nextHost)) != 0; ) {
+        lock(host);
+        for (next = 0; (conn = mprGetNextItem(host->connections, &next)) != 0; ) {
+            if (conn->state != MPR_HTTP_STATE_BEGIN) {
+                if (lastTrace < now) {
+                    mprLog(ctx, 0, "Waiting for request %s to complete", 
+                           *conn->request->url ? conn->request->url : conn->request->pathInfo);
+                    lastTrace = now;
+                }
+                unlock(host);
+                return 0;
+            }
+        }
+        unlock(host);
+    }
+    if (!mprServicesAreIdle(ctx)) {
+        if (lastTrace < now) {
+            mprLog(ctx, 0, "Waiting for MPR services complete");
+            lastTrace = now;
+        }
+        return 0;
+    }
+    return 1;
+}
+
+
 MaHostAddress *maCreateHostAddress(MprCtx ctx, cchar *ipAddr, int port)
 {
     MaHostAddress   *hostAddress;
@@ -737,12 +777,10 @@ MaHostAddress *maCreateHostAddress(MprCtx ctx, cchar *ipAddr, int port)
     if (hostAddress == 0) {
         return 0;
     }
-
     hostAddress->flags = 0;
     hostAddress->ipAddr = mprStrdup(hostAddress, ipAddr);
     hostAddress->port = port;
     hostAddress->vhosts = mprCreateList(hostAddress);
-
     return hostAddress;
 }
 

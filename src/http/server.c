@@ -139,6 +139,7 @@ MaHttp *maCreateHttp(MprCtx ctx)
     if (http == 0) {
         return 0;
     }
+    mprGetMpr(ctx)->appwebHttpService = http;
     http->servers = mprCreateList(http);
     http->stages = mprCreateHash(http, 0);
 
@@ -196,7 +197,6 @@ void maAddServer(MaHttp *http, MaServer *server)
 }
 
 
-
 void maSetDefaultServer(MaHttp *http, MaServer *server)
 {
     http->defaultServer = server;
@@ -235,6 +235,13 @@ void *maLookupStageData(MaHttp *http, cchar *name)
 
     stage = (MaStage*) mprLookupHash(http->stages, name);
     return stage->stageData;
+}
+
+
+void maSetForkCallback(MaHttp *http, MprForkCallback callback, void *data)
+{
+    http->forkCallback = callback;
+    http->forkData = data;
 }
 
 
@@ -362,6 +369,12 @@ int maApplyChangedGroup(MaHttp *http)
 }
 
 
+void maSetListenCallback(MaHttp *http, MaListenCallback fn)
+{
+    http->listenCallback = fn;
+}
+
+
 /*
  *  Load a module. Returns 0 if the modules is successfully loaded either statically or dynamically.
  */
@@ -451,9 +464,7 @@ MaServer *maCreateServer(MaHttp *http, cchar *name, cchar *root, cchar *ipAddr, 
         mprAddItem(server->hostAddresses, hostAddress);
     }
     maSetDefaultServer(http, server);
-
     maLoadStaticModules(http);
-
     return server;
 }
 

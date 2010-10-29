@@ -89,6 +89,12 @@ BLD_FEATURE_COMPLETE_NATIVE=1
 BLD_FEATURE_CONFIG=template/standard
 
 #
+#	Name of the config file to use. Defaults to the name of the process, normally appweb.conf. 
+#   Set to a quoted string to override.
+#
+BLD_FEATURE_CONFIG_FILE=0
+
+#
 #	Enable parsing of configuration files
 #
 BLD_FEATURE_CONFIG_PARSE=1
@@ -154,6 +160,12 @@ BLD_FEATURE_ROMFS=0
 #	Run as a service / daemon. Only used by the Appweb program. The MPR does get a bit bigger.
 #
 BLD_FEATURE_RUN_AS_SERVICE=1
+
+#
+#	Name of the server root directory to use. Defaults to the name home directory of the process. 
+#   Set to a quoted string to override.
+#
+BLD_FEATURE_SERVER_ROOT=0
 
 #
 #   Build shared by default. Only enable one of shared or static.

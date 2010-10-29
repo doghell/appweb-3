@@ -81,7 +81,7 @@ $(BLD_BIN_DIR)/$(BLD_PRODUCT)$(BLD_EXE): $(OBJECTS) $(LIBDEP)
 		--libs "$(BLD_APPWEB_LIBS) $(LIBS)" --syslibs "$(SYSLIBS)" $(RES) $(OBJECTS) $(EXTRA_OBJECTS)
 
 #
-#	Patch the appweb.conf configuration file based on the configure --config=dir setting
+#	Copy config files from template and patch
 #
 appweb.conf: ../../buildConfig.make
 	cp -r $(BLD_FEATURE_CONFIG)/* .

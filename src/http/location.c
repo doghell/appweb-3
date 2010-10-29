@@ -20,10 +20,10 @@ MaLocation *maCreateBareLocation(MprCtx ctx)
     if (location == 0) {
         return 0;
     }
-
     location->errorDocuments = mprCreateHash(location, MA_ERROR_HASH_SIZE);
     location->handlers = mprCreateList(location);
     location->extensions = mprCreateHash(location, MA_HANDLER_HASH_SIZE);
+    location->expires = mprCreateHash(location, MA_HANDLER_HASH_SIZE);
     location->inputStages = mprCreateList(location);
     location->outputStages = mprCreateList(location);
 
@@ -33,7 +33,6 @@ MaLocation *maCreateBareLocation(MprCtx ctx)
 #if BLD_FEATURE_AUTH
     location->auth = maCreateAuth(location, 0);
 #endif
-    
     return location;
 }
 
@@ -48,12 +47,10 @@ MaLocation *maCreateLocation(MprCtx ctx, MaLocation *parent)
     if (parent == 0) {
         return maCreateBareLocation(ctx);
     }
-
     location = mprAllocObjZeroed(ctx, MaLocation);
     if (location == 0) {
         return 0;
     }
-    
     location->prefix = mprStrdup(location, parent->prefix);
     location->parent = parent;
     location->prefixLen = parent->prefixLen;
@@ -62,6 +59,7 @@ MaLocation *maCreateLocation(MprCtx ctx, MaLocation *parent)
     location->outputStages = parent->outputStages;
     location->handlers = parent->handlers;
     location->extensions = parent->extensions;
+    location->expires = parent->expires;
     location->connector = parent->connector;
     location->errorDocuments = parent->errorDocuments;
     location->sessionTimeout = parent->sessionTimeout;
@@ -112,13 +110,11 @@ int maAddHandler(MaHttp *http, MaLocation *location, cchar *name, cchar *extensi
         location->extensions = mprCopyHash(location, location->parent->extensions);
         location->handlers = mprDupList(location, location->parent->handlers);
     }
-    
     handler = maLookupStage(http, name);
     if (handler == 0) {
         mprError(http, "Can't find stage %s", name); 
         return MPR_ERR_NOT_FOUND;
     }
-
     if (extensions && *extensions) {
         /*
          *  Add to the handler extension hash
@@ -147,13 +143,11 @@ int maAddHandler(MaHttp *http, MaLocation *location, cchar *name, cchar *extensi
         }
         mprAddItem(location->handlers, handler);
     }
-
     if (extensions && *extensions) {
         mprLog(location, MPR_CONFIG, "Add handler \"%s\" for \"%s\"", name, extensions);
     } else {
         mprLog(location, MPR_CONFIG, "Add handler \"%s\" for \"%s\"", name, location->prefix);
     }
-
     return 0;
 }
 
@@ -171,17 +165,14 @@ int maSetHandler(MaHttp *http, MaHost *host, MaLocation *location, cchar *name)
         location->extensions = mprCopyHash(location, location->parent->extensions);
         location->handlers = mprDupList(location, location->parent->handlers);
     }
-    
     handler = maLookupStage(http, name);
     if (handler == 0) {
         mprError(http, "Can't find handler %s", name); 
         return MPR_ERR_NOT_FOUND;
     }
     location->handler = handler;
-
     mprLog(location, MPR_CONFIG, "SetHandler \"%s\" \"%s\", prefix %s", name, (host) ? host->name: "unknown", 
         location->prefix);
-
     return 0;
 }
 
@@ -262,11 +253,37 @@ int maSetConnector(MaHttp *http, MaLocation *location, cchar *name)
         mprError(http, "Can't find connector %s", name); 
         return MPR_ERR_NOT_FOUND;
     }
-
     location->connector = stage;
     mprLog(location, MPR_CONFIG, "Set connector \"%s\"", name);
-
     return 0;
+}
+
+
+void maAddLocationExpiry(MaLocation *location, MprTime when, cchar *mimeTypes)
+{
+    char    *types, *mime, *tok;
+
+    if (mimeTypes && *mimeTypes) {
+        if (mprGetParent(location->expires) == location->parent) {
+            location->expires = mprCopyHash(location, location->parent->expires);
+        }
+        types = mprStrdup(location, mimeTypes);
+        mime = mprStrTok(types, " ,\t\r\n", &tok);
+        while (mime) {
+            mprAddHash(location->expires, mime, ITOP(when));
+            mime = mprStrTok(0, " \t\r\n", &tok);
+        }
+        mprFree(types);
+    }
+}
+
+
+void maResetHandlers(MaLocation *location)
+{
+    if (mprGetParent(location->handlers) == location) {
+        mprFree(location->handlers);
+    }
+    location->handlers = mprCreateList(location);
 }
 
 
