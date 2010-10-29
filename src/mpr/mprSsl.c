@@ -5624,7 +5624,7 @@ extern int mprSetMaxSocketClients(MprCtx ctx, int max);
  */
 typedef struct MprSocket {
     MprSocketService *service;          /**< Socket service */
-    MprSocketAcceptProc acceptCallback;     /**< Accept callback */
+    MprSocketAcceptProc acceptCallback; /**< Accept callback */
     void            *acceptData;        /**< User accept callback data */
     int             currentEvents;      /**< Mask of ready events (FD_x) */
     int             error;              /**< Last error */
@@ -9672,12 +9672,10 @@ static int configureCertificates(MprSsl *ssl, SSL_CTX *ctx, char *key, char *cer
     if (cert == 0) {
         return 0;
     }
-
     if (cert && SSL_CTX_use_certificate_chain_file(ctx, cert) <= 0) {
         mprError(ssl, "OpenSSL: Can't define certificate file: %s", cert); 
         return -1;
     }
-
     key = (key == 0) ? cert : key;
     if (key) {
         if (SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM) <= 0) {

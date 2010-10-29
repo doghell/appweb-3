@@ -4617,11 +4617,12 @@ typedef struct EjsWeb {
     void            *handle;        /* Web server connection/request handle */
     EjsWebControl   *control;       /* Pointer to control block */
     cchar           *url;           /* App relative url: /controller/action. Starts with "/"  */
+#if UNUSED
     char            *searchPath;
     char            *baseUrl;
     char            *baseDir;
+#endif
     int             flags;          /* Control flags */
-
     char            *controllerFile;/* Simple controller file name without path */
     EjsName         controllerName; /* Qualified Controller name (with "Controller" suffix) */
     EjsName         doActionName;   /* Qualified do action function name */

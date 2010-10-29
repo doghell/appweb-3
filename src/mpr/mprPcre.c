@@ -5625,7 +5625,7 @@ extern int mprSetMaxSocketClients(MprCtx ctx, int max);
  */
 typedef struct MprSocket {
     MprSocketService *service;          /**< Socket service */
-    MprSocketAcceptProc acceptCallback;     /**< Accept callback */
+    MprSocketAcceptProc acceptCallback; /**< Accept callback */
     void            *acceptData;        /**< User accept callback data */
     int             currentEvents;      /**< Mask of ready events (FD_x) */
     int             error;              /**< Last error */

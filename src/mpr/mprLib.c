@@ -8478,6 +8478,7 @@ MprCmdService *mprCreateCmdService(Mpr *mpr)
  */
 MprCmd *mprCreateCmd(MprCtx ctx)
 {
+    MprCmdService   *cs;
     MprCmd          *cmd;
     MprCmdFile      *files;
     int             i;
@@ -8503,6 +8504,10 @@ MprCmd *mprCreateCmd(MprCtx ctx)
 #if BLD_FEATURE_MULTITHREAD
     cmd->mutex = mprCreateLock(cmd);
 #endif
+    cs = mprGetMpr(ctx)->cmdService;
+    mprLock(cs->mutex);
+    mprAddItem(cs->cmds, cmd);
+    mprUnlock(cs->mutex);
     return cmd;
 }
 
@@ -8539,10 +8544,16 @@ static void vxCmdDestructor(MprCmd *cmd)
 
 static int cmdDestructor(MprCmd *cmd)
 {
+    MprCmdService   *cs;
+
     resetCmd(cmd);
 #if VXWORKS
     vxCmdDestructor(cmd);
 #endif
+    cs = mprGetMpr(ctx)->cmdService;
+    mprLock(cs->mutex);
+    mprRemoveItem(cs->cmds, cmd);
+    mprUnlock(cs->mutex);
     return 0;
 }
 
@@ -16560,9 +16571,6 @@ void *mprLookupModuleData(MprCtx ctx, cchar *name)
 }
 
 
-/*
- *  Update the module search path
- */
 void mprSetModuleSearchPath(MprCtx ctx, char *searchPath)
 {
     MprModuleService    *ms;
