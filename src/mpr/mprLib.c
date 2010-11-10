@@ -5010,21 +5010,21 @@ static int allocCount = 1;
 
 
 static void allocException(MprBlk *bp, uint size, bool granted);
-static inline void *allocMemory(uint size);
+static void *allocMemory(uint size);
 static void allocError(MprBlk *parent, uint size);
-static inline void freeBlock(Mpr *mpr, MprHeap *heap, MprBlk *bp);
-static inline void freeMemory(MprBlk *bp);
-static inline void initHeap(MprHeap *heap, cchar *name, bool threadSafe);
-static inline void linkBlock(MprBlk *parent, MprBlk *bp);
+static void freeBlock(Mpr *mpr, MprHeap *heap, MprBlk *bp);
+static void freeMemory(MprBlk *bp);
+static void initHeap(MprHeap *heap, cchar *name, bool threadSafe);
+static void linkBlock(MprBlk *parent, MprBlk *bp);
 static void sysinit(Mpr *mpr);
-static void inline unlinkBlock(MprBlk *bp);
+static void unlinkBlock(MprBlk *bp);
 
 #if BLD_FEATURE_VMALLOC
 static MprRegion *createRegion(MprCtx ctx, MprHeap *heap, uint size);
 #endif
 #if BLD_FEATURE_MEMORY_STATS
-static inline void incStats(MprHeap *heap, MprBlk *bp);
-static inline void decStats(MprHeap *heap, MprBlk *bp);
+static void incStats(MprHeap *heap, MprBlk *bp);
+static void decStats(MprHeap *heap, MprBlk *bp);
 #else
 #define incStats(heap, parent, bp)
 #define decStats(heap, bp)
@@ -5842,7 +5842,7 @@ MprBlk *_mprAllocBlock(MprCtx ctx, MprHeap *heap, MprBlk *parent, uint usize)
 /*
  *  Free a block back to a heap
  */
-static inline void freeBlock(Mpr *mpr, MprHeap *heap, MprBlk *bp)
+static void freeBlock(Mpr *mpr, MprHeap *heap, MprBlk *bp)
 {
     int         size;
 #if BLD_FEATURE_VMALLOC
@@ -5977,7 +5977,7 @@ static MprRegion *createRegion(MprCtx ctx, MprHeap *heap, uint usize)
 #endif
 
 
-static inline void linkBlock(MprBlk *parent, MprBlk *bp)
+static void linkBlock(MprBlk *parent, MprBlk *bp)
 {
 #if BLD_FEATURE_MEMORY_VERIFY
     MprBlk      *sibling;
@@ -6004,7 +6004,7 @@ static inline void linkBlock(MprBlk *parent, MprBlk *bp)
 }
 
 
-static inline void unlinkBlock(MprBlk *bp)
+static void unlinkBlock(MprBlk *bp)
 {
     MprBlk      *parent;
 
@@ -6028,7 +6028,7 @@ static inline void unlinkBlock(MprBlk *bp)
 
 
 #if BLD_FEATURE_MEMORY_STATS
-static inline void incStats(MprHeap *heap, MprBlk *bp)
+static void incStats(MprHeap *heap, MprBlk *bp)
 {
     if (unlikely(bp->flags & MPR_ALLOC_IS_HEAP)) {
         heap->reservedBytes += bp->size;
@@ -6046,7 +6046,7 @@ static inline void incStats(MprHeap *heap, MprBlk *bp)
 }
 
 
-static inline void decStats(MprHeap *heap, MprBlk *bp)
+static void decStats(MprHeap *heap, MprBlk *bp)
 {
     mprAssert(bp);
 
@@ -6080,7 +6080,7 @@ static void monitorStack(Mpr *mpr)
 #endif
 
 
-static inline void initHeap(MprHeap *heap, cchar *name, bool threadSafe)
+static void initHeap(MprHeap *heap, cchar *name, bool threadSafe)
 {
     heap->name = name;
     heap->region = 0;
@@ -6565,13 +6565,13 @@ static int mapProt(int flags)
 /*
  *  Actually allocate memory. Just use ordinary malloc. Arenas and slabs will use MapAlloc instead.
  */
-static inline void *allocMemory(uint size)
+static void *allocMemory(uint size)
 {
     return malloc(size);
 }
 
 
-static inline void freeMemory(MprBlk *bp)
+static void freeMemory(MprBlk *bp)
 {
 #if BLD_FEATURE_MEMORY_DEBUG
     int     size;
