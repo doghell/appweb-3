@@ -274,6 +274,7 @@
     #include    <sys/mman.h>
     #include    <sys/sysctl.h>
     #include    <sys/un.h>
+    #include    <uio.h>
     #include    <unistd.h>
     #include    <poll.h>
 #if BLD_FEATURE_FLOATING_POINT

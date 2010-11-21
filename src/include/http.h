@@ -1708,6 +1708,7 @@ typedef struct MaRequest {
     MaAuth          *auth;                  /**< Set to either dir or location auth information */
     MaDir           *dir;                   /**< Best matching dir (PTR only) */
     MaLocation      *location;              /**< Location block */
+    MprHashTable    *requestData;           /**< General request data storage. Users must create hash table if required */
     MprList         *etags;                 /**< Document etag to uniquely identify the document version */
     MprTime         since;                  /**< If-Modified date */
     bool            ifModified;             /**< If-Modified processing requested */

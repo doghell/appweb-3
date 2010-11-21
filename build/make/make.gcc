@@ -203,9 +203,13 @@ _LDPATH			= $(BLD_ABS_LIB_DIR)
 #
 ifneq			($(BLD_OS),VXWORKS)
 ifeq			($(BLD_CC_DYN_LOAD),1)
+ifneq			($(BLD_OS),LINUX)
     _LIBS	    += -ldl
 endif
-_LIBS       	+= -lm
+endif
+ifeq			($(BLD_FEATURE_FLOATING_POINT),1)
+    _LIBS      	+= -lm
+endif
 ifeq 			($(BLD_FEATURE_AUTH_PAM),1)
     _LIBS       += -lpam
 endif

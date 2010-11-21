@@ -86,7 +86,6 @@ MprModule *maEgiHandlerInit(MaHttp *http, cchar *path)
     if (module == 0) {
         return 0;
     }
-
     handler = maCreateHandler(http, "egiHandler", 
         MA_STAGE_GET | MA_STAGE_HEAD | MA_STAGE_POST | MA_STAGE_PUT | MA_STAGE_VARS | MA_STAGE_ENV_VARS | MA_STAGE_VIRTUAL);
     if (handler == 0) {

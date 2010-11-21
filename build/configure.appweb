@@ -54,6 +54,11 @@ manageFeatures()
         BLD_FEATURE_ANGEL=0
     fi
 
+    if [ "$BLD_FEATURE_EJS" = "0" ] ; then
+        BLD_FEATURE_NUM_TYPE_DOUBLE=0
+        BLD_FEATURE_FLOATING_POINT=0
+    fi
+
     if [ "$BLD_FEATURE_NUM_TYPE" = "double" ] ; then
         BLD_FEATURE_FLOATING_POINT=1
         BLD_FEATURE_NUM_TYPE_DOUBLE=1

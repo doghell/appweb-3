@@ -113,3 +113,5 @@ Third Party Components
 5) DTOA (Decimal to Ascii conversion code). This is used in the runtime core. It is licensed by Lucent with a BSD style license.
 6) JQuery and plugins. These optional components may be deployed in client-side browser user interfaces. They are not part of the binary product. JQuery is licensed under an MIT or GPL license. Some plugins have other licenses. 
 
+Contributors have provided other portions of the software that are covered by the Embedthis Contributor license that grants Embedthis sufficient rights to execute this license Agreement.
+

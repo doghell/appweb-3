@@ -205,6 +205,10 @@
  *  a decimal expansion to decide close cases. This logic is only
  *  used for input more than STRTOD_DIGLIM digits long (default 40).
  */
+#if EMBEDTHIS || 1
+    #include    "buildConfig.h"
+#endif
+#if BLD_FEATURE_FLOATING_POINT
 
 #if EMBEDTHIS || 1
     #if WIN
@@ -4288,6 +4292,8 @@ dtoa
 #ifdef __cplusplus
 }
 #endif
+/* EMBEDTHIS */
+#endif /* BLD_FEATURE_FLOATING_POINT */
 /************************************************************************/
 /*
  *  End of file "../src/dtoa.c"
@@ -8550,7 +8556,7 @@ static int cmdDestructor(MprCmd *cmd)
 #if VXWORKS
     vxCmdDestructor(cmd);
 #endif
-    cs = mprGetMpr(ctx)->cmdService;
+    cs = mprGetMpr(cmd)->cmdService;
     mprLock(cs->mutex);
     mprRemoveItem(cs->cmds, cmd);
     mprUnlock(cs->mutex);
@@ -20495,6 +20501,7 @@ static void disconnectSocket(MprSocket *sp);
 static int  flushSocket(MprSocket *sp);
 static int  getSocketIpAddr(MprCtx ctx, struct sockaddr *addr, int addrlen, char *ipAddr, int size, int *port);
 static int  ioProc(MprSocket *sp, int mask);
+static int  ipv6(cchar *ip);
 static int  listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptProc acceptFn, void *data, int initialFlags);
 static int  readSocket(MprSocket *sp, void *buf, int bufsize);
 static int  socketDestructor(MprSocket *sp);
@@ -21810,9 +21817,9 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
     socklen_t *addrlen)
 {
     MprSocketService    *ss;
-    struct addrinfo     hints, *res;
+    struct addrinfo     hints, *res, *r;
     char                portBuf[MPR_MAX_IP_PORT];
-    int                 rc;
+    int                 v6;
 
     mprAssert(ctx);
     mprAssert(host);
@@ -21831,13 +21838,16 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
         host = 0;
         hints.ai_flags |= AI_PASSIVE;           /* Bind to 0.0.0.0 and :: */
     }
+    v6 = ipv6(host);
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_family = AF_UNSPEC;
-
+    if (host) {
+        hints.ai_family = v6 ? AF_INET6 : AF_INET;
+    } else {
+        hints.ai_family = AF_UNSPEC;
+    }
     mprItoa(portBuf, sizeof(portBuf), port, 10);
 
-    rc = -1;
-    res = 0;
+#if UNUSED
     if (host == NULL || strchr(host, ':') == 0) {
         /* 
             Looks like IPv4. Map localhost to 127.0.0.1 to avoid crash bug in MAC OS X.
@@ -21846,17 +21856,35 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
             host = "127.0.0.1";
         }
     }
-    rc = getaddrinfo(host, portBuf, &hints, &res);
-    if (rc != 0) {
+#endif
+    res = 0;
+    if (getaddrinfo(host, portBuf, &hints, &res) != 0) {
         mprUnlock(ss->mutex);
         return MPR_ERR_CANT_OPEN;
     }
+    /*
+        Prefer IPv4 if IPv6 not requested
+     */
+    for (r = res; r; r = r->ai_next) {
+        if (v6) {
+            if (r->ai_family == AF_INET6) {
+                break;
+            }
+        } else {
+            if (r->ai_family == AF_INET) {
+                break;
+            }
+        }
+    }
+    if (r == NULL) {
+        r = res;
+    }
     *addr = (struct sockaddr*) mprAllocObjZeroed(ctx, struct sockaddr_storage);
-    mprMemcpy((char*) *addr, sizeof(struct sockaddr_storage), (char*) res->ai_addr, (int) res->ai_addrlen);
+    mprMemcpy((char*) *addr, sizeof(struct sockaddr_storage), (char*) r->ai_addr, (int) r->ai_addrlen);
 
-    *addrlen = (int) res->ai_addrlen;
-    *family = res->ai_family;
-    *protocol = res->ai_protocol;
+    *addrlen = (int) r->ai_addrlen;
+    *family = r->ai_family;
+    *protocol = r->ai_protocol;
 
     freeaddrinfo(res);
     mprUnlock(ss->mutex);
@@ -22007,6 +22035,24 @@ static int getSocketIpAddr(MprCtx ctx, struct sockaddr *addr, int addrlen, char 
 }
 
 
+static int ipv6(cchar *ip)
+{
+    cchar   *cp;
+    int     colons;
+
+    if (ip == 0 || *ip == 0) {
+        return 0;
+    }
+    colons = 0;
+    for (cp = (char*) ip; ((*cp != '\0') && (colons < 2)) ; cp++) {
+        if (*cp == ':') {
+            colons++;
+        }
+    }
+    return colons >= 2;
+}
+
+
 /*
  *  Parse ipAddrPort and return the IP address and port components. Handles ipv4 and ipv6 addresses. When an ipAddrPort
  *  contains an ipv6 port it should be written as
@@ -22019,24 +22065,15 @@ int mprParseIp(MprCtx ctx, cchar *ipAddrPort, char **ipAddrRef, int *port, int d
 {
     char    *ipAddr;
     char    *cp;
-    int     colonCount;
 
     ipAddr = NULL;
     if (defaultPort < 0) {
         defaultPort = 80;
     }
-
-    /*
-     * First check if ipv6 or ipv4 address by looking for > 1 colons.
-     */
-    colonCount = 0;
-    for (cp = (char*) ipAddrPort; ((*cp != '\0') && (colonCount < 2)) ; cp++) {
-        if (*cp == ':') {
-            colonCount++;
-        }
+    if ((cp = strstr(ipAddrPort, "://")) != 0) {
+        ipAddrPort = &cp[3];
     }
-
-    if (colonCount > 1) {
+    if (ipv6(ipAddrPort)) {
         /*
          *  IPv6. If port is present, it will follow a closing bracket ']'
          */

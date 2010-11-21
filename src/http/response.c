@@ -76,7 +76,6 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
     if (req->method ==  MA_REQ_TRACE || req->method == MA_REQ_OPTIONS) {
         maTraceOptions(conn);
     }
-
     mprPutStringToBuf(buf, req->httpProtocol);
     mprPutCharToBuf(buf, ' ');
     mprPutIntToBuf(buf, resp->code);

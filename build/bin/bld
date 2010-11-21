@@ -939,8 +939,8 @@ else
                 INSTALL_NAME="-install_name @rpath/`basename $SHARED_LIBRARY`"
             fi
             run "${LINKER}" -o ${SHARED_LIBRARY} ${SONAME_SWITCH} ${INSTALL_NAME} ${DSO} ${LOBJS} ${MAKE_LDFLAGS} \
-                ${MAKE_CFLAGS} ${_CFLAGS} ${BLD_CFLAGS} ${_LDFLAGS} ${LINK_LIBRARY_PATHS} -L${_LDPATH} ${RPATH} ${LIB_LIST} \
-                ${STND_LIBS}
+                ${BLD_LDFLAGS} ${_LDFLAGS} ${MAKE_CFLAGS} ${_CFLAGS} ${BLD_CFLAGS} ${LINK_LIBRARY_PATHS} \
+                -L${_LDPATH} ${RPATH} ${LIB_LIST} ${STND_LIBS}
             if [ $? != 0 ] ; then
                 echo "bld: $LINKER failed"
                 log "DETAILS" `traceArgs $ARGS`

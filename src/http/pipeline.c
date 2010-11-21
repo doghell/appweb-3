@@ -56,10 +56,12 @@ void maMatchHandler(MaConn *conn)
     mprAssert(location);
     req->auth = location->auth;
 
+#if UNUSED
     if (conn->requestFailed || conn->request->method & (MA_REQ_OPTIONS | MA_REQ_TRACE)) {
         handler = conn->http->passHandler;
         return;
     }
+#endif
     if (modifyRequest(conn)) {
         return;
     }
@@ -83,10 +85,19 @@ void maMatchHandler(MaConn *conn)
             }
         }
     } while (handler && rescan && loopCount-- > 0);
+
     if (handler == 0) {
         maFailRequest(conn, MPR_HTTP_CODE_BAD_METHOD, "Requested method %s not supported for URL: %s", 
             req->methodName, req->url);
         handler = conn->http->passHandler;
+
+    } else if (req->method & (MA_REQ_OPTIONS | MA_REQ_TRACE)) {
+        if ((req->flags & MA_REQ_OPTIONS) != !(handler->flags & MA_STAGE_OPTIONS)) {
+            handler = conn->http->passHandler;
+
+        } else if ((req->flags & MA_REQ_TRACE) != !(handler->flags & MA_STAGE_TRACE)) {
+            handler = conn->http->passHandler;
+        }
     }
     resp->handler = handler;
     mprLog(resp, 4, "Select handler: \"%s\" for \"%s\"", handler->name, req->url);
