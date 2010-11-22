@@ -1345,6 +1345,30 @@ cchar *maGetQueryString(MaConn *conn)
 }
 
 
+void maSetStageData(MaConn *conn, cchar *key, cvoid *data)
+{
+    MaRequest      *req;
+
+    req = conn->request;
+    if (req->requestData == 0) {
+        req->requestData = mprCreateHash(conn, -1);
+    }
+    mprAddHash(req->requestData, key, data);
+}
+
+
+cvoid *maGetStageData(MaConn *conn, cchar *key)
+{
+    MaRequest      *req;
+
+    req = conn->request;
+    if (req->requestData == 0) {
+        return NULL;
+    }
+    return mprLookupHash(req->requestData, key);
+}
+
+
 /*
  *  @copy   default
  *
