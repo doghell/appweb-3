@@ -21,7 +21,7 @@ defineComponent() {
 
 setCompilerOptions()
 {
-    local out file cc cpu file hasGcc hasStackProtector hasMtune hasDynLoad tune
+    local out file cc cpu file hasGcc hasStackProtector hasMtune hasDynLoad tune flags
 
     eval os=\$BLD_${KIND}_OS
     eval cc=\$CFG_${KIND}_CC
@@ -35,6 +35,10 @@ setCompilerOptions()
     eval hasCygwin=\${KIND}_HAS_CYGWIN
     eval hasDiab=\${KIND}_HAS_DIAB
     eval hasWarnUnused=\${KIND}_HAS_WARN_UNUSED
+    eval flags=\"\$BLD_${KIND}_CFLAGS \$BLD_${KIND}_DFLAGS \$BLD_${KIND}_IFLAGS \$BLD_${KIND}_LDFLAGS\"
+    if [ $os = MACOSX -a "${flags}" = "${flags/-arch/}" ] ; then
+        flags="$flags -arch $cpu"
+    fi
 
     eval $hasStackProtector=0
     eval $hasMtune=0
@@ -64,11 +68,11 @@ setCompilerOptions()
 		eval tune=\$BLD_${KIND}_CFLAGS
 		tune=`echo $tune | sed 's/.*-mtune=//' | sed 's/ .*//'`
 		tune=${tune:=generic}
-        "${cc}" -arch ${cpu} -mtune=$tune -c $file >/dev/null 2>&1
+        eval \"${cc}\" -mtune=$tune -c $file >/dev/null 2>&1
         if [ $? = 0 ] ; then
             eval $hasMtune=1
 		else
-			"${cc}" -arch ${cpu} -mtune=${cpu} -c $file >/dev/null 2>&1
+			eval \"${cc}\" -mtune=${cpu} -c $file >/dev/null 2>&1
 			if [ $? = 0 ] ; then
 				eval $hasMtune=1
 			fi
@@ -79,9 +83,9 @@ setCompilerOptions()
         #
         if [ "$verbose" != 0 ] ; then
             echo -e "    Checking for compiler -fno-stack-protector support"
-            # echo -e "        ${cc}" -arch ${cpu} -fno-stack-protector -c $file "\n"
+            # echo -e "        ${cc}" -fno-stack-protector -c $file "\n"
         fi
-        "${cc}" -arch ${cpu} -fno-stack-protector -c $file >/dev/null 2>&1
+        eval \"${cc}\" -fno-stack-protector -c $file >/dev/null 2>&1
         if [ $? = 0 ] ; then
             eval $hasStackProtector=1
         fi
@@ -91,9 +95,9 @@ setCompilerOptions()
         #
         if [ "$verbose" != 0 ] ; then
             echo -e "    Checking for compiler -Wno-unused-result support"
-            # echo -e "        ${cc}" -arch ${cpu} -Wno-unused-result -c $file "\n"
+            # echo -e "        ${cc}" -Wno-unused-result -c $file "\n"
         fi
-        "${cc}" -arch ${cpu} -Wno-unused-result -c $file >/dev/null 2>&1
+        eval \"${cc}\" -Wno-unused-result -c $file >/dev/null 2>&1
         if [ $? = 0 ] ; then
             eval $hasWarnUnused=1
         fi
@@ -104,10 +108,10 @@ setCompilerOptions()
             #
             if [ "$verbose" != 0 ] ; then
                 echo -e "    Checking for fork()"
-                # echo -e "        ${cc}" -arch ${cpu} -o $out -c $file "\n"
+                # echo -e "        ${cc}" -o $out -c $file "\n"
             fi
             echo -e "#include <stdio.h>\nint main() { fork(); return 0; }\n" >$file
-            "${cc}" -arch ${cpu} -o $out $file >/dev/null 2>&1
+            eval \"${cc}\" $flags -o $out $file >/dev/null 2>&1
             if [ $? = 0 ] ; then
                 eval $hasMmu=1
             fi
@@ -117,14 +121,14 @@ setCompilerOptions()
             #
             if [ "$verbose" != 0 ] ; then
                 echo -e "    Checking for dlopen()"
-                # echo "         ${cc}" -arch ${cpu} -o $out -c $file 
+                # echo "         ${cc}" $flags -o $out -c $file 
             fi
             echo -e "#include <stdio.h>\nint main() { dlopen(); return 0; }\n" >$file
-            "${cc}" -arch ${cpu} -o $out $file >/dev/null 2>&1
+            eval \"${cc}\" $flags -o $out $file >/dev/null 2>&1
             if [ $? = 0 ] ; then
                 eval $hasDynLoad=1
             else
-                "${cc}" -arch ${cpu} -ldl -o $out $file >/dev/null 2>&1
+                eval \"${cc}\" -ldl $flags -o $out $file >/dev/null 2>&1
                 if [ $? = 0 ] ; then
                     eval $hasDynLoad=1
                 fi
@@ -135,10 +139,10 @@ setCompilerOptions()
             #
             if [ "$verbose" != 0 ] ; then
                 echo -e "    Checking for libedit()"
-                # echo "         ${cc}" -arch ${cpu} -o $out -c $file 
+                # echo "         ${cc}" $flags -o $out -c $file 
             fi
             echo -e "#include <histedit.h>\nint main() { history_init(); return 0; }\n" >$file
-            "${cc}" -arch ${cpu} -ledit -lcurses -o $out $file >/dev/null 2>&1
+            eval \"${cc}\" -ledit -lcurses $flags -o $out $file >/dev/null 2>&1
             if [ $? = 0 ] ; then
                 eval $hasLibEdit=1
             fi
@@ -148,10 +152,10 @@ setCompilerOptions()
             #
             if [ "$verbose" != 0 ] ; then
                 echo -e "    Checking for initializers"
-                # echo "         ${cc}" -arch ${cpu} -o $out -c $file 
+                # echo "         ${cc}" $flags -o $out -c $file 
             fi
             echo -e "#include <stdarg.h>\nva_list d = {{0}};\n" >$file
-            "${cc}" -arch ${cpu} -Werror -c -o $out -c $file >/dev/null 2>&1
+            eval \"${cc}\" -Werror -c $flags -o $out -c $file >/dev/null 2>&1
             if [ $? = 0 ] ; then
                 eval $hasDoubleBraces=1
             fi
