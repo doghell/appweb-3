@@ -133,11 +133,12 @@ int maAddHandler(MaHttp *http, MaLocation *location, cchar *name, cchar *extensi
             word = mprStrTok(NULL, " \t\r\n", &tok);
         }
         mprFree(extlist);
+        mprAddItem(location->handlers, handler);
 
     } else {
         if (handler->match == 0) {
             /*
-             *  If a handler provides a custom match() routine, then don't match by extension.
+             *  Only match by extension if the handler does not provide a match() routine
              */
             mprAddHash(location->extensions, "", handler);
         }
