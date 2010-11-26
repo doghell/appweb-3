@@ -45,6 +45,9 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
         maFormatBody(conn, "Bad Request", "Can't serve *.mod files");
         maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Can't server *.mod files");
     }
+    if (req->location->handler != conn->http->ejsHandler && strcmp(ext, "ejs") != 0) {
+        return 0;
+    }
     if (*url == '\0' || strcmp(url, "/") == 0) {
         mprSprintf(urlbuf, sizeof(urlbuf), "%s/web/index.ejs", req->alias->prefix);
         maSetRequestUri(conn, urlbuf);
