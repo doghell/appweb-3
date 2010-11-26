@@ -55,19 +55,13 @@ void maMatchHandler(MaConn *conn)
     location = req->location = maLookupBestLocation(req->host, req->url);
     mprAssert(location);
     req->auth = location->auth;
+    resp->extension = getExtension(conn);
 
-#if UNUSED
-    if (conn->requestFailed || conn->request->method & (MA_REQ_OPTIONS | MA_REQ_TRACE)) {
-        handler = conn->http->passHandler;
-        return;
-    }
-#endif
     if (modifyRequest(conn)) {
         return;
     }
     /*
      *  Get the best (innermost) location block and see if a handler is explicitly set for that location block.
-     *  Possibly rewrite the url and retry.
      */
     loopCount = MA_MAX_REWRITE;
     do {
@@ -87,9 +81,11 @@ void maMatchHandler(MaConn *conn)
     } while (handler && rescan && loopCount-- > 0);
 
     if (handler == 0) {
-        maFailRequest(conn, MPR_HTTP_CODE_BAD_METHOD, "Requested method %s not supported for URL: %s", 
-            req->methodName, req->url);
         handler = conn->http->passHandler;
+        if (!(req->method & (MA_REQ_OPTIONS | MA_REQ_TRACE))) {
+            maFailRequest(conn, MPR_HTTP_CODE_BAD_METHOD, "Requested method %s not supported for URL: %s", 
+                req->methodName, req->url);
+        }
 
     } else if (req->method & (MA_REQ_OPTIONS | MA_REQ_TRACE)) {
         if ((req->flags & MA_REQ_OPTIONS) != !(handler->flags & MA_STAGE_OPTIONS)) {
@@ -486,17 +482,9 @@ static MaStage *findHandlerByExtension(MaConn *conn)
     resp = conn->response;
     location = req->location;
     
-    resp->extension = getExtension(conn);
-#if UNUSED
-    if (resp->filename == 0) {
-        resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
+    if (resp->extension == 0) {
+        resp->extension = getExtension(conn);
     }
-    info = &resp->fileInfo;
-    if (!info->checked) {
-        mprGetPathInfo(conn, resp->filename, info);
-    }
-#endif
-
     if (*resp->extension) {
         handler = maGetHandlerByExtension(location, resp->extension);
         if (checkStage(conn, handler)) {
@@ -508,11 +496,9 @@ static MaStage *findHandlerByExtension(MaConn *conn)
      *  Failed to match by extension, so perform custom handler matching
      */
     for (next = 0; (handler = mprGetNextItem(location->handlers, &next)) != 0; ) {
-        if (handler->match && handler->match(conn, handler, req->url)) {
-            if (checkStage(conn, handler)) {
-                resp->handler = handler;
-                return handler;
-            }
+        if (handler->match && checkStage(conn, handler)) {
+            resp->handler = handler;
+            return handler;
         }
     }
 
