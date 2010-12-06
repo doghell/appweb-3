@@ -20768,7 +20768,6 @@ static int listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptPro
     if (mprGetSocketInfo(sp, host, port, &family, &protocol, &addr, &addrlen) < 0) {
         return MPR_ERR_NOT_FOUND;
     }
-
     sp->fd = (int) socket(family, datagram ? SOCK_DGRAM: SOCK_STREAM, protocol);
     if (sp->fd < 0) {
         unlock(sp);
@@ -21893,7 +21892,8 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
 
 
 #elif MACOSX
-int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sockaddr **addr, socklen_t *addrlen)
+int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protocol, struct sockaddr **addr, 
+    socklen_t *addrlen)
 {
     MprSocketService    *ss;
     struct hostent      *hostent;
@@ -21937,6 +21937,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sock
     mprAssert(hostent);
     *addrlen = len;
     *family = hostent->h_addrtype;
+    *protocol = 0;
     freehostent(hostent);
 
     mprUnlock(ss->mutex);
@@ -21946,7 +21947,8 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sock
 
 #else
 
-int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sockaddr **addr, socklen_t *addrlen)
+int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protocol, struct sockaddr **addr, 
+    socklen_t *addrlen)
 {
     MprSocketService    *ss;
     struct sockaddr_in  *sa;
@@ -21991,6 +21993,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sock
                 mprUnlock(ss->mutex);
                 return MPR_ERR_NOT_FOUND;
             }
+            protocol = AF_INET6;
         }
         memcpy((char*) &sa->sin_addr, (char*) hostent->h_addr_list[0], (size_t) hostent->h_length);
 #endif
@@ -21998,6 +22001,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, struct sock
     *addr = (struct sockaddr*) sa;
     *addrlen = sizeof(struct sockaddr_in);
     *family = sa->sin_family;
+    *protocol = 0;
     mprUnlock(ss->mutex);
     return 0;
 }
