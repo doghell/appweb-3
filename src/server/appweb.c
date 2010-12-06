@@ -539,7 +539,7 @@ static void catchSignal(int signo, siginfo_t *info, void *arg)
         }
 #endif
         mprLog(mpr, 1, "Received signal %d", signo);
-        if (signo == SIGTERM) {
+        if (signo == SIGINT || signo == SIGTERM) {
             mprLog(mpr, 1, "Exiting immediately ...");
             mprTerminate(mpr, 0);
         } else {

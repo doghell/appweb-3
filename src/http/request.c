@@ -577,6 +577,7 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
                     maFailRequest(conn, MPR_HTTP_CODE_RANGE_NOT_SATISFIABLE, "Bad range");
                 }
             } else if (strcmp(key, "REFERER") == 0) {
+                /* NOTE: yes the header is misspelt in the spec */
                 req->referer = value;
             }
             break;

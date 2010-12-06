@@ -25617,11 +25617,6 @@ static void decodeTime(MprCtx ctx, struct tm *tp, MprTime when, bool local)
     tp->tm_yday     = (int) (floorDiv(when, MS_PER_DAY) - daysSinceEpoch(year));
 #endif
     tp->tm_mon      = getMonth(year, tp->tm_yday);
-    if (leapYear(year)) {
-        tp->tm_mday = tp->tm_yday - leapMonthStart[tp->tm_mon] + 1;
-    } else {
-        tp->tm_mday = tp->tm_yday - normalMonthStart[tp->tm_mon] + 1;
-    }
     tp->tm_isdst    = dst != 0;
 #if BLD_UNIX_LIKE && !CYGWIN
     tp->tm_gmtoff   = offset / MS_PER_SEC;
@@ -25638,6 +25633,14 @@ static void decodeTime(MprCtx ctx, struct tm *tp, MprTime when, bool local)
     }
     if (tp->tm_wday < 0) {
         tp->tm_wday += 7;
+    }
+    if (tp->tm_yday < 0) {
+        tp->tm_yday += 365;
+    }
+    if (leapYear(year)) {
+        tp->tm_mday = tp->tm_yday - leapMonthStart[tp->tm_mon] + 1;
+    } else {
+        tp->tm_mday = tp->tm_yday - normalMonthStart[tp->tm_mon] + 1;
     }
     mprAssert(tp->tm_hour >= 0);
     mprAssert(tp->tm_min >= 0);
