@@ -416,17 +416,17 @@ int osInit(Mpr *mpr)
 int checkEnvironment(Mpr *mpr, cchar *program, cchar *home)
 {
 #if BLD_UNIX_LIKE
-    if (unixSecurityChecks(mpr, program, home) < 0) {
-        return -1;
-    }
-#endif
-#if BLD_UNIX_LIKE
     char    *path;
     /*
      *  Ensure the binaries directory is in the path. Used by ejs to run ejsweb from /usr/local/bin
      */
     path = mprStrcat(mpr, -1, "PATH=", getenv("PATH"), ":", mprGetAppDir(mpr), NULL);
     putenv(path);
+#endif
+#if BLD_UNIX_LIKE
+    if (unixSecurityChecks(mpr, program, home) < 0) {
+        return -1;
+    }
 #endif
     return 0;
 }

@@ -103,7 +103,6 @@ int maConfigureServer(MprCtx ctx, MaHttp *http, MaServer *server, cchar *configF
         mprFree(path);
 #endif
     }
-
     return 0;
 }
 

@@ -703,6 +703,8 @@ else
             RPATH_LIST="${BLD_LIB_PREFIX} ${BLD_MOD_PREFIX} $RPATH_LIST"
         fi
         RPATH_LIST="ORIGIN/ ORIGIN/../$libdir ORIGIN/../$moddir $RPATH_LIST"
+    elif [ "$OS" = FREEBSD ] ; then
+        RPATH_LIST="lib modules $RPATH_LIST"
     fi
     if [ "$RPATH_LIST" != "" ] ; then
         if [ "$OS" = "LINUX" ] ; then

@@ -6183,20 +6183,13 @@ EjsFrame *ejsCreateFrame(Ejs *ejs, EjsFunction *src)
     frame->function.block.prev = src->block.prev;
     frame->function.block.traits = src->block.traits;
 
-#if BLD_HAS_UNNAMED_UNIONS
-    frame->function.block.bits = src->block.bits;
-#else
     frame->function.block.numTraits = src->block.numTraits;
     frame->function.block.sizeTraits = src->block.sizeTraits;
     frame->function.block.numInherited = src->block.numInherited;
     frame->function.block.hasScriptFunctions = src->block.hasScriptFunctions;
     frame->function.block.referenced = src->block.referenced;
     frame->function.block.breakCatch = src->block.breakCatch;
-#endif
 
-#if BLD_HAS_UNNAMED_UNIONS
-    frame->function.bits = src->bits;
-#else
     frame->function.numArgs = src->numArgs;
     frame->function.numDefault = src->numDefault;
     frame->function.nextSlot = src->nextSlot;
@@ -6214,7 +6207,7 @@ EjsFrame *ejsCreateFrame(Ejs *ejs, EjsFunction *src)
     frame->function.loading = src->loading;
     frame->function.nativeProc = src->nativeProc;
     frame->function.isFrame = src->isFrame;
-#endif
+
     frame->function.isFrame = 1;
     frame->function.prototype = 0;
     frame->function.properties = 0;

@@ -52,7 +52,7 @@ include		$(BLD_TOP)/build/make.config
 #
 #	These exports may be defined by users make files and are passed to bld
 #
-export 	MAKE_CFLAGS MAKE_DFLAGS MAKE_IFLAGS MAKE_LDFLAGS EXPORT_OBJECTS BUILDING_CROSS TRACE
+export 	MAKE_CFLAGS MAKE_DFLAGS MAKE_IFLAGS MAKE_LDFLAGS EXPORT_OBJECTS BUILDING_CROSS TRACE TEMP
 
 #
 #	Compute the directory path for display purposes
@@ -61,6 +61,7 @@ _DPATH_			?= .
 BUILD_DEPTH     ?= 2
 BUILDING_CROSS 	:= 0
 MAKE			:= $(BLD_MAKE)
+TEMP            ?= /tmp
 ifeq ($(TRACE),)
     MAKEFLAGS   += -s TRACE=0
 endif

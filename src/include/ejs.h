@@ -1733,44 +1733,35 @@ typedef int (*EjsSortFn)(Ejs *ejs, struct EjsVar *p1, struct EjsVar *p2, cchar *
  */
 typedef struct EjsVar {
 #if BLD_DEBUG
-    cchar   *name;                              /**< Name useful when debugging memory allocations */
-    int     seq;                                /**< Unique allocations squence */
+    cchar   *name;                      /**< Name useful when debugging memory allocations */
+    int     seq;                        /**< Unique allocations squence */
 #endif
-    struct EjsType  *type;                      /**< Type of this object (not base type). ie. type for Object is EjsType  */
+    struct EjsType  *type;              /**< Type of this object (not base type). ie. type for Object is EjsType  */
 
-#if BLD_HAS_UNNAMED_UNIONS
-    union {
-        struct {
-#endif
-            uint    builtin           :  1;     /**< Variable is part of the core and is always present */
-            uint    dynamic           :  1;     /**< Object may add properties. Derrived from type */
-            uint    hasGetterSetter   :  1;     /**< Class has getter/setter functions */
-            uint    hasNativeBase     :  1;     /**< Variable has a non-object based native base class */
+    uint    builtin           :  1;     /**< Variable is part of the core and is always present */
+    uint    dynamic           :  1;     /**< Object may add properties. Derrived from type */
+    uint    hasGetterSetter   :  1;     /**< Class has getter/setter functions */
+    uint    hasNativeBase     :  1;     /**< Variable has a non-object based native base class */
 
-            uint    hidden            :  1;     /**< Not enumerable via for/in */
-            uint    isFunction        :  1;     /**< Instance is a function */
-            uint    isObject          :  1;     /**< Instance is an Object */
-            uint    isInstanceBlock   :  1;     /**< Object is a type instance block object */
+    uint    hidden            :  1;     /**< Not enumerable via for/in */
+    uint    isFunction        :  1;     /**< Instance is a function */
+    uint    isObject          :  1;     /**< Instance is an Object */
+    uint    isInstanceBlock   :  1;     /**< Object is a type instance block object */
 
-            uint    isType            :  1;     /**< Instance is a type object */
-            uint    jsonVisited       :  1;     /**< JSON traversal */
-            uint    marked            :  1;     /**< GC marked in use */
-            uint    master            :  1;     /**< Allocated in the master interpreter */
+    uint    isType            :  1;     /**< Instance is a type object */
+    uint    jsonVisited       :  1;     /**< JSON traversal */
+    uint    marked            :  1;     /**< GC marked in use */
+    uint    master            :  1;     /**< Allocated in the master interpreter */
 
-            uint    native            :  1;     /**< Native property backed by C/Java implementation */
-            uint    noPool            :  1;     /**< Object has private allocations and can't be pooled */
-            uint    permanent         :  1;     /**< Object is immune from GC */
-            uint    primitive         :  1;     /**< Variable is primitive and has no properties of any kind */
+    uint    native            :  1;     /**< Native property backed by C/Java implementation */
+    uint    noPool            :  1;     /**< Object has private allocations and can't be pooled */
+    uint    permanent         :  1;     /**< Object is immune from GC */
+    uint    primitive         :  1;     /**< Variable is primitive and has no properties of any kind */
 
-            uint    separateSlots     :  1;     /**< Has a separate memory allocation for slots */
-            uint    survived          :  1;     /**< Object has survived one GC pass */
-            uint    visited           :  1;     /**< Has been traversed */
+    uint    separateSlots     :  1;     /**< Has a separate memory allocation for slots */
+    uint    survived          :  1;     /**< Object has survived one GC pass */
+    uint    visited           :  1;     /**< Has been traversed */
 
-#if BLD_HAS_UNNAMED_UNIONS
-        };
-        int         bits;
-    };
-#endif
 } EjsVar;
 
 /*
@@ -2293,27 +2284,17 @@ typedef struct EjsBlock {
     struct EjsBlock *scopeChain;                    /**< Lexical scope chain for this block */
     struct EjsBlock *prev;                          /**< Previous block in activation chain */
     struct EjsVar   *prevException;                 /**< Previous exception if nested exceptions */
-#if UNUSED || 1
     EjsVar          **stackBase;                    /**< Start of stack in this block */
-#endif
     EjsTrait        *traits;                        /**< Property trait descriptions */
-#if BLD_HAS_UNNAMED_UNIONS
-    union {
-        struct {
-#endif
-            int     numTraits: 16;                  /**< Number of traits */
-            int     sizeTraits: 16;                 /**< Size of traits array */
-            int     numInherited: 16;               /**< Number of inherited traits */
-            uint    dynamicInstance : 1;            /**< Instances may add properties */
-            uint    hasScriptFunctions: 1;          /**< Block has non-native functions requiring namespaces */
-            uint    referenced: 1;                  /**< Block has a reference to it */
-            uint    breakCatch: 1;                  /**< Return, break or continue in a catch block */
-            uint    nobind: 1;                      /**< Don't bind to properties in this block */
-#if BLD_HAS_UNNAMED_UNIONS
-        };
-        int         bits;
-    };
-#endif
+
+    int             numTraits: 16;                  /**< Number of traits */
+    int             sizeTraits: 16;                 /**< Size of traits array */
+    int             numInherited: 16;               /**< Number of inherited traits */
+    uint            dynamicInstance : 1;            /**< Instances may add properties */
+    uint            hasScriptFunctions: 1;          /**< Block has non-native functions requiring namespaces */
+    uint            referenced: 1;                  /**< Block has a reference to it */
+    uint            breakCatch: 1;                  /**< Return, break or continue in a catch block */
+    uint            nobind: 1;                      /**< Don't bind to properties in this block */
 } EjsBlock;
 
 
@@ -2639,43 +2620,34 @@ typedef struct EjsFunction {
     EjsVar          *owner;                 /**< Back reference to original owning block */
     int             slotNum;                /**< Slot number in owner for this function */
 
-#if BLD_HAS_UNNAMED_UNIONS
-    union {
-        struct {
-#endif
-            uint    numArgs: 8;             /**< Count of formal parameters */
-            uint    numDefault: 8;          /**< Count of formal parameters with default initializers */
+    uint            numArgs: 8;             /**< Count of formal parameters */
+    uint            numDefault: 8;          /**< Count of formal parameters with default initializers */
 
-            uint    constructor: 1;         /**< Function is a constructor */
-            uint    getter: 1;              /**< Function is a getter */
-            uint    setter: 1;              /**< Function is a setter */
-            uint    staticMethod: 1;        /**< Function is a static method */
+    uint            constructor: 1;         /**< Function is a constructor */
+    uint            getter: 1;              /**< Function is a getter */
+    uint            setter: 1;              /**< Function is a setter */
+    uint            staticMethod: 1;        /**< Function is a static method */
 
-            uint    hasReturn: 1;           /**< Function has a return stmt */
-            uint    isInitializer: 1;       /**< Function is an initializer function */
-            uint    literalGetter: 1;       /**< Function is in an object literal */
-            uint    override: 1;            /**< Function overrides a base class method */
+    uint            hasReturn: 1;           /**< Function has a return stmt */
+    uint            isInitializer: 1;       /**< Function is an initializer function */
+    uint            literalGetter: 1;       /**< Function is in an object literal */
+    uint            override: 1;            /**< Function overrides a base class method */
 
-            uint    lang: 2;                /**< Language compliance level: ecma|plus|fixed */
-            uint    fullScope: 1;           /**< Closures must capture full scope */
-            uint    rest: 1;                /**< Function has a "..." rest of args parameter */
+    uint            lang: 2;                /**< Language compliance level: ecma|plus|fixed */
+    uint            fullScope: 1;           /**< Closures must capture full scope */
+    uint            rest: 1;                /**< Function has a "..." rest of args parameter */
 
-            uint    loading: 1;             /**< Function is being loaded by the loader */
-            uint    nativeProc: 1;          /**< Function is native procedure */
-            uint    isFrame: 1;             /**< Function is an activation frame */
-            uint    inCatch: 1;             /**< Executing catch block */
+    uint            loading: 1;             /**< Function is being loaded by the loader */
+    uint            nativeProc: 1;          /**< Function is native procedure */
+    uint            isFrame: 1;             /**< Function is an activation frame */
+    uint            inCatch: 1;             /**< Executing catch block */
 
-            /* Word boundary */
+    /* Word boundary */
 
-            uint    inException: 1;         /**< Executing catch/finally exception processing */
-            uint    reserved: 15;           /* Unused */
+    uint            inException: 1;         /**< Executing catch/finally exception processing */
+    uint            reserved: 15;           /* Unused */
 
-            int     nextSlot: 16;           /**< Next multimethod or getter/setter */
-#if BLD_HAS_UNNAMED_UNIONS
-        };
-        int64       bits;
-    };
-#endif
+    int             nextSlot: 16;           /**< Next multimethod or getter/setter */
 } EjsFunction;
 
 #if DOXYGEN

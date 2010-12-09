@@ -10,7 +10,6 @@
 
 #if BLD_FEATURE_DIR
 /********************************** Defines ***********************************/
-
 /*
  *  Handler configuration
  */
@@ -26,7 +25,6 @@ typedef struct Dir {
     char            *sortField;
     int             sortOrder;              /* 1 == ascending, -1 descending */
 } Dir;
-
 
 /****************************** Forward Declarations **************************/
 

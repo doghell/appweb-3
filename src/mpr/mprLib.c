@@ -6205,13 +6205,13 @@ MprAlloc *mprGetAllocStats(MprCtx ctx)
 {
     MprAlloc    *ap;
 
-    ap = &mprGetMpr(ctx)->alloc;
 #if LINUX
     struct rusage   rusage;
     char            buf[1024], *cp;
     int             fd, len;
 
     getrusage(RUSAGE_SELF, &rusage);
+    ap = &mprGetMpr(ctx)->alloc;
     ap->rss = rusage.ru_maxrss;
 
     ap->ram = MAXINT64;
@@ -6233,6 +6233,7 @@ MprAlloc *mprGetAllocStats(MprCtx ctx)
     int             mib[2];
 
     getrusage(RUSAGE_SELF, &rusage);
+    ap = &mprGetMpr(ctx)->alloc;
     ap->rss = rusage.ru_maxrss;
 
     mib[0] = CTL_HW;
@@ -10123,6 +10124,12 @@ int mprWaitForCond(MprCond *cp, int timeout)
 {
     MprTime     now, expire;
     int         rc;
+#if BLD_UNIX_LIKE
+    struct timespec     waitTill;
+    struct timeval      current;
+    int                 usec;
+#endif
+
     rc = 0;
     if (timeout < 0) {
         timeout = MAXINT;
@@ -10131,9 +10138,6 @@ int mprWaitForCond(MprCond *cp, int timeout)
     expire = now + timeout;
 
 #if BLD_UNIX_LIKE
-        struct timespec     waitTill;
-        struct timeval      current;
-        int                 usec;
         gettimeofday(&current, NULL);
         usec = current.tv_usec + (timeout % 1000) * 1000;
         waitTill.tv_sec = current.tv_sec + (timeout / 1000) + (usec / 1000000);
@@ -10210,9 +10214,7 @@ void mprSignalCond(MprCond *cp)
 #elif VXWORKS
         semGive(cp->cv);
 #else
-        int rc;
-        rc = pthread_cond_signal(&cp->cv);
-        mprAssert(rc == 0);
+        pthread_cond_signal(&cp->cv);
 #endif
     }
     mprUnlock(cp->mutex);
@@ -10229,10 +10231,8 @@ void mprResetCond(MprCond *cp)
     semDelete(cp->cv);
     cp->cv = semCCreate(SEM_Q_PRIORITY, SEM_EMPTY);
 #else
-    int rc = pthread_cond_destroy(&cp->cv);
-    mprAssert(rc == 0);
-    rc = pthread_cond_init(&cp->cv, NULL);
-    mprAssert(rc == 0);
+    pthread_cond_destroy(&cp->cv);
+    pthread_cond_init(&cp->cv, NULL);
 #endif
     mprUnlock(cp->mutex);
 }
@@ -15544,6 +15544,9 @@ static int destroySpinLock(MprSpin *lock);
 MprMutex *mprCreateLock(MprCtx ctx)
 {
     MprMutex    *lock;
+#if BLD_UNIX_LIKE
+    pthread_mutexattr_t attr;
+#endif
 
     mprAssert(ctx);
 
@@ -15553,7 +15556,6 @@ MprMutex *mprCreateLock(MprCtx ctx)
     }
 
 #if BLD_UNIX_LIKE
-    pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
     pthread_mutex_init(&lock->cs, &attr);
@@ -15580,8 +15582,6 @@ MprMutex *mprCreateLock(MprCtx ctx)
 
 MprMutex *mprInitLock(MprCtx ctx, MprMutex *lock)
 {
-    mprAssert(ctx);
-
 #if BLD_UNIX_LIKE
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
@@ -15650,6 +15650,9 @@ bool mprTryLock(MprMutex *lock)
 MprSpin *mprCreateSpinLock(MprCtx ctx)
 {
     MprSpin    *lock;
+#if BLD_UNIX_LIKE && !MACOSX
+    pthread_mutexattr_t attr;
+#endif
 
     mprAssert(ctx);
 
@@ -15668,7 +15671,6 @@ MprSpin *mprCreateSpinLock(MprCtx ctx)
     pthread_spin_init(&lock->cs, 0);
 
 #elif BLD_UNIX_LIKE
-    pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
     pthread_mutex_init(&lock->cs, &attr);
@@ -15702,6 +15704,10 @@ MprSpin *mprCreateSpinLock(MprCtx ctx)
  */
 MprSpin *mprInitSpinLock(MprCtx ctx, MprSpin *lock)
 {
+#if BLD_UNIX_LIKE && !MACOSX
+    pthread_mutexattr_t attr;
+#endif
+
     mprAssert(ctx);
 
 #if USE_MPR_LOCK
@@ -15714,7 +15720,6 @@ MprSpin *mprInitSpinLock(MprCtx ctx, MprSpin *lock)
     pthread_spin_init(&lock->cs, 0);
 
 #elif BLD_UNIX_LIKE
-    pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
     pthread_mutex_init(&lock->cs, &attr);
@@ -18189,6 +18194,7 @@ char *mprGetAppPath(MprCtx ctx)
     }
 
 #if MACOSX
+{
     char    path[MPR_MAX_PATH], pbuf[MPR_MAX_PATH];
     uint    size;
     int     len;
@@ -18205,8 +18211,10 @@ char *mprGetAppPath(MprCtx ctx)
     pbuf[len] = '\0';
     mpr->appPath = mprGetAbsPath(ctx, pbuf);
     return mprStrdup(ctx, mpr->appPath);
+}
 
 #elif FREEBSD 
+{
     char    pbuf[MPR_MAX_STRING];
     int     len;
 
@@ -18217,8 +18225,10 @@ char *mprGetAppPath(MprCtx ctx)
      pbuf[len] = '\0';
      mpr->appPath = mprGetAbsPath(ctx, pbuf);
      return mprStrdup(ctx, mpr->appPath);
+}
 
 #elif BLD_UNIX_LIKE 
+{
     char    pbuf[MPR_MAX_STRING], *path;
     int     len;
 
@@ -18236,7 +18246,7 @@ char *mprGetAppPath(MprCtx ctx)
     mprFree(path);
     mpr->appPath = mprGetAbsPath(ctx, pbuf); 
     return mprStrdup(ctx, mpr->appPath);
-
+}
 #elif BLD_WIN_LIKE
 {
     char    path[MPR_MAX_PATH];
