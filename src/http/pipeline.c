@@ -13,7 +13,7 @@
 static char *addIndexToUrl(MaConn *conn, cchar *index);
 static MaStage *checkStage(MaConn *conn, MaStage *stage);
 static char *getExtension(MaConn *conn);
-static MaStage *findHandlerByExtension(MaConn *conn);
+static MaStage *findHandler(MaConn *conn);
 static bool mapToFile(MaConn *conn, MaStage *handler, bool *rescan);
 static bool matchFilter(MaConn *conn, MaFilter *filter);
 static bool modifyRequest(MaConn *conn);
@@ -71,7 +71,7 @@ void maMatchHandler(MaConn *conn)
              *  Didn't find a location block handler, so try to match by extension and by handler match() routines.
              *  This may invoke processDirectory which may redirect and thus require reprocessing -- hence the loop.
              */
-            handler = findHandlerByExtension(conn);
+            handler = findHandler(conn);
         }
         if (handler && !(handler->flags & MA_STAGE_VIRTUAL)) {
             if (!mapToFile(conn, handler, &rescan)) {
@@ -470,12 +470,15 @@ static char *getExtension(MaConn *conn)
  *  Search for a handler by request extension. If that fails, use handler custom matching.
  *  If all that fails, return the catch-all handler (fileHandler)
  */
-static MaStage *findHandlerByExtension(MaConn *conn)
+static MaStage *findHandler(MaConn *conn)
 {
     MaRequest   *req;
     MaResponse  *resp;
     MaStage     *handler;
     MaLocation  *location;
+    MprHash     *hp;
+    cchar       *ext;
+    char        *path, *uri;
     int         next;
 
     req = conn->request;
@@ -485,10 +488,30 @@ static MaStage *findHandlerByExtension(MaConn *conn)
     if (resp->extension == 0) {
         resp->extension = getExtension(conn);
     }
-    if (*resp->extension) {
+    ext = resp->extension;
+    if (*ext) {
         handler = maGetHandlerByExtension(location, resp->extension);
         if (checkStage(conn, handler)) {
             return handler;
+        }
+
+    } else {
+        /*
+            URI has no extension, check if the addition of configured  extensions results in a valid filename.
+         */
+        for (path = 0, hp = 0; (hp = mprGetNextHash(location->extensions, hp)) != 0; ) {
+            handler = (MaStage*) hp->data;
+            if (*hp->key && (handler->flags & MA_STAGE_ADD_EXT)) {
+                path = mprStrcat(resp, -1, resp->filename, ".", hp->key, NULL);
+                if (mprGetPathInfo(conn, path, &resp->fileInfo) == 0) {
+                    mprLog(conn, 5, "findHandler: Adding extension, new path %s\n", path);
+                    resp->filename = path;
+                    uri = mprStrcat(resp, -1, req->url, ".", hp->key, NULL);
+                    maSetRequestUri(conn, uri);
+                    return handler;
+                }
+                mprFree(path);
+            }
         }
     }
 

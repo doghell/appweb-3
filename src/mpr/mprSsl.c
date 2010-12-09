@@ -2664,6 +2664,23 @@ extern void mprInitList(MprList *list);
 extern int mprInsertItemAtPos(MprList *list, int index, cvoid *item);
 
 /**
+ *  Pop an item
+ *  @description Treat the list as a stack and pop the last pushed item
+ *  @param list List pointer returned from mprCreateList.
+ *  @return Returns the last pushed item. If the list is empty, returns NULL.
+ */
+extern cvoid *mprPopItem(MprList *list);
+
+/** 
+ *  Push an item onto the list
+ *  @description Treat the list as a stack and push the last pushed item
+ *  @param list List pointer returned from mprCreateList.
+ *  @return Returns a positive integer list index for the inserted item. If the item cannot be inserted due 
+ *      to a memory allocation failure, -1 is returned
+ */
+extern int mprPushItem(MprList *list, cvoid *item);
+
+/**
  *  Remove an item from the list
  *  @description Search for a specified item and then remove it from the list.
  *      Existing items are not freed, they are only removed from the list.

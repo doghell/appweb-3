@@ -15368,6 +15368,27 @@ void *mprGetPrevItem(MprList *lp, int *next)
 }
 
 
+int mprPushItem(MprList *lp, cvoid *item)
+{
+    return mprAddItem(lp, item);
+}
+
+
+cvoid *mprPopItem(MprList *lp)
+{
+    cvoid   *item;
+    int     index;
+
+    item = NULL;
+    if (lp->length > 0) {
+        index = lp->length - 1;
+        item = mprGetItem(lp, index);
+        mprRemoveItemAtPos(lp, index);
+    }
+    return item;
+}
+
+
 int mprGetListCount(MprList *lp)
 {
     if (lp == 0) {

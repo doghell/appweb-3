@@ -110,65 +110,6 @@ static sapi_module_struct phpSapiBlock = {
 
 /********************************** Code ***************************/
 
-static bool matchPhp(MaConn *conn, MaStage *handler, cchar *url)
-{
-    MaRequest       *req;
-    MaResponse      *resp;
-    MaLocation      *location;
-    MprPath         *info;
-    MprHash         *hp;
-    cchar           *ext;
-    char            *path, *uri;
-
-    req = conn->request;
-    resp = conn->response;
-    info = &resp->fileInfo;
-    location = req->location;
-    ext = resp->extension;
-
-    if (resp->filename == 0) {
-        resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
-    }
-    info = &resp->fileInfo;
-    if (!info->checked) {
-        mprGetPathInfo(conn, resp->filename, info);
-    }
-    if (resp->fileInfo.valid) {
-        if (location->handler == conn->http->phpHandler) {
-            /* PHP selected via SetHandler */
-            return 1;
-        }
-        if (ext[0] && mprLookupHash(location->extensions, ext) == conn->http->phpHandler) {
-            /* PHP selected via AddHandler extension */
-            return 1;
-        }
-    }
-    /*
-        If the URI has no extension and the PHP handler is configured to support the "" extension via AddHandler, 
-        then see if a file exists with any other valid PHP extensions.
-     */
-    if (ext[0] == '\0') {
-        for (path = 0, hp = 0; (hp = mprGetNextHash(location->extensions, hp)) != 0; ) {
-            if (hp->data == conn->http->phpHandler) {
-                if (*hp->key) {
-                    path = mprStrcat(resp, -1, resp->filename, ".", hp->key, NULL);
-                    if (mprGetPathInfo(conn, path, &resp->fileInfo) == 0) {
-                        resp->filename = path;
-                        uri = mprStrcat(resp, -1, req->url, ".", hp->key, NULL);
-                        maSetRequestUri(conn, uri);
-                        return 1;
-                    }
-                    mprFree(path);
-                } else {
-                    return 1;
-                }
-            }
-        }
-    }
-	return 0;
-}
-
-
 static void openPhp(MaQueue *q)
 {
     MaRequest       *req;
@@ -523,13 +464,11 @@ MprModule *maPhpHandlerInit(MaHttp *http, cchar *path)
         return 0;
     }
     handler = maCreateHandler(http, "phpHandler", 
-        MA_STAGE_GET | MA_STAGE_HEAD | MA_STAGE_PUT | MA_STAGE_DELETE | MA_STAGE_POST | MA_STAGE_ENV_VARS | 
-        MA_STAGE_PATH_INFO | MA_STAGE_VERIFY_ENTITY);
+        MA_STAGE_ALL | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO | MA_STAGE_VERIFY_ENTITY | MA_STAGE_ADD_EXT);
     if (handler == 0) {
         mprFree(module);
         return 0;
     }
-    handler->match = matchPhp;
     handler->open = openPhp;
     handler->run = runPhp;
     http->phpHandler = handler;
