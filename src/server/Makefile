@@ -84,7 +84,8 @@ $(BLD_BIN_DIR)/$(BLD_PRODUCT)$(BLD_EXE): $(OBJECTS) $(LIBDEP)
 #	Copy config files from template and patch
 #
 appweb.conf: ../../buildConfig.make
-	(dir=`pwd` ; cd $(BLD_FEATURE_CONFIG) ; find . -type f | egrep -v 'CVS/|RCS/|SCCS/|.svn/' | cpio -pdumv $$dir)
+	(dir=`pwd` ; cd $(BLD_FEATURE_CONFIG) ; find . -type f | \
+		egrep -v 'CVS/|RCS/|SCCS/|.svn/' | cpio -pdum $$dir >/dev/null 2>&1)
 	BLD_CFG_PREFIX=. BLD_WEB_PREFIX=./web BLD_MOD_PREFIX=$(BLD_MOD_DIR) BLD_DOC_PREFIX=../../doc \
 	BLD_SERVER=`hostname` BLD_LOG_PREFIX=./logs BLD_HTTP_PORT=$(BLD_HTTP_PORT) BLD_SSL_PORT=$(BLD_SSL_PORT) \
 	patchAppwebConf appweb.conf conf/hosts/ssl-default.conf conf/log.conf conf/doc.conf

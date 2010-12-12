@@ -6225,8 +6225,7 @@ MprAlloc *mprGetAllocStats(MprCtx ctx)
         }
         close(fd);
     }
-#endif
-#if MACOSX || FREEBSD
+#elif MACOSX || FREEBSD
     struct rusage   rusage;
     int64           ram, usermem;
     size_t          len;
@@ -6251,6 +6250,8 @@ MprAlloc *mprGetAllocStats(MprCtx ctx)
     len = sizeof(usermem);
     sysctl(mib, 2, &usermem, &len, NULL, 0);
     ap->user = usermem;
+#else
+    ap = &mprGetMpr(ctx)->alloc;
 #endif
     return ap;
 }

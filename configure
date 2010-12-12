@@ -1178,6 +1178,11 @@ with() {
             name="${arg%=*}"
             dir="${arg##*=}"
 
+            eval XX_${name}=1 >/dev/null 2>&1
+            if [ $? != 0 ] ; then
+                echo "configure: Bad \"with\" option: with-${name}" >&2
+                exit 255
+            fi
             [ "$dir" = "${arg}" ] && dir=
 
             upperName=`upper ${name}`

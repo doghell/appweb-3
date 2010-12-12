@@ -501,7 +501,7 @@ static MaStage *findHandler(MaConn *conn)
          */
         for (path = 0, hp = 0; (hp = mprGetNextHash(location->extensions, hp)) != 0; ) {
             handler = (MaStage*) hp->data;
-            if (*hp->key && (handler->flags & MA_STAGE_ADD_EXT)) {
+            if (*hp->key && (handler->flags & MA_STAGE_MISSING_EXT)) {
                 path = mprStrcat(resp, -1, resp->filename, ".", hp->key, NULL);
                 if (mprGetPathInfo(conn, path, &resp->fileInfo) == 0) {
                     mprLog(conn, 5, "findHandler: Adding extension, new path %s\n", path);

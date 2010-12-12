@@ -1580,7 +1580,7 @@ extern void maInsertQueue(MaQueue *prev, MaQueue *q);
 #define MA_STAGE_PATH_INFO      0x80000         /**< Always do path info processing */
 #define MA_STAGE_AUTO_DIR       0x100000        /**< Want auto directory redirection */
 #define MA_STAGE_VERIFY_ENTITY  0x200000        /**< Verify the request entity exists */
-#define MA_STAGE_ADD_EXT        0x400000        /**< Add extensions to URI if file exist */
+#define MA_STAGE_MISSING_EXT    0x400000        /**< Handle URIs with missing extensions */
 
 /**
  *  Pipeline Stages

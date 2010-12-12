@@ -1095,7 +1095,7 @@ MprModule *maCgiHandlerInit(MaHttp *http, cchar *path)
         return 0;
     }
     handler = maCreateHandler(http, "cgiHandler", 
-        MA_STAGE_ALL | MA_STAGE_VARS | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO | MA_STAGE_ADD_EXT);
+        MA_STAGE_ALL | MA_STAGE_VARS | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO | MA_STAGE_MISSING_EXT);
     if (handler == 0) {
         mprFree(module);
         return 0;
