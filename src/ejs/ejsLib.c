@@ -28710,7 +28710,7 @@ static char *search(Ejs *ejs, char *filename, int minVersion, int maxVersion)
     char        *path;
 
     if ((path = ejsSearchForModule(ejs, filename, minVersion, maxVersion)) == 0) {
-        mprLog(ejs, 2, "Can't find module file \"%s.mod\" in search path \"%s\"", filename, 
+        mprLog(ejs, 2, "Can't find module file \"%s\" in search path \"%s\"", filename, 
             ejs->ejsPath ? ejs->ejsPath : "");
         ejsThrowReferenceError(ejs,  "Can't find module file \"%s\", min version %d.%d.%d, max version %d.%d.%d", filename, 
             EJS_MAJOR(minVersion), EJS_MINOR(minVersion), EJS_PATCH(minVersion),

@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <html>
 <head>
 </head>

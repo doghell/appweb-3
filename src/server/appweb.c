@@ -60,11 +60,11 @@ MAIN(appweb, int argc, char **argv)
     Mpr         *mpr;
     MaHttp      *http;
     cchar       *ipAddrPort, *documentRoot, *argp, *logSpec;
-    char        *configFile, *ipAddr, *homeDir, *timeText, *ejsPrefix, *ejsPath;
+    char        *configFile, *ipAddr, *homeDir, *timeText, *ejsPrefix, *ejsPath, *changeRoot;
     int         workers, outputVersion, argind, port;
     
     documentRoot = 0;
-    ejsPrefix = ejsPath = 0;
+    changeRoot = ejsPrefix = ejsPath = 0;
     ipAddrPort = 0;
     ipAddr = 0;
     port = -1;
@@ -110,20 +110,7 @@ MAIN(appweb, int argc, char **argv)
             if (argind >= argc) {
                 return printUsage(mpr);
             }
-            homeDir = mprGetAbsPath(mpr, argv[++argind]);
-            if (chdir(homeDir) < 0) {
-                mprPrintfError(mpr, "%s: Can't change directory to %s\n", homeDir);
-                exit(4);
-            }
-            if (chroot(homeDir) < 0) {
-                if (errno == EPERM) {
-                    mprPrintfError(mpr, "%s: Must be super user to use the --chroot option\n", mprGetAppName(mpr));
-                } else {
-                    mprPrintfError(mpr, "%s: Can't change change root directory to %s, errno %d\n",
-                        mprGetAppName(mpr), homeDir, errno);
-                }
-                exit(5);
-            }
+            changeRoot = mprGetAbsPath(mpr, argv[++argind]);
 #endif
 
         } else if (strcmp(argp, "--debug") == 0 || strcmp(argp, "-d") == 0) {
@@ -205,7 +192,6 @@ MAIN(appweb, int argc, char **argv)
         if (configFile == 0) {
             configFile = mprStrcat(mpr, -1, mprGetAppName(mpr), ".conf", NULL);
         }
-        configFile = mprGetAbsPath(mpr, configFile);
         if (!mprPathExists(mpr, configFile, R_OK)) {
             mprPrintfError(mpr, "Can't open config file %s\n", configFile);
             exit(2);
@@ -223,6 +209,24 @@ MAIN(appweb, int argc, char **argv)
         }
 #endif
     }
+#if BLD_UNIX_LIKE
+    if (changeRoot) {
+        homeDir = mprGetAbsPath(mpr, changeRoot);
+        if (chdir(homeDir) < 0) {
+            mprPrintfError(mpr, "%s: Can't change directory to %s\n", homeDir);
+            exit(4);
+        }
+        if (chroot(homeDir) < 0) {
+            if (errno == EPERM) {
+                mprError(mpr, "%s: Must be super user to use the --chroot option\n", mprGetAppName(mpr));
+            } else {
+                mprError(mpr, "%s: Can't change change root directory to %s, errno %d\n",
+                    mprGetAppName(mpr), homeDir, errno);
+            }
+            exit(5);
+        }
+    }
+#endif
 
     homeDir = mprGetCurrentPath(mpr);
     if (checkEnvironment(mpr, argv[0], homeDir) < 0) {
