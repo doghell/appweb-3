@@ -149,6 +149,8 @@ static void runPhp(MaQueue *q)
     MaResponse          *resp;
     MprHash             *hp;
     MaPhp               *php;
+    FILE                *fp;
+    char                shebang[MPR_MAX_STRING];
     zend_file_handle    file_handle;
 
     TSRMLS_FETCH();
@@ -219,10 +221,30 @@ static void runPhp(MaQueue *q)
      */
     file_handle.filename = resp->filename;
     file_handle.free_filename = 0;
-    file_handle.type = ZEND_HANDLE_FILENAME;
     file_handle.opened_path = 0;
 
+#if LOAD_FROM_FILE
+    file_handle.type = ZEND_HANDLE_FILENAME;
+#else
+    file_handle.type = ZEND_HANDLE_FP;
+    if ((fp = fopen(resp->filename, "r")) == NULL) {
+        maFailRequest(conn, MPR_HTTP_CODE_INTERNAL_SERVER_ERROR,  "PHP can't open script");
+        return;
+    }
+    /*
+        Check for shebang and skip
+     */
+    file_handle.handle.fp = fp;
+    shebang[0] = '\0';
+    fgets(shebang, sizeof(shebang), file_handle.handle.fp);
+    if (shebang[0] != '#' || shebang[1] != '!') {
+        fseek(fp, 0L, SEEK_SET);
+    }
+#endif
+
     zend_try {
+        // CG(start_lineno) = 7;
+        // OG(output_start_lineno) = 7;
         php_execute_script(&file_handle TSRMLS_CC);
         if (!SG(headers_sent)) {
             sapi_send_headers(TSRMLS_C);
