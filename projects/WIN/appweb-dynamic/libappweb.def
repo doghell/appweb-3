@@ -13,6 +13,7 @@ EXPORTS
   maAddHost
   maAddListen
   maAddLocation
+  maAddLocationExpiry
   maAddMimeType
   maAddServer
   maAddStandardMimeTypes
@@ -97,6 +98,7 @@ EXPORTS
   maGetNextQueueForService
   maGetQueryString
   maGetQueueRoom
+  maGetStageData
   maInitQueue
   maInitSchedulerQueue
   maInsertAlias
@@ -125,6 +127,7 @@ EXPORTS
   maLookupStage
   maLookupStageData
   maLookupVirtualHost
+  maMakeFilename
   maMakePath
   maMapUriToStorage
   maMatchEtag
@@ -160,9 +163,9 @@ EXPORTS
   maRemoveUsersFromGroup
   maReplaceReferences
   maRequestWriteBlocked
+  maResetHandlers
   maResetPipeline
   maResizePacket
-  maRewriteUri
   maRotateAccessLog
   maRunPipeline
   maRunSimpleWebServer
@@ -187,6 +190,8 @@ EXPORTS
   maSetDirPath
   maSetDocumentRoot
   maSetEntityLength
+  maSetEnvCallback
+  maSetForkCallback
   maSetFormVar
   maSetGroupAcl
   maSetHandler
@@ -201,6 +206,7 @@ EXPORTS
   maSetIntFormVar
   maSetKeepAlive
   maSetKeepAliveTimeout
+  maSetListenCallback
   maSetLocationAuth
   maSetLocationFlags
   maSetLocationPrefix
@@ -210,6 +216,7 @@ EXPORTS
   maSetNamedVirtualHost
   maSetNamedVirtualHostAddress
   maSetNoKeepAlive
+  maSetRedirectCallback
   maSetRequestGroup
   maSetRequestUri
   maSetRequestUser
@@ -217,6 +224,7 @@ EXPORTS
   maSetResponseCode
   maSetResponseMimeType
   maSetServerRoot
+  maSetStageData
   maSetTimeout
   maSetTraceMethod
   maSetVirtualHost

@@ -21,9 +21,11 @@ EXPORTS
   _mprStrndup
   assertTrue
   dtoa
+  floorDiv
   freedtoa
   gethex
   gettimeofday
+  mprAcceptProc
   mprActivateWorker
   mprAddDuplicateHash
   mprAddFileSystem
@@ -58,6 +60,7 @@ EXPORTS
   mprCreateAllocService
   mprCreateBuf
   mprCreateCmd
+  mprCreateCmdService
   mprCreateCond
   mprCreateDiskFileSystem
   mprCreateDispatcher
@@ -220,6 +223,7 @@ EXPORTS
   mprGetSocketError
   mprGetSocketFd
   mprGetSocketFlags
+  mprGetSocketInfo
   mprGetSocketPort
   mprGetStderr
   mprGetStdin
@@ -252,8 +256,10 @@ EXPORTS
   mprInvokeWaitCallback
   mprIsAbsPath
   mprIsCmdRunning
+  mprIsComplete
   mprIsExiting
   mprIsHttpComplete
+  mprIsIdle
   mprIsInfinite
   mprIsNan
   mprIsPathSeparator
@@ -276,6 +282,7 @@ EXPORTS
   mprLookupItem
   mprLookupMimeType
   mprLookupModule
+  mprLookupModuleData
   mprMakeArgv
   mprMakeCmdIO
   mprMakeDir
@@ -302,9 +309,11 @@ EXPORTS
   mprPathExists
   mprPeekc
   mprPollCmdPipes
+  mprPopItem
   mprPrintAllocReport
   mprPrintf
   mprPrintfError
+  mprPushItem
   mprPutBlockToBuf
   mprPutCharToBuf
   mprPutFmtToBuf
@@ -354,6 +363,7 @@ EXPORTS
   mprSendFileToSocket
   mprServiceEvents
   mprServiceWinIO
+  mprServicesAreIdle
   mprSetAllocError
   mprSetAllocLimits
   mprSetAllocNotifier
@@ -386,6 +396,7 @@ EXPORTS
   mprSetHttpRetries
   mprSetHttpTimeout
   mprSetHwnd
+  mprSetIdleCallback
   mprSetInst
   mprSetIpAddr
   mprSetItem
@@ -408,6 +419,7 @@ EXPORTS
   mprSetSocketEventMask
   mprSetSocketMessage
   mprSetSocketNoDelay
+  mprSetSocketPrebindCallback
   mprSetThreadData
   mprSetThreadPriority
   mprSetThreadStackSize
@@ -451,6 +463,7 @@ EXPORTS
   mprStopThreadService
   mprStopWorkerService
   mprStrLower
+  mprStrStartsWith
   mprStrTok
   mprStrTrim
   mprStrUpper
@@ -459,6 +472,7 @@ EXPORTS
   mprStrcmp
   mprStrcmpAnyCase
   mprStrcmpAnyCaseCount
+  mprStrcmpCount
   mprStrcpy
   mprStrcpyCount
   mprStrlen

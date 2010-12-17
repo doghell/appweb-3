@@ -706,7 +706,26 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
         break;
 
     case 'C':
-        if (mprStrcmpAnyCase(key, "CustomLog") == 0) {
+        if (mprStrcmpAnyCase(key, "Chroot") == 0) {
+#if BLD_UNIX_LIKE
+            path = maMakePath(host, mprStrTrim(value, "\""));
+            if (chroot(path) < 0) {
+                if (errno == EPERM) {
+                    mprError(server, "Must be super user to use the --chroot option\n");
+                } else {
+                    mprError(server, "Can't change change root directory to %s, errno %d\n", path, errno);
+                }
+                mprFree(path);
+                return MPR_ERR_BAD_SYNTAX;
+            }
+            mprFree(path);
+            return 1;
+#else
+            mprError(server, "Chroot directive not supported on this operating system\n");
+            return MPR_ERR_BAD_SYNTAX;
+#endif
+
+        } else if (mprStrcmpAnyCase(key, "CustomLog") == 0) {
 #if BLD_FEATURE_ACCESS_LOG && !BLD_FEATURE_ROMFS
             char *format, *end;
             if (*value == '\"') {

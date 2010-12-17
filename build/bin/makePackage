@@ -366,7 +366,6 @@ createEnvelopes() {
         if ! ls *.${fmt} >/dev/null 2>&1 ; then
             continue
         fi
-
         name="${baseName}.${fmt}"
 
         if [ $fmt = exe ] ; then
