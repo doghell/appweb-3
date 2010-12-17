@@ -77,12 +77,22 @@
                 Ejscript <a href="http://github.com/embedthis/ejs-1/issues">issue database</a>.</p>
             <a name="r3.2.3" id="r3.2.3"></a>
             <h2 class="section">Changes in 3.2.3</h2>
+            <h3>Minor Features</h3>
+            <ul>
+                <li>Added <a href="../guide/appweb/users/dir/server.html#chroot">Chroot</a> directive</li>
+                <li>Support filtering shebang lines in PHP scripts</li>
+                <li>Add missing extensions for PHP/CGI requests to allow requests for PHP files without .php extension</li>
+                <li>Support graceful exit</li>
+            </ul>
             <h3>Key Fixes</h3>
             <ul>
                 <li>Fix CGI output parsing when gateways omit headers</li>
                 <li>Bad timezone on HTTP headers in certain locales</li>
                 <li>Potential bad free of connection input buffer</li>
                 <li>Formatted printing of floating point numbers</li>
+                <li>Fixed --chroot switch</li>
+                <li>Ensure handlers match() routine is always invoked if required</li>
+                <li>FreeBSD linking fixes</li>
                 <li>Ejscript: Windows 7 support and VS 10.0</li>
                 <li>Update Ejscript documentation</li>
                 <li>Ejscript: Array.slice with negative indicies</li>
