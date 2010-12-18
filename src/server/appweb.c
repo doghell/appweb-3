@@ -209,6 +209,11 @@ MAIN(appweb, int argc, char **argv)
         }
 #endif
     }
+    homeDir = mprGetCurrentPath(mpr);
+    if (checkEnvironment(mpr, argv[0], homeDir) < 0) {
+        exit(3);
+    }
+
 #if BLD_UNIX_LIKE
     if (changeRoot) {
         homeDir = mprGetAbsPath(mpr, changeRoot);
@@ -227,11 +232,6 @@ MAIN(appweb, int argc, char **argv)
         }
     }
 #endif
-
-    homeDir = mprGetCurrentPath(mpr);
-    if (checkEnvironment(mpr, argv[0], homeDir) < 0) {
-        exit(3);
-    }
 
     /*
      *  Create the top level HTTP service and default HTTP server. Set the initial server root to "."
