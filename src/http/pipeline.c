@@ -109,10 +109,12 @@ static bool modifyRequest(MaConn *conn)
     MaRequest       *req;
     MprPath         *info;
     MprHash         *he;
+    MprList         *handlers;
     int             next;
 
     req = conn->request;
     resp = conn->response;
+    handlers = NULL;
 
     if (resp->filename == 0) {
         resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
@@ -125,19 +127,34 @@ static bool modifyRequest(MaConn *conn)
     if (location) {
         for (next = 0; (handler = mprGetNextItem(location->handlers, &next)) != 0; ) {
             if (handler->modify) {
-                if (handler->modify(conn, handler)) {
-                    return 1;
+                if (handlers == NULL) {
+                    handlers = mprCreateList(location);
+                }
+                if (mprLookupItem(handlers, handler) < 0) {
+                    mprAddItem(handlers, handler);
+                    if (handler->modify(conn, handler)) {
+                        mprFree(handlers);
+                        return 1;
+                    }
                 }
             }
         }
         for (he = 0; (he = mprGetNextHash(location->extensions, he)) != 0; ) {
             handler = (MaStage*) he->data;
             if (handler->modify) {
-                if (handler->modify(conn, handler)) {
-                    return 1;
+                if (handlers == NULL) {
+                    handlers = mprCreateList(location);
+                }
+                if (mprLookupItem(handlers, handler) < 0) {
+                    mprAddItem(handlers, handler);
+                    if (handler->modify(conn, handler)) {
+                        mprFree(handlers);
+                        return 1;
+                    }
                 }
             }
         }
+        mprFree(handlers);
     }
     return 0;
 }
