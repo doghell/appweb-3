@@ -128,7 +128,7 @@ static bool modifyRequest(MaConn *conn)
         for (next = 0; (handler = mprGetNextItem(location->handlers, &next)) != 0; ) {
             if (handler->modify) {
                 if (handlers == NULL) {
-                    handlers = mprCreateList(location);
+                    handlers = mprCreateList(req);
                 }
                 if (mprLookupItem(handlers, handler) < 0) {
                     mprAddItem(handlers, handler);
@@ -143,7 +143,7 @@ static bool modifyRequest(MaConn *conn)
             handler = (MaStage*) he->data;
             if (handler->modify) {
                 if (handlers == NULL) {
-                    handlers = mprCreateList(location);
+                    handlers = mprCreateList(req);
                 }
                 if (mprLookupItem(handlers, handler) < 0) {
                     mprAddItem(handlers, handler);
