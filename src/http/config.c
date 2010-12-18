@@ -601,7 +601,7 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
     MprHash         *hp;
     char            ipAddrPort[MPR_MAX_IP_ADDR_PORT];
     char            *name, *path, *prefix, *cp, *tok, *ext, *mimeType, *url, *newUrl, *extensions, *codeStr, *hostName;
-    char            *items, *include, *exclude;
+    char            *items, *include, *exclude, *when, *mimeTypes;
     int             port, rc, code, processed, num, flags, colonCount, len, mask, level;
 
     mprAssert(state);
@@ -822,7 +822,6 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "Expires") == 0) {
-            char *when, *mimeTypes;
             value = mprStrTrim(value, "\"");
             when = mprStrTok(value, " \t", &mimeTypes);
             maAddLocationExpiry(location, (MprTime) mprAtoi(when, 10), mimeTypes);
