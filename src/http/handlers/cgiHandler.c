@@ -729,17 +729,17 @@ static void buildArgs(MaConn *conn, MprCmd *cmd, int *argcp, char ***argvp)
     argind = 0;
     argc = *argcp;
 
-    if (req->mimeType) {
-        actionProgram = maGetMimeActionProgram(req->host, req->mimeType);
+    if (resp->extension) {
+        actionProgram = maGetMimeActionProgram(req->host, resp->extension);
         if (actionProgram != 0) {
             argc++;
         }
-        /*
-         *  This is an Apache compatible hack for PHP 5.3
-         */
-        mprItoa(status, sizeof(status), MPR_HTTP_CODE_MOVED_TEMPORARILY, 10);
-        mprAddHash(req->headers, "REDIRECT_STATUS", mprStrdup(req, status));
     }
+    /*
+     *  This is an Apache compatible hack for PHP 5.3
+     */
+    mprItoa(status, sizeof(status), MPR_HTTP_CODE_MOVED_TEMPORARILY, 10);
+    mprAddHash(req->headers, "REDIRECT_STATUS", mprStrdup(req, status));
 
     /*
      *  Count the args for ISINDEX queries. Only valid if there is not a "=" in the query. 
