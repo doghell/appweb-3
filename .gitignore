@@ -108,3 +108,4 @@ ino.log
 lib/i386-wrs*
 .embedthis
 target
+src/server/logs
