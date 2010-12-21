@@ -797,7 +797,7 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
     #define EAGAIN          11
 
     /*
-     *  VS 2010 defines these
+     *  VS 2011 defines these
      */
     #ifndef EWOULDBLOCK
     #define EWOULDBLOCK     EAGAIN
@@ -1124,8 +1124,8 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -1148,7 +1148,13 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -1380,8 +1386,8 @@ extern "C" {
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -1404,7 +1410,13 @@ extern "C" {
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -7655,8 +7667,8 @@ extern void freedtoa(char* ptr);
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -7679,7 +7691,13 @@ extern void freedtoa(char* ptr);
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -7841,8 +7859,8 @@ typedef struct MprTestFailure {
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -7865,7 +7883,13 @@ typedef struct MprTestFailure {
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -8377,8 +8401,8 @@ extern int mprCreateMatrixSslModule(MprCtx ctx, bool lazy);
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -8401,7 +8425,13 @@ extern int mprCreateMatrixSslModule(MprCtx ctx, bool lazy);
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -9282,8 +9312,8 @@ void mprMatrixSslModuleDummy() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -9306,7 +9336,13 @@ void mprMatrixSslModuleDummy() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -10340,8 +10376,8 @@ void __mprOpenSslModuleDummy() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -10364,7 +10400,13 @@ void __mprOpenSslModuleDummy() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -10612,8 +10654,8 @@ void mprVerifySslClients(MprSsl *ssl, bool on)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -10636,7 +10678,13 @@ void mprVerifySslClients(MprSsl *ssl, bool on)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*

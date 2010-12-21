@@ -5,7 +5,7 @@
 #   Usage:
 #       import.ksh [--diff] [--dir dir] [--ignore xx] [--patch preserveFeature] [--src dir] [--sync] fileList
 #
-#   Copyright (c) Embedthis Software Inc, 2003-2010. All Rights Reserved.
+#   Copyright (c) Embedthis Software Inc, 2003-2011. All Rights Reserved.
 #
 #   This file is for internal use only when importing shared source code.
 #

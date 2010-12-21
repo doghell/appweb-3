@@ -1,7 +1,7 @@
 #
 #	Makefile for the http server library
 #
-#	Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
+#	Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
 #
 
 PRE_DIRS		:= handlers filters connectors modules

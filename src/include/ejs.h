@@ -217,8 +217,8 @@ extern "C" {
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -241,7 +241,13 @@ extern "C" {
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -475,8 +481,8 @@ typedef enum EjsOpCode {
 #endif
 
 /*
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -777,8 +783,8 @@ extern EjsOptable *ejsGetOptable(MprCtx ctx);
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -801,7 +807,13 @@ extern EjsOptable *ejsGetOptable(MprCtx ctx);
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 
 /************************************************************************/
@@ -1380,8 +1392,8 @@ extern void ejsUnlockVm(Ejs *ejs);
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -1404,7 +1416,13 @@ extern void ejsUnlockVm(Ejs *ejs);
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -4004,8 +4022,8 @@ extern void     ejsSetSqliteTls(MprThreadLocal *tls);
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -4028,7 +4046,13 @@ extern void     ejsSetSqliteTls(MprThreadLocal *tls);
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -4394,8 +4418,8 @@ extern EjsDoc       *ejsCreateDoc(struct Ejs *ejs, EjsBlock *block, int slotNum,
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -4418,7 +4442,13 @@ extern EjsDoc       *ejsCreateDoc(struct Ejs *ejs, EjsBlock *block, int slotNum,
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -4451,8 +4481,8 @@ extern EjsDoc       *ejsCreateDoc(struct Ejs *ejs, EjsBlock *block, int slotNum,
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -4475,7 +4505,13 @@ extern EjsDoc       *ejsCreateDoc(struct Ejs *ejs, EjsBlock *block, int slotNum,
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -4738,8 +4774,8 @@ extern int          ejsWrite(Ejs *ejs, cchar *fmt, ...);
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -4762,7 +4798,13 @@ extern int          ejsWrite(Ejs *ejs, cchar *fmt, ...);
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*

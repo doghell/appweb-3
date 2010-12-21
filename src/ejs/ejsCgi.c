@@ -151,8 +151,8 @@ MAIN(ejsCgiMain, int argc, char **argv)
 
         } else if (strcmp(argp, "--version") == 0 || strcmp(argp, "-V") == 0) {
             mprPrintfError(mpr, "%s %s\n"
-                "Copyright (C) Embedthis Software 2003-2010\n"
-                "Copyright (C) Michael O'Brien 2003-2010\n",
+                "Copyright (C) Embedthis Software 2003-2011\n"
+                "Copyright (C) Michael O'Brien 2003-2011\n",
                BLD_NAME, BLD_VERSION);
             exit(0);
 
@@ -1034,8 +1034,8 @@ static char *makeDateString(MprPath *sbuf)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -1058,5 +1058,11 @@ static char *makeDateString(MprPath *sbuf)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */

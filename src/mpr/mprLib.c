@@ -4861,8 +4861,8 @@ MprLogHandler mprGetLogHandler(MprCtx ctx)
 
 cchar *mprCopyright()
 {
-    return  "Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.\n"
-            "Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.";
+    return  "Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.\n"
+            "Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.";
 }
 
 
@@ -4895,8 +4895,8 @@ static void memoryFailure(MprCtx ctx, int64 size, int64 total, bool granted)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -4919,7 +4919,13 @@ static void memoryFailure(MprCtx ctx, int64 size, int64 total, bool granted)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -6770,8 +6776,8 @@ void mprPrintAllocReport(MprCtx ctx, cchar *msg)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -6794,7 +6800,13 @@ void mprPrintAllocReport(MprCtx ctx, cchar *msg)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 
 /************************************************************************/
@@ -7087,8 +7099,8 @@ void __mprAsyncDummy() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -7111,7 +7123,13 @@ void __mprAsyncDummy() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -7866,8 +7884,8 @@ void __dummyBrew() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -7890,7 +7908,13 @@ void __dummyBrew() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -8397,8 +8421,8 @@ void mprResetBufIfEmpty(MprBuf *bp)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -8421,7 +8445,13 @@ void mprResetBufIfEmpty(MprBuf *bp)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -10012,8 +10042,8 @@ void __mprCmdDummy() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -10036,7 +10066,13 @@ void __mprCmdDummy() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -10313,8 +10349,8 @@ int mprWaitForCondWithService(MprCond *cp, int timeout)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -10337,7 +10373,13 @@ int mprWaitForCondWithService(MprCond *cp, int timeout)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -10862,8 +10904,8 @@ static void decode(uint *output, uchar *input, uint len)
 /*
  *  @copy   custom
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1994-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1994-2011. All Rights Reserved.
  *  Portions Copyright (C) 1991-2, RSA Data Security, Inc. All rights reserved. 
  *  
  *  RSA License:
@@ -10911,7 +10953,13 @@ static void decode(uint *output, uchar *input, uint len)
  *  These notices must be retained in any copies of any part of this
  *  documentation and/or software.
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -11268,8 +11316,8 @@ MprDiskFileSystem *mprCreateDiskFileSystem(MprCtx ctx, cchar *path)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -11292,7 +11340,13 @@ MprDiskFileSystem *mprCreateDiskFileSystem(MprCtx ctx, cchar *path)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 
 /************************************************************************/
@@ -11735,8 +11789,8 @@ static void removeEvent(MprEvent *event)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -11759,7 +11813,13 @@ static void removeEvent(MprEvent *event)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -12292,8 +12352,8 @@ void mprDisableFileBuffering(MprFile *file)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -12316,7 +12376,13 @@ void mprDisableFileBuffering(MprFile *file)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -12467,8 +12533,8 @@ void mprSetPathNewline(MprCtx ctx, cchar *path, cchar *newline)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -12491,7 +12557,13 @@ void mprSetPathNewline(MprCtx ctx, cchar *path, cchar *newline)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -12797,8 +12869,8 @@ static int hashIndex(cchar *key, int size)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -12821,7 +12893,13 @@ static int hashIndex(cchar *key, int size)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -14916,8 +14994,8 @@ static void completeRequest(MprHttp *http)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -14940,7 +15018,13 @@ static void completeRequest(MprHttp *http)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -15510,8 +15594,8 @@ MprKeyValue *mprCreateKeyPair(MprCtx ctx, cchar *key, cchar *value)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -15534,7 +15618,13 @@ MprKeyValue *mprCreateKeyPair(MprCtx ctx, cchar *key, cchar *value)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -15979,8 +16069,8 @@ void __dummyMprLock() {}
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -16003,7 +16093,13 @@ void __dummyMprLock() {}
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -16400,8 +16496,8 @@ int _cmp(char *s1, char *s2)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -16424,7 +16520,13 @@ int _cmp(char *s1, char *s2)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -16725,8 +16827,8 @@ int mprSearchForModule(MprCtx ctx, cchar *name, char **path)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -16749,7 +16851,13 @@ int mprSearchForModule(MprCtx ctx, cchar *name, char **path)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -18304,8 +18412,8 @@ char *mprGetAppDir(MprCtx ctx)
 /*
     @copy   default
     
-    Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
-    Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+    Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+    Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
     
     This software is distributed under commercial and open source licenses.
     You may use the GPL open source license described below or you may acquire 
@@ -18328,6 +18436,12 @@ char *mprGetAppDir(MprCtx ctx)
     for this software and support services are available from Embedthis 
     Software at http://www.embedthis.com 
     
+    Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
     @end
  */
 /************************************************************************/
@@ -18688,8 +18802,8 @@ void __mprDummyPollWait() {}
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -18712,7 +18826,13 @@ void __mprDummyPollWait() {}
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -19744,8 +19864,8 @@ int print(cchar *fmt, ...)
 /*
     @copy   default
     
-    Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
-    Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+    Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+    Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
     
     This software is distributed under commercial and open source licenses.
     You may use the GPL open source license described below or you may acquire 
@@ -19768,6 +19888,12 @@ int print(cchar *fmt, ...)
     for this software and support services are available from Embedthis 
     Software at http://www.embedthis.com 
     
+    Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
     @end
  */
 
@@ -20057,8 +20183,8 @@ void __dummy_romfs() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -20081,7 +20207,13 @@ void __dummy_romfs() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -20463,8 +20595,8 @@ void __dummyMprSelectWait() {}
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -20487,7 +20619,13 @@ void __dummyMprSelectWait() {}
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -22194,8 +22332,8 @@ void mprSetSocketPrebindCallback(MprCtx ctx, MprSocketPrebind callback)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -22218,7 +22356,13 @@ void mprSetSocketPrebindCallback(MprCtx ctx, MprSocketPrebind callback)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -22946,8 +23090,8 @@ char *mprStrnstr(cchar *str, cchar *pattern, int len)
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -22970,7 +23114,13 @@ char *mprStrnstr(cchar *str, cchar *pattern, int len)
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -23958,8 +24108,8 @@ void __mprUnitTest() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -23982,7 +24132,13 @@ void __mprUnitTest() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -25011,8 +25167,8 @@ cchar *mprGetCurrentThreadName(MprCtx ctx) { return "main"; }
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -25035,7 +25191,13 @@ cchar *mprGetCurrentThreadName(MprCtx ctx) { return "main"; }
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -25132,7 +25294,7 @@ static TimeToken fullDays[] = {
 };
 
 /*
-    Make origin 1 to correspond to user date entries 10/28/2010
+    Make origin 1 to correspond to user date entries 10/28/2011
  */
 static TimeToken months[] = {
     { "jan",  1 | TOKEN_MONTH },
@@ -26034,7 +26196,7 @@ char *mprFormatTime(MprCtx ctx, cchar *fmt, struct tm *tp)
             mprPutCharToBuf(buf, '%');
             break;
 
-        case '+' :                                      /* date (Mon May 18 23:29:50 PDT 2010) */
+        case '+' :                                      /* date (Mon May 18 23:29:50 PDT 2011) */
             mprPutStringToBuf(buf, abbrevDay[tp->tm_wday]);
             mprPutCharToBuf(buf, ' ');
             mprPutStringToBuf(buf, abbrevMonth[tp->tm_mon]);
@@ -26440,7 +26602,7 @@ int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int zoneFlags, st
     while (token && *token) {
         if (allDigits(token)) {
             /*
-                Parse either day of month or year. Priority to day of month. Format: <29> Jan <15> <2010>
+                Parse either day of month or year. Priority to day of month. Format: <29> Jan <15> <2011>
              */ 
             value = mprAtoi(token, 10);
             if (value > 3000) {
@@ -26528,7 +26690,7 @@ int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int zoneFlags, st
             }
             if (dateSep) {
                 /*
-                    Date:  07/28/2010, 07/28/08, Jan/28/2010, Jaunuary-28-2010, 28-jan-2010
+                    Date:  07/28/2011, 07/28/08, Jan/28/2011, Jaunuary-28-2011, 28-jan-2011
                     Support order: dd/mm/yy, mm/dd/yy and yyyy/mm/dd
                     Support separators "/", ".", "-"
                  */
@@ -26771,8 +26933,8 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 /*
     @copy   default
 
-    Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
-    Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+    Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+    Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
 
     This software is distributed under commercial and open source licenses.
     You may use the GPL open source license described below or you may acquire
@@ -26794,6 +26956,12 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
     acquire a commercial license to use this software. Commercial licenses
     for this software and support services are available from Embedthis
     Software at http://www.embedthis.com
+
+    Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
 
     @end
  */
@@ -27348,8 +27516,8 @@ void __mprDummyUnicode() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -27372,7 +27540,13 @@ void __mprDummyUnicode() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -27557,8 +27731,8 @@ void __dummyMprUnix() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -27581,7 +27755,13 @@ void __dummyMprUnix() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -28220,8 +28400,8 @@ cchar *mprLookupMimeType(MprCtx ctx, cchar *ext)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -28244,7 +28424,13 @@ cchar *mprLookupMimeType(MprCtx ctx, cchar *ext)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -28429,8 +28615,8 @@ void __dummyMprVxWorks() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -28453,7 +28639,13 @@ void __dummyMprVxWorks() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -28825,8 +29017,8 @@ void mprUpdateWaitHandler(MprWaitHandler *wp, bool wakeup)
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -28849,7 +29041,13 @@ void mprUpdateWaitHandler(MprWaitHandler *wp, bool wakeup)
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -29257,8 +29455,8 @@ void __dummyMprWin() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -29281,7 +29479,13 @@ void __dummyMprWin() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -30290,8 +30494,8 @@ void __dummyMprWince() {}
 /*
  *  @copy   default
  *
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire
@@ -30314,7 +30518,13 @@ void __dummyMprWince() {}
  *  for this software and support services are available from Embedthis
  *  Software at http://www.embedthis.com
  *
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
@@ -30998,8 +31208,8 @@ void __dummyMprXml() {}
 /*
  *  @copy   default
  *  
- *  Copyright (c) Embedthis Software LLC, 2003-2010. All Rights Reserved.
- *  Copyright (c) Michael O'Brien, 1993-2010. All Rights Reserved.
+ *  Copyright (c) Embedthis Software LLC, 2003-2011. All Rights Reserved.
+ *  Copyright (c) Michael O'Brien, 1993-2011. All Rights Reserved.
  *  
  *  This software is distributed under commercial and open source licenses.
  *  You may use the GPL open source license described below or you may acquire 
@@ -31022,7 +31232,13 @@ void __dummyMprXml() {}
  *  for this software and support services are available from Embedthis 
  *  Software at http://www.embedthis.com 
  *  
- *  @end
+ *  Local variables:
+    tab-width: 4
+    c-basic-offset: 4
+    End:
+    vim: sw=8 ts=8 expandtab
+
+    @end
  */
 /************************************************************************/
 /*
