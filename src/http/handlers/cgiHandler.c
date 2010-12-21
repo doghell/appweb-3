@@ -197,13 +197,13 @@ static void waitForCgiCompletion(MaQueue *q)
         unlock(q);
         rc = mprWaitForCmd(cmd, 5 * 1000);
         lock(q);
-    } while (rc > 0 && mprGetElapsedTime(cmd, cmd->lastActivity) <= conn->host->timeout);
+    } while (rc != 0 && mprGetElapsedTime(cmd, cmd->lastActivity) <= conn->host->timeout);
 
     if (cmd->pid) {
         mprStopCmd(cmd);
+        mprReapCmd(cmd, MPR_TIMEOUT_STOP_TASK);
         cmd->status = 250;
     }
-
     if (cmd->status != 0) {
         maFailRequest(conn, MPR_HTTP_CODE_SERVICE_UNAVAILABLE,
             "CGI process %s: exited abnormally with exit status: %d.\nSee the server log for more information.\n", 
@@ -239,6 +239,7 @@ static void runCgi(MaQueue *q)
         return;
     }
     waitForCgiCompletion(q);
+    //  MOB 
     mprAssert(cmd->pid == 0);
 
 #if BLD_FEATURE_MULTITHREAD
