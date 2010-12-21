@@ -1402,7 +1402,8 @@ MaLocation *maCreateLocationAlias(MaHttp *http, MaConfigState *state, cchar *pre
 
 
 /*
- *  Make a path name. This replaces $references, converts to an absolute path name, cleans the path and maps delimiters.
+ *  Make a path name. This replaces $references, converts to an absolute path name (relative to the server root) and
+ *  clean the path and maps delimiters.
  */
 char *maMakePath(MaHost *host, cchar *file)
 {
