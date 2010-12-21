@@ -218,14 +218,14 @@ MAIN(appweb, int argc, char **argv)
     if (changeRoot) {
         homeDir = mprGetAbsPath(mpr, changeRoot);
         if (chdir(homeDir) < 0) {
-            mprPrintfError(mpr, "%s: Can't change directory to %s\n", homeDir);
+            mprError(mpr, "%s: Can't change directory to %s", homeDir);
             exit(4);
         }
         if (chroot(homeDir) < 0) {
             if (errno == EPERM) {
-                mprError(mpr, "%s: Must be super user to use the --chroot option\n", mprGetAppName(mpr));
+                mprError(mpr, "%s: Must be super user to use the --chroot option", mprGetAppName(mpr));
             } else {
-                mprError(mpr, "%s: Can't change change root directory to %s, errno %d\n",
+                mprError(mpr, "%s: Can't change change root directory to %s, errno %d",
                     mprGetAppName(mpr), homeDir, errno);
             }
             exit(5);
