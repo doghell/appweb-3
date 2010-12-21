@@ -22,5 +22,5 @@ $(BLD_BIN_DIR)/testAppweb$(BLD_EXE): $(OBJECTS) $(BLD_LIB_DIR)/libmpr$(BLD_LIB)
 #   tab-width: 4
 #   c-basic-offset: 4
 #   End:
-#   vim: sw=4 ts=4
+#   vim: sw=4 ts=4 noexpandtab
 #
