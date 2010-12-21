@@ -710,15 +710,15 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
 #if BLD_UNIX_LIKE
             path = maMakePath(host, mprStrTrim(value, "\""));
             if (chdir(path) < 0) {
-                mprError(server, "Can't change directory to %s\n", path);
+                mprError(server, "Can't change directory to %s", path);
                 mprFree(path);
-                return MPR_ERR_BAD_SYNTAX;
+                return MPR_ERR_CANT_OPEN;
             }
             if (chroot(path) < 0) {
                 if (errno == EPERM) {
-                    mprError(server, "Must be super user to use the --chroot option\n");
+                    mprError(server, "Must be super user to use the --chroot option");
                 } else {
-                    mprError(server, "Can't change change root directory to %s, errno %d\n", path, errno);
+                    mprError(server, "Can't change change root directory to %s, errno %d", path, errno);
                 }
                 mprFree(path);
                 return MPR_ERR_BAD_SYNTAX;
