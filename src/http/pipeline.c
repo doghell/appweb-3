@@ -813,7 +813,7 @@ static void setPathInfo(MaConn *conn)
                     *last = '\0';
                     pathInfo[0] = '\0';
                 }
-                if (req->pathInfo[0]) {
+                if (req->pathInfo && req->pathInfo[0]) {
                     req->pathTranslated = maMakeFilename(conn, alias, req->pathInfo, 0);
                 }
             }
