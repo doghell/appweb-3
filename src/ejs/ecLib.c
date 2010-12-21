@@ -4030,7 +4030,7 @@ static EjsName *allocName(Ejs *ejs, EjsName *qname)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -8318,7 +8318,7 @@ void ecStartBreakableStatement(EcCompiler *cp, int kinds)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -8530,7 +8530,7 @@ int ejsEvalScript(cchar *script)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -9816,7 +9816,7 @@ void ecCloseStream(EcLexer *lp)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -11049,7 +11049,7 @@ static int sum(cchar *name, int value)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -20448,7 +20448,7 @@ static void dummy(int junk) { }
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -20647,7 +20647,7 @@ void ecLeaveState(EcCompiler *cp)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */

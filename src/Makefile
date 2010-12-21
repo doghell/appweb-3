@@ -26,3 +26,11 @@ compileExtra:
 ifeq ($(BLD_FEATURE_STATIC),0)
 	@T=modules D=ejs ; $(DO_RECURSE)
 endif
+
+#
+#   Local variables:
+#   tab-width: 4
+#   c-basic-offset: 4
+#   End:
+#   vim: sw=4 ts=4
+#

@@ -245,7 +245,7 @@ extern "C" {
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -811,7 +811,7 @@ extern EjsOptable *ejsGetOptable(MprCtx ctx);
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -1420,7 +1420,7 @@ extern void ejsUnlockVm(Ejs *ejs);
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -4050,7 +4050,7 @@ extern void     ejsSetSqliteTls(MprThreadLocal *tls);
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -4446,7 +4446,7 @@ extern EjsDoc       *ejsCreateDoc(struct Ejs *ejs, EjsBlock *block, int slotNum,
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -4509,7 +4509,7 @@ extern EjsDoc       *ejsCreateDoc(struct Ejs *ejs, EjsBlock *block, int slotNum,
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -4802,7 +4802,7 @@ extern int          ejsWrite(Ejs *ejs, cchar *fmt, ...);
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */

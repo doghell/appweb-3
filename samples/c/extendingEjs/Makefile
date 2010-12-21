@@ -20,3 +20,11 @@ Acme$(BLD_SHOBJ) : $(OBJECTS) $(BLD_EJS_MAKEDEP) Acme.slots.h
 
 cleanExtra:
 	@rm -f *.lst *.mod *$(BLD_LIB)
+
+#
+#   Local variables:
+#   tab-width: 4
+#   c-basic-offset: 4
+#   End:
+#   vim: sw=4 ts=4
+#

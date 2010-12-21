@@ -4923,7 +4923,7 @@ static void memoryFailure(MprCtx ctx, int64 size, int64 total, bool granted)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -6804,7 +6804,7 @@ void mprPrintAllocReport(MprCtx ctx, cchar *msg)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -7127,7 +7127,7 @@ void __mprAsyncDummy() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -7912,7 +7912,7 @@ void __dummyBrew() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -8449,7 +8449,7 @@ void mprResetBufIfEmpty(MprBuf *bp)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -10070,7 +10070,7 @@ void __mprCmdDummy() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -10377,7 +10377,7 @@ int mprWaitForCondWithService(MprCond *cp, int timeout)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -10957,7 +10957,7 @@ static void decode(uint *output, uchar *input, uint len)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -11344,7 +11344,7 @@ MprDiskFileSystem *mprCreateDiskFileSystem(MprCtx ctx, cchar *path)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -11817,7 +11817,7 @@ static void removeEvent(MprEvent *event)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -12380,7 +12380,7 @@ void mprDisableFileBuffering(MprFile *file)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -12561,7 +12561,7 @@ void mprSetPathNewline(MprCtx ctx, cchar *path, cchar *newline)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -12897,7 +12897,7 @@ static int hashIndex(cchar *key, int size)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -15022,7 +15022,7 @@ static void completeRequest(MprHttp *http)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -15622,7 +15622,7 @@ MprKeyValue *mprCreateKeyPair(MprCtx ctx, cchar *key, cchar *value)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -16097,7 +16097,7 @@ void __dummyMprLock() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -16524,7 +16524,7 @@ int _cmp(char *s1, char *s2)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -16855,7 +16855,7 @@ int mprSearchForModule(MprCtx ctx, cchar *name, char **path)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -18440,7 +18440,7 @@ char *mprGetAppDir(MprCtx ctx)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -18830,7 +18830,7 @@ void __mprDummyPollWait() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -19892,7 +19892,7 @@ int print(cchar *fmt, ...)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -20211,7 +20211,7 @@ void __dummy_romfs() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -20623,7 +20623,7 @@ void __dummyMprSelectWait() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -22360,7 +22360,7 @@ void mprSetSocketPrebindCallback(MprCtx ctx, MprSocketPrebind callback)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -23118,7 +23118,7 @@ char *mprStrnstr(cchar *str, cchar *pattern, int len)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -24136,7 +24136,7 @@ void __mprUnitTest() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -25195,7 +25195,7 @@ cchar *mprGetCurrentThreadName(MprCtx ctx) { return "main"; }
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -26961,7 +26961,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -27544,7 +27544,7 @@ void __mprDummyUnicode() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -27759,7 +27759,7 @@ void __dummyMprUnix() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -28428,7 +28428,7 @@ cchar *mprLookupMimeType(MprCtx ctx, cchar *ext)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -28643,7 +28643,7 @@ void __dummyMprVxWorks() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -29045,7 +29045,7 @@ void mprUpdateWaitHandler(MprWaitHandler *wp, bool wakeup)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -29483,7 +29483,7 @@ void __dummyMprWin() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -30522,7 +30522,7 @@ void __dummyMprWince() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -31236,7 +31236,7 @@ void __dummyMprXml() {}
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */

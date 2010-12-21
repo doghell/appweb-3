@@ -150,7 +150,7 @@ extern int  emCreateDoc(EjsMod *mp);
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -2821,7 +2821,7 @@ static EjsDoc *getDuplicateDoc(Ejs *ejs, cchar *duplicate)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -4472,7 +4472,7 @@ static void logger(MprCtx ctx, int flags, int level, const char *msg)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -5694,7 +5694,7 @@ static void leadin(EjsMod *mp, EjsModule *module, int classDec, int inFunction)
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */
@@ -6366,7 +6366,7 @@ static int genType(EjsMod *bp, MprFile *file, EjsModule *mp, EjsType *type, int 
     tab-width: 4
     c-basic-offset: 4
     End:
-    vim: sw=8 ts=8 expandtab
+    vim: sw=4 ts=4 expandtab
 
     @end
  */

@@ -52,3 +52,11 @@ $(BLD_TOOLS_DIR)/getpath$(BLD_EXE): $(BLD_OBJ_DIR)/getpath$(BLD_OBJ)
 
 cleanExtra:
 	rm -f $(TARGETS) ../*.manifest *.o *.pdb *.obj 2>/dev/null ; true
+
+#
+#   Local variables:
+#   tab-width: 4
+#   c-basic-offset: 4
+#   End:
+#   vim: sw=4 ts=4
+#

@@ -36,3 +36,11 @@ angel.c: Makefile ../src/server/UNIX/angel.c
 
 cleanExtra:
 	rm -f *.c *.h
+
+#
+#   Local variables:
+#   tab-width: 4
+#   c-basic-offset: 4
+#   End:
+#   vim: sw=4 ts=4
+#
