@@ -21726,7 +21726,7 @@ static EjsVar *saveXml(Ejs *ejs, EjsXML *xml, int argc, EjsVar **argv)
 
     file = mprOpen(ejs, filename,  O_CREAT | O_TRUNC | O_WRONLY | O_TEXT, 0664);
     if (file == 0) {
-        ejsThrowIOError(ejs, "Can't open: %s, %d", filename,  mprGetOsError(ejs));
+        ejsThrowIOError(ejs, "Can't open: %s, %d", filename,  mprGetOsError());
         return 0;
     }
 

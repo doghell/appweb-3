@@ -450,7 +450,7 @@ bool maWillNextQueueAccept(MaQueue *q, MaPacket *packet)
     /*
      *  The downstream queue is full, so disable the queue and mark the downstream queue as full and service immediately. 
      */
-    mprLog(q, 7, "Disable queue");
+    mprLog(q, 7, "Disable queue %s", q->owner);
     maDisableQueue(q);
     next->flags |= MA_QUEUE_FULL;
     maScheduleQueue(next);

@@ -426,7 +426,7 @@ static int writeToFile(MaQueue *q, char *data, int len)
         rc = mprWrite(up->file, data, len);
         if (rc != len) {
             maFailRequest(conn, MPR_HTTP_CODE_INTERNAL_SERVER_ERROR, 
-                "Can't write to upload temp file %s, rc %d, errno %d\n", up->tmpPath, rc, mprGetOsError(up));
+                "Can't write to upload temp file %s, rc %d, errno %d\n", up->tmpPath, rc, mprGetOsError());
             return MPR_ERR_CANT_WRITE;
         }
         file->size += len;

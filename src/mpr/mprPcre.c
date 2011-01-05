@@ -7555,6 +7555,7 @@ extern bool     mprGetDebugMode(MprCtx ctx);
 
 extern int      mprGetLogLevel(MprCtx ctx);
 
+#if DOXYGEN || BLD_WIN_LIKE
 /**
  *  Return the O/S error code.
  *  @description Returns an O/S error code from the most recent system call. 
@@ -7564,7 +7565,11 @@ extern int      mprGetLogLevel(MprCtx ctx);
  *  @ingroup Mpr
  */
 extern int mprGetOsError();
+#else
+#define mprGetOsError() errno
+#endif
 
+#if DOXYGEN || BLD_WIN_LIKE
 /**
  *  Return the error code for the most recent system or library operation.
  *  @description Returns an error code from the most recent system call. 
@@ -7574,6 +7579,9 @@ extern int mprGetOsError();
  *  @ingroup Mpr
  */
 extern int mprGetError();
+#else
+#define mprGetError() errno
+#endif
 
 extern int      mprMakeArgv(MprCtx ctx, cchar *prog, cchar *cmd, int *argc, char ***argv);
 

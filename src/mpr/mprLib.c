@@ -16391,12 +16391,12 @@ static void defaultLogHandler(MprCtx ctx, int flags, int level, cchar *msg)
 }
 
 
+#if BLD_WIN_LIKE
 /*
  *  Return the raw O/S error code
  */
 int mprGetOsError()
 {
-#if BLD_WIN_LIKE
     int     rc;
     rc = GetLastError();
 
@@ -16407,11 +16407,6 @@ int mprGetOsError()
         return EPIPE;
     }
     return rc;
-#elif BLD_UNIX_LIKE || VXWORKS
-    return errno;
-#else
-    return 0;
-#endif
 }
 
 
@@ -16420,9 +16415,6 @@ int mprGetOsError()
  */
 int mprGetError()
 {
-#if !BLD_WIN_LIKE
-    return mprGetOsError();
-#else
     int     err;
 
     err = mprGetOsError();
@@ -16479,8 +16471,8 @@ int mprGetError()
         return EAGAIN;
     }
     return MPR_ERR;
-#endif
 }
+#endif
 
 
 #if MACOSX

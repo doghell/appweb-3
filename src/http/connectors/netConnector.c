@@ -38,11 +38,12 @@ static void netOutgoingService(MaQueue *q)
         /*
          *  Issue a single I/O request to write all the blocks in the I/O vector
          */
+        errCode = mprGetOsError();
         mprAssert(q->ioIndex > 0);
         written = mprWriteSocketVector(conn->sock, q->iovec, q->ioIndex);
         mprLog(q, 5, "Net connector written %d", written);
         if (written < 0) {
-            errCode = mprGetError();
+            errCode = mprGetOsError();
             if (errCode == EAGAIN || errCode == EWOULDBLOCK) {
                 break;
             }
