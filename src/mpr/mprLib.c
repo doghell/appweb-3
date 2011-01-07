@@ -3,7 +3,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Multithreaded Portable Runtime 3.1.3.
+ *  Multithreaded Portable Runtime 3.1.4.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -4639,8 +4639,12 @@ bool mprServicesAreIdle(MprCtx ctx)
     Mpr     *mpr;
     
     mpr = mprGetMpr(ctx);
+#if BLD_FEATURE_MULTITHREAD
     return mprGetListCount(mpr->workerService->busyThreads) == 0 && mprGetListCount(mpr->cmdService->cmds) == 0 && 
        !(mpr->dispatcher->flags & MPR_DISPATCHER_DO_EVENT);
+#else
+    return mprGetListCount(mpr->cmdService->cmds) == 0 && !(mpr->dispatcher->flags & MPR_DISPATCHER_DO_EVENT);
+#endif
 }
 
 
@@ -8675,6 +8679,12 @@ void mprCloseCmdFd(MprCmd *cmd, int channel)
 }
 
 
+int mprIsCmdComplete(MprCmd *cmd)
+{
+    return cmd->eofCount >= cmd->requiredEof;
+}
+
+
 /*
  *  Default callback routine for the mprRunCmd routines. Uses may supply their own callback instead of this routine. 
  *  The callback is run whenever there is I/O to read/write to the CGI gateway.
@@ -9176,8 +9186,8 @@ int mprWaitForCmd(MprCmd *cmd, int timeout)
 
 
 /*
- *  Collect the child's exit status. The initiating thread must do this on some operating systems. For consistency,
- *  we make this the case for all O/Ss. Return zero if the exit status is successfully reaped. Return -1 if an error 
+ *  Collect the child's exit status. The initiating thread must do this on uClibc. 
+ *  Return zero if the exit status is successfully reaped. Return -1 if an error 
  *  and return > 0 if process still running.
  */
 int mprReapCmd(MprCmd *cmd, int timeout)
@@ -9186,7 +9196,7 @@ int mprReapCmd(MprCmd *cmd, int timeout)
 
     mprAssert(cmd->pid);
 
-#if BLD_FEATURE_MULTITHREAD
+#if BLD_FEATURE_MULTITHREAD && __UCLIBC__
     if (cmd->parent != mprGetCurrentThread(cmd)) {
         /* Return positive status code */
         return -MPR_ERR_BAD_STATE;
@@ -9525,8 +9535,10 @@ static int startProcess(MprCmd *cmd)
     STARTUPINFO         startInfo;
     int                 err;
 
-#if BLD_FEATURE_MULTITHREAD
+#if UNUSED
+#if BLD_FEATURE_MULTITHREAD && __UCLIBC__
     cmd->parent = mprGetCurrentThread(cmd);
+#endif
 #endif
 
     memset(&startInfo, 0, sizeof(startInfo));
@@ -9705,7 +9717,7 @@ static int startProcess(MprCmd *cmd)
 
     files = cmd->files;
 
-#if BLD_FEATURE_MULTITHREAD
+#if BLD_FEATURE_MULTITHREAD && __UCLIBC__
     cmd->parent = mprGetCurrentThread(cmd);
 #endif
 
@@ -9822,8 +9834,10 @@ int startProcess(MprCmd *cmd)
 
     mprLog(cmd, 4, "cmd: start %s", cmd->program);
 
+#if UNUSED
 #if BLD_FEATURE_MULTITHREAD
     cmd->parent = mprGetCurrentThread(cmd);
+#endif
 #endif
 
     entryPoint = 0;
@@ -13177,6 +13191,7 @@ static int httpDestructor(MprHttp *http)
 
     mprLock(hs->mutex);
     mprRemoveItem(hs->connections, http);
+    mprFree(http->sock);
     mprUnlock(hs->mutex);
     return 0;
 }
@@ -13847,8 +13862,12 @@ static int httpReadEvent(MprHttp *http)
         http->keepAlive = 0;
         if (http->state != MPR_HTTP_STATE_COMPLETE && http->response->contentLength == 0) {
             mprLog(http, 5, "Socket end of file from server, rc %d, errno %d", nbytes, errno);
-            http->state = MPR_HTTP_STATE_COMPLETE;
-            processResponse(http, buf, nbytes);
+            if (resp->flags & MPR_HTTP_RESP_CHUNKED) {
+                badRequest(http, "Communications error");
+            } else {
+                http->state = MPR_HTTP_STATE_COMPLETE;
+                processResponse(http, buf, nbytes);
+            }
         } else {
             badRequest(http, "Communications error");
         }
@@ -18664,7 +18683,7 @@ static void serviceIO(MprWaitService *ws, struct pollfd *fds, int count)
     start = 0;
     
 #if BLD_FEATURE_MULTITHREAD
-    mprAssert(mprGetCurrentOsThread(ws) == mprGetMpr(ws)->serviceThread);
+    mprAssert(mprGetCurrentOsThread() == mprGetMpr(ws)->serviceThread);
 
     /*
      *  Service the breakout pipe first
@@ -18725,12 +18744,11 @@ static void serviceIO(MprWaitService *ws, struct pollfd *fds, int count)
                 /*
                  *  Disable events to prevent recursive I/O events. Callback must call mprEnableWaitEvents
                  */
-                mprAssert(wp->disableMask == -1);
+                ws->maskGeneration++;
                 if (wp->disableMask == 0) {
                     /* Should not ever get here. Just for safety. */
                     break;
                 }
-                ws->maskGeneration++;
                 wp->disableMask = 0;
                 mprAssert(wp->inUse == 0);
                 wp->inUse++;
@@ -20531,12 +20549,11 @@ static void serviceIO(MprWaitService *ws)
             /*
              *  Disable events to prevent recursive I/O events. Callback must call mprEnableWaitEvents
              */
-            mprAssert(wp->disableMask == -1);
+            ws->maskGeneration++;
             if (wp->disableMask == 0) {
                 /* Should never get here. Just for safety. */
                 continue;
             }
-            ws->maskGeneration++;
             wp->disableMask = 0;
             mprAssert(wp->inUse == 0);
             wp->inUse++;

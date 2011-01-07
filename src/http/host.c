@@ -652,7 +652,7 @@ static void hostTimer(MaHost *host, MprEvent *event)
      */
     lock(host);
     updateCurrentDate(host);
-    mprLog(host, 5, "Connection Count %d", mprGetListCount(host->connections));
+    mprLog(host, 6, "hostTimer: %d active connections", mprGetListCount(host->connections));
 
     /*
      *  Check for any expired connections
@@ -665,11 +665,12 @@ static void hostTimer(MaHost *host, MprEvent *event)
         if (diff < 0 && !mprGetDebugMode(host)) {
             conn->keepAliveCount = 0;
             if (conn->request) {
-                mprLog(host, 6, "Request still open %s", conn->request->url);
+                mprLog(host, 6, "Open request timed out due to inactivity: %s", conn->request->url);
             } else {
                 mprLog(host, 6, "Idle connection timed out");
             }
             if (!conn->disconnected) {
+                conn->disconnected = 1;
                 mprDisconnectSocket(conn->sock);
             }
         }

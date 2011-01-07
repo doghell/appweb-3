@@ -2,7 +2,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Multithreaded Portable Runtime 3.1.3.
+ *  Multithreaded Portable Runtime 3.1.4.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -7322,6 +7322,8 @@ extern void mprPollCmdPipes(MprCmd *cmd, int timeout);
  */
 extern int mprWriteCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize);
 
+extern int mprIsCmdComplete(MprCmd *cmd);
+
 #endif /* BLD_FEATURE_CMD */
 /* *********************************** Mpr ************************************/
 /*
@@ -9409,7 +9411,6 @@ static DH       *dhCallback(SSL *ssl, int isExport, int keyLength);
 static void     disconnectOss(MprSocket *sp);
 static int      flushOss(MprSocket *sp);
 static int      listenOss(MprSocket *sp, cchar *host, int port, MprSocketAcceptProc acceptFn, void *data, int flags);
-static int      lockDestructor(void *ptr);
 static int      openSslDestructor(MprSsl *ssl);
 static int      openSslSocketDestructor(MprSslSocket *ssp);
 static int      readOss(MprSocket *sp, void *buf, int len);
@@ -9418,6 +9419,7 @@ static int      verifyX509Certificate(int ok, X509_STORE_CTX *ctx);
 static int      writeOss(MprSocket *sp, void *buf, int len);
 
 #if BLD_FEATURE_MULTITHREAD
+static int      lockDestructor(void *ptr);
 static DynLock  *sslCreateDynLock(const char *file, int line);
 static void     sslDynLock(int mode, DynLock *dl, const char *file, int line);
 static void     sslDestroyDynLock(DynLock *dl, const char *file, int line);
@@ -9489,11 +9491,13 @@ int mprCreateOpenSslModule(MprCtx ctx, bool lazy)
 }
 
 
+#if BLD_FEATURE_MULTITHREAD
 static int lockDestructor(void *ptr)
 {
     locks = 0;
     return 0;
 }
+#endif
 
 
 static MprSsl *getDefaultOpenSsl(MprCtx ctx)

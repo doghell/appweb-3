@@ -12,6 +12,8 @@
 
 #if BLD_DEBUG
 static void checkQueueCount(MaQueue *q);
+#else
+#define checkQueueCount(q)
 #endif
 
 /************************************ Code ************************************/
@@ -132,9 +134,8 @@ MaPacket *maGet(MaQueue *q)
     MaQueue     *prev;
     MaPacket    *packet;
 
-#if BLD_DEBUG
     checkQueueCount(q);
-#endif
+
     conn = q->conn;
     while (q->first) {
         if ((packet = q->first) != 0) {
@@ -153,6 +154,7 @@ MaPacket *maGet(MaQueue *q)
                 mprAssert(q->first == 0);
             }
         }
+        checkQueueCount(q);
         if (q->flags & MA_QUEUE_FULL && q->count < q->low) {
             /*
              *  This queue was full and now is below the low water mark. Back-enable the previous queue.
@@ -160,13 +162,10 @@ MaPacket *maGet(MaQueue *q)
             q->flags &= ~MA_QUEUE_FULL;
             prev = findPreviousQueue(q);
             if (prev && prev->flags & MA_QUEUE_DISABLED) {
-                mprLog(q, 7, "Enable q");
                 maEnableQueue(prev);
             }
         }
-#if BLD_DEBUG
         checkQueueCount(q);
-#endif
         return packet;
     }
     return 0;
@@ -201,12 +200,12 @@ MaPacket *maCreatePacket(MprCtx ctx, int size)
  */
 MaPacket *maCreateConnPacket(MaConn *conn, int size)
 {
-    MaPacket    *packet;
-    MaRequest   *req;
-
     if (conn->state == MPR_HTTP_STATE_COMPLETE) {
         return maCreatePacket((MprCtx) conn, size);
     }
+#if UNUSED
+    MaPacket    *packet;
+    MaRequest   *req;
     req = conn->request;
     if (req) {
         /* These packets are all owned by the request */
@@ -216,6 +215,7 @@ MaPacket *maCreateConnPacket(MaConn *conn, int size)
             return packet;
         }
     }
+#endif
     return maCreatePacket(conn->request ? (MprCtx) conn->request: (MprCtx) conn, size);
 }
 
@@ -228,6 +228,7 @@ void maFreePacket(MaQueue *q, MaPacket *packet)
     conn = q->conn;
     req = conn->request;
 
+#if UNUSED
     if (req == 0 || packet->content == 0 || packet->content->buflen < MA_BUFSIZE || mprGetParent(packet) == conn) {
         /* 
          *  Don't bother recycling non-content, small packets or packets owned by the connection
@@ -250,6 +251,9 @@ void maFreePacket(MaQueue *q, MaPacket *packet)
     packet->flags = 0;
     packet->next = req->freePackets;
     req->freePackets = packet;
+#else
+    mprFree(packet);
+#endif
 } 
 
 
@@ -309,6 +313,7 @@ static void checkQueueCount(MaQueue *q)
 }
 #endif
 
+
 /*
  *  Put a packet on the service queue.
  */
@@ -316,9 +321,7 @@ void maPutForService(MaQueue *q, MaPacket *packet, bool serviceQ)
 {
     mprAssert(packet);
    
-#if BLD_DEBUG
     checkQueueCount(q);
-#endif
     q->count += maGetPacketLength(packet);
     packet->next = 0;
     
@@ -330,9 +333,7 @@ void maPutForService(MaQueue *q, MaPacket *packet, bool serviceQ)
         q->first = packet;
         q->last = packet;
     }
-#if BLD_DEBUG
     checkQueueCount(q);
-#endif
     if (serviceQ && !(q->flags & MA_QUEUE_DISABLED))  {
         maScheduleQueue(q);
     }
@@ -368,6 +369,7 @@ void maJoinForService(MaQueue *q, MaPacket *packet, bool serviceQ)
             maFreePacket(q, packet);
         }
     }
+    checkQueueCount(q);
     if (serviceQ && !(q->flags & MA_QUEUE_DISABLED))  {
         maScheduleQueue(q);
     }
@@ -416,9 +418,7 @@ void maPutBack(MaQueue *q, MaPacket *packet)
     mprAssert(maGetPacketLength(packet) >= 0);
     q->count += maGetPacketLength(packet);
     mprAssert(q->count >= 0);
-#if BLD_DEBUG
     checkQueueCount(q);
-#endif
 }
 
 
@@ -450,7 +450,6 @@ bool maWillNextQueueAccept(MaQueue *q, MaPacket *packet)
     /*
      *  The downstream queue is full, so disable the queue and mark the downstream queue as full and service immediately. 
      */
-    mprLog(q, 7, "Disable queue %s", q->owner);
     maDisableQueue(q);
     next->flags |= MA_QUEUE_FULL;
     maScheduleQueue(next);
@@ -477,6 +476,7 @@ void maSendPackets(MaQueue *q)
 
 void maDisableQueue(MaQueue *q)
 {
+    mprLog(q, 7, "Disable queue %s", q->owner);
     q->flags |= MA_QUEUE_DISABLED;
 }
 
@@ -527,13 +527,16 @@ void maServiceQueue(MaQueue *q)
     if (q->conn->serviceq.scheduleNext == q) {
         maGetNextQueueForService(&q->conn->serviceq);
     }
-    q->service(q);
-    q->flags |= MA_QUEUE_SERVICED;
+    if (!(q->flags & MA_QUEUE_DISABLED)) {
+        q->service(q);
+        q->flags |= MA_QUEUE_SERVICED;
+    }
 }
 
 
 void maEnableQueue(MaQueue *q)
 {
+    mprLog(q, 7, "Enable q %s", q->owner);
     q->flags &= ~MA_QUEUE_DISABLED;
     maScheduleQueue(q);
 }
@@ -617,7 +620,6 @@ static bool drain(MaQueue *q, bool block)
     int         oldMode;
 
     conn = q->conn;
-    q->pending = 0;
 
     /*
      *  Queue is full. Need to drain the service queue if possible.
@@ -640,7 +642,6 @@ static bool drain(MaQueue *q, bool block)
 /*
  *  Write a block of data. This is the lowest level write routine for dynamic data. If block is true, this routine will 
  *  block until all the block is written. If block is false, then it may return without having written all the data.
- *  WARNING: This routine will block if the downstream queue is full. 
  */
 int maWriteBlock(MaQueue *q, cchar *buf, int size, bool block)
 {
@@ -663,27 +664,23 @@ int maWriteBlock(MaQueue *q, cchar *buf, int size, bool block)
     }
     for (written = 0; size > 0; ) {
         if (q->count >= q->max && !drain(q, block)) {
+            checkQueueCount(q);
             break;
         }
         if (conn->disconnected) {
             return MPR_ERR_CANT_WRITE;
         }
-        packet = q->pending;
-        if (packet) {
-            mprAssert(packet->content);
-        }
-        if (packet == 0 || mprGetBufSpace(packet->content) == 0) {
-            if ((packet = maCreateDataPacket(q, packetSize)) != 0) {
-                q->pending = packet;
-                maPutForService(q, packet, 1);
-            }
+        if ((packet = maCreateDataPacket(q, packetSize)) == 0) {
+            return MPR_ERR_NO_MEMORY;
         }
         bytes = mprPutBlockToBuf(packet->content, buf, size);
         buf += bytes;
         size -= bytes;
-        q->count += bytes;
         written += bytes;
+        maPutForService(q, packet, 1);
+        checkQueueCount(q);
     }
+    checkQueueCount(q);
     return written;
 }
 
@@ -791,6 +788,7 @@ void maCleanQueue(MaQueue *q)
         }
         prev = packet;
     }
+    checkQueueCount(q);
 }
 
 
@@ -824,6 +822,7 @@ void maDiscardData(MaQueue *q, bool removePackets)
                 mprFlushBuf(packet->content);
             }
         }
+        checkQueueCount(q);
     }
 }
 

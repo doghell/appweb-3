@@ -31,15 +31,10 @@ MaRequest *maCreateRequest(MaConn *conn)
     MaRequest   *req;
     MprHeap     *arena;
 
-    /*
-     *  Create a request memory arena. From this arena, are all allocations made for this entire request.
-     *  Arenas are scalable, non-thread-safe virtual memory blocks.
-     */
-    arena  = mprAllocArena(conn->arena, "request", MA_REQ_MEM, 0, NULL);
+    arena  = mprAllocHeap(conn->arena, "request", MA_REQ_MEM, 0, NULL);
     if (arena == 0) {
         return 0;
     }
-
     req = mprAllocObjWithDestructorZeroed(arena, MaRequest, destroyRequest);
     if (req == 0) {
         return 0;
@@ -108,7 +103,6 @@ void maProcessWriteEvent(MaConn *conn)
 void maProcessReadEvent(MaConn *conn, MaPacket *packet)
 {
     mprAssert(conn);
-    mprAssert(packet);
 
     conn->canProceed = 1;
     

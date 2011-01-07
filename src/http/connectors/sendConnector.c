@@ -81,6 +81,7 @@ static void sendOutgoingService(MaQueue *q)
         if (written < 0) {
             errCode = mprGetError();
             if (errCode == EAGAIN || errCode == EWOULDBLOCK) {
+                maRequestWriteBlocked(conn);
                 break;
             }
             if (errCode == EPIPE || errCode == ECONNRESET) {
@@ -238,6 +239,7 @@ static void freeSentPackets(MaQueue *q, int bytes)
             bytes -= len;
             /* Prefixes dont' count in the q->count. No need to adjust */
             if (mprGetBufLength(packet->prefix) == 0) {
+                mprFree(packet->prefix);
                 packet->prefix = 0;
             }
         }

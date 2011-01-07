@@ -57,6 +57,7 @@ static MaConn *createConn(MprCtx ctx, MaHost *host, MprSocket *sock, cchar *ipAd
     conn->host = host;
     conn->originalHost = host;
     conn->expire = mprGetTime(conn) + host->timeout;
+    conn->eventMask = -1;
 
     maInitSchedulerQueue(&conn->serviceq);
 
@@ -162,12 +163,7 @@ int maAcceptConn(MprSocket *sock, MaServer *server, cchar *ip, int port)
         mprFree(sock);
         return 1;
     }
-
-    /*
-     *  Create a connection memory arena. This optimizes memory allocations for this entire connection.
-     *  Arenas are scalable, thread-safe virtual memory blocks that are freed in one chunk.
-     */
-    arena = mprAllocArena(host, "conn", 1, 0, NULL);
+    arena = mprAllocHeap(host, "conn", 1, 0, NULL);
     if (arena == 0) {
         mprError(server, "Can't create connect arena object. Insufficient memory.");
         mprFree(sock);
@@ -249,6 +245,7 @@ void maEnableConnEvents(MaConn *conn, int eventMask)
     mprLog(conn, 7, "Enable conn events mask %x", eventMask);
     conn->expire = conn->time;
     conn->expire += (conn->state == MPR_HTTP_STATE_BEGIN) ? conn->host->keepAliveTimeout : conn->host->timeout;
+    eventMask &= conn->eventMask;
     mprSetSocketCallback(conn->sock, (MprSocketProc) ioEvent, conn, eventMask, MPR_NORMAL_PRIORITY);
 }
 
