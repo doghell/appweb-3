@@ -523,7 +523,11 @@ static MaStage *findHandler(MaConn *conn)
                 if (mprGetPathInfo(conn, path, &resp->fileInfo) == 0) {
                     mprLog(conn, 5, "findHandler: Adding extension, new path %s\n", path);
                     resp->filename = path;
-                    uri = mprStrcat(resp, -1, req->url, ".", hp->key, NULL);
+                    if (req->parsedUri->query) {
+                        uri = mprStrcat(resp, -1, req->url, ".", hp->key, "?", req->parsedUri->query, NULL);
+                    } else {
+                        uri = mprStrcat(resp, -1, req->url, ".", hp->key, NULL);
+                    }
                     maSetRequestUri(conn, uri);
                     return handler;
                 }
