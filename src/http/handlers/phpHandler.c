@@ -440,7 +440,12 @@ static int initializePhp(MprModule *mp)
 #endif
 
     http = mp->moduleData;
+
+#ifdef BLD_FEATURE_PHP_INI
+    phpSapiBlock.php_ini_path_override = BLD_FEATURE_PHP_INI;
+#else
     phpSapiBlock.php_ini_path_override = http->defaultServer->serverRoot;
+#endif
     sapi_startup(&phpSapiBlock);
     if (php_module_startup(&phpSapiBlock, 0, 0) == FAILURE) {
         mprError(mp, "PHP did not initialize");
