@@ -66,6 +66,7 @@ typedef struct MaPhp {
 
 static void flushOutput(void *context);
 static void logMessage(char *message);
+static int  initializePhp(MaHttp *http);
 static char *readCookies(TSRMLS_D);
 static int  readPostData(char *buffer, uint len TSRMLS_DC);
 static void registerServerVars(zval *varArray TSRMLS_DC);
@@ -117,9 +118,14 @@ static void openPhp(MaQueue *q)
     MaConn          *conn;
     MaAlias         *alias;
 
-    // TSRMLS_FETCH();
-
     conn = q->conn;
+
+    if (!q->stage->stageData) {
+        if (initializePhp(conn->http) < 0) {
+            maFailRequest(conn, MPR_HTTP_CODE_INTERNAL_SERVER_ERROR, "PHP initialization failed");
+        }
+        q->stage->stageData = (void*) 1;
+    }
     resp = conn->response;
     req = conn->request;
     alias = req->alias;
@@ -420,9 +426,8 @@ static int startup(sapi_module_struct *sapi_module)
 /*
  *  Initialze the php module
  */
-static int initializePhp(MprModule *mp)
+static int initializePhp(MaHttp *http)
 {
-    MaHttp                  *http;
 #if ZTS
     void                    ***tsrm_ls;
     php_core_globals        *core_globals;
@@ -439,8 +444,6 @@ static int initializePhp(MprModule *mp)
     tsrm_ls = (void***) ts_resource(0);
 #endif
 
-    http = mp->moduleData;
-
 #ifdef BLD_FEATURE_PHP_INI
     phpSapiBlock.php_ini_path_override = BLD_FEATURE_PHP_INI;
 #else
@@ -448,7 +451,7 @@ static int initializePhp(MprModule *mp)
 #endif
     sapi_startup(&phpSapiBlock);
     if (php_module_startup(&phpSapiBlock, 0, 0) == FAILURE) {
-        mprError(mp, "PHP did not initialize");
+        mprError(http, "PHP did not initialize");
         return MPR_ERR_CANT_INITIALIZE;
     }
 
@@ -497,7 +500,6 @@ MprModule *maPhpHandlerInit(MaHttp *http, cchar *path)
     handler->open = openPhp;
     handler->run = runPhp;
     http->phpHandler = handler;
-    initializePhp(module);
     return module;
 }
 
