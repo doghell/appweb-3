@@ -115,6 +115,10 @@
     #define MA_MAX_SECRET           32
 #endif
 
+#if !BLD_FEATURE_VMALLOC
+    #undef MA_REQ_MEM
+    #define MA_REQ_MEM              1
+#endif
 
 #define MA_MIN_PACKET           512             /**< Minimum packet size */
 #define MA_PACKET_ALIGN(x)      (((x) + 0x3FF) & ~0x3FF)
