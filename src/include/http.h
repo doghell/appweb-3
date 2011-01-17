@@ -11,6 +11,7 @@
 
 #include    "mpr.h"
 #include    "httpTune.h"
+#include    "customize.h"
 
 /****************************** Forward Declarations **************************/
 
