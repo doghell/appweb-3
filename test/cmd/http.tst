@@ -27,12 +27,12 @@ if (test.config["http_client"] == 1 && session["main"] && test.depth > 1) {
     //  Basic get
     data = run("/numbers.txt")
     assert(data.startsWith("012345678"))
-    assert(data.endsWith("END"))
+    assert(data.trim().endsWith("END"))
 
     //  Chunked get
     data = run("--chunk 256 /big.txt")
     assert(data.startsWith("012345678"))
-    assert(data.endsWith("END"))
+    assert(data.trim().endsWith("END"))
 
     //  Chunked empty get
     data = run("--chunk 100 /empty.html")
@@ -54,17 +54,13 @@ if (test.config["http_client"] == 1 && session["main"] && test.depth > 1) {
     run("-i 20 --http 1 /index.html")
 
     //  Auth
-    run("--user 'joshua:pass1' /basic/basic.html")
-    run("--user 'joshua' --password 'pass1' /basic/basic.html")
+    run("--user joshua:pass1 /basic/basic.html")
+    run("--user joshua --password pass1 /basic/basic.html")
 
     //  Form data
     data = run("--form 'name=John+Smith&address=300+Park+Avenue' /form.ejs")
     assert(data.contains('"address": "300 Park Avenue"'))
     assert(data.contains('"name": "John Smith"'))
-
-    //  Validate that header appears
-    data = run("--showHeaders --header 'custom: MyHeader' /index.html")
-    assert(data.contains('Content-Type'))
 
     //  PUT file
     run("cmd/test.dat /tmp/day.tmp")
@@ -72,7 +68,8 @@ if (test.config["http_client"] == 1 && session["main"] && test.depth > 1) {
         assert(exists("web/tmp/day.tmp"))
     }
 
-    run("basic/*.tst /tmp/")
+    files = Path("basic").files().join(" ")
+    run(files + " /tmp/")
     if (test.threads == 1) {
         assert(exists("web/tmp/methods.tst"))
     }
@@ -83,30 +80,37 @@ if (test.config["http_client"] == 1 && session["main"] && test.depth > 1) {
     run("--method DELETE /tmp/test.dat")
     assert(!exists("web/tmp/test.dat"))
 
-    //  Options/Trace
+    //  Options/Trace with showCode
     run("--method OPTIONS /index.html")
-    assert(run("--showCode -q --method TRACE /index.html") == "406")
+    data = run("--showCode -q --method TRACE /index.html")
+    assert(data.trim() == "406")
+
+    //  Show headers
+    data = run("--showHeaders /index.html")
+    assert(data.contains('Content-Type'))
 
     //  Upload
-    data = run("--upload basic/*.tst /upload.ejs")
+    files = Path("basic").files().join(" ")
+    data = run("--upload " + files + " /upload.ejs")
     assert(data.contains('"clientFilename": "methods.tst"'))
     if (test.threads == 1) {
         assert(exists("web/tmp/methods.tst"))
     }
 
-    data = run("--upload --form 'name=John+Smith&address=300+Park+Avenue' basic/*.tst /upload.ejs")
+    files = Path("basic").files().join(" ")
+    data = run("--upload --form 'name=John+Smith&address=300+Park+Avenue' " + files + " /upload.ejs")
     assert(data.contains('"address": "300 Park Avenue"'))
     assert(data.contains('"clientFilename": "methods.tst"'))
 
     data = run("--cookie 'test-id=12341234; $domain=site.com; $path=/dir/' /form.ejs")
     assert(data.contains('"test-id": '))
-    assert(data.contains('"name": "test-id",'))
-    assert(data.contains('"domain": "site.com",'))
-    assert(data.contains('"path": "/dir/",'))
+    assert(data.contains('"name": "test-id"'))
+    assert(data.contains('"domain": "site.com"'))
+    assert(data.contains('"path": "/dir/"'))
 
     //  Ranges
-    assert(run("--range 0-4 /numbers.html") == "01234")
-    assert(run("--range -5 /numbers.html") == "5678")
+    assert(run("--range 0-4 /numbers.html").trim() == "01234")
+    assert(run("--range -5 /numbers.html").trim() == "5678")
 
     //  Load test
     if (test.depth > 2) {

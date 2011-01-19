@@ -18598,7 +18598,7 @@ int mprWaitForIO(MprWaitService *ws, int timeout)
 
     rc = poll(fds, count, timeout);
     if (rc < 0) {
-        mprLog(ws, 2, "Poll returned %d, errno %d", rc, mprGetOsError());
+        mprLog(ws, 8, "Poll returned %d, errno %d", rc, mprGetOsError());
     } else if (rc > 0) {
         serviceIO(ws, fds, count);
     }
@@ -23047,6 +23047,12 @@ int mprMakeArgv(MprCtx ctx, cchar *program, cchar *cmd, int *argcp, char ***argv
             cp++;
             argv[argc] = cp;
             while ((*cp != '\0') && (*cp != '"')) {
+                cp++;
+            }
+        } else if (*cp == '\'') {
+            cp++;
+            argv[argc] = cp;
+            while ((*cp != '\0') && (*cp != '\'')) {
                 cp++;
             }
         } else {

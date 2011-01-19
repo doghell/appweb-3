@@ -2,7 +2,7 @@
  *  secure.tst - SSL http tests
  */
 
-if (0 && test.config["ssl"] == 1) {
+if (test.config["ssl"] == 1) {
     const URL = session["main"] + "/index.html"
     const URLS = session["ssl"] + "/index.html"
 

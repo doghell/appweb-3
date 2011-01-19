@@ -18,6 +18,7 @@ $(BLD_BIN_DIR)/httpPassword$(BLD_EXE): $(OBJECTS)
 
 $(BLD_BIN_DIR)/cgiProgram$(BLD_EXE): $(OBJECTS)
 	bld --exe $(BLD_BIN_DIR)/cgiProgram$(BLD_EXE) $(BLD_OBJ_DIR)/cgiProgram$(BLD_OBJ) $(BLD_OBJ_DIR)/mprLib$(BLD_OBJ)
+	cp $(BLD_BIN_DIR)/cgiProgram$(BLD_EXE) ../../test/cgi-bin
 
 #
 #   Local variables:

@@ -200,7 +200,6 @@ int main(int argc, char* argv[], char* envp[])
     method = getenv("REQUEST_METHOD") ;
     if (method == 0) {
         method = "GET";
-
     } else {
         if (strcmp(method, "POST") == 0) {
             if (getPostData(mpr, &postBuf, &postLen) < 0) {
@@ -427,13 +426,15 @@ static void printPost()
 {
     int     i;
 
-    if (numPostKeys == 0) {
-        mprPrintf(mpr, "<H2>No Post Data Found</H2>\r\n");
-    } else {
+    if (numPostKeys) {
         mprPrintf(mpr, "<H2>Decoded Post Variables</H2>\r\n");
         for (i = 0; i < (numPostKeys * 2); i += 2) {
             mprPrintf(mpr, "<p>PVAR %s=%s</p>\r\n", postKeys[i], postKeys[i+1]);
         }
+    } else if (postLen > 0) {
+        write(1, postBuf, postLen);
+    } else {
+        mprPrintf(mpr, "<H2>No Post Data Found</H2>\r\n");
     }
     mprPrintf(mpr, "\r\n");
 }

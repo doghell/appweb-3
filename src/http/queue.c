@@ -736,7 +736,7 @@ MaPacket *maSplitPacket(MprCtx ctx, MaPacket *orig, int offset)
     size = max(count, MA_BUFSIZE);
     size = MA_PACKET_ALIGN(size);
     
-    if ((packet = maCreateDataPacket(ctx, orig->entityLength ? 0: size)) == 0) {
+    if ((packet = maCreateDataPacket(ctx, (orig->content == 0) ? 0: size)) == 0) {
         return 0;
     }
     packet->flags = orig->flags;

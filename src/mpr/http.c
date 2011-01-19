@@ -330,7 +330,7 @@ static bool parseArgs(Mpr *mpr, int argc, char **argv)
         } else if (strcmp(argp, "--sequence") == 0) {
             sequence++;
 
-        } else if (strcmp(argp, "--showCode") == 0) {
+        } else if (strcmp(argp, "--showCode") == 0 || strcmp(argp, "--showStatus") == 0) {
             showCode++;
 
         } else if (strcmp(argp, "--show") == 0 || strcmp(argp, "--showHeaders") == 0) {
@@ -662,8 +662,8 @@ static int doRequest(MprHttp *http, cchar *url, MprList *fields, MprList *files)
         if (showHeaders) {
             responseHeaders = mprGetHttpHeaders(http);
             resp = http->response;
-            mprPrintfError(http, "%s %d %s\n", resp->protocol, resp->code, resp->message);
-            mprPrintfError(http, "%s\n", responseHeaders);
+            mprPrintf(http, "%s %d %s\n", resp->protocol, resp->code, resp->message);
+            mprPrintf(http, "%s\n", responseHeaders);
             mprFree(responseHeaders);
         }
     }
