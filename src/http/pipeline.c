@@ -381,7 +381,7 @@ bool maRunPipeline(MaConn *conn)
     q = conn->response->queue[MA_QUEUE_SEND].nextQ;
     
     if (q->stage->run) {
-        q->stage->run(q);
+        MEASURE(conn, q->stage->name, "run", q->stage->run(q));
     }
     return maServiceQueues(conn);
 }
@@ -659,7 +659,7 @@ static void openQ(MaQueue *q)
     }
     q->flags |= MA_QUEUE_OPEN;
     if (q->open) {
-        q->open(q);
+        MEASURE(conn, q->stage->name, "open", q->stage->open(q));
     }
 }
 
@@ -677,7 +677,7 @@ static void startQ(MaQueue *q)
     }
     q->flags |= MA_QUEUE_STARTED;
     if (q->start) {
-        q->start(q);
+        MEASURE(q, q->stage->name, "start", q->start(q));
     }
 }
 

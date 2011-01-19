@@ -66,6 +66,10 @@ int destroyRequest(MaRequest *req)
             conn->input = maSplitPacket(conn, conn->input, 0);
         }
     }
+#if BLD_DEBUG
+    mprLog(conn, 4, "TIME: Request %s took %,d msec %,d ticks", req->url, mprGetTime(req) - req->startTime,
+        mprGetTicks() - req->startTicks);
+#endif
     return 0;
 }
 
@@ -152,7 +156,6 @@ static bool parseRequest(MaConn *conn, MaPacket *packet)
     if ((len = mprGetBufLength(packet->content)) == 0) {
         return 0;
     }
-
     start = mprGetBufStart(packet->content);
     if ((end = mprStrnstr(start, "\r\n\r\n", len)) == 0) {
         return 0;
@@ -162,16 +165,11 @@ static bool parseRequest(MaConn *conn, MaPacket *packet)
         maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, "Header too big");
         return 0;
     }
-#if UNUSED
-    *end = '\0'; mprLog(conn, 3, "\n@@@ Request =>\n%s\n", start); *end = '\r';
-#endif
-
     if (parseFirstLine(conn, packet)) {
         parseHeaders(conn, packet);
     } else {
         return 0;
     }
-
     maMatchHandler(conn);
     
     /*
@@ -217,6 +215,11 @@ static bool parseFirstLine(MaConn *conn, MaPacket *packet)
     req = conn->request = maCreateRequest(conn);
     resp = conn->response = maCreateResponse(conn);
     host = conn->host;
+
+#if BLD_DEBUG
+    req->startTime = mprGetTime(conn);
+    req->startTicks = mprGetTicks();
+#endif
 
     methodName = getToken(conn, " ");
     if (*methodName == '\0') {

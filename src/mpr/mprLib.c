@@ -26921,22 +26921,29 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 /*
     High resolution timer
  */
-#if BLD_UNIX_LIKE
-    #if BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64
-        inline MprTime mprGetHiResTime() {
-            MprTime  now;
+#if BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64
+    #if BLD_UNIX_LIKE
+        uint64 mprGetTicks() {
+            uint64  now;
             __asm__ __volatile__ ("rdtsc" : "=A" (now));
             return now;
         }
-    #endif /* BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64 */
-
-#elif BLD_WIN_LIKE
-    inline MprTime mprGetHiResTime() {
-        MprTime  now;
-        QueryPerformanceCounter((LARGE_INTEGER*) &now);
-        return now;
+    #elif BLD_WIN_LIKE
+        int64 mprGetTicks() {
+            LARGE_INTEGER  now;
+            QueryPerformanceCounter(&now);
+            return (uint64) now;
+        }
+    #else
+        uint64 mprGetTicks() {
+            return (uint64) mprGetTime();
+        }
+    #endif
+#else 
+    uint64 mprGetTicks() {
+        return (uint64) mprGetTime();
     }
-#endif /* BLD_WIN_LIKE */
+#endif
 
 
 /*

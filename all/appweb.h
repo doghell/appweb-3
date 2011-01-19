@@ -2011,6 +2011,10 @@ typedef struct MaRequest {
     MprTime         since;                  /**< If-Modified date */
     bool            ifModified;             /**< If-Modified processing requested */
     bool            ifMatch;                /**< If-Match processing requested */
+#if BLD_DEBUG
+    MprTime         startTime;              /**< Start time of request */
+    uint64          startTicks;             /**< Start tick time of request */
+#endif
 } MaRequest;
 
 /**

@@ -2437,6 +2437,8 @@ extern char *mprFormatTime(MprCtx ctx, cchar *fmt, struct tm *timep);
  */
 extern MprTime  mprGetTime(MprCtx ctx);
 
+extern uint64 mprGetTicks();
+
 /**
  *  Return the time remaining until a timeout has elapsed
  *  @param ctx Any memory context allocated by mprAlloc or mprCreate.
@@ -2489,6 +2491,19 @@ MprTime mprMakeUniversalTime(MprCtx ctx, struct tm *tm);
 extern int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int timezone, struct tm *defaults);
 
 extern int mprGetTimeZoneOffset(MprCtx ctx, MprTime when);
+
+#if BLD_DEBUG
+#define MEASURE(ctx, tag1, tag2, op) \
+    if (1) { \
+        MprTime start = mprGetTime(ctx); \
+        uint64  ticks = mprGetTicks(); \
+        op; \
+        mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec, %,d ticks", tag1, tag2, \
+            mprGetTime(ctx) - start, mprGetTicks() - ticks); \
+    } else 
+#else
+#define MEASURE(tag, op) op
+#endif
 
 /**
  *  List Module.
