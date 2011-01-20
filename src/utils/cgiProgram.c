@@ -2,9 +2,7 @@
  *  cgiProgram.c - Test CGI program
  *
  *  Copyright (c) All Rights Reserved. See details at the end of the file.
- */
-
-/*
+ *
  *  Usage:
  *      cgiProgram [switches]
  *          -a                  Output the args (used for ISINDEX queries)
@@ -53,12 +51,12 @@ static int      timeout;
 
 static void     printQuery();
 static void     printPost(MprBuf *buf);
-static int      getVars(MprCtx ctx, char*** cgiKeys, char* buf, int buflen);
+static int      getVars(MprCtx ctx, char ***cgiKeys, char *buf, int buflen);
 static int      getPostData(MprCtx ctx, MprBuf *buf);
 static int      getQueryString(Mpr *mpr, char **buf, int *buflen);
-static void     descape(char* src);
-static char     hex2Char(char* s); 
-static char     *safeGetenv(char* key);
+static void     descape(char *src);
+static char     hex2Char(char *s); 
+static char     *safeGetenv(char *key);
 static void     error(Mpr *mpr, char *fmt, ...);
 
 #if !VXWORKS && !WINCE
@@ -73,7 +71,7 @@ static void     printEnv(char **env);
 #if VXWORKS || WINCE
 MAIN(cgiProgramMain, int argc, char *argv[])
 #else
-int main(int argc, char* argv[], char* envp[])
+int main(int argc, char *argv[], char *envp[])
 #endif
 {
     char    *cp, *method;
@@ -493,9 +491,9 @@ static int getPostData(MprCtx ctx, MprBuf *buf)
 }
 
 
-static int getVars(MprCtx ctx, char*** cgiKeys, char* buf, int buflen)
+static int getVars(MprCtx ctx, char ***cgiKeys, char *buf, int buflen)
 {
-    char**  keyList;
+    char    **keyList;
     char    *eq, *cp, *pp;
     int     i, keyCount;
 
@@ -539,7 +537,7 @@ static int getVars(MprCtx ctx, char*** cgiKeys, char* buf, int buflen)
 }
 
 
-static char hex2Char(char* s) 
+static char hex2Char(char *s) 
 {
     char    c;
 
@@ -560,7 +558,7 @@ static char hex2Char(char* s)
 }
 
 
-static void descape(char* src) 
+static void descape(char *src) 
 {
     char    *dest;
 
@@ -577,9 +575,9 @@ static void descape(char* src)
 }
 
 
-static char* safeGetenv(char* key)
+static char *safeGetenv(char *key)
 {
-    char*   cp;
+    char    *cp;
 
     cp = getenv(key);
     if (cp == 0) {
