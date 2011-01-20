@@ -2508,10 +2508,9 @@ extern int mprGetTimeZoneOffset(MprCtx ctx, MprTime when);
                 op; \
                 elapsed = mprGetTime(ctx) - start; \
                 if (elapsed < 1000) { \
-                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec, %,d ticks", tag1, tag2, \
-                        mprGetTime(ctx) - start, mprGetTicks() - ticks); \
+                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec, %,d ticks", tag1, tag2, elapsed, mprGetTicks() - ticks); \
                 } else { \
-                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec", tag1, tag2, mprGetTime(ctx) - start); \
+                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec", tag1, tag2, elapsed); \
                 } \
             } else 
     #else

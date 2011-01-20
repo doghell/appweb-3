@@ -67,12 +67,15 @@ int destroyRequest(MaRequest *req)
         }
     }
 #if BLD_DEBUG
+    {
+        MprTime     elapsed = mprGetTime(req) - req->startTime;
 #if MPR_HIGH_RES_TIMER
-    mprLog(conn, 4, "TIME: Request %s took %,d msec %,d ticks", req->url, mprGetTime(req) - req->startTime,
-           mprGetTicks() - req->startTicks);
-#else
-    mprLog(conn, 4, "TIME: Request %s took %,d msec", req->url, mprGetTime(req) - req->startTime);
+        if (elapsed < 1000) {
+            mprLog(conn, 4, "TIME: Request %s took %,d msec %,d ticks", req->url, elapsed, mprGetTicks() - req->startTicks);
+        } else
 #endif
+            mprLog(conn, 4, "TIME: Request %s took %,d msec", req->url, elapsed);
+    }
 #endif
     return 0;
 }

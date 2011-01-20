@@ -73,7 +73,6 @@ if (test.config["http_client"] == 1 && session["main"] && test.depth > 1) {
     if (test.threads == 1) {
         assert(exists("web/tmp/methods.tst"))
     }
-
     //  DELETE
     run("cmd/test.dat /tmp/test.dat")
     assert(exists("web/tmp/test.dat"))
@@ -116,6 +115,11 @@ if (test.config["http_client"] == 1 && session["main"] && test.depth > 1) {
     if (test.depth > 2) {
         run("-i 2000 /index.html")
         run("-i 2000 /big.txt")
+    }
+
+    //  Cleanup
+    for each (f in Path("web/tmp").files()) {
+        Path(f).remove()
     }
 
 } else {

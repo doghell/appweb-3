@@ -23,24 +23,22 @@ for (i in 64) {
 
 //  Scale the count by the test depth
 count = sizes[test.depth] * 1024
-print("@@@@ Writing " + count * buf.available)
 
 function postTest(url: String) {
+    // print("@@@@ Writing " + count * buf.available + " to " + url)
     http.post(HTTP + url)
     for (i in count) {
         http.write(buf)
     }
-print("STATUS " + http.code)
     assert(http.code == 200)
+    assert(http.response)
     http.close()
 }
 
-// postTest("/index.html")
+postTest("/index.html")
 postTest("/form.php")
-/*
 postTest("/cgiProgram.cgi")
 postTest("/form.ejs")
 if (test.config["debug"] == 1) {
     postTest("/egiProgram.egi")
 }
-*/

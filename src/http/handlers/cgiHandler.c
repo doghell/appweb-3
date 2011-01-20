@@ -342,14 +342,15 @@ static void pushDataToCgi(MaQueue *q)
         len = mprGetBufLength(buf);
         mprAssert(len > 0);
         rc = mprWriteCmdPipe(cmd, MPR_CMD_STDIN, mprGetBufStart(buf), len);
+        mprLog(q, 5, "CGI: write %d bytes to gateway. Rc rc %d, errno %d", len, rc, mprGetOsError());
         if (rc < 0) {
-            mprLog(q, 2, "CGI: write to gateway failed for %d bytes, rc %d, errno %d\n", len, rc, mprGetOsError());
+            mprLog(q, 2, "CGI: write to gateway failed for %d bytes, rc %d, errno %d", len, rc, mprGetOsError());
             mprCloseCmdFd(cmd, MPR_CMD_STDIN);
             maFailRequest(conn, MPR_HTTP_CODE_BAD_GATEWAY, "Can't write body data to CGI gateway");
             break;
 
         } else {
-            mprLog(q, 5, "CGI: write to gateway %d bytes asked to write %d\n", rc, len);
+            mprLog(q, 5, "CGI: write to gateway %d bytes asked to write %d", rc, len);
             mprAdjustBufStart(buf, rc);
             if (mprGetBufLength(buf) > 0) {
                 maPutBack(q, packet);
@@ -383,6 +384,7 @@ static int writeToClient(MaQueue *q, MprCmd *cmd, MprBuf *buf, int channel)
      */
     for (servicedQueues = 0; (len = mprGetBufLength(buf)) > 0 ; ) {
         if (!conn->requestFailed) {
+            mprLog(q, 5, "CGI: write %d bytes to client. Rc rc %d, errno %d", len, rc, mprGetOsError());
             rc = maWriteBlock(q, mprGetBufStart(buf), len, 0);
             mprLog(cmd, 5, "Write to browser ask %d, actual %d", len, rc);
         } else {
@@ -438,6 +440,7 @@ static int cgiCallback(MprCmd *cmd, int channel, void *data)
     mprAssert(q);
     lock(conn);
 
+    mprLog(q, 5, "CGI: gateway I/O event on channel %d, state %d", channel, conn->state);
     cgiEvent(q, cmd, channel);
 
     /*
@@ -511,6 +514,8 @@ static void cgiEvent(MaQueue *q, MprCmd *cmd, int channel)
                 }
             }
             nbytes = mprReadCmdPipe(cmd, channel, mprGetBufEnd(buf), space);
+            mprLog(q, 5, "CGI: read from gateway %d on channel %d. errno %d", nbytes, channel, 
+                    nbytes >= 0 ? 0 : mprGetOsError());
             if (nbytes < 0) {
                 err = mprGetError();
                 if (err == EINTR) {
@@ -678,7 +683,7 @@ static bool parseHeader(MaConn *conn, MprCmd *cmd)
     }
     
     if (strchr(mprGetBufStart(buf), ':')) {
-        mprLog(conn, 4, "CGI: parseHeader: header\n%s\n", headers);
+        mprLog(conn, 4, "CGI: parseHeader: header\n%s", headers);
 
         while (mprGetBufLength(buf) > 0 && buf->start[0] && (buf->start[0] != '\r' && buf->start[0] != '\n')) {
 

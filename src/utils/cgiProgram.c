@@ -41,8 +41,7 @@ static char     **originalArgv;
 static int      outputArgs, outputEnv, outputPost, outputQuery;
 static int      outputBytes, outputHeaderLines, responseStatus;
 static char     *outputLocation;
-static char     *postBuf;
-static int      postLen;
+static MprBuf   *postBuf;
 static char     **postKeys;
 static char     *queryBuf;
 static int      queryLen;
@@ -53,9 +52,9 @@ static int      timeout;
 /***************************** Forward Declarations ***************************/
 
 static void     printQuery();
-static void     printPost();
+static void     printPost(MprBuf *buf);
 static int      getVars(MprCtx ctx, char*** cgiKeys, char* buf, int buflen);
-static int      getPostData(MprCtx ctx, char **buf, int *buflen);
+static int      getPostData(MprCtx ctx, MprBuf *buf);
 static int      getQueryString(Mpr *mpr, char **buf, int *buflen);
 static void     descape(char* src);
 static char     hex2Char(char* s); 
@@ -89,8 +88,6 @@ int main(int argc, char* argv[], char* envp[])
     hasError = 0;
     timeout = 0;
     queryBuf = 0;
-    postBuf = 0;
-    postLen = 0;
     queryLen = 0;
     numQueryKeys = numPostKeys = 0;
 
@@ -202,11 +199,12 @@ int main(int argc, char* argv[], char* envp[])
         method = "GET";
     } else {
         if (strcmp(method, "POST") == 0) {
-            if (getPostData(mpr, &postBuf, &postLen) < 0) {
-                error(mpr, "Can't read CGI input, len %d", postLen);
+            postBuf = mprCreateBuf(mpr, -1, -1);
+            if (getPostData(mpr, postBuf) < 0) {
+                error(mpr, "Can't read CGI input");
             }
             if (strcmp(safeGetenv("CONTENT_TYPE"), "application/x-www-form-urlencoded") == 0) {
-                numPostKeys = getVars(mpr, &postKeys, postBuf, postLen);
+                numPostKeys = getVars(mpr, &postKeys, mprGetBufStart(postBuf), mprGetBufLength(postBuf));
             }
         }
     }
@@ -289,7 +287,7 @@ int main(int argc, char* argv[], char* envp[])
             printQuery();
         }
         if (outputPost) {
-            printPost();
+            printPost(postBuf);
         }
         if (timeout) {
             mprSleep(mpr, timeout * MPR_TICKS_PER_SEC);
@@ -422,7 +420,7 @@ static void printQuery()
 }
 
  
-static void printPost()
+static void printPost(MprBuf *buf)
 {
     int     i;
 
@@ -431,8 +429,8 @@ static void printPost()
         for (i = 0; i < (numPostKeys * 2); i += 2) {
             mprPrintf(mpr, "<p>PVAR %s=%s</p>\r\n", postKeys[i], postKeys[i+1]);
         }
-    } else if (postLen > 0) {
-        write(1, postBuf, postLen);
+    } else if (buf) {
+        write(1, mprGetBufStart(buf), mprGetBufLength(buf));
     } else {
         mprPrintf(mpr, "<H2>No Post Data Found</H2>\r\n");
     }
@@ -456,41 +454,41 @@ static int getQueryString(Mpr *mpr, char **buf, int *buflen)
 }
 
 
-static int getPostData(MprCtx ctx, char **buf, int *buflen)
+static int getPostData(MprCtx ctx, MprBuf *buf)
 {
-    char*   inBuf;
-    int     contentLength;
-    int     bytes, len;
+    char    *contentLength;
+    int     bytes, len, space;
 
-    *buflen = 0;
-    *buf = 0;
-
-    contentLength = atoi(safeGetenv("CONTENT_LENGTH"));
-
-    /*
-     *  Simple sanity test
-     */
-    if (contentLength < 0 || contentLength > (16 * 1024 * 1024)) {
-        error(mpr, "Bad content length: %d", contentLength);
-        return -1;
+    if ((contentLength = getenv("CONTENT_LENGTH")) != 0) {
+        len = atoi(contentLength);
+    } else {
+        len = MAXINT;
     }
+    while (len > 0) {
+        space = mprGetBufSpace(buf);
+        if (space < MPR_BUFSIZE) {
+            if (mprGrowBuf(buf, MPR_BUFSIZE) < 0) {
+                error(mpr, "Couldn't allocate memory to read post data");
+                return -1;
+            }
+        }
+        space = mprGetBufSpace(buf);
+        bytes = read(0, mprGetBufEnd(buf), space);
 
-    inBuf = (char*) mprAlloc(ctx, contentLength + 1);
-
-    for (len = 0; len < contentLength; ) {
-        bytes = read(0, &inBuf[len], contentLength - len);
         if (bytes < 0) {
             error(mpr, "Couldn't read CGI input %d", errno);
             return -1;
-        } else if (bytes == 0) {
-            mprSleep(mpr, 10);
-        }
-        len += bytes;
-    }
 
-    inBuf[contentLength] = '\0';
-    *buf = inBuf;
-    *buflen = contentLength;
+        } else if (bytes == 0) {
+            if (contentLength == 0) {
+                /* EOF */
+                break;
+            }
+        }
+        mprAdjustBufEnd(buf, bytes);
+        len -= bytes;
+    }
+    mprAddNullToBuf(buf);
     return 0;
 }
 
