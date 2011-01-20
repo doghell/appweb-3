@@ -1233,6 +1233,7 @@ extern MaQueue *maGetNextQueueForService(MaQueue *q);
 extern void maInitQueue(MaHttp *http, MaQueue *q, cchar *name);
 extern void maInitSchedulerQueue(MaQueue *q);
 extern void maInsertQueue(MaQueue *prev, MaQueue *q);
+extern void maCheckQueueCount(MaQueue *q);
 
 /******************************** Pipeline Stages *****************************/
 /*

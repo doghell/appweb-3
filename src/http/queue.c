@@ -11,9 +11,9 @@
 /********************************** Forwards **********************************/
 
 #if BLD_DEBUG
-static void checkQueueCount(MaQueue *q);
+void maCheckQueueCount(MaQueue *q);
 #else
-#define checkQueueCount(q)
+#define maCheckQueueCount(q)
 #endif
 
 /************************************ Code ************************************/
@@ -134,7 +134,7 @@ MaPacket *maGet(MaQueue *q)
     MaQueue     *prev;
     MaPacket    *packet;
 
-    checkQueueCount(q);
+    maCheckQueueCount(q);
 
     conn = q->conn;
     while (q->first) {
@@ -154,7 +154,7 @@ MaPacket *maGet(MaQueue *q)
                 mprAssert(q->first == 0);
             }
         }
-        checkQueueCount(q);
+        maCheckQueueCount(q);
         if (q->flags & MA_QUEUE_FULL && q->count < q->low) {
             /*
              *  This queue was full and now is below the low water mark. Back-enable the previous queue.
@@ -165,7 +165,7 @@ MaPacket *maGet(MaQueue *q)
                 maEnableQueue(prev);
             }
         }
-        checkQueueCount(q);
+        maCheckQueueCount(q);
         return packet;
     }
     return 0;
@@ -300,7 +300,7 @@ MaPacket *maCreateEndPacket(MprCtx ctx)
 
 
 #if BLD_DEBUG
-static void checkQueueCount(MaQueue *q)
+void maCheckQueueCount(MaQueue *q)
 {
     MaPacket    *packet;
     int         count;
@@ -321,7 +321,7 @@ void maPutForService(MaQueue *q, MaPacket *packet, bool serviceQ)
 {
     mprAssert(packet);
    
-    checkQueueCount(q);
+    maCheckQueueCount(q);
     q->count += maGetPacketLength(packet);
     packet->next = 0;
     
@@ -333,7 +333,7 @@ void maPutForService(MaQueue *q, MaPacket *packet, bool serviceQ)
         q->first = packet;
         q->last = packet;
     }
-    checkQueueCount(q);
+    maCheckQueueCount(q);
     if (serviceQ && !(q->flags & MA_QUEUE_DISABLED))  {
         maScheduleQueue(q);
     }
@@ -352,8 +352,10 @@ void maJoinForService(MaQueue *q, MaPacket *packet, bool serviceQ)
          *  Just use the service queue as a holding queue while we aggregate the post data.
          */
         maPutForService(q, packet, 0);
+        maCheckQueueCount(q);
 
     } else {
+        maCheckQueueCount(q);
         q->count += maGetPacketLength(packet);
         if (q->first && maGetPacketLength(q->first) == 0) {
             old = q->first;
@@ -366,10 +368,11 @@ void maJoinForService(MaQueue *q, MaPacket *packet, bool serviceQ)
              *  Aggregate all data into one packet and free the packet.
              */
             maJoinPacket(q->first, packet);
+            maCheckQueueCount(q);
             maFreePacket(q, packet);
         }
     }
-    checkQueueCount(q);
+    maCheckQueueCount(q);
     if (serviceQ && !(q->flags & MA_QUEUE_DISABLED))  {
         maScheduleQueue(q);
     }
@@ -418,7 +421,7 @@ void maPutBack(MaQueue *q, MaPacket *packet)
     mprAssert(maGetPacketLength(packet) >= 0);
     q->count += maGetPacketLength(packet);
     mprAssert(q->count >= 0);
-    checkQueueCount(q);
+    maCheckQueueCount(q);
 }
 
 
@@ -664,7 +667,7 @@ int maWriteBlock(MaQueue *q, cchar *buf, int size, bool block)
     }
     for (written = 0; size > 0; ) {
         if (q->count >= q->max && !drain(q, block)) {
-            checkQueueCount(q);
+            maCheckQueueCount(q);
             break;
         }
         if (conn->disconnected) {
@@ -673,14 +676,16 @@ int maWriteBlock(MaQueue *q, cchar *buf, int size, bool block)
         if ((packet = maCreateDataPacket(q, packetSize)) == 0) {
             return MPR_ERR_NO_MEMORY;
         }
-        bytes = mprPutBlockToBuf(packet->content, buf, size);
+        if ((bytes = mprPutBlockToBuf(packet->content, buf, size)) == 0) {
+            return MPR_ERR_NO_MEMORY;
+        }
         buf += bytes;
         size -= bytes;
         written += bytes;
         maPutForService(q, packet, 1);
-        checkQueueCount(q);
+        maCheckQueueCount(q);
     }
-    checkQueueCount(q);
+    maCheckQueueCount(q);
     return written;
 }
 
@@ -712,7 +717,11 @@ int maWrite(MaQueue *q, cchar *fmt, ...)
  */
 int maJoinPacket(MaPacket *packet, MaPacket *p)
 {
-    if (mprPutBlockToBuf(packet->content, mprGetBufStart(p->content), maGetPacketLength(p)) < 0) {
+    int     len;
+
+    len = maGetPacketLength(p);
+
+    if (mprPutBlockToBuf(packet->content, mprGetBufStart(p->content), len) != len) {
         return MPR_ERR_NO_MEMORY;
     }
     return 0;
@@ -747,7 +756,9 @@ MaPacket *maSplitPacket(MprCtx ctx, MaPacket *orig, int offset)
     }
     if (orig->content && maGetPacketLength(orig) > 0) {
         mprAdjustBufEnd(orig->content, -count);
-        mprPutBlockToBuf(packet->content, mprGetBufEnd(orig->content), count);
+        if (mprPutBlockToBuf(packet->content, mprGetBufEnd(orig->content), count) != count) {
+            return 0;
+        }
 #if BLD_DEBUG
         mprAddNullToBuf(orig->content);
 #endif
@@ -788,7 +799,7 @@ void maCleanQueue(MaQueue *q)
         }
         prev = packet;
     }
-    checkQueueCount(q);
+    maCheckQueueCount(q);
 }
 
 
@@ -822,7 +833,7 @@ void maDiscardData(MaQueue *q, bool removePackets)
                 mprFlushBuf(packet->content);
             }
         }
-        checkQueueCount(q);
+        maCheckQueueCount(q);
     }
 }
 

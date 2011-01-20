@@ -143,7 +143,6 @@ MprModule *maSslModuleInit(MaHttp *http, cchar *path)
     if ((module = mprLoadSsl(http, 1)) == 0) {
         return 0;
     }
-    // module->name = "sslModule";
     if ((stage = maCreateStage(http, "sslModule", MA_STAGE_MODULE)) == 0) {
         mprFree(module);
         return 0;

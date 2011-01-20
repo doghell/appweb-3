@@ -5737,13 +5737,19 @@ MprBlk *_mprAllocBlock(MprCtx ctx, MprHeap *heap, MprBlk *parent, uint usize)
      *  exceeded. It is the application's responsibility to set the red-line value suitable for the system.
      */
     if (parent) {
+#if UNUSED
         if (size >= MPR_ALLOC_BIGGEST) {
+            /* Block is too big */
+            allocException(parent, size, 0);
             return 0;
 
-        } else if ((size + mpr->alloc.bytesAllocated) > mpr->alloc.maxMemory) {
+        } else 
+#endif
+        if ((size + mpr->alloc.bytesAllocated) > mpr->alloc.maxMemory) {
             /*
              *  Prevent allocation as over the maximum memory limit.
              */
+            allocException(parent, size, 0);
             return 0;
 
         } else if ((size + mpr->alloc.bytesAllocated) > mpr->alloc.redLine) {
@@ -7999,6 +8005,7 @@ int mprSetBufSize(MprBuf *bp, int initialSize, int maxSize)
      *  New buffer - create storage for the data
      */
     if ((bp->data = mprAlloc(bp, initialSize)) == 0) {
+        mprAssert(!MPR_ERR_NO_MEMORY);
         return MPR_ERR_NO_MEMORY;
     }
     bp->growBy = initialSize;
@@ -8200,7 +8207,7 @@ int mprPutCharToBuf(MprBuf *bp, int c)
     space = bp->buflen - mprGetBufLength(bp);
     if (space < (int) sizeof(char)) {
         if (mprGrowBuf(bp, 1) < 0) {
-            return -1;
+            return MPR_ERR_NO_MEMORY;
         }
     }
     cp = (char*) bp->end;
@@ -8320,18 +8327,16 @@ int mprGrowBuf(MprBuf *bp, int need)
     if (bp->maxsize > 0 && bp->buflen >= bp->maxsize) {
         return MPR_ERR_TOO_MANY;
     }
-
     if (bp->start > bp->end) {
         mprCompactBuf(bp);
     }
-
     if (need > 0) {
         growBy = max(bp->growBy, need);
     } else {
         growBy = bp->growBy;
     }
-    
     if ((newbuf = mprAlloc(bp, bp->buflen + growBy)) == 0) {
+        mprAssert(!MPR_ERR_NO_MEMORY);
         return MPR_ERR_NO_MEMORY;
     }
     if (bp->data) {
@@ -26927,7 +26932,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 /*
     High resolution timer
  */
-#if BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64
+#if MPR_HIGH_RES_TIMER
     #if BLD_UNIX_LIKE
         uint64 mprGetTicks() {
             uint64  now;
@@ -26947,7 +26952,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
     #endif
 #else 
     uint64 mprGetTicks() {
-        return (uint64) mprGetTime();
+        return 0;
     }
 #endif
 

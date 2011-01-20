@@ -119,7 +119,6 @@ static void openPhp(MaQueue *q)
     MaAlias         *alias;
 
     conn = q->conn;
-
     if (!q->stage->stageData) {
         if (initializePhp(conn->http) < 0) {
             maFailRequest(conn, MPR_HTTP_CODE_INTERNAL_SERVER_ERROR, "PHP initialization failed");
@@ -292,6 +291,7 @@ static int writeBlock(cchar *str, uint len TSRMLS_DC)
         return -1;
     }
     written = maWriteBlock(conn->response->queue[MA_QUEUE_SEND].nextQ, str, len, 1);
+    mprLog(mprGetMpr(0), 6, "php: write %d", written);
     if (written <= 0) {
         php_handle_aborted_connection();
     }
@@ -341,6 +341,7 @@ static int sendHeaders(sapi_headers_struct *phpHeaders TSRMLS_DC)
     conn = (MaConn*) SG(server_context);
     maSetResponseCode(conn, phpHeaders->http_response_code);
     maSetResponseMimeType(conn, phpHeaders->mimetype);
+    mprLog(mprGetMpr(0), 6, "php: send headers");
     return SAPI_HEADER_SENT_SUCCESSFULLY;
 }
 
@@ -400,7 +401,7 @@ static int readPostData(char *buffer, uint bufsize TSRMLS_DC)
     MaConn      *conn;
     MaQueue     *q;
     MprBuf      *content;
-    int         len;
+    int         len, nbytes;
 
     conn = (MaConn*) SG(server_context);
     q = conn->response->queue[MA_QUEUE_RECEIVE].prevQ;
@@ -410,9 +411,11 @@ static int readPostData(char *buffer, uint bufsize TSRMLS_DC)
     content = q->first->content;
     len = min(mprGetBufLength(content), (int) bufsize);
     if (len > 0) {
-        mprMemcpy(buffer, len, mprGetBufStart(content), len);
+        nbytes = mprMemcpy(buffer, len, mprGetBufStart(content), len);
+        mprAssert(nbytes == len);
         mprAdjustBufStart(content, len);
     }
+    mprLog(mprGetMpr(0), 6, "php: read post data %d remaining %d", len, mprGetBufLength(content));
     return len;
 }
 
@@ -444,6 +447,7 @@ static int initializePhp(MaHttp *http)
     tsrm_ls = (void***) ts_resource(0);
 #endif
 
+    mprLog(mprGetMpr(0), 2, "php: initialize php library");
 #ifdef BLD_FEATURE_PHP_INI
     phpSapiBlock.php_ini_path_override = BLD_FEATURE_PHP_INI;
 #else

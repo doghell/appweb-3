@@ -2492,17 +2492,37 @@ extern int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int timezo
 
 extern int mprGetTimeZoneOffset(MprCtx ctx, MprTime when);
 
-#if BLD_DEBUG
-#define MEASURE(ctx, tag1, tag2, op) \
-    if (1) { \
-        MprTime start = mprGetTime(ctx); \
-        uint64  ticks = mprGetTicks(); \
-        op; \
-        mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec, %,d ticks", tag1, tag2, \
-            mprGetTime(ctx) - start, mprGetTicks() - ticks); \
-    } else 
+#if (BLD_UNIX_LIKE || BLD_WIN_LIKE) && (BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64)
+    #define MPR_HIGH_RES_TIMER 1
 #else
-#define MEASURE(tag, op) op
+    #define MPR_HIGH_RES_TIMER 0
+#endif
+
+#if BLD_DEBUG
+    #if MPR_HIGH_RES_TIMER
+        #define MEASURE(ctx, tag1, tag2, op) \
+            if (1) { \
+                MprTime elapsed, start = mprGetTime(ctx); \
+                uint64  ticks = mprGetTicks(); \
+                op; \
+                elapsed = mprGetTime(ctx) - start; \
+                if (elapsed < 1000) { \
+                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec, %,d ticks", tag1, tag2, \
+                        mprGetTime(ctx) - start, mprGetTicks() - ticks); \
+                } else { \
+                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec", tag1, tag2, mprGetTime(ctx) - start); \
+                } \
+            } else 
+    #else
+        #define MEASURE(ctx, tag1, tag2, op) \
+            if (1) { \
+                MprTime start = mprGetTime(ctx); \
+                op; \
+                mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec", tag1, tag2, mprGetTime(ctx) - start); \
+            } else 
+    #endif
+#else
+    #define MEASURE(ctx, tag1, tag2, op) op
 #endif
 
 /**
@@ -9748,7 +9768,10 @@ static int configureCertificates(MprSsl *ssl, SSL_CTX *ctx, char *key, char *cer
         return 0;
     }
     if (cert && SSL_CTX_use_certificate_chain_file(ctx, cert) <= 0) {
-        mprError(ssl, "OpenSSL: Can't define certificate file: %s", cert); 
+        if (SSL_CTX_use_certificate_file(ctx, cert, SSL_FILETYPE_ASN1) <= 0) {
+            mprError(ssl, "OpenSSL: Can't open certificate file: %s", cert);
+            return -1;
+        }
         return -1;
     }
     key = (key == 0) ? cert : key;
@@ -9756,7 +9779,7 @@ static int configureCertificates(MprSsl *ssl, SSL_CTX *ctx, char *key, char *cer
         if (SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM) <= 0) {
             /* attempt ASN1 for self-signed format */
             if (SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_ASN1) <= 0) {
-                mprError(ssl, "OpenSSL: Can't define private key file: %s", key); 
+                mprError(ssl, "OpenSSL: Can't open private key file: %s", key); 
                 return -1;
             }
         }

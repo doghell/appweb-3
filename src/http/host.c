@@ -116,6 +116,7 @@ MaHost *maCreateVirtualHost(MaServer *server, cchar *ipAddrPort, MaHost *parent)
     host->maxKeepAlive = parent->maxKeepAlive;
     host->keepAlive = parent->keepAlive;
     host->accessLog = parent->accessLog;
+    host->mimeTypes = parent->mimeTypes;
     host->location = maCreateLocation(host, parent->location);
 
     host->traceMask = parent->traceMask;

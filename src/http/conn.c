@@ -85,7 +85,7 @@ static int connectionDestructor(MaConn *conn)
 
     if (conn->sock) {
         mprLog(conn, 4, "Closing connection");
-        mprCloseSocket(conn->sock, MPR_SOCKET_GRACEFUL);
+        mprCloseSocket(conn->sock, conn->connectionFailed ? 0 : MPR_SOCKET_GRACEFUL);
         mprFree(conn->sock);
     }
     return 0;

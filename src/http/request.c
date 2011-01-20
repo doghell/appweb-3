@@ -67,8 +67,12 @@ int destroyRequest(MaRequest *req)
         }
     }
 #if BLD_DEBUG
+#if MPR_HIGH_RES_TIMER
     mprLog(conn, 4, "TIME: Request %s took %,d msec %,d ticks", req->url, mprGetTime(req) - req->startTime,
-        mprGetTicks() - req->startTicks);
+           mprGetTicks() - req->startTicks);
+#else
+    mprLog(conn, 4, "TIME: Request %s took %,d msec", req->url, mprGetTime(req) - req->startTime);
+#endif
 #endif
     return 0;
 }
@@ -216,7 +220,7 @@ static bool parseFirstLine(MaConn *conn, MaPacket *packet)
     resp = conn->response = maCreateResponse(conn);
     host = conn->host;
 
-#if BLD_DEBUG
+#if BLD_DEBUG    
     req->startTime = mprGetTime(conn);
     req->startTicks = mprGetTicks();
 #endif
@@ -702,7 +706,11 @@ static bool processContent(MaConn *conn, MaPacket *packet)
     if (packet == 0) {
         return 0;
     }
-
+    if (conn->connectionFailed) {
+        conn->state = MPR_HTTP_STATE_PROCESSING;
+        maPutForService(resp->queue[MA_QUEUE_SEND].nextQ, maCreateHeaderPacket(resp), 1);
+        return 1;
+    }
     content = packet->content;
     if (req->flags & MA_REQ_CHUNKED) {
         if ((remaining = getChunkPacketSize(conn, content)) == 0) {

@@ -38,6 +38,7 @@ static int  interpretCommands(EcCompiler*cp, cchar *cmd);
 static int  interpretFiles(EcCompiler *cp, MprList *files, int argc, char **argv, cchar *className, cchar *methodName,
                 int lang);
 static int  preloadModules(EcCompiler *cp, MprList *modules);
+static void setupSignals();
 
 
 #if BLD_APPWEB_PRODUCT
@@ -61,6 +62,7 @@ static int  preloadModules(EcCompiler *cp, MprList *modules);
      */
     mpr = mprCreate(argc, argv, ejsMemoryFailure);
     mprSetAppName(mpr, argv[0], 0, 0);
+    setupSignals();
 
     if (mprStart(mpr, MPR_START_EVENTS_THREAD) < 0) {
         mprError(mpr, "Can't start mpr services");
@@ -469,7 +471,6 @@ static int commandGets(EcStream *stream)
 }
 
 
-
 static int preloadModules(EcCompiler *cp, MprList *modules)
 {
     cchar   *name;
@@ -482,6 +483,79 @@ static int preloadModules(EcCompiler *cp, MprList *modules)
     }
     cp->useModules = modules;
     return 0;
+}
+
+
+#if BLD_UNIX_LIKE 
+/*
+    Catch signals. Do a graceful shutdown.
+ */
+static void catchSignal(int signo, siginfo_t *info, void *arg)
+{
+    Mpr     *mpr;
+
+    mpr = mprGetMpr();
+    if (mpr) {
+#if DEBUG_IDE
+        if (signo == SIGINT) return;
+#endif
+        mprLog(mpr, 2, "Received signal %d", signo);
+        if (signo == SIGTERM) {
+            mprLog(mpr, 1, "Executing a graceful exit. Waiting for all requests to complete.");
+            mprTerminate(mpr, 1);
+        } else {
+            mprLog(mpr, 1, "Exiting immediately ...");
+            mprTerminate(mpr, 0);
+        }
+    }
+}
+#endif /* BLD_HOST_UNIX */
+
+
+static void setupSignals()
+{
+#if BLD_UNIX_LIKE
+    struct sigaction    act;
+
+    memset(&act, 0, sizeof(act));
+    act.sa_sigaction = catchSignal;
+    act.sa_flags = 0;
+   
+    /*
+        Mask these when processing signals
+     */
+    sigemptyset(&act.sa_mask);
+    sigaddset(&act.sa_mask, SIGALRM);
+    sigaddset(&act.sa_mask, SIGCHLD);
+    sigaddset(&act.sa_mask, SIGPIPE);
+    sigaddset(&act.sa_mask, SIGTERM);
+    sigaddset(&act.sa_mask, SIGUSR1);
+    sigaddset(&act.sa_mask, SIGUSR2);
+
+    if (!mprGetDebugMode(NULL)) {
+        sigaddset(&act.sa_mask, SIGINT);
+    }
+
+    /*
+        Catch these signals
+     */
+    sigaction(SIGINT, &act, 0);
+    sigaction(SIGQUIT, &act, 0);
+    sigaction(SIGTERM, &act, 0);
+    sigaction(SIGUSR1, &act, 0);
+
+    /*
+        Ignore pipe signals
+     */
+    signal(SIGPIPE, SIG_IGN);
+
+#if LINUX
+    /*
+        Ignore signals from write requests to large files
+     */
+    signal(SIGXFSZ, SIG_IGN);
+#endif
+#endif /* BLD_UNIX_LIKE */
 }
 
 
