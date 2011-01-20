@@ -9623,6 +9623,7 @@ static int configureOss(MprSsl *ssl)
      */
     if (ssl->keyFile || ssl->certFile) {
         if (configureCertificates(ssl, context, ssl->keyFile, ssl->certFile) != 0) {
+            mprError(ssl, "OpenSSL: Can't configure certificates");
             SSL_CTX_free(context);
             return MPR_ERR_CANT_INITIALIZE;
         }
@@ -9771,7 +9772,6 @@ static int configureCertificates(MprSsl *ssl, SSL_CTX *ctx, char *key, char *cer
             mprError(ssl, "OpenSSL: Can't open certificate file: %s", cert);
             return -1;
         }
-        return -1;
     }
     key = (key == 0) ? cert : key;
     if (key) {

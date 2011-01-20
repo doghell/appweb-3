@@ -148,10 +148,8 @@ int maAcceptConn(MprSocket *sock, MaServer *server, cchar *ip, int port)
     rc = 0;
     listenSock = sock->listenSock;
 
-#if BLD_DEBUG
     mprLog(server, 4, "New connection from %s:%d for %s:%d %s",
         ip, port, listenSock->ipAddr, listenSock->port, listenSock->sslSocket ? "(secure)" : "");
-#endif
 
     /*
      *  Map the address onto a suitable host to initially serve the request initially until we can parse the Host header.

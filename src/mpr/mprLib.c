@@ -26940,10 +26940,10 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
             return now;
         }
     #elif BLD_WIN_LIKE
-        int64 mprGetTicks() {
+        uint64 mprGetTicks() {
             LARGE_INTEGER  now;
             QueryPerformanceCounter(&now);
-            return (uint64) now;
+            return (((uint64) now.HighPart) << 32) + now.HighPart;
         }
     #else
         uint64 mprGetTicks() {
