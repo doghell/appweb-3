@@ -218,7 +218,7 @@ static bool parseArgs(Mpr *mpr, int argc, char **argv)
                 mprAddItem(headers, mprCreateKeyPair(headers, "Cookie", argv[++nextArg]));
             }
 
-        } else if (strcmp(argp, "--debug") == 0 || strcmp(argp, "-d") == 0 || strcmp(argp, "--debugger") == 0) {
+        } else if (strcmp(argp, "--debug") == 0 || strcmp(argp, "-D") == 0 || strcmp(argp, "--debugger") == 0) {
             mprSetDebugMode(mpr, 1);
             retries = 0;
 
