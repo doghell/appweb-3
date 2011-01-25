@@ -5,6 +5,9 @@
 if (test.config["http_client"] == 1 && session["main"] && test.depth > 1) {
 
     let command = "/usr/bin/env http --host " + session["main"] + " "
+    if (Config.OS == "WIN") {
+        command = "/bin/env http --host " + session["main"] + " "
+    }
     if (test.verbosity > 2) {
         command += "-v "
     }
