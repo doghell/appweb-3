@@ -111,7 +111,6 @@ static void incomingChunkData(MaQueue *q, MaPacket *packet)
         mprAssert(maGetPacketLength(packet) <= req->chunkSize);
         mprLog(q, 5, "chunkFilter: data %d bytes, req->remainingContent %d", maGetPacketLength(packet), 
             req->remainingContent);
-        maCheckQueueCount(q);
         maPutNext(q, packet);
         if (req->remainingContent == 0) {
             req->chunkState = MA_CHUNK_START;
