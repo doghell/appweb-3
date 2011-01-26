@@ -116,10 +116,12 @@ void maProcessReadEvent(MaConn *conn, MaPacket *packet)
     mprAssert(conn);
 
     conn->canProceed = 1;
+    mprLog(conn, 0, "ENTER maProcessReadEvent state %d, packet %p, %s", conn->state, packet, mprGetCurrentThreadName(conn));
     
     while (conn->canProceed) {
-        mprLog(conn, 7, "maProcessReadEvent, state %d", conn->state);
-        
+        mprLog(conn, 0, "maProcessReadEvent, state %d, packet %d, %s", conn->state, packet, mprGetCurrentThreadName(conn));
+        mprAssert(packet == 0 || packet->flags != 0xfeeefeee);
+
         switch (conn->state) {
         case MPR_HTTP_STATE_BEGIN:
             conn->canProceed = parseRequest(conn, packet);
@@ -145,6 +147,7 @@ void maProcessReadEvent(MaConn *conn, MaPacket *packet)
             return;
         }
     }
+    mprLog(conn, 0, "LEAVE maProcessReadEvent state %d, packet %p, dedicated %d, %s", conn->state, packet, conn->dedicated, mprGetCurrentThreadName(conn));
 }
 
 
@@ -831,6 +834,7 @@ bool maProcessCompletion(MaConn *conn)
     /*
      *  This will free the request, response, pipeline and call maPrepConnection to reset the state.
      */
+    mprLog(conn, 0, "request.maProcessComplication fre request");
     mprFree(req->arena);
     return (conn->disconnected) ? 0 : more;
 }

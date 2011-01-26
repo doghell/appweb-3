@@ -257,10 +257,11 @@ static void readEvent(MaConn *conn)
     MprBuf      *content;
     int         nbytes, len;
 
-    while (!conn->disconnected) {
+    do {
         if ((packet = getPacket(conn, &len)) == 0) {
             break;
         }
+        mprAssert(packet->flags != 0xfeeefeee);
         mprAssert(len > 0);
         content = packet->content;
         nbytes = mprReadSocket(conn->sock, mprGetBufEnd(content), len);
@@ -269,18 +270,17 @@ static void readEvent(MaConn *conn)
         if (nbytes > 0) {
             mprAdjustBufEnd(content, nbytes);
             maProcessReadEvent(conn, packet);
-            break;
         } else {
             if (mprIsSocketEof(conn->sock)) {
+                conn->dedicated = 0;
                 if (conn->request) {
                     maProcessReadEvent(conn, packet);
                 }
             } else if (nbytes < 0) {
                 maFailConnection(conn, MPR_HTTP_CODE_COMMS_ERROR, "Communications read error");
             }
-            break;
         }
-    }
+    } while (!conn->disconnected && conn->dedicated);
 }
 
 

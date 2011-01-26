@@ -9140,6 +9140,8 @@ void mprPollCmdPipes(MprCmd *cmd, int timeout)
             stderrCallback(cmd, MPR_READABLE);
         }
     }
+    mprAssert(cmd->status != 0xfeeefeee);
+
 }
 #endif /* BLD_WIN_LIKE && !WINCE */
 
@@ -9167,7 +9169,9 @@ int mprWaitForCmd(MprCmd *cmd, int timeout)
         }
 #if BLD_WIN_LIKE && !WINCE
         mprPollCmdPipes(cmd, timeout);
+        // MOB - WARNING - cmd can be deleted here
 #endif
+        mprAssert(cmd->status != 0xfeeefeee);
         rc = mprWaitForCondWithService(cmd->completeCond, 10);
         if (rc == 0) {
             complete++;

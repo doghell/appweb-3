@@ -2502,22 +2502,26 @@ extern int mprGetTimeZoneOffset(MprCtx ctx, MprTime when);
     #if MPR_HIGH_RES_TIMER
         #define MEASURE(ctx, tag1, tag2, op) \
             if (1) { \
+                char tags[64]; \
                 MprTime elapsed, start = mprGetTime(ctx); \
                 uint64  ticks = mprGetTicks(); \
+                mprSprintf(tags, sizeof(tags) - 1, "%s.%s", tag1, tag2); \
                 op; \
                 elapsed = mprGetTime(ctx) - start; \
                 if (elapsed < 1000) { \
-                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec, %,d ticks", tag1, tag2, elapsed, mprGetTicks() - ticks); \
+                    mprLog(ctx, 4, "TIME: %s elapsed %,d msec, %,d ticks", tags, elapsed, mprGetTicks() - ticks); \
                 } else { \
-                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec", tag1, tag2, elapsed); \
+                    mprLog(ctx, 4, "TIME: %s elapsed %,d msec", tags, elapsed); \
                 } \
             } else 
     #else
         #define MEASURE(ctx, tag1, tag2, op) \
             if (1) { \
+                char tags[64]; \
                 MprTime start = mprGetTime(ctx); \
+                mprSprintf(tags, sizeof(tags) - 1, "%s.%s", tag1, tag2); \
                 op; \
-                mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec", tag1, tag2, mprGetTime(ctx) - start); \
+                mprLog(ctx, 4, "TIME: %s elapsed %,d msec", tags, mprGetTime(ctx) - start); \
             } else 
     #endif
 #else

@@ -383,7 +383,10 @@ bool maRunPipeline(MaConn *conn)
     if (q->stage->run) {
         MEASURE(conn, q->stage->name, "run", q->stage->run(q));
     }
-    return maServiceQueues(conn);
+    if (conn->request) {
+        return maServiceQueues(conn);
+    }
+    return 0;
 }
 
 

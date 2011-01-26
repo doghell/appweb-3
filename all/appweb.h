@@ -1849,9 +1849,10 @@ typedef struct MaConn {
     int             state;                  /**< Connection state */
     int             flags;                  /**< Connection flags */
     int             connectionFailed;       /**< Request failed and connection protocol is compromised */
-    int             requestFailed;          /**< Request failed. Abbreviate request processing */
+    int             dedicated;              /**< Dedicate the current thread to the request */
     int             disconnected;           /**< Connection is disconnected. Abandon current  request */
     int             eventMask;              /**< Desired events anded with this mask */
+    int             requestFailed;          /**< Request failed. Abbreviate request processing */
 
     struct MaRequest *request;              /**< Request object */
     struct MaResponse *response;            /**< Response object */
