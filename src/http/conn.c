@@ -124,6 +124,10 @@ void maPrepConnection(MaConn *conn)
     conn->state =  MPR_HTTP_STATE_BEGIN;
     conn->flags &= ~MA_CONN_CLEAN_MASK;
     conn->expire = conn->time + conn->host->keepAliveTimeout;
+    conn->dedicated = 0;
+    if (conn->sock) {
+        mprSetSocketBlockingMode(conn->sock, 0);
+    }
 }
 
 
@@ -261,7 +265,6 @@ static void readEvent(MaConn *conn)
         if ((packet = getPacket(conn, &len)) == 0) {
             break;
         }
-        mprAssert(packet->flags != 0xfeeefeee);
         mprAssert(len > 0);
         content = packet->content;
         nbytes = mprReadSocket(conn->sock, mprGetBufEnd(content), len);
@@ -342,6 +345,17 @@ static inline MaPacket *getPacket(MaConn *conn, int *bytesToRead)
     mprAssert(len > 0);
     *bytesToRead = len;
     return packet;
+}
+
+
+void maDedicateThreadToConn(MaConn *conn)
+{
+    mprAssert(conn);
+
+    conn->dedicated = 1;
+    if (conn->sock) {
+        mprSetSocketBlockingMode(conn->sock, 1);
+    }
 }
 
 

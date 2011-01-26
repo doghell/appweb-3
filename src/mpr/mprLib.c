@@ -8735,7 +8735,6 @@ static int cmdCallback(MprCmd *cmd, int channel, void *data)
                  *  Do before closing as the stderr event may come on another thread and we want to ensure avoid locking.
                  */
                 mprCloseCmdFd(cmd, channel);
-                mprEnableCmdEvents(cmd, MPR_CMD_STDERR);
             } else {
                 mprCloseCmdFd(cmd, channel);
             }
@@ -8744,7 +8743,6 @@ static int cmdCallback(MprCmd *cmd, int channel, void *data)
     } else {
         mprAdjustBufEnd(buf, len);
     }
-    mprEnableCmdEvents(cmd, channel);
     return 0;
 }
 
@@ -8909,6 +8907,7 @@ int mprStartCmd(MprCmd *cmd, int argc, char **argv, char **envp, int flags)
         cmd->requiredEof++;
     }
 
+#if UNUSED && KEEP && NON_BLOCKING
 #if BLD_UNIX_LIKE || VXWORKS
     {
         int     stdinFd, stdoutFd, stderrFd, nonBlock;
@@ -8952,6 +8951,7 @@ int mprStartCmd(MprCmd *cmd, int argc, char **argv, char **envp, int flags)
             }
         }
     }
+#endif
 #endif
     rc = startProcess(cmd);
 #if CYGWIN
@@ -9001,9 +9001,6 @@ void mprStopCmd(MprCmd *cmd)
 }
 
 
-/*
- *  Non-blocking read from a pipe. For windows which doesn't seem to have non-blocking pipes!
- */
 int mprReadCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize)
 {
 #if BLD_WIN_LIKE && !WINCE
@@ -9025,7 +9022,10 @@ int mprReadCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize)
     errno = EAGAIN;
     return -1;
 
-#elif VXWORKS
+#elif VXWORKS && UNUSED && KEEP
+    /*
+        Only needed when using non-blocking I/O
+     */
     int     rc;
     rc = read(cmd->files[channel].fd, buf, bufsize);
 
@@ -9043,17 +9043,11 @@ int mprReadCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize)
     return rc;
 
 #else
-    /*
-     *  File is already in non-blocking mode
-     */
     return read(cmd->files[channel].fd, buf, bufsize);
 #endif
 }
 
 
-/*
- *  Non-blocking read from a pipe. For windows which doesn't seem to have non-blocking pipes!
- */
 int mprWriteCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize)
 {
 #if BLD_WIN_LIKE
@@ -9064,16 +9058,11 @@ int mprWriteCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize)
         return -1;
     }
 #endif
-    /*
-     *  Non-windows, this is a non-blocking write. There really isn't a good way to not block on windows. You can't use
-     *  PeekNamedPipe because it will hang if the gateway is blocked reading it. You can't use NtQueryInformationFile 
-     *  on Windows SDK 6.0+. You also can't put the socket into non-blocking mode because Windows pipes share the
-     *  blocking mode for both ends. So we block on Windows.
-     */
     return write(cmd->files[channel].fd, buf, bufsize);
 }
 
 
+#if UNUSED && KEEP
 void mprEnableCmdEvents(MprCmd *cmd, int channel)
 {
 #if BLD_UNIX_LIKE || VXWORKS
@@ -9092,6 +9081,7 @@ void mprDisableCmdEvents(MprCmd *cmd, int channel)
     }
 #endif
 }
+#endif
 
 
 #if BLD_WIN_LIKE && !WINCE
@@ -9099,12 +9089,14 @@ void mprDisableCmdEvents(MprCmd *cmd, int channel)
  *  Service I/O and return a count of characters that can be read without blocking. If the proces has completed,
  *  then return 1 to indicate that EOF can be read.
  */
-static int serviceWinCmdEvents(MprCmd *cmd, int channel, int timeout)
+static int serviceCmdEvents(MprCmd *cmd, int channel, int timeout)
 {
     int     rc, count, status;
 
-    if (mprGetDebugMode(cmd)) timeout = MAXINT;
-
+    if (mprGetDebugMode(cmd)) {
+        timeout = MAXINT;
+    }
+{
     if (cmd->files[channel].handle) {
         rc = PeekNamedPipe(cmd->files[channel].handle, NULL, 0, NULL, &count, NULL);
         if (rc && count > 0) {
@@ -9122,8 +9114,8 @@ static int serviceWinCmdEvents(MprCmd *cmd, int channel, int timeout)
         }
         return 1;
     }
-    return 0;
 }
+#endif /* BLD_WIN_LIKE && !WINCE */
 
 
 /*
@@ -9131,19 +9123,28 @@ static int serviceWinCmdEvents(MprCmd *cmd, int channel, int timeout)
  */
 void mprPollCmdPipes(MprCmd *cmd, int timeout)
 {
+#if BLD_WIN_LIKE && !WINCE
     if (cmd->files[MPR_CMD_STDOUT].handle) {
-        if (serviceWinCmdEvents(cmd, MPR_CMD_STDOUT, timeout) > 0 && (cmd->flags & MPR_CMD_OUT)) {
+        if (serviceCmdEvents(cmd, MPR_CMD_STDOUT, timeout) > 0 && (cmd->flags & MPR_CMD_OUT)) {
             stdoutCallback(cmd, MPR_READABLE);
         }
     } else if (cmd->files[MPR_CMD_STDERR].handle) {
-        if (serviceWinCmdEvents(cmd, MPR_CMD_STDERR, timeout) > 0 && (cmd->flags & MPR_CMD_ERR)) {
+        if (serviceCmdEvents(cmd, MPR_CMD_STDERR, timeout) > 0 && (cmd->flags & MPR_CMD_ERR)) {
             stderrCallback(cmd, MPR_READABLE);
         }
     }
-    mprAssert(cmd->status != 0xfeeefeee);
-
+#else
+    if (cmd->files[MPR_CMD_STDOUT].fd >= 0) {
+        if (mprWaitForSingleIO(cmd, cmd->files[MPR_CMD_STDOUT].fd, MPR_READABLE, timeout)) {
+            stdoutCallback(cmd, MPR_READABLE);
+        }
+    } else if (cmd->files[MPR_CMD_STDERR].fd >= 0) {
+        if (mprWaitForSingleIO(cmd, cmd->files[MPR_CMD_STDERR].fd, MPR_READABLE, timeout)) {
+            stderrCallback(cmd, MPR_READABLE);
+        }
+    }
+#endif
 }
-#endif /* BLD_WIN_LIKE && !WINCE */
 
 /*
  *  Wait for a command to complete. Return 0 if the command completed, otherwise return MPR_ERR_TIMEOUT. 
@@ -9167,11 +9168,7 @@ int mprWaitForCmd(MprCmd *cmd, int timeout)
                 return 0;
             }
         }
-#if BLD_WIN_LIKE && !WINCE
         mprPollCmdPipes(cmd, timeout);
-        // MOB - WARNING - cmd can be deleted here
-#endif
-        mprAssert(cmd->status != 0xfeeefeee);
         rc = mprWaitForCondWithService(cmd->completeCond, 10);
         if (rc == 0) {
             complete++;
@@ -9361,7 +9358,6 @@ static int sanitizeArgs(MprCmd *cmd, int argc, char **argv, char **env)
     cmd->argc = argc;
     cmd->env = 0;
 #endif
-
 #if BLD_UNIX_LIKE
     char    *cp;
     int     index, i, hasPath, hasLibPath;
@@ -9542,12 +9538,6 @@ static int startProcess(MprCmd *cmd)
     PROCESS_INFORMATION procInfo;
     STARTUPINFO         startInfo;
     int                 err;
-
-#if UNUSED
-#if BLD_FEATURE_MULTITHREAD && __UCLIBC__
-    cmd->parent = mprGetCurrentThread(cmd);
-#endif
-#endif
 
     memset(&startInfo, 0, sizeof(startInfo));
     startInfo.cb = sizeof(startInfo);
@@ -9832,7 +9822,7 @@ static int makeChannel(MprCmd *cmd, int index)
 
 #if VXWORKS
 /*
- *  Start the command to run (stdIn and stdOut are named from the client's perspective)
+    Start the command to run (stdIn and stdOut are named from the client's perspective)
  */
 int startProcess(MprCmd *cmd)
 {
@@ -9842,12 +9832,6 @@ int startProcess(MprCmd *cmd)
     int             i, pri;
 
     mprLog(cmd, 4, "cmd: start %s", cmd->program);
-
-#if UNUSED
-#if BLD_FEATURE_MULTITHREAD
-    cmd->parent = mprGetCurrentThread(cmd);
-#endif
-#endif
 
     entryPoint = 0;
     if (cmd->env) {

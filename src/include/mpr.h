@@ -7095,8 +7095,7 @@ typedef struct MprCmdFile {
  *  @stability Evolving.
  *  @see mprGetCmdBuf mprCreateCmd mprIsCmdRunning mprStartCmd mprGetCmdExitStatus mprGetCmdFd mprMakeCmdIO 
  *      mprReadCmdPipe mprReapCmd mprRunCmd mprRunCmdV mprWaitForCmd mprWriteCmdPipe mprCloseCmdFd 
- *      mprDisableCmdEvents mprDisconnectCmd mprEnableCmdEvents mprPollCmdPipes mprSetCmdCallback mprSetCmdDir 
- *      mprSetCmdEnv mprStopCmd
+ *      mprPollCmdPipes mprSetCmdCallback mprSetCmdDir mprSetCmdEnv mprStopCmd
  *  @defgroup MprCmd MprCmd
  */
 typedef struct MprCmd {
@@ -7142,7 +7141,9 @@ typedef struct MprCmd {
 #endif
 #if BLD_FEATURE_MULTITHREAD
     MprMutex        *mutex;             /* Multithread sync */
+#if UNUSED
     MprThread       *parent;            /* Parent process thread */
+#endif
 #endif
 } MprCmd;
 
@@ -7163,6 +7164,7 @@ extern void mprCloseCmdFd(MprCmd *cmd, int channel);
  */
 extern MprCmd *mprCreateCmd(MprCtx ctx);
 
+#if UNUSED
 /**
  *  Disconnect a command its underlying I/O channels. This is used to prevent further I/O wait events while
  *  still preserving the MprCmd object.
@@ -7186,6 +7188,7 @@ extern void mprDisableCmdEvents(MprCmd *cmd, int channel);
  *  @ingroup MprCmd
  */
 extern void mprEnableCmdEvents(MprCmd *cmd, int channel);
+#endif
 
 /**
  *  Get the command exit status

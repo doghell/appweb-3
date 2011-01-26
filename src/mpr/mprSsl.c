@@ -2502,22 +2502,26 @@ extern int mprGetTimeZoneOffset(MprCtx ctx, MprTime when);
     #if MPR_HIGH_RES_TIMER
         #define MEASURE(ctx, tag1, tag2, op) \
             if (1) { \
+                char tags[64]; \
                 MprTime elapsed, start = mprGetTime(ctx); \
                 uint64  ticks = mprGetTicks(); \
+                mprSprintf(tags, sizeof(tags) - 1, "%s.%s", tag1, tag2); \
                 op; \
                 elapsed = mprGetTime(ctx) - start; \
                 if (elapsed < 1000) { \
-                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec, %,d ticks", tag1, tag2, elapsed, mprGetTicks() - ticks); \
+                    mprLog(ctx, 4, "TIME: %s elapsed %,d msec, %,d ticks", tags, elapsed, mprGetTicks() - ticks); \
                 } else { \
-                    mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec", tag1, tag2, elapsed); \
+                    mprLog(ctx, 4, "TIME: %s elapsed %,d msec", tags, elapsed); \
                 } \
             } else 
     #else
         #define MEASURE(ctx, tag1, tag2, op) \
             if (1) { \
+                char tags[64]; \
                 MprTime start = mprGetTime(ctx); \
+                mprSprintf(tags, sizeof(tags) - 1, "%s.%s", tag1, tag2); \
                 op; \
-                mprLog(ctx, 4, "TIME: %s.%s elapsed %,d msec", tag1, tag2, mprGetTime(ctx) - start); \
+                mprLog(ctx, 4, "TIME: %s elapsed %,d msec", tags, mprGetTime(ctx) - start); \
             } else 
     #endif
 #else
@@ -7091,8 +7095,7 @@ typedef struct MprCmdFile {
  *  @stability Evolving.
  *  @see mprGetCmdBuf mprCreateCmd mprIsCmdRunning mprStartCmd mprGetCmdExitStatus mprGetCmdFd mprMakeCmdIO 
  *      mprReadCmdPipe mprReapCmd mprRunCmd mprRunCmdV mprWaitForCmd mprWriteCmdPipe mprCloseCmdFd 
- *      mprDisableCmdEvents mprDisconnectCmd mprEnableCmdEvents mprPollCmdPipes mprSetCmdCallback mprSetCmdDir 
- *      mprSetCmdEnv mprStopCmd
+ *      mprPollCmdPipes mprSetCmdCallback mprSetCmdDir mprSetCmdEnv mprStopCmd
  *  @defgroup MprCmd MprCmd
  */
 typedef struct MprCmd {
@@ -7138,7 +7141,9 @@ typedef struct MprCmd {
 #endif
 #if BLD_FEATURE_MULTITHREAD
     MprMutex        *mutex;             /* Multithread sync */
+#if UNUSED
     MprThread       *parent;            /* Parent process thread */
+#endif
 #endif
 } MprCmd;
 
@@ -7159,6 +7164,7 @@ extern void mprCloseCmdFd(MprCmd *cmd, int channel);
  */
 extern MprCmd *mprCreateCmd(MprCtx ctx);
 
+#if UNUSED
 /**
  *  Disconnect a command its underlying I/O channels. This is used to prevent further I/O wait events while
  *  still preserving the MprCmd object.
@@ -7182,6 +7188,7 @@ extern void mprDisableCmdEvents(MprCmd *cmd, int channel);
  *  @ingroup MprCmd
  */
 extern void mprEnableCmdEvents(MprCmd *cmd, int channel);
+#endif
 
 /**
  *  Get the command exit status
