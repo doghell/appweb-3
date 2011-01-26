@@ -18508,16 +18508,20 @@ int mprWaitForSingleIO(MprCtx ctx, int fd, int mask, int timeout)
     fds[0].events = 0;
     fds[0].revents = 0;
 
-    if (mask & MPR_READABLE)
-        fds[0].events |= POLLIN;
-    if (mask & MPR_WRITABLE)
+    if (mask & MPR_READABLE) {
+        fds[0].events |= (POLLIN | POLLHUP);
+    }
+    if (mask & MPR_WRITABLE) {
         fds[0].events |= POLLOUT;
+    }
     if (poll(fds, 1, timeout) > 0) {
         mask = 0;
-        if (fds[0].revents & POLLIN)
+        if (fds[0].revents & (POLLIN | POLLHUP)) {
             mask |= MPR_READABLE;
-        if (fds[0].revents & POLLOUT)
+        }
+        if (fds[0].revents & POLLOUT) {
             mask |= MPR_WRITABLE;
+        }
         return mask;
     }
     return 0;
@@ -18619,7 +18623,7 @@ static void getWaitFds(MprWaitService *ws)
      *  Add the breakout port to wakeup the service thread when other threads need selecting services.
      */
     pollfd->fd = ws->breakPipe[MPR_READ_PIPE];
-    pollfd->events = POLLIN;
+    pollfd->events = POLLIN | POLLHUP;
     pollfd++;
 #endif
 
@@ -18641,7 +18645,7 @@ static void getWaitFds(MprWaitService *ws)
 #endif
                 pollfd->events = 0;
                 if (mask & MPR_READABLE) {
-                    pollfd->events |= POLLIN;
+                    pollfd->events |= POLLIN | POLLHUP;
                 }
                 if (mask & MPR_WRITABLE) {
                     pollfd->events |= POLLOUT;
@@ -18680,7 +18684,7 @@ static void serviceIO(MprWaitService *ws, struct pollfd *fds, int count)
     /*
      *  Service the breakout pipe first
      */
-    if (fds[0].revents & POLLIN) {
+    if (fds[0].revents & (POLLIN | POLLHUP)) {
         char    buf[128];
         if (read(ws->breakPipe[MPR_READ_PIPE], buf, sizeof(buf)) < 0) {
             /* Ignore */
