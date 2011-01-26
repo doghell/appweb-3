@@ -9096,7 +9096,6 @@ static int serviceCmdEvents(MprCmd *cmd, int channel, int timeout)
     if (mprGetDebugMode(cmd)) {
         timeout = MAXINT;
     }
-{
     if (cmd->files[channel].handle) {
         rc = PeekNamedPipe(cmd->files[channel].handle, NULL, 0, NULL, &count, NULL);
         if (rc && count > 0) {
