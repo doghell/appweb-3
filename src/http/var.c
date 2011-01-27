@@ -153,7 +153,6 @@ void maAddVars(MaConn *conn, cchar *buf, int len)
                 if (*value) {
                     newValue = mprStrcat(vars, MA_MAX_HEADERS, oldValue, " ", value, NULL);
                     mprAddHash(vars, keyword, newValue);
-                    mprFree(newValue);
                 }
             } else {
                 mprAddHash(vars, keyword, value);

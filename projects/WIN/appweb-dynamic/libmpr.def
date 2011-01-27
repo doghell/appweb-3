@@ -95,7 +95,6 @@ EXPORTS
   mprDedicateWorker
   mprDedicateWorkerToHandler
   mprDeletePath
-  mprDisableCmdEvents
   mprDisableFileBuffering
   mprDisableSocketEvents
   mprDisableWaitEvents
@@ -106,7 +105,6 @@ EXPORTS
   mprDoEvent
   mprDtoa
   mprDupList
-  mprEnableCmdEvents
   mprEnableFileBuffering
   mprEnableHttpUpload
   mprEnableSocketEvents
@@ -230,6 +228,7 @@ EXPORTS
   mprGetStdout
   mprGetTempPath
   mprGetThreadData
+  mprGetTicks
   mprGetTime
   mprGetTimeZoneOffset
   mprGetTransformedPath
@@ -255,6 +254,7 @@ EXPORTS
   mprInsertItemAtPos
   mprInvokeWaitCallback
   mprIsAbsPath
+  mprIsCmdComplete
   mprIsCmdRunning
   mprIsComplete
   mprIsExiting

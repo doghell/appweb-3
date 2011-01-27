@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="angel"
-    ProjectGUID="6cbcba19-56f6-4967-8311-4f1e14c5533f"
+    ProjectGUID="036080f0-7c6d-42eb-a4f3-db47787e3760"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -136,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{e3725505-cff2-48e6-b0cf-f9eebb6204c6}"
+            UniqueIdentifier="{64fbd5be-cefd-4fd3-b884-85d715f8257f}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -162,7 +162,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{3635a3d3-c47c-4c83-be1d-c57b470a3cf3}"
+            UniqueIdentifier="{36892093-dfaf-40a9-aaa1-496c69670fae}"
             >
             <File
                 RelativePath="..\..\..\src\mpr\mprLib.c"

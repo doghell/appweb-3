@@ -26,6 +26,7 @@ EXPORTS
   maAppendQueue
   maApplyChangedGroup
   maApplyChangedUser
+  maCheckQueueCount
   maCleanQueue
   maCompareFormVar
   maCompleteRequest
@@ -64,6 +65,7 @@ EXPORTS
   maCreateUser
   maCreateVirtualHost
   maCreateWebServer
+  maDedicateThreadToConn
   maDefaultOutgoingServiceStage
   maDestroyPipeline
   maDisableGroup
