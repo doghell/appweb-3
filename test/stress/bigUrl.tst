@@ -27,16 +27,12 @@ for (iter in test.depth) {
     query = query.trim("&")
 
     //  Test /index.html
-/*
     http.get(URL + "?" + query)
     assert(http.code == 200)
     assert(http.response.contains("Hello /index.html"))
-*/
 
     //  Test /index.ejs
     http.get(EURL + "?" + query)
-print(http.code)
-print(http.response)
     assert(http.code == 200)
     assert(http.response.contains("Hello /index.ejs"))
 }
