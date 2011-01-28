@@ -1705,8 +1705,9 @@ typedef struct MaStage {
      */
     void            (*incomingService)(MaQueue *q);
 
-    void            *stageData;             /**< Per-stage data */
+    MprModule       *module;                /**< Backing module */
     char            *path;                  /**< Backing module path (from LoadModule) */
+    void            *stageData;             /**< Per-stage data */
 
 #if BLD_FEATURE_MULTITHREAD
     MprMutex        *mutex;                 /**< Multi-thread sync */
@@ -1802,7 +1803,6 @@ extern void *maLookupStageData(MaHttp *http, cchar *name);
  */
 extern int maAddHandler(MaHttp *http, MaLocation *location, cchar *name, cchar *extensions);
 extern MaStage *maCreateStage(MaHttp *http, cchar *name, int flags);
-extern int maRemoveStage(MaHttp *http, cchar *name);
 extern struct MaStage *maLookupStage(MaHttp *http, cchar *name);
 extern int maOpenPassHandler(MaHttp *http);
 extern int maOpenNetConnector(MaHttp *http);
