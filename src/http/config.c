@@ -1345,7 +1345,7 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
                 mprError(server, "Can't find module stage %s", name);
                 return MPR_ERR_BAD_SYNTAX;
             }
-            module->timeout = mprAtoi(cp, 10) * MPR_TICKS_PER_SEC;
+            module->timeout = (int) mprAtoi(cp, 10) * MPR_TICKS_PER_SEC;
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "User") == 0) {
