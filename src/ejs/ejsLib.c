@@ -33595,7 +33595,7 @@ void ejsConfigureSqliteTypes(Ejs *ejs)
 /*
  *  Loadable module interface
  */
-MprModule *ejs_db_sqliteModuleInit(Ejs *ejs)
+MprModule *ejs_db_sqliteModuleInit(Ejs *ejs, cchar *path)
 {
     MprModule   *module;
     int         priorGen;
@@ -34296,7 +34296,7 @@ void ejsConfigureWebTypes(Ejs *ejs)
 /*
  *  Loadable module interface. Called when loaded from a shared library.
  */
-MprModule *ejs_webModuleInit(Ejs *ejs)
+MprModule *ejs_webModuleInit(Ejs *ejs, cchar *path)
 {
     MprModule   *module;
     int         priorGen;
