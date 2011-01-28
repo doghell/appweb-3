@@ -643,8 +643,11 @@ static void startTimer(MaHost *host)
  */
 static void hostTimer(MaHost *host, MprEvent *event)
 {
+    Mpr         *mpr;
+    MaStage     *stage;
     MaConn      *conn;
-    int         next, connCount;
+    MprModule   *module;
+    int         next, count;
 
     mprAssert(event);
     
@@ -658,7 +661,7 @@ static void hostTimer(MaHost *host, MprEvent *event)
     /*
      *  Check for any expired connections
      */
-    for (connCount = 0, next = 0; (conn = mprGetNextItem(host->connections, &next)) != 0; connCount++) {
+    for (count = 0, next = 0; (conn = mprGetNextItem(host->connections, &next)) != 0; count++) {
         /*
          *  Workaround for a GCC bug when comparing two 64bit numerics directly. Need a temporary.
          */
@@ -676,7 +679,31 @@ static void hostTimer(MaHost *host, MprEvent *event)
             }
         }
     }
-    if (connCount == 0) {
+    /*
+        Check for unloadable modules
+     */
+    mpr = mprGetMpr(http);
+    for (next = 0; (module = mprGetNextItem(mpr->moduleService->modules, &next)) != 0; ) {
+        if (module->timeout) {
+            if (module->lastActivity + module->timeout < host->now) {
+                if ((stage = maLookupStage(host->server->http, module->name)) != 0) {
+                    mprLog(host, 2, "Unloading inactive module %s", module->name);
+                    if (stage->match) {
+                        mprError(conn, "Can't unload modules with match routines");
+                        module->timeout = 0;
+                    } else {
+                        maUnloadModule(host->server->http, module->name);
+                        stage->flags |= MA_STAGE_UNLOADED;
+                    }
+                } else {
+                    maUnloadModule(conn->http, module->name);
+                }
+            } else {
+                count++;
+            }
+        }
+    }
+    if (count == 0) {
         mprFree(event);
         host->timer = 0;
     }

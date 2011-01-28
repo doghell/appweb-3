@@ -447,7 +447,7 @@ static int initializePhp(MaHttp *http)
     tsrm_ls = (void***) ts_resource(0);
 #endif
 
-    mprLog(mprGetMpr(0), 2, "php: initialize php library");
+    mprLog(http, 2, "php: initialize php library");
 #ifdef BLD_FEATURE_PHP_INI
     phpSapiBlock.php_ini_path_override = BLD_FEATURE_PHP_INI;
 #else
@@ -458,7 +458,6 @@ static int initializePhp(MaHttp *http)
         mprError(http, "PHP did not initialize");
         return MPR_ERR_CANT_INITIALIZE;
     }
-
 #if ZTS
     zend_llist_init(&global_vars, sizeof(char *), 0, 0);
 #endif
@@ -473,12 +472,21 @@ static int initializePhp(MaHttp *http)
 
 static int finalizePhp(MprModule *mp)
 {
+    MaHttp      *http;
+    MaStage     *stage;
+
+    mprLog(mp, 4, "php: Finalize library before unloading");
+
     TSRMLS_FETCH();
     php_module_shutdown(TSRMLS_C);
     sapi_shutdown();
 #if ZTS
     tsrm_shutdown();
 #endif
+    http = mprGetMpr(ctx)->appwebHttpService;
+    if ((stage = maLookupStage(http, "phpHandler")) != 0) {
+        stage->stageData = 0;
+    }
     return 0;
 }
 
@@ -491,19 +499,25 @@ MprModule *maPhpHandlerInit(MaHttp *http, cchar *path)
     MprModule   *module;
     MaStage     *handler;
 
-    module = mprCreateModule(http, "phpHandler", BLD_VERSION, http, NULL, finalizePhp);
-    if (module == 0) {
+    if ((module = mprCreateModule(http, "phpHandler", BLD_VERSION, http, NULL, finalizePhp)) == 0) {
         return 0;
     }
-    handler = maCreateHandler(http, "phpHandler", 
-        MA_STAGE_ALL | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO | MA_STAGE_VERIFY_ENTITY | MA_STAGE_MISSING_EXT);
-    if (handler == 0) {
-        mprFree(module);
-        return 0;
+    module->path = mprStrdup(module, path);
+
+    if ((handler = maLookupStage(http, "phpHandler")) == 0) {
+        handler = maCreateHandler(http, "phpHandler", 
+            MA_STAGE_ALL | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO | MA_STAGE_VERIFY_ENTITY | MA_STAGE_MISSING_EXT);
+        if (handler == 0) {
+            mprFree(module);
+            return 0;
+        }
     }
+    http->phpHandler = handler;
     handler->open = openPhp;
     handler->run = runPhp;
-    http->phpHandler = handler;
+    handler->module = module;
+    mprFree(handler->path);
+    handler->path = mprStrdup(handler, path);
     return module;
 }
 

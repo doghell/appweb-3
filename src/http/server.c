@@ -179,7 +179,6 @@ MaHttp *maCreateHttp(MprCtx ctx)
     maOpenNetConnector(http);
 #endif
     maOpenPassHandler(http);
-
     return http;
 }
 
@@ -221,6 +220,14 @@ void maRegisterStage(MaHttp *http, MaStage *stage)
 {
     mprAddHash(http->stages, stage->name, stage);
 }
+
+
+#if UNUSED
+int maRemoveStage(MaHttp *http, cchar *name)
+{
+    return mprRemoveHash(http->stages, name);
+}
+#endif
 
 
 MaStage *maLookupStage(MaHttp *http, cchar *name)
@@ -391,7 +398,6 @@ int maLoadModule(MaHttp *http, cchar *name, cchar *libname)
         mprLog(http, MPR_CONFIG, "Activating module (Builtin) %s", name);
         return 0;
     }
-
     mprSprintf(entryPoint, sizeof(entryPoint), "ma%sInit", name);
     entryPoint[2] = toupper((int) entryPoint[2]);
 
@@ -402,6 +408,25 @@ int maLoadModule(MaHttp *http, cchar *name, cchar *libname)
         return MPR_ERR_CANT_CREATE;
     }
     mprLog(http, MPR_CONFIG, "Activating module (Loadable) %s", name);
+    return 0;
+}
+
+
+int maUnloadModule(MaHttp *http, cchar *name)
+{
+    MprModule   *module;
+    MaStage     *stage;
+
+    if ((module = mprLookupModule(http, name)) == 0) {
+        return MPR_ERR_CANT_ACCESS;
+    }
+    if (module->timeout) {
+        //  MOB - stop all requests 
+        if ((stage = maLookupStage(http, name)) != 0) {
+            stage->flags |= MA_STAGE_UNLOADED;
+        }
+        mprUnloadModule(module);
+    }
     return 0;
 }
 
@@ -438,6 +463,7 @@ MaServer *maCreateServer(MaHttp *http, cchar *name, cchar *root, cchar *ipAddr, 
     MaServer        *server;
     MaHostAddress   *hostAddress;
     MaListen        *listen;
+    static int      staticModulesLoaded = 0;
 
     mprAssert(http);
     mprAssert(name && *name);
@@ -464,7 +490,10 @@ MaServer *maCreateServer(MaHttp *http, cchar *name, cchar *root, cchar *ipAddr, 
         mprAddItem(server->hostAddresses, hostAddress);
     }
     maSetDefaultServer(http, server);
-    maLoadStaticModules(http);
+    if (!staticModulesLoaded) {
+        staticModulesLoaded = 1;
+        maLoadStaticModules(http);
+    }
     return server;
 }
 

@@ -55,6 +55,9 @@ void maLoadStaticModules(MaHttp *http)
 #if BLD_FEATURE_UPLOAD
     staticModules[index++] = maUploadFilterInit(http, NULL);
 #endif
+#ifdef BLD_STATIC_MODULE
+    staticModules[index++] = BLD_STATIC_MODULE(http, NULL);
+#endif
     maxStaticModules = index;
 }
 

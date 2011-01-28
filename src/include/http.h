@@ -11,7 +11,6 @@
 
 #include    "mpr.h"
 #include    "httpTune.h"
-#include    "customize.h"
 
 /****************************** Forward Declarations **************************/
 
@@ -163,6 +162,10 @@ extern int          maApplyChangedGroup(MaHttp *http);
 extern int          maApplyChangedUser(MaHttp *http);
 extern struct MaServer *maLookupServer(MaHttp *http, cchar *name);
 extern int          maLoadModule(MaHttp *http, cchar *name, cchar *libname);
+#if UNUSED
+extern int          maReloadModule(MaHttp *http, cchar *name);
+#endif
+extern int          maUnloadModule(MaHttp *http, cchar *name);
 extern void         maSetDefaultServer(MaHttp *http, struct MaServer *server);
 extern void         maSetListenCallback(MaHttp *http, MaListenCallback fn);
 extern void         maSetForkCallback(MaHttp *http, MprForkCallback callback, void *data);
@@ -1259,6 +1262,7 @@ extern void maCheckQueueCount(MaQueue *q);
 #define MA_STAGE_AUTO_DIR       0x100000        /**< Want auto directory redirection */
 #define MA_STAGE_VERIFY_ENTITY  0x200000        /**< Verify the request entity exists */
 #define MA_STAGE_MISSING_EXT    0x400000        /**< Handle URIs with missing extensions */
+#define MA_STAGE_UNLOADED       0x800000        /**< Stage library has been unloaded */
 
 /**
  *  Pipeline Stages
@@ -1377,6 +1381,8 @@ typedef struct MaStage {
      */
     void            (*incomingService)(MaQueue *q);
 
+    MprModule       *module;                /**< Backing module */
+    char            *path;                  /**< Backing module path (from LoadModule) */
     void            *stageData;             /**< Per-stage data */
 
 #if BLD_FEATURE_MULTITHREAD
@@ -2025,6 +2031,7 @@ extern int maDefineEgiForm(MaHttp *http, cchar *name, MaEgiForm *form);
 
 #endif
 
+#include    "customize.h"
 
 #ifdef __cplusplus
 } /* extern C */

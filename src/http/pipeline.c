@@ -456,8 +456,11 @@ static MaStage *checkStage(MaConn *conn, MaStage *stage)
     if ((stage->flags & MA_STAGE_ALL & req->method) == 0) {
         return 0;
     }
-    if (stage->match && !stage->match(conn, stage, req->url)) {
-        return 0;
+    if (stage->match && !(stage->flags & MA_STAGE_UNLOADED)) {
+        /* Can't have match routines on unloadable modules */
+        if (!stage->match(conn, stage, req->url)) {
+            return 0;
+        }
     }
     return stage;
 }
@@ -652,17 +655,27 @@ static bool matchFilter(MaConn *conn, MaFilter *filter)
 static void openQ(MaQueue *q)
 {
     MaConn      *conn;
+    MaStage     *stage;
     MaResponse  *resp;
 
     conn = q->conn;
     resp = conn->response;
+    stage = q->stage;
 
     if (resp->chunkSize > 0) {
         q->packetSize = min(q->packetSize, resp->chunkSize);
     }
+    if (stage->flags & MA_STAGE_UNLOADED) {
+        mprAssert(stage->path);
+        mprLog(q, 2, "Loading module %s", stage->name);
+        maLoadModule(conn->http, stage->name, stage->path);
+    }
+    if (stage->module) {
+        stage->module->lastActivity = conn->host->now;
+    }
     q->flags |= MA_QUEUE_OPEN;
     if (q->open) {
-        MEASURE(conn, q->stage->name, "open", q->stage->open(q));
+        MEASURE(conn, stage->name, "open", stage->open(q));
     }
 }
 

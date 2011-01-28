@@ -599,6 +599,7 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
     MaDir           *dir;
     MaLimits        *limits;
     MprHash         *hp;
+    MprModule       *module;
     char            ipAddrPort[MPR_MAX_IP_ADDR_PORT];
     char            *name, *path, *prefix, *cp, *tok, *ext, *mimeType, *url, *newUrl, *extensions, *codeStr, *hostName;
     char            *items, *include, *exclude, *when, *mimeTypes;
@@ -1332,7 +1333,22 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
         break;
 
     case 'U':
-        if (mprStrcmpAnyCase(key, "User") == 0) {
+        if (mprStrcmpAnyCase(key, "UnloadModule") == 0) {
+            name = mprStrTok(value, " \t", &tok);
+            if (name == 0) {
+                return MPR_ERR_BAD_SYNTAX;
+            }
+            if ((cp = mprStrTok(0, "\n", &tok)) == 0) {
+                return MPR_ERR_BAD_SYNTAX;
+            }
+            if ((module = mprLookupModule(http, name)) == 0) {
+                mprError(server, "Can't find module stage %s", name);
+                return MPR_ERR_BAD_SYNTAX;
+            }
+            module->timeout = mprAtoi(cp, 10) * MPR_TICKS_PER_SEC;
+            return 1;
+
+        } else if (mprStrcmpAnyCase(key, "User") == 0) {
             maSetHttpUser(http, mprStrTrim(value, "\""));
             return 1;
         }
