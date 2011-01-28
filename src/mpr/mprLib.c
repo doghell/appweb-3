@@ -8519,9 +8519,6 @@ MprCmdService *mprCreateCmdService(Mpr *mpr)
 }
 
 
-/*
- *  Create a new command object
- */
 MprCmd *mprCreateCmd(MprCtx ctx)
 {
     MprCmdService   *cs;
@@ -8806,7 +8803,6 @@ int mprRunCmdV(MprCmd *cmd, int argc, char **argv, char **out, char **err, int f
     if (cmd->files[MPR_CMD_STDIN].fd >= 0) {
         mprCloseCmdFd(cmd, MPR_CMD_STDIN);
     }
-
     if (rc < 0) {
         if (err) {
             if (rc == MPR_ERR_CANT_ACCESS) {
@@ -8820,12 +8816,10 @@ int mprRunCmdV(MprCmd *cmd, int argc, char **argv, char **out, char **err, int f
         unlock(cmd);
         return rc;
     }
-
     if (cmd->flags & MPR_CMD_DETACH) {
         unlock(cmd);
         return 0;
     }
-
     unlock(cmd);
     if (mprWaitForCmd(cmd, -1) < 0) {
         return MPR_ERR_NOT_READY;
@@ -9118,7 +9112,7 @@ static int serviceCmdEvents(MprCmd *cmd, int channel, int timeout)
 
 
 /*
- *  Windows pipes don't trigger EOF, so we need some extra assist here. This polls for I/O from the command.
+ *  Poll for I/O events on the CGI pipes
  */
 void mprPollCmdPipes(MprCmd *cmd, int timeout)
 {
@@ -9199,13 +9193,6 @@ int mprReapCmd(MprCmd *cmd, int timeout)
     MprTime     mark;
 
     mprAssert(cmd->pid);
-
-#if BLD_FEATURE_MULTITHREAD && __UCLIBC__
-    if (cmd->parent != mprGetCurrentThread(cmd)) {
-        /* Return positive status code */
-        return -MPR_ERR_BAD_STATE;
-    }
-#endif
 
     if (timeout < 0) {
         timeout = MAXINT;
@@ -9714,10 +9701,6 @@ static int startProcess(MprCmd *cmd)
     int             rc, i, err;
 
     files = cmd->files;
-
-#if BLD_FEATURE_MULTITHREAD && __UCLIBC__
-    cmd->parent = mprGetCurrentThread(cmd);
-#endif
 
     /*
      *  Create the child
@@ -16603,7 +16586,7 @@ int mprStartModuleService(MprModuleService *ms)
     mprAssert(ms);
 
     for (next = 0; (mp = mprGetNextItem(ms->modules, &next)) != 0; ) {
-        if (mp->start && mp->start(mp) < 0) {
+        if (mprStartModule(mp) < 0) {
             return MPR_ERR_CANT_INITIALIZE;
         }
     }
@@ -16626,11 +16609,34 @@ void mprStopModuleService(MprModuleService *ms)
 
     mprLock(ms->mutex);
     for (next = 0; (mp = mprGetNextItem(ms->modules, &next)) != 0; ) {
-        if (mp->stop) {
-            mp->stop(mp);
-        }
+        mprStopModule(mp);
     }
     mprUnlock(ms->mutex);
+}
+
+
+int mprStartModule(MprModule *mp)
+{
+    mprAssert(mp);
+
+    if (mp->start && !(mp->flags & MPR_MODULE_STARTED)) {
+        if (mp->start(mp) < 0) {
+            return MPR_ERR_CANT_INITIALIZE;
+        }
+    }
+    mp->flags |= MPR_MODULE_STARTED;
+    return 0;
+}
+
+
+void mprStopModule(MprModule *mp)
+{
+    mprAssert(mp);
+
+    if (mp->stop && (mp->flags & MPR_MODULE_STARTED) && !(mp->flags & MPR_MODULE_STOPPED)) {
+        mp->stop(mp);
+    }
+    mp->flags |= MPR_MODULE_STOPPED;
 }
 
 
@@ -16652,12 +16658,13 @@ MprModule *mprCreateModule(MprCtx ctx, cchar *name, cchar *version, void *data, 
     if (mp == 0) {
         return 0;
     }
-
     index = mprAddItem(ms->modules, mp);
     mp->name = mprStrdup(mp, name);
     mp->version = mprStrdup(mp, version);
     mp->moduleData = data;
     mp->handle = 0;
+    mp->timeout = 0;
+    mp->lastActivity = mprGetTime(ctx);
 
     if (index < 0 || mp->name == 0 || mp->version == 0) {
         mprFree(mp);
@@ -16667,7 +16674,7 @@ MprModule *mprCreateModule(MprCtx ctx, cchar *name, cchar *version, void *data, 
     mp->stop = stop;
 
     if (mpr->flags & MPR_STARTED) {
-        if (mp->start && mp->start(mp) < 0) {
+        if (mprStartModule(mp) < 0) {
             return 0;
         }
     }
@@ -27712,6 +27719,7 @@ void mprSleep(MprCtx ctx, int milliseconds)
 
 void mprUnloadModule(MprModule *mp)
 {
+    mprStopModule(mp);
     if (mp->handle) {
         dlclose(mp->handle);
     }
@@ -29311,9 +29319,7 @@ void mprUnloadModule(MprModule *mp)
 {
     mprAssert(mp->handle);
 
-    if (mp->stop) {
-        mp->stop(mp);
-    }
+    mprStopModule(mp);
     mprRemoveItem(mprGetMpr(mp)->moduleService->modules, mp);
     FreeLibrary((HINSTANCE) mp->handle);
 }
@@ -29810,9 +29816,7 @@ void mprUnloadModule(MprModule *mp)
 {
     mprAssert(mp->handle);
 
-    if (mp->stop) {
-        mp->stop(mp);
-    }
+    mprStopModule(mp);
     mprRemoveItem(mprGetMpr(mp)->moduleService->modules, mp);
     FreeLibrary((HINSTANCE) mp->handle);
 }

@@ -1501,7 +1501,6 @@ struct  MprWorker;
 struct  MprWorkerService;
 #endif
 
-
 #undef UNUSED
 
 /**
@@ -3899,6 +3898,12 @@ extern void             mprStopModuleService(MprModuleService *os);
  */ 
 typedef int (*MprModuleProc)(struct MprModule *mp);
 
+/*
+    Module flags
+ */
+#define MPR_MODULE_STARTED     0x1     /* Module stared **/
+#define MPR_MODULE_STOPPED     0x2     /* Module stopped */
+
 /**
  *  Loadable Module Service
  *  @description The MPR provides services to load and unload shared libraries.
@@ -3909,9 +3914,13 @@ typedef int (*MprModuleProc)(struct MprModule *mp);
  */
 typedef struct MprModule {
     char            *name;              /**< Unique module name */
+    char            *path;              /**< Module library path name */
     char            *version;           /**< Module version */
     void            *moduleData;        /**< Module specific data */
     void            *handle;            /**< O/S shared library load handle */
+    MprTime         lastActivity;       /**< When the module was last used */
+    int             timeout;            /**< Inactivity unload timeout */
+    int             flags;              /**< Module control flags */
     MprModuleProc   start;              /**< Start the module service */
     MprModuleProc   stop;               /**< Stop the module service */
 } MprModule;
@@ -3961,7 +3970,7 @@ extern void mprSetModuleSearchPath(MprCtx ctx, char *searchPath);
  *  @returns A module object for this module
  *  @ingroup MprModule
  */
-extern MprModule *mprCreateModule(MprCtx ctx, cchar *name, cchar *version, void *moduleData, MprModuleProc start,
+extern MprModule *mprCreateModule(MprCtx ctx, cchar *name, cchar *version, void *moduleData, MprModuleProc start, 
         MprModuleProc stop);
 
 /**
@@ -3998,6 +4007,22 @@ extern int mprSearchForModule(MprCtx ctx, cchar *module, char **path);
  */
 extern MprModule *mprLookupModule(MprCtx ctx, cchar *name);
 extern void *mprLookupModuleData(MprCtx ctx, cchar *name);
+
+/**
+ *  Start a module
+ *  @description Invoke the module start entry point. The start routine is only called once.
+ *  @param mp Module object returned via #mprLookupModule
+ *  @ingroup MprModule
+ */
+extern int mprStartModule(MprModule *mp);
+
+/**
+ *  Stop a module
+ *  @description Invoke the module stop entry point. The stop routine is only called once.
+ *  @param mp Module object returned via #mprLookupModule
+ *  @ingroup MprModule
+ */
+extern void mprStopModule(MprModule *mp);
 
 /**
  *  Unload a module
@@ -7142,9 +7167,6 @@ typedef struct MprCmd {
 #endif
 #if BLD_FEATURE_MULTITHREAD
     MprMutex        *mutex;             /* Multithread sync */
-#if UNUSED
-    MprThread       *parent;            /* Parent process thread */
-#endif
 #endif
 } MprCmd;
 
