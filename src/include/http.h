@@ -161,10 +161,7 @@ extern void         maAddServer(MaHttp *http, struct MaServer *server);
 extern int          maApplyChangedGroup(MaHttp *http);
 extern int          maApplyChangedUser(MaHttp *http);
 extern struct MaServer *maLookupServer(MaHttp *http, cchar *name);
-extern int          maLoadModule(MaHttp *http, cchar *name, cchar *libname);
-#if UNUSED
-extern int          maReloadModule(MaHttp *http, cchar *name);
-#endif
+extern MprModule    *maLoadModule(MaHttp *http, cchar *name, cchar *libname);
 extern int          maUnloadModule(MaHttp *http, cchar *name);
 extern void         maSetDefaultServer(MaHttp *http, struct MaServer *server);
 extern void         maSetListenCallback(MaHttp *http, MaListenCallback fn);

@@ -385,7 +385,7 @@ void maSetListenCallback(MaHttp *http, MaListenCallback fn)
 /*
  *  Load a module. Returns 0 if the modules is successfully loaded either statically or dynamically.
  */
-int maLoadModule(MaHttp *http, cchar *name, cchar *libname)
+MprModule *maLoadModule(MaHttp *http, cchar *name, cchar *libname)
 {
     MprModule   *module;
     char        entryPoint[MPR_MAX_FNAME];
@@ -396,7 +396,7 @@ int maLoadModule(MaHttp *http, cchar *name, cchar *libname)
     module = mprLookupModule(http, name);
     if (module) {
         mprLog(http, MPR_CONFIG, "Activating module (Builtin) %s", name);
-        return 0;
+        return module;
     }
     mprSprintf(entryPoint, sizeof(entryPoint), "ma%sInit", name);
     entryPoint[2] = toupper((int) entryPoint[2]);
@@ -404,11 +404,11 @@ int maLoadModule(MaHttp *http, cchar *name, cchar *libname)
     if (libname == 0) {
         path = mprStrcat(http, -1, "mod_", name, BLD_SHOBJ, NULL);
     }
-    if (mprLoadModule(http, (libname) ? libname: path, entryPoint) == 0) {
-        return MPR_ERR_CANT_CREATE;
+    if ((module = mprLoadModule(http, (libname) ? libname: path, entryPoint)) == 0) {
+        return 0;
     }
     mprLog(http, MPR_CONFIG, "Activating module (Loadable) %s", name);
-    return 0;
+    return module;
 }
 
 

@@ -668,7 +668,7 @@ static void openQ(MaQueue *q)
     if (stage->flags & MA_STAGE_UNLOADED) {
         mprAssert(stage->path);
         mprLog(q, 2, "Loading module %s", stage->name);
-        maLoadModule(conn->http, stage->name, stage->path);
+        stage->module = maLoadModule(conn->http, stage->name, stage->path);
     }
     if (stage->module) {
         stage->module->lastActivity = conn->host->now;
