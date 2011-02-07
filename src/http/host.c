@@ -118,6 +118,7 @@ MaHost *maCreateVirtualHost(MaServer *server, cchar *ipAddrPort, MaHost *parent)
     host->accessLog = parent->accessLog;
     host->mimeTypes = parent->mimeTypes;
     host->location = maCreateLocation(host, parent->location);
+    host->logHost = parent->logHost;
 
     host->traceMask = parent->traceMask;
     host->traceLevel = parent->traceLevel;

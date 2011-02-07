@@ -26,7 +26,9 @@ MaAuth *maCreateAuth(MprCtx ctx, MaAuth *parent)
         auth->flags = parent->flags;
         auth->order = parent->order;
         auth->qop = parent->qop;
-
+        auth->requiredRealm = parent->requiredRealm;
+        auth->requiredUsers = parent->requiredUsers;
+        auth->requiredGroups = parent->requiredGroups;
 #if BLD_FEATURE_AUTH_FILE
         auth->userFile = parent->userFile;
         auth->groupFile = parent->groupFile;

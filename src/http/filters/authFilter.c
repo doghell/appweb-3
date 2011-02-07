@@ -575,6 +575,7 @@ void maSetAuthRequiredGroups(MaAuth *auth, cchar *groups)
     mprFree(auth->requiredGroups);
     auth->requiredGroups = mprStrdup(auth, groups);
     auth->flags |= MA_AUTH_REQUIRED;
+    auth->anyValidUser = 0;
 }
 
 
@@ -583,6 +584,7 @@ void maSetAuthRequiredUsers(MaAuth *auth, cchar *users)
     mprFree(auth->requiredUsers);
     auth->requiredUsers = mprStrdup(auth, users);
     auth->flags |= MA_AUTH_REQUIRED;
+    auth->anyValidUser = 0;
 }
 
 
