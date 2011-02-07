@@ -6309,7 +6309,6 @@ static void genLiteral(EcCompiler *cp, EcNode *np)
     EjsNamespace    *nsp;
     EjsBoolean      *bp;
     EjsNumber       *ip;
-    EjsString       *pattern;
     int64           n;
     int             id;
 
@@ -6372,12 +6371,17 @@ static void genLiteral(EcCompiler *cp, EcNode *np)
         ecEncodeString(cp, mprGetBufStart(np->literal.data));
         break;
 
+#if BLD_FEATURE_REGEXP
     case ES_RegExp:
+    {
+        EjsString *pattern;
         ecEncodeOpcode(cp, EJS_OP_LOAD_REGEXP);
         pattern = (EjsString*) ejsRegExpToString(cp->ejs, (EjsRegExp*) np->literal.var);
         ecEncodeString(cp, pattern->value);
         mprFree(pattern);
         break;
+    }
+#endif
 
     case ES_Void:
         ecEncodeOpcode(cp, EJS_OP_LOAD_UNDEFINED);

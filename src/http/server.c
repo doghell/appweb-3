@@ -245,11 +245,13 @@ void *maLookupStageData(MaHttp *http, cchar *name)
 }
 
 
+#if BLD_FEATURE_CMD
 void maSetForkCallback(MaHttp *http, MprForkCallback callback, void *data)
 {
     http->forkCallback = callback;
     http->forkData = data;
 }
+#endif
 
 
 int maStartHttp(MaHttp *http)

@@ -19,7 +19,10 @@
 
         #define BLD_STATIC_MODULE "myModuleInit"
  */
+
+#if SAMPLE
 extern MprModule *myModuleInit(MaHttp *http, cchar *path);
 #define BLD_STATIC_MODULE "myModuleInit"
+#endif
 
 #endif /* _h_CUSTOMIZE_h */

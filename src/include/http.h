@@ -96,7 +96,9 @@ typedef struct MaHttp {
 
     void            (*rangeService)(struct MaQueue *q, MaRangeFillProc fill);
     MaListenCallback listenCallback;        /**< Invoked when creating listeners */
+#if BLD_FEATURE_CMD
     MprForkCallback forkCallback;
+#endif
     void            *forkData;
 
     char            *username;              /**< Http server user name */
@@ -165,7 +167,10 @@ extern MprModule    *maLoadModule(MaHttp *http, cchar *name, cchar *libname);
 extern int          maUnloadModule(MaHttp *http, cchar *name);
 extern void         maSetDefaultServer(MaHttp *http, struct MaServer *server);
 extern void         maSetListenCallback(MaHttp *http, MaListenCallback fn);
+
+#if BLD_FEATURE_CMD
 extern void         maSetForkCallback(MaHttp *http, MprForkCallback callback, void *data);
+#endif
 
 /*
  *  Loadable module entry points
