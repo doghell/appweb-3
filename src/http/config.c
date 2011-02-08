@@ -291,7 +291,7 @@ int maParseConfig(MaServer *server, cchar *configFile)
                 continue;
 
             } else if (rc < 0) {
-                mprError(server, "Ignoring bad directive \"%s\" at %s:%d", key, state->filename, state->lineNumber);
+                mprError(server, "Ignoring bad directive \"%s\" at %s:%d\n", key, state->filename, state->lineNumber);
             }
             continue;
         }
@@ -1336,6 +1336,10 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
         if (mprStrcmpAnyCase(key, "UnloadModule") == 0) {
             name = mprStrTok(value, " \t", &tok);
             if (name == 0) {
+                return MPR_ERR_BAD_SYNTAX;
+            }
+            if (strcmp(name, "phpHandler") != 0) {
+                mprError(server, "Unloading is only supported for \"phpHandler\"");
                 return MPR_ERR_BAD_SYNTAX;
             }
             if ((cp = mprStrTok(0, "\n", &tok)) == 0) {

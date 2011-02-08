@@ -27739,6 +27739,7 @@ void mprUnloadModule(MprModule *mp)
     mprStopModule(mp);
     if (mp->handle) {
         dlclose(mp->handle);
+        mp->handle = 0;
     }
     mprRemoveItem(mprGetMpr(mp)->moduleService->modules, mp);
 }
@@ -28614,7 +28615,10 @@ void mprSleep(MprCtx ctx, int milliseconds)
 void mprUnloadModule(MprModule *mp)
 {
     mprRemoveItem(mprGetMpr(mp)->moduleService->modules, mp);
-    unldByModuleId((MODULE_ID) mp->handle, 0);
+    if (mp->handle) {
+        unldByModuleId((MODULE_ID) mp->handle, 0);
+        mp->handle = 0;
+    }
 }
 
 
@@ -29338,7 +29342,10 @@ void mprUnloadModule(MprModule *mp)
 
     mprStopModule(mp);
     mprRemoveItem(mprGetMpr(mp)->moduleService->modules, mp);
-    FreeLibrary((HINSTANCE) mp->handle);
+    if (mp->handle) {
+        FreeLibrary((HINSTANCE) mp->handle);
+        mp->handle = 0;
+    }
 }
 
 
@@ -29835,7 +29842,10 @@ void mprUnloadModule(MprModule *mp)
 
     mprStopModule(mp);
     mprRemoveItem(mprGetMpr(mp)->moduleService->modules, mp);
-    FreeLibrary((HINSTANCE) mp->handle);
+    if (mp->handle) {
+        FreeLibrary((HINSTANCE) mp->handle);
+        mp->handle = 0;
+    }
 }
 
 
