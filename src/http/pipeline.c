@@ -300,10 +300,11 @@ void maCreatePipeline(MaConn *conn)
     }
 
     /*
-     *  Open the queues (keep going on errors)
+     *  Open the queues (keep going on errors). Open in reverse order to open the handler last.
+     *  This ensures the authFilter runs before the handler.
      */
     qhead = &resp->queue[MA_QUEUE_SEND];
-    for (q = qhead->nextQ; q != qhead; q = q->nextQ) {
+    for (q = qhead->prevQ; q != qhead; q = q->prevQ) {
         if (q->open && !(q->flags & MA_QUEUE_OPEN)) {
             q->flags |= MA_QUEUE_OPEN;
             openQ(q);
@@ -312,7 +313,7 @@ void maCreatePipeline(MaConn *conn)
 
     if (req->remainingContent > 0) {
         qhead = &resp->queue[MA_QUEUE_RECEIVE];
-        for (q = qhead->nextQ; q != qhead; q = q->nextQ) {
+        for (q = qhead->prevQ; q != qhead; q = q->prevQ) {
             if (q->open && !(q->flags & MA_QUEUE_OPEN)) {
                 if (q->pair == 0 || !(q->pair->flags & MA_QUEUE_OPEN)) {
                     q->flags |= MA_QUEUE_OPEN;
@@ -613,9 +614,13 @@ static bool mapToFile(MaConn *conn, MaStage *handler, bool *rescan)
     }
     req->auth = req->dir->auth;
 
-    if (!resp->fileInfo.checked && mprGetPathInfo(conn, resp->filename, &resp->fileInfo) < 0) {
+    if (!resp->fileInfo.checked) {
+        mprGetPathInfo(conn, resp->filename, &resp->fileInfo);
+    }
+    if (!resp->fileInfo.valid) {
         mprAssert(handler);
-        if (req->method != MA_REQ_PUT && handler->flags & MA_STAGE_VERIFY_ENTITY) {
+        if (req->method != MA_REQ_PUT && handler->flags & MA_STAGE_VERIFY_ENTITY && 
+                (req->auth == 0 || req->auth->type == 0)) {
             maFailRequest(conn, MPR_HTTP_CODE_NOT_FOUND, "Can't open document: %s", resp->filename);
             return 0;
         }
