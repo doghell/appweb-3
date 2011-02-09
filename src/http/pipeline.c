@@ -43,6 +43,9 @@ void maMatchHandler(MaConn *conn)
     resp = conn->response;
     host = req->host;
 
+    location = req->location = maLookupBestLocation(host, req->url);
+    mprAssert(location);
+    
     /*
      *  Find the alias that applies for this url. There is always a catch-all alias for the document root.
      */
@@ -52,8 +55,7 @@ void maMatchHandler(MaConn *conn)
         maRedirect(conn, alias->redirectCode, alias->uri);
         return;
     }
-    location = req->location = maLookupBestLocation(req->host, req->url);
-    mprAssert(location);
+
     req->auth = location->auth;
     resp->extension = getExtension(conn);
 

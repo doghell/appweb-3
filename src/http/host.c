@@ -363,8 +363,8 @@ void maSetTimeout(MaHost *host, int timeout)
 
 int maInsertAlias(MaHost *host, MaAlias *newAlias)
 {
-    MaAlias     *alias, *old;
-    int         rc, next, index;
+    MaAlias     *alias;
+    int         rc, next;
 
     if (mprGetParent(host->aliases) == host->parent) {
         host->aliases = mprDupList(host, host->parent->aliases);
@@ -377,11 +377,15 @@ int maInsertAlias(MaHost *host, MaAlias *newAlias)
     for (next = 0; (alias = mprGetNextItem(host->aliases, &next)) != 0; ) {
         rc = strcmp(newAlias->prefix, alias->prefix);
         if (rc == 0) {
-            index = mprLookupItem(host->aliases, alias);
-            old = (MaAlias*) mprGetItem(host->aliases, index);
-            mprRemoveItem(host->aliases, alias);
-            mprInsertItemAtPos(host->aliases, next - 1, newAlias);
-            return 0;
+            if (newAlias->redirectCode == alias->redirectCode) {
+                mprRemoveItem(host->aliases, alias);
+                mprInsertItemAtPos(host->aliases, next - 1, newAlias);
+                return 0;
+
+            } else if (newAlias->redirectCode > alias->redirectCode) {
+                mprInsertItemAtPos(host->aliases, next - 1, newAlias);
+                return 0;
+            }
             
         } else if (rc > 0) {
             if (newAlias->redirectCode >= alias->redirectCode) {
@@ -683,26 +687,28 @@ static void hostTimer(MaHost *host, MprEvent *event)
         }
     }
     /*
-        Check for unloadable modules
+        Check for unloadable modules - must be idle
      */
     mpr = mprGetMpr(http);
-    for (next = 0; (module = mprGetNextItem(mpr->moduleService->modules, &next)) != 0; ) {
-        if (module->timeout) {
-            if (module->lastActivity + module->timeout < host->now) {
-                if ((stage = maLookupStage(http, module->name)) != 0) {
-                    mprLog(host, 2, "Unloading inactive module %s", module->name);
-                    if (stage->match) {
-                        mprError(conn, "Can't unload modules with match routines");
-                        module->timeout = 0;
+    if (mprGetListCount(host->connections) == 0) {
+        for (next = 0; (module = mprGetNextItem(mpr->moduleService->modules, &next)) != 0; ) {
+            if (module->timeout) {
+                if (module->lastActivity + module->timeout < host->now) {
+                    if ((stage = maLookupStage(http, module->name)) != 0) {
+                        mprLog(host, 2, "Unloading inactive module %s", module->name);
+                        if (stage->match) {
+                            mprError(conn, "Can't unload modules with match routines");
+                            module->timeout = 0;
+                        } else {
+                            maUnloadModule(http, module->name);
+                            stage->flags |= MA_STAGE_UNLOADED;
+                        }
                     } else {
                         maUnloadModule(http, module->name);
-                        stage->flags |= MA_STAGE_UNLOADED;
                     }
                 } else {
-                    maUnloadModule(http, module->name);
+                    count++;
                 }
-            } else {
-                count++;
             }
         }
     }

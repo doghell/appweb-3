@@ -633,6 +633,7 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
          */
         mprAdjustBufStart(content, 2);
     }
+    mprLog(conn, 4, "Select host \"%s\"", conn->host->name);
     return 1;
 }
 
