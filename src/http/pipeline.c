@@ -98,7 +98,7 @@ void maMatchHandler(MaConn *conn)
         }
     }
     resp->handler = handler;
-    mprLog(resp, 4, "Select handler: \"%s\" for \"%s\"", handler->name, req->url);
+    mprLog(resp, 3, "Select handler: \"%s\" for \"%s\"", handler->name, req->url);
     setEnv(conn);
 }
 
