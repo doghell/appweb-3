@@ -28275,7 +28275,7 @@ char *mprEscapeHtml(MprCtx ctx, cchar *html)
                 op += 5;
             } else if (*html == '"') {
                 strcpy(op, "&quot;");
-                op += 5;
+                op += 6;
             } else {
                 mprAssert(0);
             }
