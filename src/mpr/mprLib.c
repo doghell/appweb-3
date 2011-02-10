@@ -27738,7 +27738,9 @@ void mprUnloadModule(MprModule *mp)
 {
     mprStopModule(mp);
     if (mp->handle) {
+#if BLD_CC_DYN_LOAD
         dlclose(mp->handle);
+#endif
         mp->handle = 0;
     }
     mprRemoveItem(mprGetMpr(mp)->moduleService->modules, mp);
