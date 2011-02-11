@@ -82,13 +82,6 @@ static void openFile(MaQueue *q)
     case MA_REQ_DELETE:
         if (location->flags & MA_LOC_PUT_DELETE) {
             maOmitResponseBody(conn);
-#if MOVED_TO_START
-            if (req->method == MA_REQ_PUT) {
-                handlePutRequest(q);
-            } else {
-                handleDeleteRequest(q);
-            }
-#endif
             break;
         }
         /* Method not supported - fall through */
