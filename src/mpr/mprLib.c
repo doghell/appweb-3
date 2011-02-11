@@ -11610,7 +11610,7 @@ void mprWakeDispatcher(MprDispatcher *dispatcher)
 /*
  *  Service events until the timeout expires or if MPR_SERVICE_ONE_THING is set, then until one event is received.
  */
-int mprServiceEvents(MprDispatcher *dispatcher, int timeout, int flags)
+int mprServiceEvents(MprDispatcher *dispatcher, MprTime timeout, int flags)
 {
     MprTime     mark, remaining;
     MprEvent    *event;
@@ -11627,7 +11627,7 @@ int mprServiceEvents(MprDispatcher *dispatcher, int timeout, int flags)
 
     mark = dispatcher->now = mprGetTime(dispatcher);
     if (timeout < 0) {
-        timeout = MAXINT;
+        timeout = MAXINT64;
     }
     remaining = timeout;
     total = 0;
@@ -25549,7 +25549,7 @@ MprTime mprGetTime(MprCtx ctx)
 /*
     Return the number of milliseconds until the given timeout has expired.
  */
-MprTime mprGetRemainingTime(MprCtx ctx, MprTime mark, uint timeout)
+MprTime mprGetRemainingTime(MprCtx ctx, MprTime mark, MprTime timeout)
 {
     MprTime     now, diff;
 

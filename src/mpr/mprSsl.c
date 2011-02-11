@@ -2446,7 +2446,7 @@ extern uint64 mprGetTicks();
  *  @return Time in milliseconds until the timeout elapses  
  *  @ingroup MprDate
  */
-extern MprTime  mprGetRemainingTime(MprCtx ctx, MprTime mark, uint timeout);
+extern MprTime  mprGetRemainingTime(MprCtx ctx, MprTime mark, MprTime timeout);
 
 /**
  *  Get the elapsed time since a time mark. Create the time mark with mprGetTime()
@@ -4121,7 +4121,7 @@ extern bool mprMustWakeDispatcher(MprCtx ctx);
  *  @returns A count of the number of events serviced
  *  @ingroup MprEvent
  */
-extern int mprServiceEvents(MprDispatcher *dispatcher, int delay, int flags);
+extern int mprServiceEvents(MprDispatcher *dispatcher, MprTime delay, int flags);
 extern int mprPumpEvents(MprDispatcher *dispatcher, int delay);
 
 extern void     mprDoEvent(MprEvent *event, void *worker);
