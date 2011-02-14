@@ -2491,7 +2491,7 @@ extern int mprParseTime(MprCtx ctx, MprTime *time, cchar *dateString, int timezo
 
 extern int mprGetTimeZoneOffset(MprCtx ctx, MprTime when);
 
-#if (BLD_UNIX_LIKE || BLD_WIN_LIKE) && (BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64)
+#if (LINUX || WIN || MACOSX) && (BLD_HOST_CPU_ARCH == MPR_CPU_IX86 || BLD_HOST_CPU_ARCH == MPR_CPU_IX64)
     #define MPR_HIGH_RES_TIMER 1
 #else
     #define MPR_HIGH_RES_TIMER 0
