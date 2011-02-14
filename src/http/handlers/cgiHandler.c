@@ -17,9 +17,6 @@
 static void buildArgs(MaConn *conn, MprCmd *cmd, int *argcp, char ***argvp);
 static int cgiCallback(MprCmd *cmd, int channel, void *data);
 static void cgiEvent(MaQueue *q, MprCmd *cmd, int channel);
-#if UNUSED
-static void enableCgiEvents(MaQueue *q, MprCmd *cmd, int channel);
-#endif
 static char *getCgiToken(MprBuf *buf, cchar *delim);
 static bool parseFirstCgiResponse(MaConn *conn, MprCmd *cmd);
 static bool parseHeader(MaConn *conn, MprCmd *cmd);
@@ -69,8 +66,16 @@ static void startCgi(MaQueue *q)
     conn = q->conn;
     req = conn->request;
     resp = conn->response;
-    cmd = q->queueData = mprCreateCmd(req);
 
+    if (req->flags & MA_REQ_UPLOADING && conn->state <= MPR_HTTP_STATE_CONTENT) {
+        /*
+            Delay start while the upload filter extracts the uploaded files so the CGI process can be informed via
+            env vars of the file details. 
+         */
+        return;
+    }
+
+    cmd = q->queueData = mprCreateCmd(req);
     if (conn->http->forkCallback) {
         cmd->forkCallback = conn->http->forkCallback;
         cmd->forkData = conn->http->forkData;
@@ -149,6 +154,14 @@ static void runCgi(MaQueue *q)
     resp = conn->response;
     cmd = (MprCmd*) q->queueData;
 
+    if (cmd == 0) {
+        startCgi(q);
+        cmd = (MprCmd*) q->queueData;
+        if (q->count > 0) {
+            writeToCGI(q);
+        }
+    }
+
     /*
         Close the CGI program's stdin. This will allow it to exit if it was expecting input data.
      */
@@ -174,31 +187,6 @@ static void runCgi(MaQueue *q)
 
 
 /*
-    Service outgoing data destined for the browser. This is response data from the CGI program. See writeToClient.
- */ 
-static void outgoingCgiService(MaQueue *q)
-{
-    MprCmd      *cmd;
-
-    cmd = (MprCmd*) q->queueData;
-
-    /*
-        This will copy outgoing packets downstream toward the network connector and on to the browser. This may disable this 
-        queue if the downstream net connector queue overflows because the socket is full. In that case, conn.c:setupConnIO() 
-        will setup to listen for writable events. When the socket is writable again, the connector will drain its queue
-        which will re-enable this queue and schedule it for service again.
-     */ 
-    //  MOB -- remove this and just use the default.
-    maDefaultOutgoingServiceStage(q);
-#if UNUSED
-    if (cmd->userFlags & MA_CGI_FLOW_CONTROL && q->count < q->low) {
-        cmd->userFlags &= ~MA_CGI_FLOW_CONTROL;
-    }
-#endif
-}
-
-
-/*
     Accept incoming body data from the client (via the pipeline) destined for the CGI gateway. This is typically
     POST or PUT data.
  */
@@ -215,11 +203,10 @@ static void incomingCgiData(MaQueue *q, MaPacket *packet)
     conn = q->conn;
     resp = conn->response;
     req = conn->request;
-
     cmd = (MprCmd*) q->pair->queueData;
-    mprAssert(cmd);
-    cmd->lastActivity = mprGetTime(cmd);
-
+    if (cmd) {
+        cmd->lastActivity = mprGetTime(cmd);
+    }
     if (maGetPacketLength(packet) == 0) {
         /*
             End of input
@@ -240,7 +227,9 @@ static void incomingCgiData(MaQueue *q, MaPacket *packet)
          */
         maPutForService(q, packet, 0);
     }
-    writeToCGI(q);
+    if (cmd) {
+        writeToCGI(q);
+    }
 }
 
 
@@ -337,16 +326,6 @@ static int cgiCallback(MprCmd *cmd, int channel, void *data)
     mprLog(q, 5, "CGI: gateway I/O event on channel %d, state %d", channel, conn->state);
 
     cgiEvent(q, cmd, channel);
-
-#if UNUSED
-    /*
-        Setup for more I/O events from the gateway
-     */
-//  MOB - needed?
-    if (conn->state < MPR_HTTP_STATE_COMPLETE) {
-        enableCgiEvents(q, cmd, channel);
-    }
-#endif
     return 0;
 }
 
@@ -369,12 +348,6 @@ static void cgiEvent(MaQueue *q, MprCmd *cmd, int channel)
 
     switch (channel) {
     case MPR_CMD_STDIN:
-#if UNUSED
-        /*
-            CGI's stdin is now accepting more data
-         */
-        mprDisableCmdEvents(cmd, MPR_CMD_STDIN);
-#endif
         writeToCGI(q->pair);
         return;
 
@@ -422,12 +395,6 @@ static void cgiEvent(MaQueue *q, MprCmd *cmd, int channel)
                  */
                 mprLog(cmd, 5, "CGI EOF for %s", (channel == MPR_CMD_STDOUT) ? "stdout" : "stderr");
                 mprCloseCmdFd(cmd, channel);
-#if UNUSED && MOVED
-                if (cmd->pid == 0) {
-                    maPutForService(q, maCreateEndPacket(q), 1);
-                    maServiceQueues(conn);
-                }
-#endif
                 break;
 
             } else {
@@ -466,30 +433,6 @@ static void cgiEvent(MaQueue *q, MprCmd *cmd, int channel)
         }
     }
 }
-
-
-#if UNUSED
-//  MOB - needed?
-static void enableCgiEvents(MaQueue *q, MprCmd *cmd, int channel)
-{
-    if (cmd->pid == 0) {
-        return;
-    }
-    if (channel == MPR_CMD_STDOUT && mprGetCmdFd(cmd, channel) < 0) {
-        /*
-            Now that stdout is complete, enable stderr to receive an EOF or any error output. This is 
-            serialized to eliminate both stdin and stdout events on different threads at the same time.
-         */
-        mprLog(cmd, 8, "CGI enable stderr");
-        mprEnableCmdEvents(cmd, MPR_CMD_STDERR);
-        
-    } else if (cmd->pid) {
-        if (channel != MPR_CMD_STDOUT || !(cmd->userFlags & MA_CGI_FLOW_CONTROL)) {
-            mprEnableCmdEvents(cmd, channel);
-        }
-    }
-}
-#endif
 
 
 /*
@@ -1021,7 +964,6 @@ MprModule *maCgiHandlerInit(MaHttp *http, cchar *path)
     http->cgiHandler = handler;
     handler->close = closeCgi; 
     handler->start = startCgi; 
-    handler->outgoingService = outgoingCgiService;
     handler->incomingData = incomingCgiData; 
     handler->run = runCgi; 
     handler->parse = parseCgi; 

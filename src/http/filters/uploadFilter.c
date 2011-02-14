@@ -59,7 +59,11 @@ static bool matchUpload(MaConn *conn, MaStage *filter, cchar *uri)
     }
     pat = "multipart/form-data";
     len = (int) strlen(pat);
-    return mprStrcmpAnyCaseCount(req->mimeType, pat, len) == 0;
+    if (mprStrcmpAnyCaseCount(req->mimeType, pat, len) == 0) {
+        req->flags |= MA_REQ_UPLOADING;
+        return 1;
+    }
+    return 0;
 }
 
 

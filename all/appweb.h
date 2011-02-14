@@ -1933,6 +1933,7 @@ extern void maTraceContent(MaConn *conn, MaPacket *packet, int size, int offset,
 #define MA_REQ_CREATE_ENV   0x1             /**< Must create env for this request */
 #define MA_REQ_IF_MODIFIED  0x2             /**< If-[un]modified-since supplied */
 #define MA_REQ_CHUNKED      0x4             /**< Content is chunk encoded */
+#define MA_REQ_UPLOADING    0x8             /**< Content contains upload files */
 
 /*
  *  Incoming chunk encoding states
