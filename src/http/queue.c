@@ -203,57 +203,13 @@ MaPacket *maCreateConnPacket(MaConn *conn, int size)
     if (conn->state == MPR_HTTP_STATE_COMPLETE) {
         return maCreatePacket((MprCtx) conn, size);
     }
-#if UNUSED
-    MaPacket    *packet;
-    MaRequest   *req;
-    req = conn->request;
-    if (req) {
-        /* These packets are all owned by the request */
-        if ((packet = req->freePackets) != NULL && size <= packet->content->buflen) {
-            req->freePackets = packet->next; 
-            packet->next = 0;
-            return packet;
-        }
-    }
-#endif
     return maCreatePacket(conn->request ? (MprCtx) conn->request: (MprCtx) conn, size);
 }
 
 
 void maFreePacket(MaQueue *q, MaPacket *packet)
 {
-    MaConn      *conn;
-    MaRequest   *req;
-
-    conn = q->conn;
-    req = conn->request;
-
-#if UNUSED
-    if (req == 0 || packet->content == 0 || packet->content->buflen < MA_BUFSIZE || mprGetParent(packet) == conn) {
-        /* 
-         *  Don't bother recycling non-content, small packets or packets owned by the connection
-         *  We only store packets owned by the request and not by the connection on the free list.
-         */
-        mprFree(packet);
-        return;
-    }
-
-    /*
-     *  Add to the packet free list for recycling
-     */
-    mprAssert(packet->content);
-    mprFlushBuf(packet->content);
-    mprFree(packet->prefix);
-    packet->prefix = 0;
-    mprFree(packet->suffix);
-    packet->suffix = 0;
-    packet->entityLength = 0;
-    packet->flags = 0;
-    packet->next = req->freePackets;
-    req->freePackets = packet;
-#else
     mprFree(packet);
-#endif
 } 
 
 

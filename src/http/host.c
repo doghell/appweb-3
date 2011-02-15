@@ -745,14 +745,6 @@ static void updateCurrentDate(MaHost *host)
     host->now = mprGetTime(host);
     host->currentDate = maGetDateString(host, 0);
     mprFree(oldDate);
-
-#if UNUSED
-    struct tm   tm;
-    mprDecodeUniversalTime(host, &tm, host->now + (86400 * 1000));
-    oldDate = host->expiresDate;
-    host->expiresDate = mprFormatTime(host, MPR_HTTP_DATE, &tm);
-    mprFree(oldDate);
-#endif
 }
 
 

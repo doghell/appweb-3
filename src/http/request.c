@@ -1023,6 +1023,7 @@ void maAbortConnection(MaConn *conn, int code, cchar *fmt, ...)
 int maSetRequestUri(MaConn *conn, cchar *uri)
 {
     MaRequest   *req;
+    MaResponse  *resp;
 
     req = conn->request;
 
@@ -1036,6 +1037,8 @@ int maSetRequestUri(MaConn *conn, cchar *uri)
     }
     conn->response->extension = req->parsedUri->ext;
     req->url = mprValidateUrl(req, mprUrlDecode(req, req->parsedUri->url));
+    req->alias = maGetAlias(req->host, req->url);
+    resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
     return 0;
 }
 

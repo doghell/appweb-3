@@ -222,14 +222,6 @@ void maRegisterStage(MaHttp *http, MaStage *stage)
 }
 
 
-#if UNUSED
-int maRemoveStage(MaHttp *http, cchar *name)
-{
-    return mprRemoveHash(http->stages, name);
-}
-#endif
-
-
 MaStage *maLookupStage(MaHttp *http, cchar *name)
 {
     return (MaStage*) mprLookupHash(http->stages, name);
@@ -423,7 +415,6 @@ int maUnloadModule(MaHttp *http, cchar *name)
         return MPR_ERR_CANT_ACCESS;
     }
     if (module->timeout) {
-        //  MOB - stop all requests 
         if ((stage = maLookupStage(http, name)) != 0) {
             stage->flags |= MA_STAGE_UNLOADED;
         }
