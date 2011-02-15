@@ -5751,14 +5751,6 @@ MprBlk *_mprAllocBlock(MprCtx ctx, MprHeap *heap, MprBlk *parent, uint usize)
      *  exceeded. It is the application's responsibility to set the red-line value suitable for the system.
      */
     if (parent) {
-#if UNUSED
-        if (size >= MPR_ALLOC_BIGGEST) {
-            /* Block is too big */
-            allocException(parent, size, 0);
-            return 0;
-
-        } else 
-#endif
         if ((size + mpr->alloc.bytesAllocated) > mpr->alloc.maxMemory) {
             /*
              *  Prevent allocation as over the maximum memory limit.
@@ -11426,11 +11418,6 @@ MprEvent *mprCreateEvent(MprDispatcher *dispatcher, MprEventProc proc, int perio
 {
     MprEvent        *event;
 
-#if UNUSED
-    if (mprIsExiting(dispatcher)) {
-        return 0;
-    }
-#endif
     event = mprAllocObjWithDestructor(dispatcher, MprEvent, eventDestructor);
     if (event == 0) {
         return 0;
@@ -19296,9 +19283,6 @@ static char *sprintfCore(MprCtx ctx, char *buf, int maxsize, cchar *spec, va_lis
 
         case STATE_DOT:
             fmt.precision = 0;
-#if UNUSED
-            fmt.flags &= ~SPRINTF_LEAD_ZERO;
-#endif
             break;
 
         case STATE_PRECISION:
@@ -22046,16 +22030,6 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
     }
     mprItoa(portBuf, sizeof(portBuf), port, 10);
 
-#if UNUSED
-    if (host == NULL || strchr(host, ':') == 0) {
-        /* 
-            Looks like IPv4. Map localhost to 127.0.0.1 to avoid crash bug in MAC OS X.
-         */
-        if (host && strcmp(host, "localhost") == 0) {
-            host = "127.0.0.1";
-        }
-    }
-#endif
     res = 0;
     if (getaddrinfo(host, portBuf, &hints, &res) != 0) {
         mprUnlock(ss->mutex);
@@ -25271,26 +25245,16 @@ cchar *mprGetCurrentThreadName(MprCtx ctx) { return "main"; }
     some trickery to remap the year to a valid year when using localtime.
     FYI: 32 bit time_t expires at: 03:14:07 UTC on Tuesday, 19 January 2038
  */
-#if UNUSED
-#define MAX_TIME    (((time_t) -1) & ~(((time_t) 1) << ((sizeof(time_t) * 8) - 1)))
-#define MIN_TIME    (((time_t) 1) << ((sizeof(time_t) * 8) - 1))
-#else
 #define MAX_TIME    (((time_t) -1) & ~(((time_t) 1) << 31))
 #define MIN_TIME    (((time_t) 1) << 31)
-#endif
 
-#if UNUSED
 /*
     Approximate, conservative min and max year. The 31556952 constant is approx sec/year (365.2425 * 86400)
     Reduce by one to ensure no overflow. Note: this does not reduce actual date range representations and is
     only used in DST calculations. Use 1900 for the minimum as 
  */
-#define MIN_YEAR    ((MIN_TIME / 31556952) + 1)
-#define MAX_YEAR    ((MAX_TIME / 31556952) - 1)
-#else
 #define MIN_YEAR    1901
 #define MAX_YEAR    2037
-#endif
 
 /*
     Token types or'd into the TimeToken value
@@ -25457,10 +25421,6 @@ int mprCreateTimeService(MprCtx ctx)
 {
     Mpr                 *mpr;
     TimeToken           *tt;
-#if UNUSED
-    struct timezone     tz;
-    struct timeval      tv;
-#endif
 
     mpr = mprGetMpr(ctx);
     mpr->timeTokens = mprCreateHash(mpr, -1);
@@ -25487,13 +25447,6 @@ int mprCreateTimeService(MprCtx ctx)
     for (tt = offsets; tt->name; tt++) {
         mprAddHash(mpr->timeTokens, tt->name, (void*) tt);
     }
-#if UNUSED
-    /*
-        Get timezone without DST
-     */
-    gettimeofday(&tv, &tz);
-    mpr->timezone = -tz.tz_minuteswest * MS_PER_MIN;
-#endif
     return 0;
 }
 
@@ -25837,19 +25790,11 @@ static void decodeTime(MprCtx ctx, struct tm *tp, MprTime when, bool local)
     year = getYear(when);
 
     tp->tm_year     = year - 1900;
-#if UNUSED
-    tp->tm_hour     = (int) ((when / MS_PER_HOUR) % 24);
-    tp->tm_min      = (int) ((when / MS_PER_MIN) % 60);
-    tp->tm_sec      = (int) ((when / MS_PER_SEC) % 60);
-    tp->tm_wday     = (int) (((when / MS_PER_DAY) + 4) % 7);
-    tp->tm_yday     = (int) ((when / MS_PER_DAY) - daysSinceEpoch(year));
-#else
     tp->tm_hour     = (int) (floorDiv(when, MS_PER_HOUR) % 24);
     tp->tm_min      = (int) (floorDiv(when, MS_PER_MIN) % 60);
     tp->tm_sec      = (int) (floorDiv(when, MS_PER_SEC) % 60);
     tp->tm_wday     = (int) ((floorDiv(when, MS_PER_DAY) + 4) % 7);
     tp->tm_yday     = (int) (floorDiv(when, MS_PER_DAY) - daysSinceEpoch(year));
-#endif
     tp->tm_mon      = getMonth(year, tp->tm_yday);
     tp->tm_isdst    = dst != 0;
 #if BLD_UNIX_LIKE && !CYGWIN

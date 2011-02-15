@@ -7187,32 +7187,6 @@ extern void mprCloseCmdFd(MprCmd *cmd, int channel);
  */
 extern MprCmd *mprCreateCmd(MprCtx ctx);
 
-#if UNUSED
-/**
- *  Disconnect a command its underlying I/O channels. This is used to prevent further I/O wait events while
- *  still preserving the MprCmd object.
- *  @param cmd MprCmd object created via mprCreateCmd
- *  @ingroup MprCmd
- */
-extern void mprDisconnectCmd(MprCmd *cmd);
-
-/**
- *  Disable command I/O events. This disables events on a given channel.
- *  @param cmd MprCmd object created via mprCreateCmd
- *  @param channel Channel number to close. Should be either MPR_CMD_STDIN, MPR_CMD_STDOUT or MPR_CMD_STDERR.
- *  @ingroup MprCmd
- */
-extern void mprDisableCmdEvents(MprCmd *cmd, int channel);
-
-/**
- *  Enable command I/O events. This enables events on a given channel.
- *  @param cmd MprCmd object created via mprCreateCmd
- *  @param channel Channel number to close. Should be either MPR_CMD_STDIN, MPR_CMD_STDOUT or MPR_CMD_STDERR.
- *  @ingroup MprCmd
- */
-extern void mprEnableCmdEvents(MprCmd *cmd, int channel);
-#endif
-
 /**
  *  Get the command exit status
  *  @param cmd MprCmd object created via mprCreateCmd
