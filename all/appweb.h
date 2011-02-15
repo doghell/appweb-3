@@ -2129,7 +2129,6 @@ extern void maRequestWriteBlocked(MaConn *conn);
 extern void maSetNoKeepAlive(MaConn *conn);
 extern void maSetUploadFile(MaConn *conn, cchar *id, MaUploadFile *file);
 
-//  MOB DOC
 extern void         maSetStageData(MaConn *conn, cchar *key, cvoid *data);
 extern cvoid        *maGetStageData(MaConn *conn, cchar *key);
 
