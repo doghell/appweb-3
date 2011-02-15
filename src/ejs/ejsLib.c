@@ -4669,12 +4669,6 @@ static EjsVar *date_set_day(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     MprTime     dayDiff, day;
 
     day = ejsGetNumber(argv[0]);
-#if UNUSED
-    if (day < 0 || day > 6) {
-        ejsThrowArgError(ejs, "Bad day. Range 0-6");
-        return 0;
-    }
-#endif
     mprDecodeLocalTime(ejs, &tm, dp->value);
     dayDiff = day - tm.tm_wday;
     dp->value += dayDiff * 86400 * MPR_TICKS_PER_SEC;
@@ -4705,12 +4699,6 @@ static EjsVar *date_set_dayOfYear(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv
     MprTime     dayDiff, day;
 
     day = ejsGetNumber(argv[0]);
-#if UNUSED
-    if (day < 0 || day > 365) {
-        ejsThrowArgError(ejs, "Bad day. Range 0-365");
-        return 0;
-    }
-#endif
     mprDecodeLocalTime(ejs, &tm, dp->value);
     dayDiff = day - tm.tm_yday;
     dp->value += dayDiff * 86400 * MPR_TICKS_PER_SEC;
@@ -4741,12 +4729,6 @@ static EjsVar *date_set_date(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     MprTime     dayDiff, day;
 
     day = ejsGetNumber(argv[0]);
-#if UNUSED
-    if (day < 1 || day > 31) {
-        ejsThrowArgError(ejs, "Bad day. Range 1-31");
-        return 0;
-    }
-#endif
     mprDecodeLocalTime(ejs, &tm, dp->value);
     dayDiff = day - tm.tm_mday;
     dp->value += dayDiff * 86400 * MPR_TICKS_PER_SEC;
@@ -5152,12 +5134,6 @@ static EjsVar *date_setUTCDate(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     MprTime     dayDiff, day;
 
     day = ejsGetNumber(argv[0]);
-#if UNUSED
-    if (day < 1 || day > 31) {
-        ejsThrowArgError(ejs, "Bad day. Range 1-31");
-        return 0;
-    }
-#endif
     mprDecodeUniversalTime(ejs, &tm, dp->value);
     dayDiff = day - tm.tm_mday;
     dp->value += dayDiff * 86400 * MPR_TICKS_PER_SEC;
@@ -8389,18 +8365,6 @@ void ejsConfigureNullType(Ejs *ejs)
 #define fixed(n) ((int64) (floor(n)))
 #else
 #define fixed(n) (n)
-#endif
-
-#if UNUSED
-#if BLD_WIN_LIKE || VXWORKS
-static double localRint(double num)
-{
-    double low = floor(num);
-    double high = ceil(num);
-    return ((high - num) >= (num - low)) ? low : high;
-}
-#define rint localRint
-#endif
 #endif
 
 /*
@@ -16781,32 +16745,6 @@ static EjsVar *readLines(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
 }
 
 
-#if BLD_FEATURE_EJS_E4X && UNUSED
-/*
- *  function readXml(): XML
- */
-static EjsVar *readXml(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
-{
-    EjsXML  *xml;
-    int     count;
-
-    if (!waitForResponse(hp, -1)) {
-        return 0;
-    }
-    xml = ejsCreateXML(ejs, 0, NULL, NULL, NULL);
-    lock(hp);
-    if ((count = readTransfer(ejs, hp, -1, 0)) < 0) {
-        return 0;
-    }
-    mprAddNullToBuf(hp->responseContent);
-    ejsLoadXMLString(ejs, xml, mprGetBufStart(hp->responseContent));
-    mprFlushBuf(hp->responseContent);
-    unlock(hp);
-    return (EjsVar*) xml;
-}
-#endif
-
-
 /*
  *  function response(): Stream
  */
@@ -17311,9 +17249,6 @@ void ejsConfigureHttpType(Ejs *ejs)
     ejsBindMethod(ejs, type, ES_ejs_io_Http_read, (EjsNativeFunction) readHttpData);
     ejsBindMethod(ejs, type, ES_ejs_io_Http_readString, (EjsNativeFunction) readStringHttp);
     ejsBindMethod(ejs, type, ES_ejs_io_Http_readLines, (EjsNativeFunction) readLines);
-#if BLD_FEATURE_EJS_E4X && UNUSED
-    ejsBindMethod(ejs, type, ES_ejs_io_Http_readXml, (EjsNativeFunction) readXml);
-#endif
     ejsBindMethod(ejs, type, ES_ejs_io_Http_response, (EjsNativeFunction) httpResponse);
     ejsBindMethod(ejs, type, ES_ejs_io_Http_options, (EjsNativeFunction) optionsMethod);
     ejsBindMethod(ejs, type, ES_ejs_io_Http_setCredentials, (EjsNativeFunction) setCredentials);
@@ -26196,9 +26131,6 @@ static void *opcodeJump[] = {
          */
         CASE (EJS_OP_POP):
             ejs->result = pop(ejs);
-#if MACOSX || UNUSED
-            mprAssert(ejs->result != (void*) 0xf7f7f7f7f7f7f7f7);
-#endif
             mprAssert(ejs->exception || ejs->result);
             BREAK;
 
@@ -26818,14 +26750,6 @@ static void *opcodeJump[] = {
                 qname.space = ejsToString(ejs, v1)->value;
             }
             vp = pop(ejs);
-#if OLD
-            slotNum = ejsLookupVar(ejs, vp, &qname, &lookup);
-            if (slotNum < 0) {
-                ejsThrowReferenceError(ejs, "Property \"%s\" does not exist", qname.name);
-            } else {
-                slotNum = ejsDeleteProperty(ejs, vp, slotNum);
-            }
-#endif
             ejsDeletePropertyByName(ejs, vp, &qname);
             CHECK; BREAK;
 
@@ -27719,11 +27643,7 @@ static void createExceptionBlock(Ejs *ejs, EjsEx *ex, int flags)
         for (i = 0; i < count; i++) {
             ejsPopBlock(ejs);
         }
-#if OLD
-        count = (state->stack - fp->stackReturn - fp->argc);
-#else
         count = state->stack - fp->stackBase;
-#endif
         state->stack -= (count - ex->numStack);
     }
     

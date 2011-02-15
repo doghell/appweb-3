@@ -2389,11 +2389,6 @@ static char *wikiFormat(Ejs *ejs, char *start)
             }
             mprPutCharToBuf(buf, ' ');
 
-#if UNUSED
-        } else if (*str == '\\' && str[-1] != '\\' && str[1]) {
-            str++;
-            mprPutCharToBuf(buf, *str);
-#endif
         } else {
             mprPutCharToBuf(buf, *str);
         }
