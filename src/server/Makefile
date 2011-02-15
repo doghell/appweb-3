@@ -8,11 +8,11 @@ POST_DIRS			:= package
 
 include 			.makedep 
 
-ifeq 		($(BLD_UNIX_LIKE),1)
+ifeq 		($(BLD_HOST_UNIX),1)
 	PRE_DIRS		+= UNIX
 else
 	PRE_DIRS		+= $(BLD_OS)
-	endif
+endif
 ifeq	($(BLD_FEATURE_TEST),1)
 	PRE_DIRS		+= test
 endif
