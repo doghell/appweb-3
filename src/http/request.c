@@ -1026,6 +1026,7 @@ int maSetRequestUri(MaConn *conn, cchar *uri)
     MaResponse  *resp;
 
     req = conn->request;
+    resp = conn->response;
 
     /*
      *  Parse (tokenize) the request uri first. Then decode and lastly validate the URI path portion.
