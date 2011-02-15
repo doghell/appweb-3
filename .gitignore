@@ -109,3 +109,4 @@ lib/i386-wrs*
 .embedthis
 target
 src/server/logs
+bin/.kdbgrc.*
