@@ -44,17 +44,15 @@ static void sortList(MaConn *conn, MprList *list);
 static bool matchDir(MaConn *conn, MaStage *handler, cchar *url)
 {
     MaResponse      *resp;
-    MprPath         *info;
     Dir             *dir;
 
     resp = conn->response;
-    info = &resp->fileInfo;
     dir = handler->stageData;
     
-    if (!info->valid && mprGetPathInfo(conn, resp->filename, info) < 0) {
-        return 0;
-    }
-    return dir->enabled && info->isDir;
+    mprAssert(resp->filename);
+    mprAssert(resp->fileInfo.checked);
+
+    return dir->enabled && resp->fileInfo.isDir;
 }
 
 
