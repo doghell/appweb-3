@@ -425,6 +425,9 @@ static int parseAuth(MaHttp *http, cchar *key, char *value, MaConfigState *state
         if (mprStrcmpAnyCase(value, "Basic") == 0) {
             auth->type = MA_AUTH_BASIC;
 
+        } else if (mprStrcmpAnyCase(value, "None") == 0) {
+            auth->type = 0;
+
 #if BLD_FEATURE_AUTH_DIGEST
         } else if (mprStrcmpAnyCase(value, "Digest") == 0) {
             auth->type = MA_AUTH_DIGEST;
