@@ -211,17 +211,13 @@ void maRotateAccessLog(MaHost *host)
      *  Rotate logs when full
      */
     if (mprGetPathInfo(host, host->logPath, &info) == 0 && info.size > MA_MAX_ACCESS_LOG) {
-
         when = mprGetTime(host);
         mprDecodeUniversalTime(host, &tm, when);
-
         mprSprintf(bak, sizeof(bak), "%s-%02d-%02d-%02d-%02d:%02d:%02d", host->logPath, 
             tm.tm_mon, tm.tm_mday, tm.tm_year, tm.tm_hour, tm.tm_min, tm.tm_sec);
-
         mprFree(host->accessLog);
         rename(host->logPath, bak);
         unlink(host->logPath);
-
         host->accessLog = mprOpen(host, host->logPath, O_CREAT | O_TRUNC | O_WRONLY | O_TEXT, 0664);
     }
 }
