@@ -50,11 +50,11 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
     }
     if (*url == '\0' || strcmp(url, "/") == 0) {
         mprSprintf(urlbuf, sizeof(urlbuf), "%s/web/index.ejs", req->alias->prefix);
-        maSetRequestUri(conn, urlbuf);
+        maSetRequestUri(conn, urlbuf, NULL);
 
     } else if (strcmp(url, "/favicon.ico") == 0) {
         mprSprintf(urlbuf, sizeof(urlbuf), "%s/web/favicon.ico", req->alias->prefix);
-        maSetRequestUri(conn, urlbuf);
+        maSetRequestUri(conn, urlbuf, NULL);
         return 0;
 
     } else if (strncmp(url, "/web/", 5) == 0 || *url == '\0') {
