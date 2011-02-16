@@ -1899,6 +1899,7 @@ extern void maDestroyPipeline(MaConn *conn);
 extern void maDiscardPipeData(MaConn *conn);
 extern void maEnableConnEvents(MaConn *conn, int eventMask);
 extern MaPacket *maGetConnPacket(MaConn *conn);
+extern cchar *maGetExtension(MaConn *conn);
 extern void *maGetHandlerQueueData(struct MaConn *conn);
 extern void maMatchHandler(MaConn *conn);
 extern bool maMatchEtag(struct MaConn *conn, char *requestedEtag);
@@ -1965,6 +1966,7 @@ typedef struct MaRequest {
     int             receivedContent;        /**< Length of content actually received */
     int             method;                 /**< Request method */
     int             flags;                  /**< Request modifiers */
+    int             rewrites;               /**< Count of request rewrites */
 
     char            *methodName;            /**< Protocol method GET|PUT... (ENV: REQUEST_METHOD) */
     char            *httpProtocol;          /**< HTTP/1.0 or HTTP/1.1 */
@@ -2145,7 +2147,7 @@ extern MaAuth       *maGetAuth(MaConn *conn);
 extern void         maProcessReadEvent(MaConn *conn, MaPacket *packet);
 extern void         maProcessWriteEvent(MaConn *conn);
 extern void         maSetRequestFlags(MaConn *conn, int orFlags, int andFlags);
-extern int          maSetRequestUri(MaConn *conn, cchar *newUri);
+extern int          maSetRequestUri(MaConn *conn, cchar *newUri, cchar *query);
 extern void         maSetEtag(MaConn *conn, MprPath *info);
 
 /********************************** MaResponse *********************************/
