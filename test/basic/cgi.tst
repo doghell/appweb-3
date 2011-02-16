@@ -8,6 +8,10 @@ let http: Http = new Http
 /* Suport routines */
 
 function contains(pat): Void {
+    if (!http.response.contains(pat)) {
+        print("Response is missing: " + pat)
+        print("Response:\n" + http.response)
+    }
     assert(http.response.contains(pat))
 }
 
@@ -18,6 +22,9 @@ function keyword(pat: String): String {
 }
 
 function match(key: String, value: String): Void {
+    if (keyword(key) != value) {
+        print("MISMATCH key = " + key + " expected = " + value + " actual = " + keyword(key))
+    }
     assert(keyword(key) == value)
 }
 
@@ -64,7 +71,6 @@ function alias() {
 
     http.get(HTTP + "/YourScripts/cgiProgram.cgi")
     assert(http.code == 200)
-// print(http.response)
     contains("cgiProgram: Output")
 }
 
