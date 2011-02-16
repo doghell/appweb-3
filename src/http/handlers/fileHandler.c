@@ -312,12 +312,8 @@ static void handlePutRequest(MaQueue *q)
     conn = q->conn;
     req = conn->request;
     resp = conn->response;
+    path = resp->filename;
 
-    path = maMapUriToStorage(q->conn, req->url);
-    if (path == 0) {
-        maFailRequest(conn, MPR_HTTP_CODE_NOT_FOUND, "Can't map URI to file storage");
-        return;
-    }
     if (req->ranges) {
         /*
          *  Open an existing file with fall-back to create
@@ -355,18 +351,12 @@ static void handleDeleteRequest(MaQueue *q)
 
     conn = q->conn;
     req = conn->request;
-
-    path = maMapUriToStorage(q->conn, req->url);
-    if (path == 0) {
-        maFailRequest(conn, MPR_HTTP_CODE_NOT_FOUND, "Can't map URI to file storage");
-        return;
-    }
+    path = conn->response->filename;
 
     if (!conn->response->fileInfo.isReg) {
         maFailRequest(conn, MPR_HTTP_CODE_NOT_FOUND, "URI not found");
         return;
     }
-
     if (mprDeletePath(q, path) < 0) {
         maFailRequest(conn, MPR_HTTP_CODE_NOT_FOUND, "Can't remove URI");
         return;
