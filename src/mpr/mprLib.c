@@ -27896,6 +27896,7 @@ MprUri *mprParseUri(MprCtx ctx, cchar *uri)
     up->query = 0;
     up->ext = 0;
     up->secure = 0;
+    up->reference = 0;
 
     http = 0;
     tok = 0;
