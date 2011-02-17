@@ -663,7 +663,7 @@ static void hostTimer(MaHost *host, MprEvent *event)
      */
     lock(host);
     updateCurrentDate(host);
-    mprLog(host, 6, "hostTimer: %d active connections", mprGetListCount(host->connections));
+    mprLog(host, 8, "hostTimer: %d active connections", mprGetListCount(host->connections));
 
     /*
      *  Check for any expired connections

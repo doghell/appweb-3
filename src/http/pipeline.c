@@ -138,6 +138,7 @@ void maCreatePipeline(MaConn *conn)
     http = conn->http;
 
     mprAssert(req);
+    mprAssert(location);
     mprAssert(location->outputStages);
 
     /*
