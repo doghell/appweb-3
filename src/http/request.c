@@ -311,11 +311,8 @@ static bool parseFirstLine(MaConn *conn, MaPacket *packet)
     req->method = method;
     req->methodName = methodName;
     req->httpProtocol = httpProtocol;
-    
-    if (maSetRequestUri(conn, uri) < 0) {
-        maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Bad URL format");
-        return 0;
-    }
+    req->url = uri;
+
     if ((conn->trace = maSetupTrace(host, conn->response->extension)) != 0) {
         if (maShouldTrace(conn, MA_TRACE_REQUEST | MA_TRACE_HEADERS)) {
             mprLog(req, host->traceLevel, "\n@@@ New request from %s:%d to %s:%d\n%s %s %s", 
@@ -634,6 +631,11 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
         mprAdjustBufStart(content, 2);
     }
     mprLog(conn, 3, "Select host \"%s\"", conn->host->name);
+
+    if (maSetRequestUri(conn, req->url, "") < 0) {
+        maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Bad URI format");
+        return 0;
+    }
     return 1;
 }
 
@@ -1020,26 +1022,36 @@ void maAbortConnection(MaConn *conn, int code, cchar *fmt, ...)
 }
 
 
-int maSetRequestUri(MaConn *conn, cchar *uri)
+int maSetRequestUri(MaConn *conn, cchar *uri, cchar *query)
 {
     MaRequest   *req;
     MaResponse  *resp;
+    MaHost      *host;
+    char        *oldQuery;
 
+    host = conn->host;
     req = conn->request;
     resp = conn->response;
+    oldQuery = (req->parsedUri) ? req->parsedUri->query : 0; 
 
-    /*
-     *  Parse (tokenize) the request uri first. Then decode and lastly validate the URI path portion.
-     *  This allows URLs to have '?' in the URL.
-     */
-    req->parsedUri = mprParseUri(req, uri);
-    if (req->parsedUri == 0) {
+    if ((req->parsedUri = mprParseUri(req, uri)) == 0) {
         return MPR_ERR_BAD_ARGS;
     }
-    conn->response->extension = req->parsedUri->ext;
+    if (query == NULL) {
+        req->parsedUri->query = oldQuery;
+    } else if (*query) {
+        req->parsedUri->query = mprStrdup(req->parsedUri, query);
+    }
     req->url = mprValidateUrl(req, mprUrlDecode(req, req->parsedUri->url));
-    req->alias = maGetAlias(req->host, req->url);
+    req->location = maLookupBestLocation(host, req->url);
+    req->auth = req->location->auth;
+    req->alias = maGetAlias(host, req->url);
     resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
+    mprGetPathInfo(conn, resp->filename, &resp->fileInfo);
+    resp->extension = maGetExtension(conn);
+    if ((resp->mimeType = (char*) maLookupMimeType(host, resp->extension)) == 0) {
+        resp->mimeType = (char*) "text/html";
+    }
     return 0;
 }
 
