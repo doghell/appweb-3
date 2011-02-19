@@ -558,7 +558,8 @@ static MaStage *mapToFile(MaConn *conn, MaStage *handler)
 {
     MaRequest   *req;
     MaResponse  *resp;
-    MprPath     *info;
+    MprPath     *info, ginfo;
+    char        *gfile;
 
     req = conn->request;
     resp = conn->response;
@@ -567,7 +568,7 @@ static MaStage *mapToFile(MaConn *conn, MaStage *handler)
     mprAssert(resp->filename);
     mprAssert(info->checked);
 
-    if (!handler || handler->flags & MA_STAGE_VIRTUAL) {
+    if (!handler || (handler->flags & MA_STAGE_VIRTUAL)) {
         return handler;
     }
     if ((req->dir = maLookupBestDir(req->host, resp->filename)) == 0) {
@@ -582,6 +583,17 @@ static MaStage *mapToFile(MaConn *conn, MaStage *handler)
              */
             resp->etag = mprAsprintf(resp, -1, "\"%x-%Lx-%Lx\"", info->inode, info->size, info->mtime);
         } else {
+            if (req->acceptEncoding) {
+                if (strstr(req->acceptEncoding, "gzip") != 0) {
+                    gfile = mprAsprintf(resp, -1, "%s.gz", resp->filename);
+                    if (mprGetPathInfo(resp, gfile, &ginfo) == 0) {
+                        resp->filename = gfile;
+                        resp->fileInfo = ginfo;
+                        maSetHeader(conn, 0, "Content-Encoding", "gzip");
+                        return handler;
+                    }
+                }
+            }
             if (req->method != MA_REQ_PUT && handler->flags & MA_STAGE_VERIFY_ENTITY && 
                     (req->auth == 0 || req->auth->type == 0)) {
                 /* If doing Authentication, must let authFilter generate the response */
