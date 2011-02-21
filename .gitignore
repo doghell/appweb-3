@@ -110,3 +110,4 @@ lib/i386-wrs*
 target
 src/server/logs
 bin/.kdbgrc.*
+samples/c/*/*.slots.h
