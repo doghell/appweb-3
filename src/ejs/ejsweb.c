@@ -66,7 +66,7 @@
     }
     if ((rc = ejsLoadModule(ejs, EJS_EJSWEB_MOD, -1, -1, 0, NULL)) < 0) {
         ejsReportError(ejs, EJS_EJSWEB);
-        return EJS_ERR;
+        rc = EJS_ERR;
     }
 #if VXWORKS
     mprFree(ejs);

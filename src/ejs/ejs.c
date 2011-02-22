@@ -201,7 +201,7 @@ static void setupSignals();
 
         } else if (strcmp(argp, "--version") == 0 || strcmp(argp, "-V") == 0) {
             mprPrintfError(mpr, "%s %s-%s\n", BLD_NAME, BLD_VERSION, BLD_NUMBER);
-            exit(0);
+            return 0;
 
         } else if (strcmp(argp, "--warn") == 0) {
             if (nextArg >= argc) {

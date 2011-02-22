@@ -18855,10 +18855,12 @@ static EjsVar *exitApp(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
 
     status = argc == 0 ? 0 : ejsGetInt(argv[0]);
     mprBreakpoint();
-    if (status != 0) {
-        exit(status);
-    } else {
-        mprTerminate(mprGetMpr(ejs), 1);
+    if (!ejs->dontExit) {
+        if (status != 0) {
+            exit(status);
+        } else {
+            mprTerminate(mprGetMpr(ejs), 1);
+        }
     }
     return 0;
 }
@@ -20182,7 +20184,6 @@ static EjsVar *startWorker(Ejs *ejs, EjsWorker *worker, int timeout)
         ejsThrowStateError(ejs, "Worker has already started");
         return 0;
     }
-
     mprAssert(worker->pair->state == EJS_WORKER_BEGIN);
 
     addWorker(ejs, worker);
@@ -24560,7 +24561,7 @@ static void callProperty(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, 
     #define traceCode(ejs, opcode) opcode
 #endif
 
-#if BLD_UNIX_LIKE || VXWORKS
+#if BLD_UNIX_LIKE || (VXWORKS && !BLD_CC_DIAB)
     #define CASE(opcode) opcode
     #define BREAK \
         if (1) { \
@@ -24631,7 +24632,8 @@ static void VM(Ejs *ejs, EjsFunction *fun, EjsVar *thisObj, int argc, int stackA
     uchar           *mark;
     int             i, offset, count, opcode;
 
-#if BLD_UNIX_LIKE || VXWORKS
+#if BLD_UNIX_LIKE || (VXWORKS && !BLD_CC_DIAB)
+
     /*
      *  Direct threading computed goto processing. Include computed goto jump table.
      */
@@ -24857,7 +24859,7 @@ static void *opcodeJump[] = {
     FRAME->filename = 0;
     FRAME->lineNumber = 0;
 
-#if BLD_UNIX_LIKE || VXWORKS
+#if BLD_UNIX_LIKE || (VXWORKS && !BLD_CC_DIAB)
     /*
      *  Direct threading computed goto processing. Include computed goto jump table.
      */
@@ -26870,7 +26872,7 @@ static void *opcodeJump[] = {
             mprAssert(0);
             BREAK;
 
-#if !BLD_UNIX_LIKE && !VXWORKS
+#if !BLD_UNIX_LIKE && !(VXWORKS && !BLD_CC_DIAB)
         }
         if (ejs->attention && !payAttention(ejs)) {
             goto done;
@@ -34316,6 +34318,7 @@ static int initInterp(Ejs *ejs, EjsWebControl *control)
 #endif
     ejsMakePermanent(ejs, sessions);
     control->sessions = (EjsObject*) sessions;
+    ejs->dontExit = 1;
     return 0;
 }
 

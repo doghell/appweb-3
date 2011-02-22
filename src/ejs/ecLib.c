@@ -9670,6 +9670,7 @@ int ecOpenFileStream(EcLexer *lp, const char *path)
 
     if (mprGetPathInfo(fs, path, &info) < 0 || info.size < 0) {
         mprFree(fs);
+        mprFree(fs->file);
         return MPR_ERR_CANT_ACCESS;
     }
 
@@ -9680,13 +9681,14 @@ int ecOpenFileStream(EcLexer *lp, const char *path)
     fs->stream.buf = (char*) mprAlloc(fs, (int) info.size + 1);
     if (fs->stream.buf == 0) {
         mprFree(fs);
+        mprFree(fs->file);
         return MPR_ERR_NO_MEMORY;
     }
     if (mprRead(fs->file, fs->stream.buf, (int) info.size) != (int) info.size) {
         mprFree(fs);
+        mprFree(fs->file);
         return MPR_ERR_CANT_READ;
     }
-
     fs->stream.buf[info.size] = '\0';
     fs->stream.nextChar = fs->stream.buf;
     fs->stream.end = &fs->stream.buf[info.size];

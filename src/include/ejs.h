@@ -1156,6 +1156,7 @@ typedef struct Ejs {
     char                *errorMsg;          /**< Error message */
     char                **argv;             /**< Command line args */
     int                 argc;               /**< Count of command line args */
+    int                 dontExit;           /**< Prevent App.exit() exiting the app */
     int                 flags;              /**< Execution flags */
     int                 exitStatus;         /**< Status to exit() */
     int                 serializeDepth;     /**< Serialization depth */
