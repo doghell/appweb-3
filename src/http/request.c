@@ -927,6 +927,7 @@ static void reportFailure(MaConn *conn, int code, cchar *fmt, va_list args)
     }
     req = conn->request;
     resp = conn->response;
+    maDontCacheResponse(conn);
 
     msg = mprVasprintf(conn, MA_BUFSIZE, fmt, args);
 

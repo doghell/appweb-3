@@ -418,8 +418,7 @@ static int writeToFile(MaQueue *q, char *data, int len)
     file = up->currentFile;
 
     if ((file->size + len) > limits->maxUploadSize) {
-        maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, 
-            "Uploaded file %s exceeds maximum %d\n", up->tmpPath, limits->maxUploadSize);
+        maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, "Uploaded file exceeds maximum %d\n", limits->maxUploadSize);
         return MPR_ERR_CANT_WRITE;
     }
     if (len > 0) {
