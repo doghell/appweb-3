@@ -46,16 +46,18 @@ function forms() {
         assert(http.code == 200)
         contains("cgiProgram: Output")
 
-        //  Test #!cgiProgram 
+        //  Test test.bat (should auto-add .bat)
         http.get(HTTP + "/cgi-bin/test")
         assert(http.code == 200)
         contains("cgiProgram: Output")
 
+        //  Test test.bat
         http.get(HTTP + "/cgi-bin/test.bat")
         assert(http.code == 200)
         contains("cgiProgram: Output")
     }
 
+    # Test #!cgiProgram
     http.get(HTTP + "/cgi-bin/testScript")
     assert(http.code == 200)
     contains("cgiProgram: Output")
