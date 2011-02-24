@@ -9,6 +9,9 @@ The key files are:
 File                 Purpose
 ----------------------------
 authFilter.c       - Authorization filter. Handles basic and digest authentication.
+chunkFilter.c      - Chunk transfer encoding filter. Handles data chunking.
+rangeFilter.c      - Range filter. Handles ranged (subset) requests.
+uploadFilter.c     - Upload filter. Handles file upload.
 
 --------------------------------------------------------------------------------
 

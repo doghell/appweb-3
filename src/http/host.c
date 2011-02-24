@@ -578,7 +578,7 @@ MaLocation *maLookupBestLocation(MaHost *host, cchar *uri)
     if (uri) {
         for (next = 0; (location = mprGetNextItem(host->locations, &next)) != 0; ) {
             rc = strncmp(location->prefix, uri, location->prefixLen);
-            if (rc == 0 && uri[location->prefixLen] == '/') {
+            if (rc == 0 /* UNUSED && uri[location->prefixLen] == '/' */) {
                 return location;
             }
         }

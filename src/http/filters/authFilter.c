@@ -63,12 +63,10 @@ static void openAuth(MaQueue *q)
         maFailRequest(conn, MPR_HTTP_CODE_UNAUTHORIZED, "Access Denied, Authorization enabled.");
         return;
     }
-
     ad = q->queueData = mprAllocObjZeroed(q, AuthData);
     if (ad == 0) {
         return;
     }
-
     if (auth->type == 0) {
         formatAuthResponse(conn, auth, MPR_HTTP_CODE_UNAUTHORIZED, "Access Denied, Authorization required.", 0);
         return;
@@ -93,13 +91,12 @@ static void openAuth(MaQueue *q)
     } else {
         actualAuthType = MA_AUTH_UNKNOWN;
     }
-    mprLog(q, 4, "run: type %d, url %s\nDetails %s\n", auth->type, req->url, req->authDetails);
+    mprLog(q, 4, "openAuth: type %d, url %s\nDetails %s\n", auth->type, req->url, req->authDetails);
 
     if (ad->userName == 0) {
         formatAuthResponse(conn, auth, MPR_HTTP_CODE_UNAUTHORIZED, "Access Denied, Missing user name.", 0);
         return;
     }
-
     if (auth->type != actualAuthType) {
         formatAuthResponse(conn, auth, MPR_HTTP_CODE_UNAUTHORIZED, "Access Denied, Wrong authentication protocol.", 0);
         return;

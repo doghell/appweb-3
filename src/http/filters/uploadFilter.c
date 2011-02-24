@@ -61,6 +61,7 @@ static bool matchUpload(MaConn *conn, MaStage *filter, cchar *uri)
     len = (int) strlen(pat);
     if (mprStrcmpAnyCaseCount(req->mimeType, pat, len) == 0) {
         req->flags |= MA_REQ_UPLOADING;
+        mprLog(conn, 5, "matchUpload for %s", uri);
         return 1;
     }
     return 0;
@@ -128,8 +129,6 @@ static void closeUpload(MaQueue *q)
     
     if (up->currentFile) {
         file = up->currentFile;
-        mprDeletePath(q->conn, file->filename);
-        file->filename = 0;
         mprFree(up->file);
     }
     if (req->location->autoDelete) {
@@ -419,7 +418,7 @@ static int writeToFile(MaQueue *q, char *data, int len)
     file = up->currentFile;
 
     if ((file->size + len) > limits->maxUploadSize) {
-        maFailRequest(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, 
+        maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, 
             "Uploaded file %s exceeds maximum %d\n", up->tmpPath, limits->maxUploadSize);
         return MPR_ERR_CANT_WRITE;
     }
@@ -593,7 +592,6 @@ static int parseUpload(MaHttp *http, cchar *key, char *value, MaConfigState *sta
     if (mprStrcmpAnyCase(key, "UploadDir") == 0 || mprStrcmpAnyCase(key, "FileUploadDir") == 0) {
         host = http->defaultServer->defaultHost;
         path = maMakePath(host, mprStrTrim(value, "\""));
-
         mprFree(location->uploadDir);
         location->uploadDir = mprStrdup(location, path);
         mprLog(http, MPR_CONFIG, "Upload directory: %s", path);

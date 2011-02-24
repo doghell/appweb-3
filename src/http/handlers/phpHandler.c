@@ -209,6 +209,8 @@ static void runPhp(MaQueue *q)
         while (hp) {
             if (hp->data) {
                 php_register_variable(hp->key, (char*) hp->data, php->var_array TSRMLS_CC);
+                mprLog(q, 6, "php: header var %s = %s", hp->key, hp->data);
+
             }
             hp = mprGetNextHash(req->headers, hp);
         }
@@ -216,6 +218,7 @@ static void runPhp(MaQueue *q)
         while (hp) {
             if (hp->data) {
                 php_register_variable(hp->key, (char*) hp->data, php->var_array TSRMLS_CC);
+                mprLog(q, 6, "php: form var %s = %s", hp->key, hp->data);
             }
             hp = mprGetNextHash(req->formVars, hp);
         }

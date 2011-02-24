@@ -207,10 +207,7 @@ void maRotateAccessLog(MaHost *host)
     MprTime         when;
     char            bak[MPR_MAX_FNAME];
 
-    /*
-     *  Rotate logs when full
-     */
-    if (mprGetPathInfo(host, host->logPath, &info) == 0 && info.size > MA_MAX_ACCESS_LOG) {
+    if (mprGetPathInfo(host, host->logPath, &info) == 0) {
         when = mprGetTime(host);
         mprDecodeUniversalTime(host, &tm, when);
         mprSprintf(bak, sizeof(bak), "%s-%02d-%02d-%02d-%02d:%02d:%02d", host->logPath, 

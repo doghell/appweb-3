@@ -60,11 +60,13 @@ void maMatchHandler(MaConn *conn)
     }
     if (handler == 0) {
         handler = conn->http->passHandler;
-        if (req->rewrites >= MA_MAX_REWRITE) {
-            maFailRequest(conn, MPR_HTTP_CODE_INTERNAL_SERVER_ERROR, "Too many request rewrites");
-        } else if (!(req->method & (MA_REQ_OPTIONS | MA_REQ_TRACE))) {
-            maFailRequest(conn, MPR_HTTP_CODE_BAD_METHOD, "Requested method %s not supported for URL: %s", 
-                req->methodName, req->url);
+        if (!conn->requestFailed) {
+            if (req->rewrites >= MA_MAX_REWRITE) {
+                maFailRequest(conn, MPR_HTTP_CODE_INTERNAL_SERVER_ERROR, "Too many request rewrites");
+            } else if (!(req->method & (MA_REQ_OPTIONS | MA_REQ_TRACE))) {
+                maFailRequest(conn, MPR_HTTP_CODE_BAD_METHOD, "Requested method %s not supported for URL: %s", 
+                    req->methodName, req->url);
+            }
         }
 
     } else if (req->method & (MA_REQ_OPTIONS | MA_REQ_TRACE)) {

@@ -189,7 +189,7 @@ static bool parseRequest(MaConn *conn, MaPacket *packet)
     req = conn->request;
     if (conn->connectionFailed) {
         /* Discard input data */
-        mprAssert(conn->keepAliveCount == 0);
+        mprAssert(conn->keepAliveCount <= 0);
         conn->state = MPR_HTTP_STATE_PROCESSING;
         maRunPipeline(conn);
     } else if (req->remainingContent > 0) {
@@ -356,7 +356,7 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
     strcpy(keyBuf, "HTTP_");
     mprAssert(strstr((char*) content->start, "\r\n"));
 
-    for (count = 0; content->start[0] != '\r'; count++) {
+    for (count = 0; content->start[0] != '\r' && !conn->connectionFailed; count++) {
 
         if (count >= limits->maxNumHeaders) {
             maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Too many headers");
@@ -778,12 +778,11 @@ static bool processContent(MaConn *conn, MaPacket *packet)
         conn->input = 0;
         mprStealBlock(resp, packet);
     }
-
-    if (req->remainingContent == 0) {
+    if (req->remainingContent == 0 || conn->requestFailed) {
         /*
          *  End of input. Send a zero packet EOF signal and enable the handler send queue.
          */
-        if (req->remainingContent > 0 && conn->protocol > 0) {
+        if (req->remainingContent > 0 && conn->protocol > 0 && !conn->requestFailed) {
             maFailConnection(conn, MPR_HTTP_CODE_COMMS_ERROR, "Insufficient content data sent with request");
 
         } else {
@@ -837,7 +836,7 @@ bool maProcessCompletion(MaConn *conn)
      *  This will free the request, response, pipeline and call maPrepConnection to reset the state.
      */
     mprFree(req->arena);
-    return (conn->disconnected) ? 0 : more;
+    return (conn->disconnected || conn->connectionFailed) ? 0 : more;
 }
 
 
