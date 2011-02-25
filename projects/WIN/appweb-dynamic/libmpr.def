@@ -441,6 +441,7 @@ EXPORTS
   mprStartEventsThread
   mprStartHttpRequest
   mprStartHttpService
+  mprStartModule
   mprStartModuleService
   mprStartOsService
   mprStartSocketService
@@ -457,6 +458,7 @@ EXPORTS
   mprStopCmd
   mprStopContinuousEvent
   mprStopHttpService
+  mprStopModule
   mprStopModuleService
   mprStopOsService
   mprStopSocketService

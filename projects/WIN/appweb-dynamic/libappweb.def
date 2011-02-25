@@ -90,6 +90,7 @@ EXPORTS
   maGetConfigValue
   maGetCookies
   maGetDateString
+  maGetExtension
   maGetFormVar
   maGetGroupAcl
   maGetHandlerByExtension
@@ -248,6 +249,7 @@ EXPORTS
   maTestFormVar
   maTraceContent
   maTraceOptions
+  maUnloadModule
   maUnloadStaticModules
   maUpdateUserAcls
   maValidateNativeCredentials

@@ -760,7 +760,7 @@ static void findExecutable(MaConn *conn, char **program, char **script, char **b
         If not found, go looking for the fileName with the extensions defined in appweb.conf. 
         NOTE: we don't use PATH deliberately!!!
      */
-    if (access(fileName, X_OK) < 0 && *ext == '\0') {
+    if (access(fileName, X_OK) < 0 /* && *ext == '\0' */) {
         for (hp = 0; (hp = mprGetNextHash(location->extensions, hp)) != 0; ) {
             path = mprStrcat(resp, -1, fileName, ".", hp->key, NULL);
             if (access(path, X_OK) == 0) {
