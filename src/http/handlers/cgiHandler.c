@@ -239,7 +239,7 @@ static void writeToCGI(MaQueue *q)
     MaPacket    *packet;
     MprCmd      *cmd;
     MprBuf      *buf;
-    int         len, rc;
+    int         len, rc, err;
 
     cmd = (MprCmd*) q->pair->queueData;
     mprAssert(cmd);
@@ -252,6 +252,12 @@ static void writeToCGI(MaQueue *q)
         rc = mprWriteCmdPipe(cmd, MPR_CMD_STDIN, mprGetBufStart(buf), len);
         mprLog(q, 5, "CGI: write %d bytes to gateway. Rc rc %d, errno %d", len, rc, mprGetOsError());
         if (rc < 0) {
+            err = mprGetError();
+            if (err == EINTR) {
+                continue;
+            } else if (err == EAGAIN || err == EWOULDBLOCK) {
+                break;
+            }
             mprLog(q, 2, "CGI: write to gateway failed for %d bytes, rc %d, errno %d", len, rc, mprGetOsError());
             mprCloseCmdFd(cmd, MPR_CMD_STDIN);
             maFailRequest(conn, MPR_HTTP_CODE_BAD_GATEWAY, "Can't write body data to CGI gateway");
