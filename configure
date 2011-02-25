@@ -710,10 +710,9 @@ convertSearchPath()
     if [ "$1" != "" ] ; then
         [ "$verbose" -gt 2 ] && echo "ConvertPath expanding $1" 1>&2
         echo $1 | sed "s/[  ]'/=/g" | tr "=" "\n" | sed "s/'//g" |
-        sed "s/ /?/g" | grep -v '^$' | while read x
+        sed "s/[() ]/?/g" | grep -v '^$' | tee /tmp/mob.txt | while read x
         do
             [ "$x" = "" ] && continue
-            # [ "$verbose" != 0 ] && echo -e "\nConvert: \"$x\" => \n    \"`eval ls -d1 "$x" 2>/dev/null | sort -r`\"" 1>&2
             if [ "$BLD_BUILD_OS" = WIN ] ; then
                 eval ls -d1 "$x" 2>/dev/null | sort | while read f
                 do
