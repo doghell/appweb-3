@@ -710,7 +710,7 @@ convertSearchPath()
     if [ "$1" != "" ] ; then
         [ "$verbose" -gt 2 ] && echo "ConvertPath expanding $1" 1>&2
         echo $1 | sed "s/[  ]'/=/g" | tr "=" "\n" | sed "s/'//g" |
-        sed "s/[() ]/?/g" | grep -v '^$' | tee /tmp/mob.txt | while read x
+        sed "s/[() ]/?/g" | grep -v '^$' | while read x
         do
             [ "$x" = "" ] && continue
             if [ "$BLD_BUILD_OS" = WIN ] ; then
