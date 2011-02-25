@@ -802,7 +802,7 @@ static void setPathInfo(MaConn *conn)
             }
             if (last) {
                 offset = alias->prefixLen + (int) (last - start);
-                if (offset <= strlen(req->url)) {
+                if (offset <= (int) strlen(req->url)) {
                     pathInfo = &req->url[offset];
                     req->pathInfo = mprStrdup(req, pathInfo);
                     pathInfo[0] = '\0';
