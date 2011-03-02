@@ -84,7 +84,7 @@ static int connectionDestructor(MaConn *conn)
     maRemoveConn(conn->host, conn);
 
     if (conn->sock) {
-        mprLog(conn, 4, "Closing connection");
+        mprLog(conn, 4, "Closing connection fd %d", conn->sock->fd);
         mprCloseSocket(conn->sock, conn->connectionFailed ? 0 : MPR_SOCKET_GRACEFUL);
         mprFree(conn->sock);
     }
@@ -104,6 +104,7 @@ void maDisconnectConn(MaConn *conn)
     conn->requestFailed = 1;
 
     if (conn->response) {
+        mprLog(conn, 4, "Disconnect conn fd %d", conn->sock ? conn->sock->fd : 0);
         maCompleteRequest(conn);
         maDiscardPipeData(conn);
     }

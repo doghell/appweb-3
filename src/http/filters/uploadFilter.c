@@ -263,6 +263,7 @@ static int processContentBoundary(MaQueue *q, char *line)
         return MPR_ERR_BAD_STATE;
     }
     if (line[up->boundaryLen] && strcmp(&line[up->boundaryLen], "--") == 0) {
+        mprLog(q, 4, "Upload file end of data");
         up->contentState = MA_UPLOAD_CONTENT_END;
     } else {
         up->contentState = MA_UPLOAD_CONTENT_HEADER;
@@ -533,6 +534,7 @@ static int processContentData(MaQueue *q)
         /*
          *  Now have all the data (we've seen the boundary)
          */
+        mprLog(q, 4, "Close upload file %s, size %d", up->tmpPath, up->file->size);
         mprFree(up->file);
         up->file = 0;
         mprFree(up->clientFilename);

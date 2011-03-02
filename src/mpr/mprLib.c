@@ -21181,6 +21181,7 @@ static void disconnectSocket(MprSocket *sp)
          *  Read any outstanding read data to minimize resets. Then do a shutdown to send a FIN and read 
          *  outstanding data.  All non-blocking.
          */
+        mprLog(sp, 6, "Disconnect socket %d", sp->fd);
         mprSetSocketBlockingMode(sp, 0);
         while (recv(sp->fd, buf, sizeof(buf), 0) > 0) {
             ;
@@ -21241,6 +21242,7 @@ static void closeSocket(MprSocket *sp, bool gracefully)
          *  Read any outstanding read data to minimize resets. Then do a shutdown to send a FIN and read outstanding 
          *  data. All non-blocking.
          */
+        mprLog(sp, 6, "Close socket %d", sp->fd);
         if (gracefully) {
             mprSetSocketBlockingMode(sp, 0);
             while (recv(sp->fd, buf, sizeof(buf), 0) > 0) {

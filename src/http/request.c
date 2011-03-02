@@ -1013,6 +1013,7 @@ void maAbortConnection(MaConn *conn, int code, cchar *fmt, ...)
 
     mprAssert(fmt);
 
+    mprLog(conn, 4, "Abort conn fd %d", conn->sock ? conn->sock->fd : 0);
     if (!conn->requestFailed) {
         va_start(args, fmt);
         reportFailure(conn, code, fmt, args);

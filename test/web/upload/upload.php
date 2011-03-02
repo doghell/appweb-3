@@ -36,7 +36,7 @@
 ?>
 
 <form enctype="multipart/form-data" action="/upload/upload.php" method="POST">
-    <input type="hidden" name="MAX_FILE_SIZE" value="134217728" /> 
+    <input type="hidden" name="MAX_FILE_SIZE" value="300000000" /> 
     <table>
         <tr><td>File</td><td><input name="userfile" type="file" /></td>
     </table>
