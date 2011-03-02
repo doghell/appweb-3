@@ -348,7 +348,9 @@ void maRedirect(MaConn *conn, int code, cchar *targetUri)
 
 void maDontCacheResponse(MaConn *conn)
 {
-    conn->response->flags |= MA_RESP_DONT_CACHE;
+    if (conn->response) {
+        conn->response->flags |= MA_RESP_DONT_CACHE;
+    }
 }
 
 
