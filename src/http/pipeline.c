@@ -10,7 +10,6 @@
 
 /***************************** Forward Declarations ***************************/
 
-static char *addIndexToUrl(MaConn *conn, cchar *index);
 static MaStage *checkStage(MaConn *conn, MaStage *stage);
 static MaStage *findHandler(MaConn *conn);
 static MaStage *mapToFile(MaConn *conn, MaStage *handler);
@@ -388,21 +387,6 @@ void maDiscardPipeData(MaConn *conn)
 }
 
 
-static char *addIndexToUrl(MaConn *conn, cchar *index)
-{
-    MaRequest       *req;
-    char            *path;
-
-    req = conn->request;
-
-    path = mprJoinPath(req, req->url, index);
-    if (req->parsedUri->query && req->parsedUri->query[0]) {
-        return mprReallocStrcat(req, -1, path, "?", req->parsedUri->query, NULL);
-    }
-    return path;
-}
-
-
 static MaStage *checkStage(MaConn *conn, MaStage *stage)
 {
     MaRequest   *req;
@@ -687,12 +671,14 @@ static MaStage *processDirectory(MaConn *conn, MaStage *handler)
 {
     MaRequest       *req;
     MaResponse      *resp;
+    MprUri          *prior;
     MprPath         *info;
-    char            *path, *index;
+    char            *path, *index, *uri, *pathInfo;
 
     req = conn->request;
     resp = conn->response;
     info = &resp->fileInfo;
+    prior = req->parsedUri;
     mprAssert(info->isDir);
 
     index = req->dir->indexName;
@@ -706,7 +692,9 @@ static MaStage *processDirectory(MaConn *conn, MaStage *handler)
                 Index file exists, so do an internal redirect to it. Client will not be aware of this happening.
                 Return zero so the request will be rematched on return.
              */
-            maSetRequestUri(conn, addIndexToUrl(conn, index), NULL);
+            pathInfo = mprJoinPath(req, req->url, index);
+            uri = mprFormatUri(req, prior->scheme, prior->host, prior->port, pathInfo, prior->query);
+            maSetRequestUri(conn, uri, NULL);
             return 0;
         }
         mprFree(path);
@@ -722,10 +710,15 @@ static MaStage *processDirectory(MaConn *conn, MaStage *handler)
         } else {
             path = mprJoinPath(resp, req->url, index);
         }
+        pathInfo = mprJoinPath(req, req->url, index);
+        uri = mprFormatUri(req, prior->scheme, prior->host, prior->port, pathInfo, prior->query);
+#if UNUSED
+//  MOB -- not right - not based on alias and filename
         if (!mprPathExists(resp, path, R_OK)) {
             path = mprStrcat(resp, -1, req->url, "/", NULL);
         }
-        maRedirect(conn, MPR_HTTP_CODE_MOVED_PERMANENTLY, path);
+#endif
+        maRedirect(conn, MPR_HTTP_CODE_MOVED_PERMANENTLY, uri);
         handler = conn->http->passHandler;
     }
     return handler;

@@ -75,7 +75,6 @@ static void openAuth(MaQueue *q)
         formatAuthResponse(conn, auth, MPR_HTTP_CODE_UNAUTHORIZED, "Access Denied, Missing authorization details.", 0);
         return;
     }
-
     if (mprStrcmpAnyCase(req->authType, "basic") == 0) {
         decodeBasicAuth(q);
         actualAuthType = MA_AUTH_BASIC;
@@ -600,7 +599,6 @@ MprModule *maAuthFilterInit(MaHttp *http, cchar *path)
     if (module == 0) {
         return 0;
     }
-
     filter = maCreateFilter(http, "authFilter", MA_STAGE_ALL);
     if (filter == 0) {
         mprFree(module);

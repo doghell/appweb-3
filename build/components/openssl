@@ -31,11 +31,6 @@ defineComponent() {
 
     elif [ $BLD_HOST_OS = MACOSX ] ; then
         #
-        #   Use system libraries
-        #       path=/usr/lib
-        #       libs="ssl crypto"
-        #       iflags="-I$path/include"
-        #
         #   Use shared libraries
         #
         #       path=`probe --path "$path" --partial "extensions/$name/$ver" --search "$search" $name`
@@ -43,9 +38,16 @@ defineComponent() {
         #       path=/usr/lib
         #       libs="ssl crypto"
         #       iflags="-I$path/include"
-        path=`probe --path "$path" --partial "extensions/$name/$ver" --search "$search" $name`
-        imports="$path/libssl.a $path/libcrypto.a"
-        libs="ssl.a crypto.a"
+        #
+        #   path=`probe --path "$path" --partial "extensions/$name/$ver" --search "$search" $name`
+        #   imports="$path/libssl.a $path/libcrypto.a"
+        #   libs="ssl.a crypto.a"
+        #   iflags="-I$path/include"
+        #
+        #   Use system libraries
+
+        path=/usr/lib
+        libs="ssl crypto"
         iflags="-I$path/include"
 
     else 
