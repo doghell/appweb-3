@@ -3,7 +3,7 @@
 <!-- BeginDsi "dsi/head.html" -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Embedthis Ejscript 1.0.3 Documentation</title>
+    <title>Embedthis Ejscript 1.1.0 Documentation</title>
     <meta name="keywords" content="Ejscript, JavaScript, ECMAScript, Server-Side JavaScript, Dynamic languages, 
         Embedded, AJAX, language"/>
 	<meta name="description" content="Ejscript -- Embedded Server-Side JavaScript Language."/>
@@ -30,7 +30,7 @@
                     </p>
                  </form>
               </div>
-            <!--TITLE-->Embedthis Ejscript 1.0.3
+            <!--TITLE-->Embedthis Ejscript 1.1.0
         </div>
         <div class="crumbs">
             <a href="../product/index.html">Home</a>
@@ -42,7 +42,7 @@
         <div class="contentRight">
             <h2>Quick Nav</h2>
             <ul>
-                <li><a href="#r102">Release 1.0.3</a></li>
+                <li><a href="#r102">Release 1.1.0</a></li>
                 <li><a href="#r103">Release 1.0.3</a></li>
                 <li><a href="#r102">Release 1.0.2</a></li>
                 <li><a href="#r101">Release 1.0.1</a></li>
@@ -65,7 +65,7 @@
             <p>See the Ejscript <a href="http://github.com/embedthis/ejs-1/issues">issue database</a> for full 
                 details of fixes.</p>
             <a name="r103" id="r103"></a>
-            <h2 class="section">Changes in 1.0.3</h2>
+            <h2 class="section">Changes in 1.1.0</h2>
             <h3>Key Fixes</h3>
             <ul>
                 <li>Update date documentation</li>
@@ -76,14 +76,20 @@
                 <li>Allow JSON encoded arrays in Http form data</li>
                 <li>Bad timezone on HTTP headers in certain locales</li>
                 <li>Exception stack management</li>
-                <li>Fix memory fragmentation</li>
-                <li>Fix Http not-modified calculations</li>
-                <li>Fix parsing XML characters > 127</li>
-                <li>Fix GC issue with new Function()</li>
+                <li>Memory fragmentation</li>
+                <li>Http not-modified calculations</li>
+                <li>Parsing XML characters > 127</li>
+                <li>GC issue with new Function()</li>
                 <li>Update tool search support for Windows 7 and VS 10.X</li>
-                <li>Fix View checkbox</li>
-                <li>Fix Array.concat</li>
-                <li>Fix Memory exception assert</li>
+                <li>View checkbox</li>
+                <li>Array.concat</li>
+                <li>Memory exception assert</li>
+                <li>Building with configure --disable-all</li>
+                <li>Add missing msvcrt version 10 DLL to windows package</li>
+                <li>Path.extension() and extension() for directories with embedded periods</li>
+                <li>Escape(quote)</li>
+                <li>Compiler spin with }; construct</li>
+                <li>Ejscript: XSS issue with embedded script in URLs - thanks Gjoko Krstic at Zero Science Lab</li>
             </ul>
             <h3><strong>API Changes</strong></h3>
             <ul>
