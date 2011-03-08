@@ -682,11 +682,12 @@ static MaStage *processDirectory(MaConn *conn, MaStage *handler)
     mprAssert(info->isDir);
 
     index = req->dir->indexName;
+    path = mprJoinPath(resp, resp->filename, index);
+   
     if (req->url[strlen(req->url) - 1] == '/') {
         /*
             Internal directory redirections
          */
-        path = mprJoinPath(resp, resp->filename, index);
         if (mprPathExists(resp, path, R_OK)) {
             /*
                 Index file exists, so do an internal redirect to it. Client will not be aware of this happening.
@@ -700,24 +701,15 @@ static MaStage *processDirectory(MaConn *conn, MaStage *handler)
         mprFree(path);
 
     } else {
-
         /*
-         *  External redirect. Ask the client to re-issue a request for a new location. See if an index exists and if so, 
-         *  construct a new location for the index. If the index can't be accessed, append a "/" to the URI and redirect.
+         *  External redirect. If the index exists, redirect to it. If not, append a "/" to the URI and redirect.
          */
-        if (req->parsedUri->query && req->parsedUri->query[0]) {
-            path = mprAsprintf(resp, -1, "%s/%s?%s", req->url, index, req->parsedUri->query);
+        if (mprPathExists(resp, path, R_OK)) {
+            pathInfo = mprJoinPath(req, req->url, index);
         } else {
-            path = mprJoinPath(resp, req->url, index);
+            pathInfo = mprJoinPath(req, req->url, "/");
         }
-        pathInfo = mprJoinPath(req, req->url, index);
         uri = mprFormatUri(req, prior->scheme, prior->host, prior->port, pathInfo, prior->query);
-#if UNUSED
-//  MOB -- not right - not based on alias and filename
-        if (!mprPathExists(resp, path, R_OK)) {
-            path = mprStrcat(resp, -1, req->url, "/", NULL);
-        }
-#endif
         maRedirect(conn, MPR_HTTP_CODE_MOVED_PERMANENTLY, uri);
         handler = conn->http->passHandler;
     }
@@ -809,13 +801,6 @@ static void setPathInfo(MaConn *conn)
         if (req->pathInfo == 0) {
             req->pathInfo = req->url;
             maSetRequestUri(conn, "/", NULL);
-#if UNUSED
-            if ((cp = strrchr(req->pathInfo, '.')) != 0) {
-                resp->extension = mprStrdup(req, ++cp);
-            } else {
-                resp->extension = "";
-            }
-#endif
             req->pathTranslated = maMakeFilename(conn, alias, req->pathInfo, 0); 
         }
     }

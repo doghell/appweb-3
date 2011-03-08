@@ -636,6 +636,10 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
         maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Bad URI format");
         return 0;
     }
+    if (conn->host->secure) {
+        req->parsedUri->scheme = mprStrdup(req, "https");
+    }
+    req->parsedUri->port = conn->sock->port;
     return 1;
 }
 
@@ -1028,18 +1032,28 @@ int maSetRequestUri(MaConn *conn, cchar *uri, cchar *query)
     MaRequest   *req;
     MaResponse  *resp;
     MaHost      *host;
-    char        *oldQuery;
+    MprUri      *prior;
+    char        *cp;
 
+    if (uri == 0 || *uri == 0) {
+        uri = "/";
+    }
     host = conn->host;
     req = conn->request;
     resp = conn->response;
-    oldQuery = (req->parsedUri) ? req->parsedUri->query : 0; 
-
+    prior = req->parsedUri;
     if ((req->parsedUri = mprParseUri(req, uri)) == 0) {
         return MPR_ERR_BAD_ARGS;
     }
-    if (query == NULL) {
-        req->parsedUri->query = oldQuery;
+    if (prior) {
+        if ((cp = strstr(uri, "://")) == 0) {
+            req->parsedUri->scheme = prior->scheme;
+        } else if (strchr(&cp[3], ':') == 0) {
+            req->parsedUri->port = prior->port;
+        } 
+    }
+    if (query == 0 && prior) {
+        req->parsedUri->query = prior->query;
     } else if (*query) {
         req->parsedUri->query = mprStrdup(req->parsedUri, query);
     }
