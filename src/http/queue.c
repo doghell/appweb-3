@@ -723,6 +723,23 @@ MaPacket *maSplitPacket(MprCtx ctx, MaPacket *orig, int offset)
 }
 
 
+void maJoinPackets(MaQueue *q)
+{
+    MaPacket    *first, *packet, *next;
+
+    if (q->first) {
+        first = (q->first->flags & MA_PACKET_HEADER) ? q->first->next : q->first;
+
+        for (packet = first->next; packet; packet = next) {
+            next = packet->next;
+            maJoinPacket(first, packet);
+            maCheckQueueCount(q);
+            maFreePacket(q, packet);
+        }
+    }
+}
+
+
 /*
  *  Remove packets from a queue which do not need to be processed.
  *  Remove data packets if no body is required (HEAD|TRACE|OPTIONS|PUT|DELETE method, not modifed content, or error)

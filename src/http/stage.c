@@ -58,21 +58,25 @@ static void outgoingData(MaQueue *q, MaPacket *packet)
 static void incomingData(MaQueue *q, MaPacket *packet)
 {
     MaResponse  *resp;
+    MaRequest   *req;
     
     mprAssert(q);
     mprAssert(packet);
     
     resp = q->conn->response;
+    req = q->conn->request;
 
     if (q->nextQ->put) {
         maPutNext(q, packet);
+
     } else if (maGetPacketLength(packet)) { 
         maJoinForService(q, packet, 0);
-    } else if ((q->stage->flags & MA_STAGE_HANDLER) && resp->handler->flags & MA_STAGE_VARS) {
+
+    } else if (req->form && (q->stage->flags & MA_STAGE_HANDLER) && resp->handler->flags & MA_STAGE_VARS) {
         /*
-         *  Do this just for handlers that don't want to define an incoming data handler but do want query/form vars (EGI)
+            Do this just for handlers that don't want to define an incoming data handler but do want query/form vars (EGI)
          */
-        maAddVarsFromQueue(q);
+        maAddVarsFromQueue(req->formVars, q);
     }
 }
 

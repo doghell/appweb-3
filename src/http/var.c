@@ -114,23 +114,14 @@ void maCreateEnvVars(MaConn *conn)
  *  Make variables for each keyword in a query string. The buffer must be url encoded (ie. key=value&key2=value2..., 
  *  spaces converted to '+' and all else should be %HEX encoded).
  */
-void maAddVars(MaConn *conn, cchar *buf, int len)
+void maAddVars(MprHashTable *table, cchar *buf, int len)
 {
-    MaResponse      *resp;
-    MaRequest       *req;
-    MprHashTable    *vars;
-    cchar           *oldValue;
-    char            *newValue, *decoded, *keyword, *value, *tok;
+    cchar   *oldValue;
+    char    *newValue, *decoded, *keyword, *value, *tok;
 
-    resp = conn->response;
-    req = conn->request;
-    vars = req->formVars;
-    
-    if (vars == 0) {
-        return;
-    }
-    
-    decoded = (char*) mprAlloc(resp, len + 1);
+    mprAssert(table);
+
+    decoded = (char*) mprAlloc(table, len + 1);
     decoded[len] = '\0';
     memcpy(decoded, buf, len);
 
@@ -138,54 +129,51 @@ void maAddVars(MaConn *conn, cchar *buf, int len)
     while (keyword != 0) {
         if ((value = strchr(keyword, '=')) != 0) {
             *value++ = '\0';
-            value = mprUrlDecode(req, value);
+            value = mprUrlDecode(table, value);
         } else {
             value = "";
         }
-        keyword = mprUrlDecode(req, keyword);
+        keyword = mprUrlDecode(table, keyword);
 
         if (*keyword) {
             /*
              *  Append to existing keywords.
              */
-            oldValue = mprLookupHash(vars, keyword);
+            oldValue = mprLookupHash(table, keyword);
             if (oldValue != 0 && *oldValue) {
                 if (*value) {
-                    newValue = mprStrcat(vars, MA_MAX_HEADERS, oldValue, " ", value, NULL);
-                    mprAddHash(vars, keyword, newValue);
+                    newValue = mprStrcat(table, MA_MAX_HEADERS, oldValue, " ", value, NULL);
+                    mprAddHash(table, keyword, newValue);
                 }
             } else {
-                mprAddHash(vars, keyword, value);
+                mprAddHash(table, keyword, value);
             }
         }
         keyword = mprStrTok(0, "&", &tok);
     }
     /*
-     *  Must not free "decoded". This will be freed when the response completes.
+     *  Must not free "decoded". This will be freed when the table is freed.
      */
 }
 
 
-void maAddVarsFromQueue(MaQueue *q)
+void maAddVarsFromQueue(MprHashTable *table, MaQueue *q)
 {
     MaConn      *conn;
     MaRequest   *req;
     MprBuf      *content;
-    cchar       *pat;
 
     mprAssert(q);
     
     conn = q->conn;
     req = conn->request;
     
-    pat = "application/x-www-form-urlencoded";
-    if (mprStrcmpAnyCaseCount(req->mimeType, pat, (int) strlen(pat)) == 0) {
-        if (q->first && q->first->content) {
-            content = q->first->content;
-            mprAddNullToBuf(content);
-            mprLog(q, 3, "encoded body data: length %d, \"%s\"", mprGetBufLength(content), mprGetBufStart(content));
-            maAddVars(conn, mprGetBufStart(content), mprGetBufLength(content));
-        }
+    if (req->form && q->first && q->first->content) {
+        maJoinPackets(q);
+        content = q->first->content;
+        mprAddNullToBuf(content);
+        mprLog(q, 3, "encoded body data: length %d, \"%s\"", mprGetBufLength(content), mprGetBufStart(content));
+        maAddVars(table, mprGetBufStart(content), mprGetBufLength(content));
     }
 }
 

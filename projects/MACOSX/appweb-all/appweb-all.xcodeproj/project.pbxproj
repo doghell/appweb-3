@@ -823,6 +823,8 @@
 		C94086E3101A67470019809C /* testAppweb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = testAppweb.h; path = ../../../src/test/testAppweb.h; sourceTree = SOURCE_ROOT; };
 		C95C31C60FC5257D00FB3105 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../../../src/ejs/sqlite3.c; sourceTree = SOURCE_ROOT; };
 		C95C31E80FC5292A00FB3105 /* appweb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = appweb.c; path = ../../../src/server/appweb.c; sourceTree = SOURCE_ROOT; };
+		C9636AA21325C039009A88B1 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		C9636AA41325C039009A88B1 /* mod_spy.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = mod_spy.1; sourceTree = "<group>"; };
 		C9761DA00FD03F94009C78E1 /* libmpr.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmpr.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9761DA70FD03FAA009C78E1 /* libpcre.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpcre.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9761DAE0FD03FBA009C78E1 /* libmprssl.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmprssl.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1215,6 +1217,15 @@
 			name = server;
 			sourceTree = "<group>";
 		};
+		C9636AA11325C039009A88B1 /* mod_spy */ = {
+			isa = PBXGroup;
+			children = (
+				C9636AA21325C039009A88B1 /* main.c */,
+				C9636AA41325C039009A88B1 /* mod_spy.1 */,
+			);
+			path = mod_spy;
+			sourceTree = "<group>";
+		};
 		C9761E870FD04412009C78E1 /* utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -1274,6 +1285,7 @@
 				C9D81660101D32A40039DD9D /* Libraries */,
 				C9AFCC5D0FC521A10080E908 /* Headers */,
 				C9AFCC5C0FC5219B0080E908 /* Source */,
+				C9636AA11325C039009A88B1 /* mod_spy */,
 				C9AFCC570FC521440080E908 /* Products */,
 			);
 			sourceTree = "<group>";

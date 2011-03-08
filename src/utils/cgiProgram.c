@@ -472,16 +472,16 @@ static int getPostData(MprCtx ctx, MprBuf *buf)
         }
         space = mprGetBufSpace(buf);
         bytes = read(0, mprGetBufEnd(buf), space);
-
         if (bytes < 0) {
             error(mpr, "Couldn't read CGI input %d", errno);
             return -1;
 
         } else if (bytes == 0) {
-            if (contentLength == 0) {
-                /* EOF */
-                break;
+            /* EOF */
+            if (len > 0) {
+                error(mpr, "Missing content (length %s)", contentLength);
             }
+            break;
         }
         mprAdjustBufEnd(buf, bytes);
         len -= bytes;

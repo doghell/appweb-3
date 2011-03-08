@@ -204,7 +204,7 @@ static void incomingEjsData(MaQueue *q, MaPacket *packet)
              */
             maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Client supplied insufficient body data");
         }
-        maAddVarsFromQueue(q);
+        maAddVarsFromQueue(req->formVars, q);
 
     } else {
         maJoinForService(q, packet, 0);

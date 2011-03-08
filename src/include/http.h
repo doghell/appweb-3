@@ -1232,13 +1232,14 @@ extern int maWriteString(MaQueue *q, cchar *s);
 /*
  *  Internal
  */
+extern void maCheckQueueCount(MaQueue *q);
 extern void maCleanQueue(MaQueue *q);
 extern MaQueue  *maCreateQueue(struct MaConn *conn, struct MaStage *stage, int direction, MaQueue *prev);
 extern MaQueue *maGetNextQueueForService(MaQueue *q);
 extern void maInitQueue(MaHttp *http, MaQueue *q, cchar *name);
 extern void maInitSchedulerQueue(MaQueue *q);
 extern void maInsertQueue(MaQueue *prev, MaQueue *q);
-extern void maCheckQueueCount(MaQueue *q);
+extern void maJoinPackets(MaQueue *q);
 
 /******************************** Pipeline Stages *****************************/
 /*
@@ -1642,6 +1643,7 @@ typedef struct MaRequest {
     int             receivedContent;        /**< Length of content actually received */
     int             method;                 /**< Request method */
     int             flags;                  /**< Request modifiers */
+    int             form;                   /**< Form request */
     int             rewrites;               /**< Count of request rewrites */
 
     char            *methodName;            /**< Protocol method GET|PUT... (ENV: REQUEST_METHOD) */
@@ -1715,8 +1717,8 @@ typedef struct MaRequest {
  *  @param len Length of buf
  *  @ingroup MaRequest
  */
-extern void maAddVars(MaConn *conn, cchar *buf, int len);
-extern void maAddVarsFromQueue(MaQueue *q);
+extern void maAddVars(MprHashTable *table, cchar *buf, int len);
+extern void maAddVarsFromQueue(MprHashTable *table, MaQueue *q);
 
 /**
  *  Compare a form variable

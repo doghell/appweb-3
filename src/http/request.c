@@ -466,6 +466,7 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
 
             } else if (strcmp(key, "CONTENT_TYPE") == 0) {
                 req->mimeType = value;
+                req->form = strstr(value, "application/x-www-form-urlencoded") != 0;
 
             } else if (strcmp(key, "COOKIE") == 0) {
                 if (req->cookie && *req->cookie) {

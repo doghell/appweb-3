@@ -824,7 +824,7 @@ static void setEnv(MaConn *conn)
     setPathInfo(conn);
 
     if (handler->flags & MA_STAGE_VARS && req->parsedUri->query) {
-        maAddVars(conn, req->parsedUri->query, (int) strlen(req->parsedUri->query));
+        maAddVars(req->formVars, req->parsedUri->query, (int) strlen(req->parsedUri->query));
     }
     if (handler->flags & MA_STAGE_ENV_VARS) {
         maCreateEnvVars(conn);

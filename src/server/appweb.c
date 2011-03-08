@@ -113,7 +113,8 @@ MAIN(appweb, int argc, char **argv)
             changeRoot = mprGetAbsPath(mpr, argv[++argind]);
 #endif
 
-        } else if (strcmp(argp, "--debug") == 0 || strcmp(argp, "-d") == 0 || strcmp(argp, "--debugger") == 0) {
+        } else if (strcmp(argp, "--debug") == 0 || strcmp(argp, "-D") == 0 || 
+                strcmp(argp, "-d") == 0 || strcmp(argp, "--debugger") == 0) {
             mprSetDebugMode(mpr, 1);
 
         } else if (strcmp(argp, "--ejs") == 0) {

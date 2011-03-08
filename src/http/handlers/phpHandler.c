@@ -189,6 +189,7 @@ static void runPhp(MaQueue *q)
         PG(max_input_time) = -1;
         EG(timeout_seconds) = 0;
 
+        /* The readPostData callback may be invoked during startup */
         php_request_startup(TSRMLS_C);
         CG(zend_lineno) = 0;
 
@@ -510,7 +511,8 @@ MprModule *maPhpHandlerInit(MaHttp *http, cchar *path)
 
     if ((handler = maLookupStage(http, "phpHandler")) == 0) {
         handler = maCreateHandler(http, "phpHandler", 
-            MA_STAGE_ALL | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO | MA_STAGE_VERIFY_ENTITY | MA_STAGE_MISSING_EXT);
+            MA_STAGE_ALL | MA_STAGE_VARS | MA_STAGE_ENV_VARS | MA_STAGE_PATH_INFO | MA_STAGE_VERIFY_ENTITY | 
+            MA_STAGE_MISSING_EXT);
         if (handler == 0) {
             mprFree(module);
             return 0;

@@ -67,10 +67,10 @@ static void startCgi(MaQueue *q)
     req = conn->request;
     resp = conn->response;
 
-    if (req->flags & MA_REQ_UPLOADING && conn->state <= MPR_HTTP_STATE_CONTENT) {
+    if ((req->form || req->flags & MA_REQ_UPLOADING) && conn->state <= MPR_HTTP_STATE_CONTENT) {
         /*
-            Delay start while the upload filter extracts the uploaded files so the CGI process can be informed via
-            env vars of the file details. 
+            Delay starting the CGI process if uploading files or a form request. This enables env vars to be defined
+            with file upload and form data before starting the CGI gateway.
          */
         return;
     }
@@ -157,8 +157,8 @@ static void runCgi(MaQueue *q)
     if (cmd == 0) {
         startCgi(q);
         cmd = (MprCmd*) q->queueData;
-        if (q->count > 0) {
-            writeToCGI(q);
+        if (q->pair->count > 0) {
+            writeToCGI(q->pair);
         }
     }
 
@@ -219,13 +219,19 @@ static void incomingCgiData(MaQueue *q, MaPacket *packet)
             q->queueData = 0;
             maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Client supplied insufficient body data");
         }
-        maAddVarsFromQueue(q);
+        if (req->form) {
+            maAddVarsFromQueue(req->formVars, q);
+        }
 
     } else {
         /*
             No service routine, we just need it to be queued for writeToCGI
          */
-        maPutForService(q, packet, 0);
+        if (req->form) {
+            maJoinForService(q, packet, 0);
+        } else {
+            maPutForService(q, packet, 0);
+        }
     }
     if (cmd) {
         writeToCGI(q);
