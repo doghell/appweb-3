@@ -113,3 +113,5 @@ bin/.kdbgrc.*
 samples/c/*/*.slots.h
 bin/*.sln
 all/appweb.h
+project.xcworkspace
+xcuserdata
