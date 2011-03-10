@@ -641,7 +641,7 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
         req->parsedUri->scheme = mprStrdup(req, "https");
     }
     req->parsedUri->port = conn->sock->port;
-    req->parsedUri->host = conn->host->name;
+    req->parsedUri->host = req->hostName ? req->hostName : conn->host->name;
     return 1;
 }
 
