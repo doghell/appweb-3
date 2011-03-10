@@ -1049,6 +1049,7 @@ int maSetRequestUri(MaConn *conn, cchar *uri, cchar *query)
     if (prior) {
         if ((cp = strstr(uri, "://")) == 0) {
             req->parsedUri->scheme = prior->scheme;
+            req->parsedUri->host = prior->host;
         } else if (strchr(&cp[3], ':') == 0) {
             req->parsedUri->port = prior->port;
         } 
