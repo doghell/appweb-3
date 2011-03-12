@@ -103,7 +103,6 @@ int main(int argc, char *argv[], char *envp[])
     if (strncmp(mprGetPathBase(mpr, argv[0]), "nph-", 4) == 0) {
         nonParsedHeader++;
     }
-
     if (getArgv(mpr, &argc, &argv, originalArgc, originalArgv) < 0) {
         error(mpr, "Can't read CGI input");
     }
