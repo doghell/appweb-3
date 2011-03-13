@@ -297,9 +297,8 @@ static int writeToClient(MaQueue *q, MprCmd *cmd, MprBuf *buf, int channel)
      */
     while ((len = mprGetBufLength(buf)) > 0) {
         if (!conn->requestFailed) {
-            mprLog(q, 5, "CGI: write %d bytes to client. Rc rc %d, errno %d", len, rc, mprGetOsError());
             rc = maWriteBlock(q, mprGetBufStart(buf), len, 1);
-            mprLog(cmd, 5, "Write to browser ask %d, actual %d", len, rc);
+            mprLog(q, 5, "CGI: write %d bytes to client. Rc rc %d, errno %d", len, rc, mprGetOsError());
         } else {
             /* Request has failed so just eat the data */
             rc = len;
