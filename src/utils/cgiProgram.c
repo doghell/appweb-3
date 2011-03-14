@@ -419,7 +419,7 @@ static void printQuery()
  
 static void printPost(MprBuf *buf)
 {
-    int     i;
+    int     i, rc;
 
     if (numPostKeys) {
         mprPrintf(mpr, "<H2>Decoded Post Variables</H2>\r\n");
@@ -427,7 +427,7 @@ static void printPost(MprBuf *buf)
             mprPrintf(mpr, "<p>PVAR %s=%s</p>\r\n", postKeys[i], postKeys[i+1]);
         }
     } else if (buf) {
-        write(1, mprGetBufStart(buf), mprGetBufLength(buf));
+        rc = write(1, mprGetBufStart(buf), mprGetBufLength(buf));
     } else {
         mprPrintf(mpr, "<H2>No Post Data Found</H2>\r\n");
     }
