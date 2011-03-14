@@ -11206,6 +11206,14 @@ static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info
     }
 #endif
 
+#ifdef S_ISLNK
+    info->isLink = S_ISLNK(s.st_mode);
+    if (info->isLink) {
+        if (stat((char*) path, &s) < 0) {
+            return MPR_ERR_CANT_ACCESS;
+        }
+    }
+#endif
     info->valid = 1;
     info->size = s.st_size;
     info->atime = s.st_atime;
@@ -11215,21 +11223,10 @@ static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info
     info->isDir = S_ISDIR(s.st_mode);
     info->isReg = S_ISREG(s.st_mode);
     info->perms = s.st_mode & 07777;
-#ifdef S_ISLNK
-    info->isLink = S_ISLNK(s.st_mode);
-    if (info->isLink) {
-        struct stat realInfo;
-        if (stat((char*) path, &realInfo) < 0) {
-            return MPR_ERR_CANT_ACCESS;
-        }
-        info->size = realInfo.st_size;
-    }
-#endif
 
     if (strcmp(path, "/dev/null") == 0) {
         info->isReg = 0;
     }
-
 #endif
     return 0;
 }
