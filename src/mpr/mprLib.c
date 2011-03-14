@@ -25248,8 +25248,8 @@ cchar *mprGetCurrentThreadName(MprCtx ctx) { return "main"; }
     some trickery to remap the year to a valid year when using localtime.
     FYI: 32 bit time_t expires at: 03:14:07 UTC on Tuesday, 19 January 2038
  */
-#define MAX_TIME    (((time_t) -1) & ~(((time_t) 1) << 31))
-#define MIN_TIME    (((time_t) 1) << 31)
+#define MAX_TIME    0x7FFFFFFF
+#define MIN_TIME    -(MAX_TIME)
 
 /*
     Approximate, conservative min and max year. The 31556952 constant is approx sec/year (365.2425 * 86400)
@@ -25777,7 +25777,7 @@ static void decodeTime(MprCtx ctx, struct tm *tp, MprTime when, bool local)
                 Can't use localTime on this date. Map to an alternate date with a valid year.
              */
             decodeTime(ctx, &t, when, 0);
-            t.tm_year = 110;
+            t.tm_year = 111;
             timeForZoneCalc = makeTime(ctx, &t);
         }
         t.tm_isdst = -1;
