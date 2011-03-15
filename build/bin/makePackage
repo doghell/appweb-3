@@ -34,6 +34,7 @@
 DRY_RUN=
 QUIET=0
 TASK=Package
+MD5=
 
 #
 #   Find the top of the source tree and change directory to it. Set BLD_TOP
@@ -114,6 +115,16 @@ setup() {
         for i in $(ls -Rl@ | grep '^	' | awk '{print $1}' | sort -u); do \
             find . | xargs xattr -d $i 2>/dev/null ; done
         cd ${BLD_TOP}
+    fi
+    for n in md5 md5sum ; do
+        if type $n >/dev/null 2>&1 ; then
+            MD5=$n
+            break
+        fi
+    done
+    if [ "$MD5" = "" ] ; then
+        echo "Can't find md5 or md5sum, required for packaging"
+        exit 255
     fi
 }
 
@@ -297,8 +308,8 @@ sum() {
     dir=${file%/*}                  # dirname
 
     cd "$dir" >/dev/null
-    echo "md5sum ${base} md5-${base}.txt"
-    md5sum "${base}" | awk '{ print $1 }' > "${dir}/md5-${base}.txt"
+    echo "$MD5 ${base} md5-${base}.txt"
+    $MD5 "${base}" | awk '{ print $1 }' > "${dir}/md5-${base}.txt"
     chmod 755 "${dir}/md5-${base}.txt"
     chown `id -ru` "${dir}/md5-${base}.txt"
     cd $HOME >/dev/null
@@ -310,8 +321,8 @@ cleanup() {
     if [ $BLD_BUILD_OS = LINUX -a `id -u` != 0 ] ; then
         echo -e "\nWARNING: Non-root package. Installed files will be owned by `id -nu`\n"
     fi
-    # ${RM} -rf ${ROOT_DIR}
-    # rm -f install.log
+    ${RM} -rf ${ROOT_DIR}
+    rm -f install.log
 }
 
 createPlatformPackages() {
