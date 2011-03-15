@@ -21,7 +21,7 @@ prefix="${ROOT_DIR}/usr/lib/${PRODUCT}"
 
 # Appweb is not yet fully versioned
 version=
-# version=`ls $prefix | egrep -v '[a-zA-Z@!_\-]' | sort -n -r | head -1`
+# version=`ls $prefix 2>/dev/null | egrep -v '[a-zA-Z@!_\-]' | sort -n -r | head -1`
 
 if [ "$TASK" = "Remove" ] ; then
     for name in $PROGRAMS
