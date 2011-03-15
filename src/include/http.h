@@ -1712,7 +1712,7 @@ typedef struct MaRequest {
 /**
  *  Add query and post form variables
  *  @description Add new variables encoded in the supplied buffer
- *  @param conn MaConn connection object
+ *  @param table MprHashTable Hash table to modify
  *  @param buf Buffer containing www-urlencoded data
  *  @param len Length of buf
  *  @ingroup MaRequest
