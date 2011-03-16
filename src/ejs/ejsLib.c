@@ -713,7 +713,7 @@ static EjsVar *concatArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
                 dest[next++] = vpa->data[k];
             }
         } else {
-            if (growArray(ejs, newArray, next + vpa->length) < 0) {
+            if (growArray(ejs, newArray, next + 1) < 0) {
                 ejsThrowMemoryError(ejs);
                 return 0;
             }
