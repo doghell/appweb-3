@@ -27,9 +27,6 @@ void maCreateEnvVars(MaConn *conn)
     
     vars = req->headers;
 
-    /*
-     *  Alias for REMOTE_USER. Define both for broader compatibility with CGI.
-     */
     mprAddHash(vars, "AUTH_TYPE", req->authType);
     mprAddHash(vars, "AUTH_USER", (req->user && *req->user) ? req->user : 0);
     mprAddHash(vars, "AUTH_GROUP", req->group);

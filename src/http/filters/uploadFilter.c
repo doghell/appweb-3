@@ -449,6 +449,7 @@ static int writeToFile(MaQueue *q, char *data, int len)
 static int processContentData(MaQueue *q)
 {
     MaConn          *conn;
+    MaRequest       *req;
     MaUploadFile    *file;
     MaLimits        *limits;
     MaPacket        *packet;
@@ -458,6 +459,7 @@ static int processContentData(MaQueue *q)
     int             size, dataLen;
 
     conn = q->conn;
+    req = conn->request;
     up = q->queueData;
     content = q->first->content;
     limits = conn->host->limits;
@@ -526,6 +528,8 @@ static int processContentData(MaQueue *q)
                  *  Need to add www-form-urlencoding separators
                  */
                 mprPutCharToBuf(packet->content, '&');
+            } else {
+                req->mimeType = mprStrdup(req, "application/x-www-form-urlencoded");
             }
             mprPutFmtToBuf(packet->content, "%s=%s", up->id, data);
         }

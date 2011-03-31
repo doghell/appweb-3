@@ -26,10 +26,8 @@ MaLocation *maCreateBareLocation(MprCtx ctx)
     location->expires = mprCreateHash(location, MA_HANDLER_HASH_SIZE);
     location->inputStages = mprCreateList(location);
     location->outputStages = mprCreateList(location);
-
     location->prefix = mprStrdup(location, "");
     location->prefixLen = (int) strlen(location->prefix);
-
 #if BLD_FEATURE_AUTH
     location->auth = maCreateAuth(location, 0);
 #endif
@@ -325,13 +323,14 @@ void maSetLocationPrefix(MaLocation *location, cchar *uri)
     mprFree(location->prefix);
     location->prefix = mprStrdup(location, uri);
     location->prefixLen = (int) strlen(location->prefix);
-
+#if UNUSED
     /*
      *  Always strip trailing "/". Note this is a URI not a path.
      */
     if (location->prefixLen > 0 && location->prefix[location->prefixLen - 1] == '/') {
         location->prefix[--location->prefixLen] = '\0';
     }
+#endif
 }
 
 

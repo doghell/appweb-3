@@ -108,7 +108,7 @@ static int buildNetVec(MaQueue *q)
             }
             
         } else if (resp->flags & MA_RESP_NO_BODY) {
-            maCleanQueue(q);
+            maDiscardData(q, 0);
             continue;
         }
         if (q->ioIndex >= (MA_MAX_IOVEC - 2)) {
