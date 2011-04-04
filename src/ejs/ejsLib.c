@@ -4,7 +4,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.1.0.
+ *  Embedthis Ejscript 1.1.1.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -30306,8 +30306,8 @@ static int readWord(Ejs *ejs, MprFile *file, int *number)
  */
 static int readNumber(Ejs *ejs, MprFile *file, int *number)
 {
-    uint    t, c;
-    int     sign, shift;
+    uint    t;
+    int     c, sign, shift;
 
     mprAssert(file);
     mprAssert(number);
