@@ -259,7 +259,7 @@ MaPacket *maCreateEndPacket(MprCtx ctx)
 void maCheckQueueCount(MaQueue *q)
 {
     MaPacket    *packet;
-    int         count;
+    int64       count;
 
     count = 0;
     for (packet = q->first; packet; packet = packet->next) {
@@ -389,7 +389,7 @@ bool maWillNextQueueAccept(MaQueue *q, MaPacket *packet)
 {
     MaConn      *conn;
     MaQueue     *next;
-    int         size;
+    int64       size;
 
     conn = q->conn;
     next = q->nextQ;
@@ -532,12 +532,12 @@ bool maPacketTooBig(MaQueue *q, MaPacket *packet)
  *  Split a packet if required so it fits in the downstream queue. Put back the 2nd portion of the split packet on the queue.
  *  Ensure that the packet is not larger than "size" if it is greater than zero.
  */
-int maResizePacket(MaQueue *q, MaPacket *packet, int size)
+int maResizePacket(MaQueue *q, MaPacket *packet, int64 size)
 {
     MaPacket    *tail;
     MaConn      *conn;
     MprCtx      ctx;
-    int         len;
+    int64       len;
     
     if (size <= 0) {
         size = MAXINT;
@@ -691,7 +691,7 @@ int maJoinPacket(MaPacket *packet, MaPacket *p)
 MaPacket *maSplitPacket(MprCtx ctx, MaPacket *orig, int offset)
 {
     MaPacket    *packet;
-    int         count, size;
+    int64       count, size;
 
     if (offset >= maGetPacketLength(orig)) {
         mprAssert(0);

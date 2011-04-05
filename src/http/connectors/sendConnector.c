@@ -17,9 +17,9 @@
 /**************************** Forward Declarations ****************************/
 
 static void addPacketForSend(MaQueue *q, MaPacket *packet);
-static void adjustSendVec(MaQueue *q, int written);
-static int  buildSendVec(MaQueue *q);
-static void freeSentPackets(MaQueue *q, int written);
+static void adjustSendVec(MaQueue *q, int64 written);
+static int64  buildSendVec(MaQueue *q);
+static void freeSentPackets(MaQueue *q, int64 written);
 
 /*********************************** Code *************************************/
 /*
@@ -55,7 +55,8 @@ static void sendOutgoingService(MaQueue *q)
 {
     MaConn      *conn;
     MaResponse  *resp;
-    int         written, ioCount, errCode;
+    int64       written, ioCount;
+    int         errCode;
 
     conn = q->conn;
     resp = conn->response;
@@ -113,9 +114,9 @@ static void sendOutgoingService(MaQueue *q)
 /*
  *  Build the IO vector. This connector uses the send file API which permits multiple IO blocks to be written with 
  *  file data. This is used to write transfer the headers and chunk encoding boundaries. Return the count of bytes to 
- *  be written. Return -1 for EOF.
+ *  be written.
  */
-static int buildSendVec(MaQueue *q)
+static int64 buildSendVec(MaQueue *q)
 {
     MaConn      *conn;
     MaResponse  *resp;
@@ -165,7 +166,7 @@ static int buildSendVec(MaQueue *q)
 /*
  *  Add one entry to the io vector
  */
-static void addToSendVector(MaQueue *q, char *ptr, int bytes)
+static void addToSendVector(MaQueue *q, char *ptr, int64 bytes)
 {
     mprAssert(bytes > 0);
 
@@ -222,10 +223,10 @@ static void addPacketForSend(MaQueue *q, MaPacket *packet)
  *  being full. Don't come here if we've seen all the packets and all the data has been completely written. ie. small files
  *  don't come here.
  */
-static void freeSentPackets(MaQueue *q, int bytes)
+static void freeSentPackets(MaQueue *q, int64 bytes)
 {
     MaPacket    *packet;
-    int         len;
+    int64       len;
 
     mprAssert(q->first);
     mprAssert(q->count >= 0);
@@ -272,11 +273,12 @@ static void freeSentPackets(MaQueue *q, int bytes)
  *  being full. Don't come here if we've seen all the packets and all the data has been completely written. ie. small files
  *  don't come here.
  */
-static void adjustSendVec(MaQueue *q, int written)
+static void adjustSendVec(MaQueue *q, int64 written)
 {
     MprIOVec    *iovec;
     MaResponse  *resp;
-    int         i, j, len;
+    int64       len;
+    int         i, j;
 
     resp = q->conn->response;
 

@@ -15,9 +15,9 @@
 /**************************** Forward Declarations ****************************/
 
 static void addPacketForNet(MaQueue *q, MaPacket *packet);
-static void adjustNetVec(MaQueue *q, int written);
-static int  buildNetVec(MaQueue *q);
-static void freeNetPackets(MaQueue *q, int written);
+static void adjustNetVec(MaQueue *q, int64 written);
+static int64  buildNetVec(MaQueue *q);
+static void freeNetPackets(MaQueue *q, int64 written);
 
 /*********************************** Code *************************************/
 
@@ -25,7 +25,8 @@ static void netOutgoingService(MaQueue *q)
 {
     MaConn      *conn;
     MaResponse  *resp;
-    int         written, errCode;
+    int64       written;
+    int         errCode;
 
     conn = q->conn;
     resp = conn->response;
@@ -79,7 +80,7 @@ static void netOutgoingService(MaQueue *q)
 /*
  *  Build the IO vector. Return the count of bytes to be written. Return -1 for EOF.
  */
-static int buildNetVec(MaQueue *q)
+static int64 buildNetVec(MaQueue *q)
 {
     MaConn      *conn;
     MaResponse  *resp;
@@ -123,7 +124,7 @@ static int buildNetVec(MaQueue *q)
 /*
  *  Add one entry to the io vector
  */
-static void addToNetVector(MaQueue *q, char *ptr, int bytes)
+static void addToNetVector(MaQueue *q, char *ptr, int64 bytes)
 {
     mprAssert(bytes > 0);
 
@@ -165,10 +166,10 @@ static void addPacketForNet(MaQueue *q, MaPacket *packet)
 }
 
 
-static void freeNetPackets(MaQueue *q, int bytes)
+static void freeNetPackets(MaQueue *q, int64 bytes)
 {
     MaPacket    *packet;
-    int         len;
+    int64       len;
 
     mprAssert(q->first);
     mprAssert(q->count >= 0);
@@ -214,11 +215,12 @@ static void freeNetPackets(MaQueue *q, int bytes)
 /*
  *  Clear entries from the IO vector that have actually been transmitted. Support partial writes.
  */
-static void adjustNetVec(MaQueue *q, int written)
+static void adjustNetVec(MaQueue *q, int64 written)
 {
     MprIOVec    *iovec;
     MaResponse  *resp;
-    int         i, j, len;
+    int64       len;
+    int         i, j;
 
     resp = q->conn->response;
 

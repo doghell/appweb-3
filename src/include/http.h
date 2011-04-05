@@ -828,7 +828,7 @@ typedef struct MaPacket {
     MprBuf          *content;               /**< Chunk content */
     MprBuf          *suffix;                /**< Prefix message to be emitted after the content */
     int             flags;                  /**< Packet flags */
-    int             entityLength;           /**< Entity length. Content is null. */
+    int64           entityLength;           /**< Entity length. Content is null. */
     struct MaPacket *next;                  /**< Next packet in chain */
 } MaPacket;
 
@@ -980,9 +980,9 @@ typedef struct MaQueue {
     MaPacket        *first;                 /**< First packet in queue (singly linked) */
     MaPacket        *last;                  /**< Last packet in queue (tail pointer) */
     MprCond         *cond;                  /**< Optional multithread sync */
-    int             count;                  /**< Bytes in queue */
-    int             max;                    /**< Maxiumum queue size */
-    int             low;                    /**< Low water mark for flow control */
+    int64           count;                  /**< Bytes in queue */
+    int64           max;                    /**< Maxiumum queue size */
+    int64           low;                    /**< Low water mark for flow control */
     int             flags;                  /**< Queue flags */
     int             packetSize;             /**< Maximum acceptable packet size */
     int             direction;              /**< Flow direction */
@@ -993,9 +993,9 @@ typedef struct MaQueue {
      */
     MprIOVec        iovec[MA_MAX_IOVEC];
     int             ioIndex;                /**< Next index into iovec */
-    int             ioCount;                /**< Count of bytes in iovec */
     int             ioFileEntry;            /**< Has file entry in iovec */
-    int             ioFileOffset;           /**< The next file position to use */
+    int64           ioCount;                /**< Count of bytes in iovec */
+    int64           ioFileOffset;           /**< The next file position to use */
 } MaQueue;
 
 
@@ -1144,7 +1144,7 @@ extern void maRemoveQueue(MaQueue *q);
  *  @return Zero if successful, otherwise a negative Mpr error code
  *  @ingroup MaQueue
  */
-extern int  maResizePacket(MaQueue *q, MaPacket *packet, int size);
+extern int  maResizePacket(MaQueue *q, MaPacket *packet, int64 size);
 
 /**
  *  Schedule a queue
@@ -1635,16 +1635,18 @@ typedef struct MaRequest {
     MprHeap         *arena;                 /**< Request memory arena */
     struct MaConn   *conn;                  /**< Connection object */
     MaPacket        *headerPacket;          /**< HTTP headers */
-    int             length;                 /**< Declared content length (ENV: CONTENT_LENGTH) */
     int             chunkState;             /**< Chunk encoding state */
     int             chunkSize;              /**< Size of the next chunk */
     int             chunkRemainingData;     /**< Remaining chunk data to read */
-    int             remainingContent;       /**< Remaining content data to read */
-    int             receivedContent;        /**< Length of content actually received */
+
     int             method;                 /**< Request method */
     int             flags;                  /**< Request modifiers */
     int             form;                   /**< Form request */
     int             rewrites;               /**< Count of request rewrites */
+
+    int64           length;                 /**< Declared content length (ENV: CONTENT_LENGTH) */
+    int64           remainingContent;       /**< Remaining content data to read */
+    int64           receivedContent;        /**< Length of content actually received */
 
     char            *methodName;            /**< Protocol method GET|PUT... (ENV: REQUEST_METHOD) */
     char            *httpProtocol;          /**< HTTP/1.0 or HTTP/1.1 */
@@ -1858,7 +1860,6 @@ typedef struct MaResponse {
 
     int             flags;                  /**< Response flags */
     int             code;                   /**< HTTP response code */
-    int             length;                 /**< Response content length */
     int             chunkSize;              /**< Chunk size to use when using transfer encoding */
     char            *etag;                  /**< Unique identifier tag */
     char            *header;                /**< HTTP response header */
@@ -1867,7 +1868,9 @@ typedef struct MaResponse {
 
     MprHashTable    *headers;               /**< Custom response headers */
     MaQueue         queue[2];               /**< Dummy head for the response queues */
-    int             pos;                    /**< Current I/O position */
+
+    int64           length;                 /**< Response content length */
+    int64           pos;                    /**< Current I/O position */
 
     /*
      *  File information for file based handlers
@@ -1876,9 +1879,8 @@ typedef struct MaResponse {
     MprPath         fileInfo;               /**< File information if there is a real file to serve */
     char            *filename;              /**< Name of a real file being served */
     cchar           *extension;             /**< Filename extension */
-    int             entityLength;           /**< Original content length before range subsetting */
-
-    int             bytesWritten;           /**< Bytes written including headers */
+    int64           entityLength;           /**< Original content length before range subsetting */
+    int64           bytesWritten;           /**< Bytes written including headers */
     int             headerSize;             /**< Size of the header written */
 
     MaRange         *currentRange;          /**< Current range being fullfilled */
@@ -2002,7 +2004,7 @@ extern void         maOmitResponseBody(MaConn *conn);
 extern char         *maReplaceReferences(MaHost *host, cchar *str);
 extern int          maRewriteUri(MaConn *conn);
 extern void         maRotateAccessLog(MaHost *host);
-extern void         maSetEntityLength(MaConn *conn, int len);
+extern void         maSetEntityLength(MaConn *conn, int64 len);
 extern void         maSetNoResponseData(MaConn *conn);
 extern int          maStopLogging(MprCtx ctx);
 extern int          maStartLogging(MprCtx ctx, cchar *logSpec);

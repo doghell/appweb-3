@@ -5981,8 +5981,8 @@ extern int mprGetSocketError(MprSocket *sp);
  *  @return A count of bytes actually written. Return a negative MPR error code on errors.
  *  @ingroup MprSocket
  */
-extern MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, int bytes, MprIOVec *beforeVec, 
-    int beforeCount, MprIOVec *afterVec, int afterCount);
+extern MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, int64 bytes, MprIOVec *beforeVec, 
+    int64 beforeCount, MprIOVec *afterVec, int64 afterCount);
 #endif
 
 /**
@@ -6479,9 +6479,9 @@ typedef struct MprHttpRequest {
     MprHashTable    *headers;           /**< Headers keyword values */
     MprBuf          *outBuf;            /**< Request output buffer */
     char            *bodyData;          /**< Form post data */
-    int             bodyLen;            /**< Length of bodyData */
+    int64           bodyLen;            /**< Length of bodyData */
     char            *formData;          /**< Form post data */
-    int             formLen;            /**< Length of formData */
+    int64           formLen;            /**< Length of formData */
     int             sentCredentials;    /**< Credentials sent with request */
     int             flags;              /**< Request control flags */
     int             chunked;            /**< Enable chunked transfers. Set to -1 if not yet defined */
@@ -6504,9 +6504,9 @@ typedef struct MprHttpResponse {
     MprBuf          *chunkBuf;          /**< Holding buffer for the current chunk */
     MprBuf          *dataBuf;           /**< Current response data buffer */
     MprHashTable    *headers;           /**< Headers keyword values */
-    int             length;             /**< Actual length of content received */
-    int             contentLength;      /**< Content length header */
-    int             contentRemaining;   /**< Remaining content data to read */
+    int64           length;             /**< Actual length of content received */
+    int64           contentLength;      /**< Content length header */
+    int64           contentRemaining;   /**< Remaining content data to read */
     int             chunkRemaining;     /**< Remaining content data to read in this chunk */
     int             code;               /**< Http response status code */
     char            *message;           /**< Http response status message */

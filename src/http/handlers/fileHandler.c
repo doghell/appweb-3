@@ -49,7 +49,7 @@ static void openFile(MaQueue *q)
             maSetResponseCode(conn, MPR_HTTP_CODE_NOT_MODIFIED);
             maOmitResponseBody(conn);
         } else {
-            maSetEntityLength(conn, (int) resp->fileInfo.size);
+            maSetEntityLength(conn, resp->fileInfo.size);
         }
         
         if (!resp->fileInfo.isReg && !resp->fileInfo.isLink) {
@@ -184,8 +184,8 @@ static void outgoingFileService(MaQueue *q)
                 if ((len = readFileData(q, packet)) < 0) {
                     return;
                 }
-                mprLog(q, 7, "outgoingFileService readData %d", len);
                 resp->pos += len;
+                mprLog(q, 7, "outgoingFileService readData %d", len);
             }
             maPutNext(q, packet);
         }
@@ -249,7 +249,8 @@ static int readFileData(MaQueue *q, MaPacket *packet)
     MaConn      *conn;
     MaResponse  *resp;
     MaRequest   *req;
-    int         len, rc;
+    int64       len;
+    int         rc;
 
     conn = q->conn;
     resp = conn->response;
@@ -257,13 +258,15 @@ static int readFileData(MaQueue *q, MaPacket *packet)
     
     if (packet->content == 0) {
         len = packet->entityLength;
+        if (len > q->max) {
+            len = q->max;
+        }
         if ((packet->content = mprCreateBuf(packet, len, len)) == 0) {
             return MPR_ERR_NO_MEMORY;
         }
     } else {
         len = mprGetBufSpace(packet->content);
     }
-    
     mprLog(q, 7, "readFileData len %d, pos %d", len, resp->pos);
     
     if (req->ranges) {

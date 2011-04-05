@@ -416,7 +416,7 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
                     maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Mulitple content length headers");
                     continue;
                 }
-                req->length = atoi(value);
+                req->length = mprAtoi(value, 10);
                 if (req->length < 0) {
                     maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Bad content length");
                     continue;

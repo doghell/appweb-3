@@ -13369,7 +13369,8 @@ int mprStartHttpRequest(MprHttp *http, cchar *method, cchar *requestUrl)
     MprHashTable        *headers;
     MprHash             *header;
     char                *host;
-    int                 port, len, rc, written;
+    int64               len, written;
+    int                 port, rc;
 
     mprAssert(http);
     mprAssert(method && *method);
@@ -13702,7 +13703,7 @@ int mprReadHttp(MprHttp *http, char *data, int size)
 {
     MprHttpResponse *resp;
     MprBuf          *buf;
-    int             nbytes;
+    int64             nbytes;
 
     mprAssert(size > 0);
 
@@ -13743,7 +13744,7 @@ char *mprReadHttpString(MprHttp *http)
 {
     MprBuf      *buf;
     char        data[MPR_HTTP_BUFSIZE], *result;
-    int         count;
+    int64       count;
 
     if (http->state == MPR_HTTP_STATE_BEGIN) {
         return 0;
@@ -14016,7 +14017,7 @@ static bool parseHeaders(MprHttp *http, MprBuf *buf)
         switch (key[0]) {
         case 'C':
             if (strcmp("CONTENT-LENGTH", key) == 0) {
-                resp->contentLength = atoi(value);
+                resp->contentLength = mprAtoi(value, 10);
                 if (resp->contentLength < 0) {
                     resp->contentLength = 0;
                 }
@@ -21619,14 +21620,15 @@ static int localSendfile(MprSocket *sp, MprFile *file, MprOffset offset, int len
  *  Write data from a file to a socket. Includes the ability to write header before and after the file data.
  *  Works even with a null "file" to just output the headers.
  */
-MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, int bytes, MprIOVec *beforeVec, 
-    int beforeCount, MprIOVec *afterVec, int afterCount)
+MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, int64 bytes, MprIOVec *beforeVec, 
+    int64 beforeCount, MprIOVec *afterVec, int64 afterCount)
 {
 #if MACOSX && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
     struct sf_hdtr  def;
 #endif
     off_t           written, off;
-    int             rc, i, done, toWriteBefore, toWriteAfter, toWriteFile;
+    int64           toWriteBefore, toWriteAfter, toWriteFile;
+    int             rc, i, done;
 
     rc = 0;
 

@@ -105,7 +105,7 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
         putFormattedHeader(conn, packet, "ETag", "%s", resp->etag);
     }
     if (resp->altBody) {
-        resp->length = (int) strlen(resp->altBody);
+        resp->length = strlen(resp->altBody);
     }
     if (resp->chunkSize > 0 && !resp->altBody) {
         if (!(req->method & MA_REQ_HEAD)) {
@@ -113,7 +113,7 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
         }
 
     } else if (resp->length >= 0) {
-        putFormattedHeader(conn, packet, "Content-Length", "%d", resp->length);
+        putFormattedHeader(conn, packet, "Content-Length", "%Ld", resp->length);
     }
 
     if (req->ranges) {
@@ -445,7 +445,7 @@ void maSetCookie(MaConn *conn, cchar *name, cchar *value, cchar *path, cchar *co
 }
 
 
-void maSetEntityLength(MaConn *conn, int len)
+void maSetEntityLength(MaConn *conn, int64 len)
 {
     MaRequest       *req;
     MaResponse      *resp;
