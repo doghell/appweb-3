@@ -28,7 +28,7 @@
 
 
 /*
- *  This header is part of the Michael's Portable Runtime and aims to include
+ *  This header is part of the Multithreaded Portable Runtime (MPR) and aims to include
  *  all necessary O/S headers and to unify the constants and declarations 
  *  required by Embedthis products. It can be included by C or C++ programs.
  */
@@ -1172,7 +1172,7 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 /************************************************************************/
 
 /*
- *  mprTune.h - Header for the Michael's Portable Runtime (MPR) Base.
+ *  mprTune.h - Header for the Multithreaded Portable Runtime (MPR) Base.
  *
  *  Copyright (c) All Rights Reserved. See details at the end of the file.
  */
@@ -1434,14 +1434,14 @@ extern "C" {
 /************************************************************************/
 
 /*
- *  mpr.h -- Header for the Michael's Portable Runtime (MPR).
+ *  mpr.h -- Header for the Multithreaded Portable Runtime (MPR).
  *
  *  Copyright (c) All Rights Reserved. See details at the end of the file.
  */
 
 /**
  *  @file mpr.h
- *  Michael's Portable Runtime (MPR) is a portable runtime core for embedded applications.
+ *  The Multithreaded Portable Runtime (MPR) is a runtime library for embedded applications.
  *  The MPR provides management for logging, error handling, events, files, http, memory, ssl, sockets, strings, 
  *  xml parsing, and date/time functions. It also provides a foundation of safe routines for secure programming, 
  *  that help to prevent buffer overflows and other security threats. It is correctly handles null arguments without

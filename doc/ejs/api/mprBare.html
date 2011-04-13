@@ -1,6 +1,6 @@
 <h1>Mpr - Portable Runtime Native API</h1>
 <a name="mpr.h"></a>
-<p>Michael&apos;s Portable Runtime (MPR) is a portable runtime core for embedded applications.</p>
+<p>The Multithreaded Portable Runtime (MPR) is a runtime library for embedded applications.</p>
 <p>The MPR provides management for logging, error handling, events, files, http, memory, ssl, sockets, strings, xml parsing, and date/time functions. It also provides a foundation of safe routines for secure programming, that help to prevent buffer overflows and other security threats. It is correctly handles null arguments without crashing. The MPR is a library and a C API that can be used in both C and C++ programs. <br/><br/>
  The MPR uses by convention a set extended typedefs for common types. These include: bool, cchar, cvoid, uchar, short, ushort, int, uint, long, ulong, int64, uint64, float, and double. The cchar type is a const char, cvoid is const void, and several types have &quot;u&quot; prefixes to denote unsigned qualifiers. <br/><br/>
  The MPR includes a memory manager to minimize memory leaks and maximize allocation efficiency. It utilizes a heap and slab allocators with tree links. All memory allocated is connected to a parent memory block thus forming a tree. When any block is freed, all child blocks are also freed. Most MPR APIs take a memory parent context as the first parameter. <br/><br/>

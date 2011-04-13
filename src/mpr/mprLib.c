@@ -4311,7 +4311,7 @@ void __dummyDtoa() {}
 /************************************************************************/
 
 /**
- *  mpr.c - Michael's Portable Runtime (MPR). Initialization, start/stop and control of the MPR.
+ *  mpr.c - Multithreaded Portable Runtime (MPR). Initialization, start/stop and control of the MPR.
  *
  *  Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
  */
@@ -16113,7 +16113,7 @@ void __dummyMprLock() {}
 /************************************************************************/
 
 /**
- *  mprLog.c - Michael's Portable Runtime (MPR) Logging and error reporting.
+ *  mprLog.c - Multithreaded Portable Runtime (MPR) Logging and error reporting.
  *
  *  Copyright (c) All Rights Reserved. See details at the end of the file.
  */
