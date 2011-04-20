@@ -1119,6 +1119,11 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 }
 #endif
 
+/*
+    Forward compatibility aliases
+ */
+typedef MprOffset MprOff;
+
 #endif /* _h_MPR_OS_HDRS */
 
 /*
@@ -2281,7 +2286,7 @@ extern int mprPutBlockToBuf(MprBuf *buf, cchar *ptr, int size);
  *  @returns Zero if successful and otherwise a negative error code 
  *  @ingroup MprBuf
  */
-extern int mprPutIntToBuf(MprBuf *buf, int i);
+extern int mprPutIntToBuf(MprBuf *buf, int64 i);
 
 /**
  *  Put a string to the buffer.
@@ -3105,7 +3110,7 @@ typedef int             (*MprMakeDirProc)(struct MprFileSystem *fs, cchar *path,
 typedef int             (*MprMakeLinkProc)(struct MprFileSystem *fs, cchar *path, cchar *target, int hard);
 typedef int             (*MprCloseFileProc)(struct MprFile *file);
 typedef int             (*MprReadFileProc)(struct MprFile *file, void *buf, uint size);
-typedef long            (*MprSeekFileProc)(struct MprFile *file, int seekType, long distance);
+typedef MprOff          (*MprSeekFileProc)(struct MprFile *file, int seekType, MprOff distance);
 typedef int             (*MprSetBufferedProc)(struct MprFile *file, int initialSize, int maxSize);
 typedef int             (*MprWriteFileProc)(struct MprFile *file, cvoid *buf, uint count);
 
@@ -3419,7 +3424,7 @@ extern int mprRead(MprFile *file, void *buf, uint size);
  *  @return Returns the new file position if successful otherwise a negative MPR error code is returned.
  *  @ingroup MprFile
  */
-extern long mprSeek(MprFile *file, int seekType, long distance);
+extern MprOff mprSeek(MprFile *file, int seekType, MprOff distance);
 
 /**
  *  Write data to a file.
@@ -3470,7 +3475,7 @@ typedef struct MprPath {
     MprTime         ctime;              /**< Create time */
     MprTime         mtime;              /**< Modified time */
     int64           size;               /**< File length */
-    uint            inode;              /**< Inode number */
+    int64           inode;              /**< Inode number */
     bool            isDir;              /**< Set if directory */
     bool            isLink;             /**< Set if symbolic link */
     bool            isReg;              /**< Set if a regular file */
@@ -4817,7 +4822,7 @@ typedef struct MprBlk {
 #endif
 } MprBlk;
 
-#define MPR_ALLOC_HDR_SIZE      (MPR_ALLOC_ALIGN(sizeof(struct MprBlk)))
+#define MPR_ALLOC_HDR_SIZE      ((int) (MPR_ALLOC_ALIGN(sizeof(struct MprBlk))))
 #define MPR_GET_BLK(ptr)        ((MprBlk*) (((char*) (ptr)) - MPR_ALLOC_HDR_SIZE))
 #define MPR_GET_PTR(bp)         ((void*) (((char*) (bp)) + MPR_ALLOC_HDR_SIZE))
 #define MPR_GET_BLK_SIZE(bp)    ((bp)->size)
@@ -5982,7 +5987,7 @@ extern int mprGetSocketError(MprSocket *sp);
  *  @ingroup MprSocket
  */
 extern MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, int64 bytes, MprIOVec *beforeVec, 
-    int64 beforeCount, MprIOVec *afterVec, int64 afterCount);
+    int beforeCount, MprIOVec *afterVec, int afterCount);
 #endif
 
 /**
@@ -6720,7 +6725,7 @@ extern cchar *mprGetHttpMessage(MprHttp *http);
  *  @return A count of the response content data in bytes.
  *  @ingroup MprHttp
  */
-extern int mprGetHttpContentLength(MprHttp *http);
+extern int64 mprGetHttpContentLength(MprHttp *http);
 
 /**
  *  Get the Http error message
@@ -8724,7 +8729,8 @@ static void closeMss(MprSocket *sp, bool gracefully)
          */
         matrixSslEncodeClosureAlert(msp->mssl, &msp->outsock);
         if (msp->outsock.start < msp->outsock.end) {
-            sp->service->standardProvider->writeSocket(sp, msp->outsock.start, msp->outsock.end - msp->outsock.start);
+            sp->service->standardProvider->writeSocket(sp, msp->outsock.start, 
+                (int) (msp->outsock.end - msp->outsock.start));
         }
     }
     sp->service->standardProvider->closeSocket(sp, gracefully);
@@ -9061,7 +9067,7 @@ readMore:
         //
         if ((insock->end - insock->start) < insock->size) {
             performRead = 1;
-            bytes = standard->readSocket(sp, insock->end, (insock->buf + insock->size) - insock->end);
+            bytes = standard->readSocket(sp, insock->end, (int) ((insock->buf + insock->size) - insock->end));
             if (bytes <= 0 && (insock->end == insock->start)) {
                 return bytes;
             }
@@ -9103,7 +9109,7 @@ decodeMore:
         //  Copy as much as we can from the temp buffer into the caller's buffer
         //  and leave the remainder in inbuf until the next call to read
         //
-        space = (inbuf->end - inbuf->start);
+        space = (int) (inbuf->end - inbuf->start);
         len = min(space, len);
         memcpy(buf, inbuf->start, len);
         inbuf->start += len;
@@ -9115,12 +9121,12 @@ decodeMore:
      *  to the outgoing data buffer and flush it out.
      */
     case SSL_SEND_RESPONSE:
-        bytes = standard->writeSocket(sp, inbuf->start, inbuf->end - inbuf->start);
+        bytes = standard->writeSocket(sp, inbuf->start, (int) (inbuf->end - inbuf->start));
         inbuf->start += bytes;
         if (inbuf->start < inbuf->end) {
             mprSetSocketBlockingMode(sp, 1);
             while (inbuf->start < inbuf->end) {
-                bytes = standard->writeSocket(sp, inbuf->start, inbuf->end - inbuf->start);
+                bytes = standard->writeSocket(sp, inbuf->start, (int) (inbuf->end - inbuf->start));
                 if (bytes < 0) {
                     goto readError;
                 }
@@ -9143,7 +9149,7 @@ decodeMore:
         mprLog(sp, 4, "MatrixSSL: Closing on protocol error %d", error);
         if (inbuf->start < inbuf->end) {
             mprSetSocketBlockingMode(sp, 0);
-            bytes = standard->writeSocket(sp, inbuf->start, inbuf->end - inbuf->start);
+            bytes = standard->writeSocket(sp, inbuf->start, (int) (inbuf->end - inbuf->start));
         }
         goto readError;
 
@@ -9317,7 +9323,7 @@ retryEncode:
     /*
      *  We've got data to send.  Try to write it all out.
      */
-    rc = sp->service->standardProvider->writeSocket(sp, outsock->start, outsock->end - outsock->start);
+    rc = sp->service->standardProvider->writeSocket(sp, outsock->start, (int) (outsock->end - outsock->start));
     if (rc <= 0) {
         unlock(sp);
         return rc;
@@ -9346,7 +9352,8 @@ static int flushMss(MprSocket *sp)
     msp = (MprSslSocket*) sp->sslSocket;
 
     if (msp->outsock.start < msp->outsock.end) {
-        return sp->service->standardProvider->writeSocket(sp, msp->outsock.start, msp->outsock.end - msp->outsock.start);
+        return sp->service->standardProvider->writeSocket(sp, msp->outsock.start, 
+            (int) (msp->outsock.end - msp->outsock.start));
     }
     return 0;
 }
@@ -9498,7 +9505,7 @@ int mprCreateOpenSslModule(MprCtx ctx, bool lazy)
      *  Configure the global locks
      */
     numLocks = CRYPTO_num_locks();
-    locks = (MprMutex**) mprAllocWithDestructor(mpr, numLocks * sizeof(MprMutex*), lockDestructor);
+    locks = (MprMutex**) mprAllocWithDestructor(mpr, (int) (numLocks * sizeof(MprMutex*)), lockDestructor);
     for (i = 0; i < numLocks; i++) {
         locks[i] = mprCreateLock(locks);
     }

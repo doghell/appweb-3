@@ -866,11 +866,7 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
 
     case 'L':
         if (mprStrcmpAnyCase(key, "LimitChunkSize") == 0) {
-            num = atoi(value);
-            if (num < MA_BOT_CHUNK_SIZE || num > MA_TOP_CHUNK_SIZE) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxChunkSize = num;
+            limits->maxChunkSize = atoi(value);
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LimitClients") == 0) {
@@ -878,59 +874,31 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LimitRequestBody") == 0) {
-            num = atoi(value);
-            if (num < MA_BOT_BODY || num > MA_TOP_BODY) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxBody = num;
+            limits->maxBody = mprAtoi(value, 10);
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LimitRequestFields") == 0) {
-            num = atoi(value);
-            if (num < MA_BOT_NUM_HEADERS || num > MA_TOP_NUM_HEADERS) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxNumHeaders = num;
+            limits->maxNumHeaders = (int) mprAtoi(value, 10);
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LimitRequestFieldSize") == 0) {
-            num = atoi(value);
-            if (num < MA_BOT_HEADER || num > MA_TOP_HEADER) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxHeader = num;
+            limits->maxHeader = (int) mprAtoi(value, 10);
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LimitResponseBody") == 0) {
-            num = atoi(value);
-            if (num < MA_BOT_RESPONSE_BODY || num > MA_TOP_RESPONSE_BODY) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxResponseBody = num;
+            limits->maxResponseBody = mprAtoi(value, 10);
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LimitStageBuffer") == 0) {
-            num = atoi(value);
-            if (num < MA_BOT_STAGE_BUFFER || num > MA_TOP_STAGE_BUFFER) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxStageBuffer = num;
+            limits->maxStageBuffer = (int) mprAtoi(value, 10);
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LimitUrl") == 0) {
-            num = atoi(value);
-            if (num < MA_BOT_URL || num > MA_TOP_URL){
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxUrl = num;
+            limits->maxUrl = (int) mprAtoi(value, 10);
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "LimitUploadSize") == 0) {
-            num = atoi(value);
-            if (num != -1 && (num < MA_BOT_UPLOAD_SIZE || num > MA_TOP_UPLOAD_SIZE)){
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxUploadSize = num;
+            limits->maxUploadSize = mprAtoi(value, 10);
             return 1;
 
 #if DEPRECATED
@@ -1032,7 +1000,7 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
                     if (*hostName == '[') {
                         hostName++;
                     }
-                    len = strlen(hostName);
+                    len = (int) strlen(hostName);
                     if (hostName[len - 1] == ']') {
                         hostName[len - 1] = '\0';
                     }
@@ -1277,9 +1245,6 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
         } else if (mprStrcmpAnyCase(key, "StartThreads") == 0) {
 #if BLD_FEATURE_MULTITHREAD
             num = atoi(value);
-            if (num < 0 || num > MA_TOP_THREADS) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
             limits->minThreads = num;
 #endif
             return 1;
@@ -1289,20 +1254,13 @@ static int processSetting(MaServer *server, char *key, char *value, MaConfigStat
     case 'T':
         if (mprStrcmpAnyCase(key, "ThreadLimit") == 0) {
 #if BLD_FEATURE_MULTITHREAD
-            num = atoi(value);
-            if (num < 0 || num > MA_TOP_THREADS) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
-            limits->maxThreads = num;
+            limits->maxThreads = atoi(value);
 #endif
             return 1;
 
         } else if (mprStrcmpAnyCase(key, "ThreadStackSize") == 0) {
 #if BLD_FEATURE_MULTITHREAD
             num = atoi(value);
-            if (num < MA_BOT_STACK || num > MA_TOP_STACK) {
-                return MPR_ERR_BAD_SYNTAX;
-            }
             mprSetThreadStackSize(server, num);
             return 1;
 #endif
@@ -1457,7 +1415,7 @@ static int matchRef(cchar *key, char **src)
     mprAssert(src);
     mprAssert(key && *key);
 
-    len = strlen(key);
+    len = (int) strlen(key);
     if (strncmp(*src, key, len) == 0) {
         *src += len;
         return 1;

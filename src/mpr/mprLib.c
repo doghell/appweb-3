@@ -615,8 +615,7 @@ Balloc
 #ifdef Omit_Private_Memory
         rv = (Bigint *)MALLOC(sizeof(Bigint) + (x-1)*sizeof(ULong));
 #else
-        len = (sizeof(Bigint) + (x-1)*sizeof(ULong) + sizeof(double) - 1)
-            /sizeof(double);
+        len = (unsigned int) ((sizeof(Bigint) + (x-1)*sizeof(ULong) + sizeof(double) - 1) / sizeof(double));
         if (k <= Kmax && pmem_next - private_mem + len <= PRIVATE_mem) {
             rv = (Bigint*)pmem_next;
             pmem_next += len;
@@ -687,7 +686,7 @@ multadd
 #ifdef ULLong
         y = *x * (ULLong)m + carry;
         carry = y >> 32;
-        *x++ = (ULong) y & FFFFFFFF;
+        *x++ = (ULong) (y & FFFFFFFF);
 #else
 #ifdef Pack_32
         xi = *x;
@@ -1716,7 +1715,7 @@ rshift(Bigint *b, int k)
             while(x < xe)
                 *x1++ = *x++;
         }
-    if ((b->wds = x1 - b->x) == 0)
+    if ((b->wds = (int) (x1 - b->x)) == 0)
         b->x[0] = 0;
     }
 
@@ -1965,7 +1964,7 @@ gethex( CONST char **sp, U *rvp, int rounding, int sign)
         word1(rvp) = Big1;
         return;
         }
-    n = s1 - s0 - 1;
+    n = (int) (s1 - s0 - 1);
     for(k = 0; n > (1 << (kshift-2)) - 1; n >>= 1)
         k++;
     b = Balloc(k);
@@ -1994,7 +1993,7 @@ gethex( CONST char **sp, U *rvp, int rounding, int sign)
         n += 4;
         }
     *x++ = L;
-    b->wds = n = x - b->x;
+    b->wds = n = (int) (x - b->x);
     n = ULbits*n - hi0bits(L);
     nbits = Nbits;
     lostbits = 0;
@@ -2588,7 +2587,7 @@ strtod
         else if (nd < 16)
             z = 10*z + c - '0';
     nd0 = nd;
-    bc.dp0 = bc.dp1 = s - s0;
+    bc.dp0 = bc.dp1 = (int) (s - s0);
 #ifdef USE_LOCALE
     s1 = localeconv()->decimal_point;
     if (c == *s1) {
@@ -2610,7 +2609,7 @@ strtod
 #endif
     if (c == '.') {
         c = *++s;
-        bc.dp1 = s - s0;
+        bc.dp1 = (int) (s - s0);
         bc.dplen = bc.dp1 - bc.dp0;
         if (!nd) {
             for(; c == '0'; c = *++s)
@@ -5082,8 +5081,8 @@ Mpr *mprCreateAllocService(MprAllocNotifier cback, MprDestructor destructor)
      *      Destructor
      */
     usize = sizeof(Mpr) + sizeof(MprDestructor);
-    size = MPR_ALLOC_ALIGN(MPR_ALLOC_HDR_SIZE + usize);
-    usize = size - MPR_ALLOC_HDR_SIZE;
+    size = (uint) MPR_ALLOC_ALIGN(MPR_ALLOC_HDR_SIZE + usize);
+    usize = (uint) (size - MPR_ALLOC_HDR_SIZE);
 
     bp = (MprBlk*) allocMemory(size);
     if (bp == 0) {
@@ -5161,8 +5160,8 @@ static MprCtx allocHeap(MprCtx ctx, cchar *name, uint heapSize, bool threadSafe,
      */
     headersSize = MPR_ALLOC_ALIGN(sizeof(MprHeap) + sizeof(MprRegion));
     usize = headersSize + heapSize;
-    size = MPR_PAGE_ALIGN(MPR_ALLOC_HDR_SIZE + usize, mpr->alloc.pageSize);
-    usize = (size - MPR_ALLOC_HDR_SIZE);
+    size = (int) MPR_PAGE_ALIGN(MPR_ALLOC_HDR_SIZE + usize, mpr->alloc.pageSize);
+    usize = (int) (size - MPR_ALLOC_HDR_SIZE);
     heapSize = usize - headersSize;
 
     parent = GET_BLK(ctx);
@@ -5328,7 +5327,7 @@ void *_mprAllocWithDestructor(MprCtx ctx, uint size, MprDestructor destructor)
     mprAssert(VALID_CTX(ctx));
     mprAssert(size > 0);
 
-    ptr = _mprAlloc(ctx, size + sizeof(MprDestructor));
+    ptr = _mprAlloc(ctx, size + (int) sizeof(MprDestructor));
     mprAssert(ptr);
     if (ptr == 0) {
         return 0;
@@ -6418,11 +6417,11 @@ static void sysinit(Mpr *mpr)
 
 #if MACOSX
     #ifdef _SC_NPROCESSORS_ONLN
-        ap->numCpu = sysconf(_SC_NPROCESSORS_ONLN);
+        ap->numCpu = (int) sysconf(_SC_NPROCESSORS_ONLN);
     #else
         ap->numCpu = 1;
     #endif
-    ap->pageSize = sysconf(_SC_PAGESIZE);
+    ap->pageSize = (int) sysconf(_SC_PAGESIZE);
 #elif SOLARIS
 {
     FILE *ptr;
@@ -6711,13 +6710,13 @@ static void printMprHeaps(MprCtx ctx)
         available = 0;
         total = 0;
         for (region = heap->depleted; region; region = region->next) {
-            available += (region->size - (region->nextMem - region->memory));
+            available += (int) (region->size - (region->nextMem - region->memory));
             total += region->size;
         }
         remaining = 0;
         if (heap->region) {
             total += heap->region->size;
-            remaining = (region->size - (region->nextMem - region->memory));
+            remaining = (int) (region->size - (region->nextMem - region->memory));
         }
 
         mprLog(ctx, 0, "    Allocated memory         %,10d K",          heap->allocBytes / 1024);
@@ -8051,7 +8050,7 @@ void mprAddNullToBuf(MprBuf *bp)
 {
     int     space;
 
-    space = bp->endbuf - bp->end;
+    space = (int) (bp->endbuf - bp->end);
     if (space < (int) sizeof(char)) {
         if (mprGrowBuf(bp, 1) < 0) {
             return;
@@ -8276,7 +8275,7 @@ int mprPutSubStringToBuf(MprBuf *bp, cchar *str, int count)
     int     len;
 
     if (str) {
-        len = strlen(str);
+        len = (int) strlen(str);
         len = min(len, count);
         if (len > 0) {
             return mprPutBlockToBuf(bp, str, len);
@@ -8375,7 +8374,7 @@ int mprGrowBuf(MprBuf *bp, int need)
 /*
  *  Add a number to the buffer (always null terminated).
  */
-int mprPutIntToBuf(MprBuf *bp, int i)
+int mprPutIntToBuf(MprBuf *bp, int64 i)
 {
     char    numBuf[16];
     int     rc;
@@ -9043,7 +9042,7 @@ int mprReadCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize)
     return rc;
 
 #else
-    return read(cmd->files[channel].fd, buf, bufsize);
+    return (int) read(cmd->files[channel].fd, buf, bufsize);
 #endif
 }
 
@@ -9058,7 +9057,7 @@ int mprWriteCmdPipe(MprCmd *cmd, int channel, char *buf, int bufsize)
         return -1;
     }
 #endif
-    return write(cmd->files[channel].fd, buf, bufsize);
+    return (int) write(cmd->files[channel].fd, buf, bufsize);
 }
 
 
@@ -9363,7 +9362,7 @@ static int sanitizeArgs(MprCmd *cmd, int argc, char **argv, char **env)
         for (i = 0; env && env[i]; i++) {
             mprLog(cmd, 6, "cmd: env[%d]: %s", i, env[i]);
         }
-        if ((cmd->env = mprAlloc(cmd, (i + 3) * sizeof(char*))) == NULL) {
+        if ((cmd->env = mprAlloc(cmd, (i + 3) * (int) sizeof(char*))) == NULL) {
             return MPR_ERR_NO_MEMORY;
         }
         hasPath = hasLibPath = 0;
@@ -10612,7 +10611,7 @@ char *mprGetMD5Hash(MprCtx ctx, cchar *buf, int length, cchar *prefix)
     *r = '\0';
 
     len = (prefix) ? (int) strlen(prefix) : 0;
-    str = (char*) mprAlloc(ctx, sizeof(result) + len);
+    str = (char*) mprAlloc(ctx, (int) sizeof(result) + len);
     if (str) {
         if (prefix) {
             strcpy(str, prefix);
@@ -11032,7 +11031,7 @@ static int readFile(MprFile *file, void *buf, uint size)
     mprAssert(file);
     mprAssert(buf);
 
-    return read(file->fd, buf, size);
+    return (int) read(file->fd, buf, size);
 }
 
 
@@ -11044,19 +11043,23 @@ static int writeFile(MprFile *file, cvoid *buf, uint count)
 #if VXWORKS
     return write(file->fd, (void*) buf, count);
 #else
-    return write(file->fd, buf, count);
+    return (int) write(file->fd, buf, count);
 #endif
 }
 
 
-static long seekFile(MprFile *file, int seekType, long distance)
+static MprOff seekFile(MprFile *file, int seekType, MprOff distance)
 {
     mprAssert(file);
 
     if (file == 0) {
         return MPR_ERR_BAD_HANDLE;
     }
-    return lseek(file->fd, distance, seekType);
+#if BLD_WIN_LIKE
+    return (MprOff) lseeki64(file->fd, (int64) distance, seekType);
+#else
+    return (MprOff) lseek(file->fd, (off_t) distance, seekType);
+#endif
 }
 
 
@@ -11219,7 +11222,7 @@ static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info
     info->atime = s.st_atime;
     info->ctime = s.st_ctime;
     info->mtime = s.st_mtime;
-    info->inode = s.st_ino;
+    info->inode = (int) s.st_ino;
     info->isDir = S_ISDIR(s.st_mode);
     info->isReg = S_ISREG(s.st_mode);
     info->perms = s.st_mode & 07777;
@@ -11238,7 +11241,7 @@ static char *getPathLink(MprDiskFileSystem *fileSystem, cchar *path)
     char    pbuf[MPR_MAX_PATH];
     int     len;
 
-    if ((len = readlink(path, pbuf, sizeof(pbuf) - 1)) < 0) {
+    if ((len = (int) readlink(path, pbuf, sizeof(pbuf) - 1)) < 0) {
         return NULL;
     }
     pbuf[len] = '\0';
@@ -11993,7 +11996,7 @@ int mprWrite(MprFile *file, cvoid *buf, uint count)
 
 int mprWriteString(MprFile *file, cchar *str)
 {
-    return mprWrite(file, str, strlen(str));
+    return mprWrite(file, str, (uint) strlen(str));
 }
 
 
@@ -12044,7 +12047,7 @@ int mprFlush(MprFile *file)
 }
 
 
-long mprSeek(MprFile *file, int seekType, long pos)
+MprOff mprSeek(MprFile *file, int seekType, MprOff pos)
 {
     MprFileSystem   *fs;
 
@@ -12179,7 +12182,7 @@ int mprPuts(MprFile *file, cchar *str)
     int     total, bytes, count;
 
     mprAssert(file);
-    count = strlen(str);
+    count = (int) strlen(str);
 
     /*
      *  Buffer output and flush when full.
@@ -12607,7 +12610,7 @@ MprHashTable *mprCreateHash(MprCtx ctx, int hashSize)
 
     table->count = 0;
     table->hashSize = hashSize;
-    table->buckets = (MprHash**) mprAllocZeroed(table, sizeof(MprHash*) * hashSize);
+    table->buckets = (MprHash**) mprAllocZeroed(table, (int) sizeof(MprHash*) * hashSize);
 
     if (table->buckets == 0) {
         mprFree(table);
@@ -12971,7 +12974,7 @@ MprHttpCode MprHttpCodes[] = {
     { 404, "404", "Not Found" },
     { 405, "405", "Method Not Allowed" },
     { 406, "406", "Not Acceptable" },
-    { 408, "408", "Request Time-out" },
+    { 408, "408", "Request Timeout" },
     { 409, "409", "Conflict" },
     { 410, "410", "Length Required" },
     { 411, "411", "Length Required" },
@@ -12984,7 +12987,7 @@ MprHttpCode MprHttpCodes[] = {
     { 501, "501", "Not Implemented" },
     { 502, "502", "Bad Gateway" },
     { 503, "503", "Service Unavailable" },
-    { 504, "504", "Gateway Time-out" },
+    { 504, "504", "Gateway Timeout" },
     { 505, "505", "Http Version Not Supported" },
     { 507, "507", "Insufficient Storage" },
 
@@ -13369,8 +13372,7 @@ int mprStartHttpRequest(MprHttp *http, cchar *method, cchar *requestUrl)
     MprHashTable        *headers;
     MprHash             *header;
     char                *host;
-    int64               len, written;
-    int                 port, rc;
+    int                 len, written, port, rc;
 
     mprAssert(http);
     mprAssert(method && *method);
@@ -13474,11 +13476,11 @@ int mprStartHttpRequest(MprHttp *http, cchar *method, cchar *requestUrl)
         mprCalcDigestNonce(http, &http->authCnonce, http->service->secret, 0, http->authRealm);
 
         mprSprintf(a1Buf, sizeof(a1Buf), "%s:%s:%s", http->user, http->authRealm, http->password);
-        len = strlen(a1Buf);
+        len = (int) strlen(a1Buf);
         ha1 = mprGetMD5Hash(req, a1Buf, len, NULL);
 
         mprSprintf(a2Buf, sizeof(a2Buf), "%s:%s", method, url->url);
-        len = strlen(a2Buf);
+        len = (int) strlen(a2Buf);
         ha2 = mprGetMD5Hash(req, a2Buf, len, NULL);
 
         qop = (http->authQop) ? http->authQop : (char*) "";
@@ -13496,7 +13498,7 @@ int mprStartHttpRequest(MprHttp *http, cchar *method, cchar *requestUrl)
         }
         mprFree(ha1);
         mprFree(ha2);
-        digest = mprGetMD5Hash(req, digestBuf, strlen(digestBuf), NULL);
+        digest = mprGetMD5Hash(req, digestBuf, (int) strlen(digestBuf), NULL);
 
         if (*qop == '\0') {
             mprPutFmtToBuf(outBuf, "Authorization: Digest username=\"%s\", realm=\"%s\", nonce=\"%s\", "
@@ -13580,7 +13582,7 @@ int mprStartHttpRequest(MprHttp *http, cchar *method, cchar *requestUrl)
     /*
      *  Write any assigned body data. Sometimes callers will invoke mprWriteHttp after this call returns.
      */
-    if (req->bodyData && writeData(http, req->bodyData, req->bodyLen, 0) < 0) {
+    if (req->bodyData && writeData(http, req->bodyData, (int) req->bodyLen, 0) < 0) {
         badRequest(http, "Can't write body data");
         unlock(http);
         return MPR_ERR_CANT_WRITE;
@@ -13744,7 +13746,7 @@ char *mprReadHttpString(MprHttp *http)
 {
     MprBuf      *buf;
     char        data[MPR_HTTP_BUFSIZE], *result;
-    int64       count;
+    int         count;
 
     if (http->state == MPR_HTTP_STATE_BEGIN) {
         return 0;
@@ -13778,7 +13780,7 @@ bool mprIsHttpComplete(MprHttp *http)
 static int getReadSize(MprHttp *http, MprBuf *buf)
 {
     MprHttpResponse     *resp;
-    int                 space;
+    int64               space;
 
     mprAssert(buf);
     resp = http->response;
@@ -13795,7 +13797,7 @@ static int getReadSize(MprHttp *http, MprBuf *buf)
         space = min(space, resp->contentRemaining);
     }
     mprAssert(0 < space && space <= mprGetBufSize(buf));
-    return space;
+    return (int) space;
 }
 
 
@@ -14305,7 +14307,7 @@ int mprAddHttpFormData(MprHttp *http, cchar *body, int len)
     req = http->request;
     conditionalReset(http);
 
-    req->formData = mprRealloc(req, req->formData, req->formLen + len + 1);
+    req->formData = mprRealloc(req, req->formData, (uint) req->formLen + len + 1);
     if (req->formData == 0) {
         return MPR_ERR_NO_MEMORY;
     }
@@ -14439,7 +14441,7 @@ int mprWriteHttp(MprHttp *http, cchar *buf, int len)
             return 0;
         }
         mprSprintf(countBuf, sizeof(countBuf), "\r\n%x\r\n", len);
-        if (writeData(http, countBuf, strlen(countBuf), 1) < 0) {
+        if (writeData(http, countBuf, (int) strlen(countBuf), 1) < 0) {
             req->flags |= MPR_HTTP_REQ_CHUNK_EMITTED;
             return MPR_ERR_CANT_WRITE;
         }
@@ -14490,7 +14492,7 @@ static int writeFmt(MprHttp *http, cchar *fmt, ...)
     data = mprVasprintf(http, -1, fmt, ap);
     va_end(ap);
 
-    len = strlen(data);
+    len = (int) strlen(data);
     if (mprWriteHttp(http, data, len) != len) {
         return MPR_ERR_CANT_WRITE;
     }
@@ -14576,7 +14578,7 @@ cchar *mprGetHttpMessage(MprHttp *http)
 }
 
 
-int mprGetHttpContentLength(MprHttp *http)
+int64 mprGetHttpContentLength(MprHttp *http)
 {
     if (mprWaitForHttpResponse(http, -1) < 0) {
         return 0;
@@ -14623,7 +14625,7 @@ char *mprGetHttpHeaders(MprHttp *http)
             }
         }
         headers = mprReallocStrcat(http, -1, headers, ": ", hp->data, "\n", NULL);
-        len = strlen(headers);
+        len = (int) strlen(headers);
         hp = mprGetNextHash(resp->headers, hp);
     }
     return headers;
@@ -14936,7 +14938,7 @@ static bool parseChunk(MprHttp *http, MprBuf *buf)
         badRequest(http, "Bad chunk specification");
         return 1;
     }
-    mprAdjustBufStart(buf, cp - start + 1);
+    mprAdjustBufStart(buf, (int) (cp - start + 1));
     return 1;
 }
 
@@ -15099,7 +15101,7 @@ int mprSetListLimits(MprList *lp, int initialSize, int maxSize)
     if (maxSize <= 0) {
         maxSize = MAXINT;
     }
-    size = initialSize * sizeof(void*);
+    size = initialSize * (int) sizeof(void*);
 
     if (lp->items == 0) {
         lp->items = (void**) mprAllocZeroed(lp, size);
@@ -15550,7 +15552,7 @@ static int growList(MprList *lp, int incr)
     } else {
         len = lp->capacity + incr;
     }
-    memsize = len * sizeof(void*);
+    memsize = len * (int) sizeof(void*);
 
     /*
      *  Grow the list of items. Use the existing context for lp->items if it already exists. Otherwise use the list as the
@@ -17832,7 +17834,7 @@ char *mprGetNormalizedPath(MprCtx ctx, cchar *pathArg)
      *  Allocate one spare byte incase we need to break into segments. If so, will add a trailing
      *  "/" to make parsing easier later.
      */
-    len = strlen(pathArg);
+    len = (int) strlen(pathArg);
     if ((path = mprAlloc(ctx, len + 2)) == 0) {
         return NULL;
     }
@@ -17885,7 +17887,7 @@ char *mprGetNormalizedPath(MprCtx ctx, cchar *pathArg)
      *  Have dots to process so break into path segments. Add one incase we need have an absolute path with a drive-spec.
      */
     mprAssert(segmentCount > 0);
-    if ((segments = mprAlloc(ctx, sizeof(char*) * (segmentCount + 1))) == 0) {
+    if ((segments = mprAlloc(ctx, (int) sizeof(char*) * (segmentCount + 1))) == 0) {
         mprFree(dupPath);
         return NULL;
     }
@@ -17918,7 +17920,7 @@ char *mprGetNormalizedPath(MprCtx ctx, cchar *pathArg)
                 continue;
             }
             segments[i++] = mark;
-            len += sp - mark;
+            len += (int) (sp - mark);
 #if KEEP
             if (i == 1 && segmentCount == 1 && fs->hasDriveSpecs && strchr(mark, ':') != 0) {
                 /*
@@ -17934,7 +17936,7 @@ char *mprGetNormalizedPath(MprCtx ctx, cchar *pathArg)
 
     if (--sp > mark) {
         segments[i++] = mark;
-        len += sp - mark;
+        len += (int) (sp - mark);
     }
     mprAssert(i <= segmentCount);
     segmentCount = i;
@@ -18348,7 +18350,7 @@ char *mprGetAppPath(MprCtx ctx)
         return mprGetAbsPath(ctx, ".");
     }
     path[size] = '\0';
-    len = readlink(path, pbuf, sizeof(pbuf) - 1);
+    len = (int) readlink(path, pbuf, sizeof(pbuf) - 1);
     if (len < 0) {
         return mprGetAbsPath(ctx, path);
     }
@@ -18596,7 +18598,7 @@ int mprWaitForIO(MprWaitService *ws, int timeout)
     }
 #endif
     count = ws->fdsCount;
-    if ((fds = mprMemdup(ws, ws->fds, count * sizeof(struct pollfd))) == 0) {
+    if ((fds = mprMemdup(ws, ws->fds, count * (int) sizeof(struct pollfd))) == 0) {
         mprUnlock(ws->mutex);
         return MPR_ERR_NO_MEMORY;
     }
@@ -18800,7 +18802,7 @@ static void growFds(MprWaitService *ws)
 
     len = max(ws->fdsSize, mprGetListCount(ws->handlers) + 1);
     if (len > ws->fdsSize) {
-        ws->fds = mprRealloc(ws, ws->fds, len * sizeof(struct pollfd));
+        ws->fds = mprRealloc(ws, ws->fds, len * (int) sizeof(struct pollfd));
         if (ws->fds == 0) {
             /*  Global memory allocation handler will handle this */
             return;
@@ -19055,7 +19057,7 @@ int mprStaticPrintf(MprCtx ctx, cchar *fmt, ...)
     va_start(ap, fmt);
     sprintfCore(NULL, buf, MPR_MAX_STRING, fmt, ap);
     va_end(ap);
-    return mprWrite(fs->stdOutput, buf, strlen(buf));
+    return mprWrite(fs->stdOutput, buf, (int) strlen(buf));
 }
 
 
@@ -19073,7 +19075,7 @@ int mprStaticPrintfError(MprCtx ctx, cchar *fmt, ...)
     va_start(ap, fmt);
     sprintfCore(NULL, buf, MPR_MAX_STRING, fmt, ap);
     va_end(ap);
-    return mprWrite(fs->stdError, buf, strlen(buf));
+    return mprWrite(fs->stdError, buf, (int) strlen(buf));
 }
 
 
@@ -19599,7 +19601,7 @@ static void outFloat(MprCtx ctx, Format *fmt, char specChar, double value)
         sprintf(result, "%*.*e", fmt->width, fmt->precision, value);
     }
 
-    len = strlen(result);
+    len = (int) strlen(result);
     fill = fmt->width - len;
     if (fmt->flags & SPRINTF_COMMA) {
         if (((len - 1) / 3) > 0) {
@@ -19722,7 +19724,7 @@ char *mprDtoa(MprCtx ctx, double value, int ndigits, int mode, int flags)
             Note: ndigits < 0 seems to trim N digits from the end with rounding.
          */
         ip = intermediate = dtoa(value, mode, ndigits, &period, &sign, NULL);
-        len = strlen(intermediate);
+        len = (int) strlen(intermediate);
         exponent = period - 1;
 
         if (mode == MPR_DTOA_ALL_DIGITS && ndigits == 0) {
@@ -19767,7 +19769,7 @@ char *mprDtoa(MprCtx ctx, double value, int ndigits, int mode, int flags)
                         count = totalDigits + sign - mprGetBufLength(buf);
                         mprPutCharToBuf(buf, '.');
                         mprPutSubStringToBuf(buf, &ip[period], count);
-                        mprPutPadToBuf(buf, '0', count - strlen(&ip[period]));
+                        mprPutPadToBuf(buf, '0', count - (int) strlen(&ip[period]));
                     }
                 }
 
@@ -21165,7 +21167,8 @@ void mprDisconnectSocket(MprSocket *sp)
 
 static void disconnectSocket(MprSocket *sp)
 {
-    char    buf[16];
+    char    buf[MPR_BUFSIZE];
+    int     i;
 
     /*
      *  Defensive lock buster. Use try lock incase an operation is blocked somewhere with a lock asserted. 
@@ -21176,13 +21179,15 @@ static void disconnectSocket(MprSocket *sp)
     }
     if (sp->fd >= 0 && !(sp->flags & MPR_SOCKET_EOF)) {
         /*
-         *  Read any outstanding read data to minimize resets. Then do a shutdown to send a FIN and read 
+         *  Read a reasonable amount of outstanding data to minimize resets. Then do a shutdown to send a FIN and read 
          *  outstanding data.  All non-blocking.
          */
         mprLog(sp, 6, "Disconnect socket %d", sp->fd);
         mprSetSocketBlockingMode(sp, 0);
-        while (recv(sp->fd, buf, sizeof(buf), 0) > 0) {
-            ;
+        for (i = 0; i < 8; i++) {
+            if (recv(sp->fd, buf, sizeof(buf), 0) <= 0) {
+                break;
+            }
         }
         shutdown(sp->fd, SHUT_RDWR);
         sp->flags |= MPR_SOCKET_EOF;
@@ -21423,11 +21428,10 @@ static int readSocket(MprSocket *sp, void *buf, int bufsize)
 again:
     if (sp->flags & MPR_SOCKET_DATAGRAM) {
         len = sizeof(server);
-        bytes = recvfrom(sp->fd, buf, bufsize, MSG_NOSIGNAL, (struct sockaddr*) &server, (socklen_t*) &len);
+        bytes = (int) recvfrom(sp->fd, buf, bufsize, MSG_NOSIGNAL, (struct sockaddr*) &server, (socklen_t*) &len);
     } else {
-        bytes = recv(sp->fd, buf, bufsize, MSG_NOSIGNAL);
+        bytes = (int) recv(sp->fd, buf, bufsize, MSG_NOSIGNAL);
     }
-
     if (bytes < 0) {
         errCode = mprGetSocketError(sp);
         if (errCode == EINTR) {
@@ -21512,9 +21516,9 @@ static int writeSocket(MprSocket *sp, void *buf, int bufsize)
         while (len > 0) {
             unlock(sp);
             if ((sp->flags & MPR_SOCKET_BROADCAST) || (sp->flags & MPR_SOCKET_DATAGRAM)) {
-                written = sendto(sp->fd, &((char*) buf)[sofar], len, MSG_NOSIGNAL, addr, addrlen);
+                written = (int) sendto(sp->fd, &((char*) buf)[sofar], len, MSG_NOSIGNAL, addr, addrlen);
             } else {
-                written = send(sp->fd, &((char*) buf)[sofar], len, MSG_NOSIGNAL);
+                written = (int) send(sp->fd, &((char*) buf)[sofar], len, MSG_NOSIGNAL);
             }
             lock(sp);
 
@@ -21563,7 +21567,7 @@ int mprWriteSocketVector(MprSocket *sp, MprIOVec *iovec, int count)
 
 #if BLD_UNIX_LIKE
     if (sp->ssl == 0) {
-        return writev(sp->fd, (const struct iovec*) iovec, count);
+        return (int) writev(sp->fd, (const struct iovec*) iovec, count);
     } else
 #endif
     {
@@ -21606,7 +21610,7 @@ static int localSendfile(MprSocket *sp, MprFile *file, MprOffset offset, int len
     char    buf[MPR_BUFSIZE];
 
     mprSeek(file, SEEK_SET, (int) offset);
-    len = min(len, sizeof(buf));
+    len = min(len, (int) sizeof(buf));
     if ((len = mprRead(file, buf, len)) < 0) {
         mprAssert(0);
         return MPR_ERR_CANT_READ;
@@ -21621,7 +21625,7 @@ static int localSendfile(MprSocket *sp, MprFile *file, MprOffset offset, int len
  *  Works even with a null "file" to just output the headers.
  */
 MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, int64 bytes, MprIOVec *beforeVec, 
-    int64 beforeCount, MprIOVec *afterVec, int64 afterCount)
+    int beforeCount, MprIOVec *afterVec, int afterCount)
 {
 #if MACOSX && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
     struct sf_hdtr  def;
@@ -21634,9 +21638,9 @@ MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, 
 
 #if MACOSX && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
     written = bytes;
-    def.hdr_cnt = beforeCount;
+    def.hdr_cnt = (int) beforeCount;
     def.headers = (beforeCount > 0) ? (struct iovec*) beforeVec: 0;
-    def.trl_cnt = afterCount;
+    def.trl_cnt = (int) afterCount;
     def.trailers = (afterCount > 0) ? (struct iovec*) afterVec: 0;
 
     if (file && file->fd >= 0) {
@@ -21649,11 +21653,12 @@ MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, 
         /*
          *  Either !MACOSX or no file is opened
          */
-        done = written = 0;
-        for (i = toWriteBefore = 0; i < beforeCount; i++) {
+        done = 0;
+        written = 0;
+        for (i = 0, toWriteBefore = 0; i < beforeCount; i++) {
             toWriteBefore += (int) beforeVec[i].len;
         }
-        for (i = toWriteAfter = 0; i < afterCount; i++) {
+        for (i = 0, toWriteAfter = 0; i < afterCount; i++) {
             toWriteAfter += (int) afterVec[i].len;
         }
         toWriteFile = bytes - toWriteBefore - toWriteAfter;
@@ -21678,7 +21683,7 @@ MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, 
 #if LINUX && !__UCLIBC__
             rc = sendfile(sock->fd, file->fd, &off, toWriteFile);
 #else
-            rc = localSendfile(sock, file, offset, toWriteFile);
+            rc = localSendfile(sock, file, offset, (int) toWriteFile);
 #endif
             if (rc > 0) {
                 written += rc;
@@ -22577,7 +22582,7 @@ char *mprReallocStrcat(MprCtx ctx, int destMax, char *buf, cchar *src, ...)
         destMax = INT_MAX;
     }
 
-    existingLen = (buf) ? strlen(buf) : 0;
+    existingLen = (buf) ? (int) strlen(buf) : 0;
     required = existingLen + 1;
 
     str = (char*) src;
@@ -22749,7 +22754,7 @@ int mprStrcmpCount(cchar *str1, cchar *str2, int len)
 
 int mprStrStartsWith(cchar *dest, cchar *pat)
 {
-    return mprStrcmpCount(dest, pat, strlen(pat)) == 0;
+    return mprStrcmpCount(dest, pat, (int) strlen(pat)) == 0;
 }
 
 
@@ -23009,7 +23014,7 @@ int mprMakeArgv(MprCtx ctx, cchar *program, cchar *cmd, int *argcp, char ***argv
      */
     size = (int) strlen(cmd) + 1;
 
-    buf = (char*) mprAlloc(ctx, (MPR_MAX_ARGC * sizeof(char*)) + size);
+    buf = (char*) mprAlloc(ctx, (MPR_MAX_ARGC * (int) sizeof(char*)) + size);
     if (buf == 0) {
         return MPR_ERR_NO_MEMORY;
     }
@@ -24491,7 +24496,7 @@ void mprSetThreadPriority(MprThread *tp, int newPriority)
 #elif VXWORKS
     taskPrioritySet(tp->osThread, osPri);
 #else
-    setpriority(PRIO_PROCESS, tp->pid, osPri);
+    setpriority(PRIO_PROCESS, (uint) tp->pid, osPri);
 #endif
     tp->priority = newPriority;
     mprUnlock(tp->mutex);
@@ -25656,7 +25661,7 @@ static int getTimeZoneOffsetFromTm(MprCtx ctx, struct tm *tp)
     }
     return offset;
 #elif BLD_UNIX_LIKE && !CYGWIN
-    return tp->tm_gmtoff * MS_PER_SEC;
+    return (int) tp->tm_gmtoff * MS_PER_SEC;
 #else
     struct timezone     tz;
     struct timeval      tv;
@@ -25693,7 +25698,7 @@ static MprTime makeTime(MprCtx ctx, struct tm *tp)
 
 static MprTime daysSinceEpoch(int year)
 {
-    int     days;
+    MprTime     days;
 
     days = ((MprTime) 365) * (year - 1970);
     days += ((year-1) / 4) - (1970 / 4);
@@ -25919,7 +25924,9 @@ char *mprFormatTime(MprCtx ctx, cchar *fmt, struct tm *tp)
         tp = &tm;
     }
     endp = &localFmt[sizeof(localFmt) - 1];
-    for (cp = fmt, size = sizeof(localFmt) - 1; *cp && dp < &localFmt[sizeof(localFmt) - 32]; size = endp - dp - 1) {
+    cp = fmt;
+    size = (int) sizeof(localFmt) - 1;
+    for (; *cp && dp < &localFmt[sizeof(localFmt) - 32]; size = (int) (endp - dp - 1)) {
         if (*cp == '%') {
             *dp++ = *cp++;
         again:
@@ -25937,7 +25944,7 @@ char *mprFormatTime(MprCtx ctx, cchar *fmt, struct tm *tp)
 
             case 'C':
                 dp--;
-                mprItoa(dp, size, (int64) (1900 + tp->tm_year) / 100, 10);
+                mprItoa(dp, size, (int64) (((1900 + tp->tm_year)) / 100), 10);
                 dp += strlen(dp);
                 cp++;
                 break;
@@ -27610,7 +27617,7 @@ int mprGetRandomBytes(MprCtx ctx, char *buf, int length, int block)
 
     sofar = 0;
     do {
-        rc = read(fd, &buf[sofar], length);
+        rc = (int) read(fd, &buf[sofar], length);
         if (rc < 0) {
             mprAssert(0);
             return MPR_ERR_CANT_READ;
@@ -27882,7 +27889,7 @@ MprUri *mprParseUri(MprCtx ctx, cchar *uri)
     len = ulen * 2 + 3;
 
     up->originalUri = mprStrdup(up, uri);
-    up->parsedUriBuf = (char*) mprAlloc(up, len * sizeof(char));
+    up->parsedUriBuf = (char*) mprAlloc(up, len * (int) sizeof(char));
 
     hostbuf = &up->parsedUriBuf[ulen+1];
     strcpy(up->parsedUriBuf, uri);

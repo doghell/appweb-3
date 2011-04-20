@@ -30,7 +30,7 @@ MaDir *maCreateBareDir(MaHost *host, cchar *path)
 
     if (path) {
         dir->path = mprStrdup(dir, path);
-        dir->pathLen = strlen(path);
+        dir->pathLen = (int) strlen(path);
     }
 
     return dir;

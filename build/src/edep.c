@@ -446,7 +446,7 @@ static char *mprGetBaseName(char *name)
 int mprGetDirName(char *buf, int bufsize, char *path)
 {
     char    *cp;
-    int     dlen;
+    size_t  dlen;
 
     cp = strrchr(path, '/');
     if (cp == 0) {

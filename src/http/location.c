@@ -323,14 +323,6 @@ void maSetLocationPrefix(MaLocation *location, cchar *uri)
     mprFree(location->prefix);
     location->prefix = mprStrdup(location, uri);
     location->prefixLen = (int) strlen(location->prefix);
-#if UNUSED
-    /*
-     *  Always strip trailing "/". Note this is a URI not a path.
-     */
-    if (location->prefixLen > 0 && location->prefix[location->prefixLen - 1] == '/') {
-        location->prefix[--location->prefixLen] = '\0';
-    }
-#endif
 }
 
 

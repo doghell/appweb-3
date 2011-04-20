@@ -163,7 +163,7 @@ void maCreatePipeline(MaConn *conn)
                     continue;
                 }
             }
-            if (filter->stage == http->rangeFilter && (req->ranges == 0 || handler == http->fileHandler)) {
+            if (filter->stage == http->rangeFilter && req->ranges == 0) {
                 continue;
             }
             if ((filter->stage->flags & MA_STAGE_ALL & req->method) == 0) {

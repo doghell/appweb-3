@@ -49,7 +49,7 @@ bool maValidateNativeCredentials(MaConn *conn, cchar *realm, cchar *user, cchar 
     
     if (auth->type == MA_AUTH_BASIC) {
         mprSprintf(passbuf, sizeof(passbuf), "%s:%s:%s", user, realm, password);
-        len = strlen(passbuf);
+        len = (int) strlen(passbuf);
         hashedPassword = mprGetMD5Hash(conn, passbuf, len, NULL);
         password = hashedPassword;
     }

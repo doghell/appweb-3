@@ -15,7 +15,7 @@
 /**************************** Forward Declarations ****************************/
 
 static void addPacketForNet(MaQueue *q, MaPacket *packet);
-static void adjustNetVec(MaQueue *q, int64 written);
+static void adjustNetVec(MaQueue *q, int written);
 static int64  buildNetVec(MaQueue *q);
 static void freeNetPackets(MaQueue *q, int64 written);
 
@@ -25,8 +25,7 @@ static void netOutgoingService(MaQueue *q)
 {
     MaConn      *conn;
     MaResponse  *resp;
-    int64       written;
-    int         errCode;
+    int         written, errCode;
 
     conn = q->conn;
     resp = conn->response;
@@ -124,7 +123,7 @@ static int64 buildNetVec(MaQueue *q)
 /*
  *  Add one entry to the io vector
  */
-static void addToNetVector(MaQueue *q, char *ptr, int64 bytes)
+static void addToNetVector(MaQueue *q, char *ptr, int bytes)
 {
     mprAssert(bytes > 0);
 
@@ -169,7 +168,7 @@ static void addPacketForNet(MaQueue *q, MaPacket *packet)
 static void freeNetPackets(MaQueue *q, int64 bytes)
 {
     MaPacket    *packet;
-    int64       len;
+    int         len;
 
     mprAssert(q->first);
     mprAssert(q->count >= 0);
@@ -178,7 +177,7 @@ static void freeNetPackets(MaQueue *q, int64 bytes)
     while ((packet = q->first) != 0) {
         if (packet->prefix) {
             len = mprGetBufLength(packet->prefix);
-            len = min(len, bytes);
+            len = (int) min(len, bytes);
             mprAdjustBufStart(packet->prefix, len);
             bytes -= len;
             /* Prefixes don't count in the q->count. No need to adjust */
@@ -190,7 +189,7 @@ static void freeNetPackets(MaQueue *q, int64 bytes)
 
         if (packet->content) {
             len = mprGetBufLength(packet->content);
-            len = min(len, bytes);
+            len = (int) min(len, bytes);
             mprAdjustBufStart(packet->content, len);
             bytes -= len;
             q->count -= len;
@@ -215,12 +214,11 @@ static void freeNetPackets(MaQueue *q, int64 bytes)
 /*
  *  Clear entries from the IO vector that have actually been transmitted. Support partial writes.
  */
-static void adjustNetVec(MaQueue *q, int64 written)
+static void adjustNetVec(MaQueue *q, int written)
 {
     MprIOVec    *iovec;
     MaResponse  *resp;
-    int64       len;
-    int         i, j;
+    int         len, i, j;
 
     resp = q->conn->response;
 

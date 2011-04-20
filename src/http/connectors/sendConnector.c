@@ -33,12 +33,6 @@ static void sendOpen(MaQueue *q)
     conn = q->conn;
     resp = conn->response;
 
-    /*
-     *  To write an entire file, reset the maximum and packet size to the maximum response body size (LimitResponseBody)
-     */
-    q->max = conn->http->limits.maxResponseBody;
-    q->packetSize = conn->http->limits.maxResponseBody;
-
     if (!conn->requestFailed && !(resp->flags & MA_RESP_NO_BODY)) {
         resp->file = mprOpen(q, resp->filename, O_RDONLY | O_BINARY, 0);
         if (resp->file == 0) {
@@ -55,11 +49,15 @@ static void sendOutgoingService(MaQueue *q)
 {
     MaConn      *conn;
     MaResponse  *resp;
-    int64       written, ioCount;
+    int         written;
     int         errCode;
 
     conn = q->conn;
     resp = conn->response;
+
+    if (conn->sock == 0) {
+        return;
+    }
 
     /*
      *  Loop doing non-blocking I/O until blocked or all the packets received are written.
@@ -75,9 +73,7 @@ static void sendOutgoingService(MaQueue *q)
         /*
          *  Write the vector and file data. Exclude the file entry in the io vector.
          */
-        ioCount = q->ioIndex - q->ioFileEntry;
-        mprAssert(ioCount >= 0);
-        written = (int) mprSendFileToSocket(conn->sock, resp->file, resp->pos, q->ioCount, q->iovec, ioCount, NULL, 0);
+        written = (int) mprSendFileToSocket(conn->sock, resp->file, q->ioPos, q->ioCount, q->iovec, q->ioIndex, NULL, 0);
         mprLog(q, 5, "Send connector written %d", written);
         if (written < 0) {
             errCode = mprGetError();
@@ -127,7 +123,7 @@ static int64 buildSendVec(MaQueue *q)
 
     mprAssert(q->ioIndex == 0);
     q->ioCount = 0;
-    q->ioFileEntry = 0;
+    q->ioFile = 0;
 
     /*
      *  Examine each packet and accumulate as many packets into the I/O vector as possible. Can only have one data packet at
@@ -135,26 +131,21 @@ static int64 buildSendVec(MaQueue *q)
      *  vector entries. Leave the packets on the queue for now, they are removed after the IO is complete for the 
      *  entire packet.
      */
-    for (packet = q->first; packet && !q->ioFileEntry; packet = packet->next) {
+    for (packet = q->first; packet; packet = packet->next) {
         if (packet->flags & MA_PACKET_HEADER) {
             maFillHeaders(conn, packet);
             q->count += maGetPacketLength(packet);
 
-        } else if (maGetPacketLength(packet) == 0) {
-            /*
-             *  This is the end of file packet. If chunking, we must still add this to the vector as we need to emit 
-             *  a trailing chunk termination line.
-             */
+        } else if (maGetPacketLength(packet) == 0 && packet->esize == 0) {
             q->flags |= MA_QUEUE_EOF;
             if (packet->prefix == NULL) {
                 break;
             }
-
         } else if (resp->flags & MA_RESP_NO_BODY) {
             maDiscardData(q, 0);
             continue;
         }
-        if (q->ioIndex >= (MA_MAX_IOVEC - 2)) {
+        if (q->ioFile || q->ioIndex >= (MA_MAX_IOVEC - 2)) {
             break;
         }
         addPacketForSend(q, packet);
@@ -166,7 +157,7 @@ static int64 buildSendVec(MaQueue *q)
 /*
  *  Add one entry to the io vector
  */
-static void addToSendVector(MaQueue *q, char *ptr, int64 bytes)
+static void addToSendVector(MaQueue *q, char *ptr, int bytes)
 {
     mprAssert(bytes > 0);
 
@@ -197,23 +188,20 @@ static void addPacketForSend(MaQueue *q, MaPacket *packet)
     if (packet->prefix) {
         addToSendVector(q, mprGetBufStart(packet->prefix), mprGetBufLength(packet->prefix));
     }
-    if (maGetPacketLength(packet) > 0) {
+    if (packet->esize > 0) {
+        mprAssert(q->ioFile == 0);
+        q->ioFile = 1;
+        q->ioCount += packet->esize;
+
+    } else if (maGetPacketLength(packet) > 0) {
         /*
          *  Header packets have actual content. File data packets are virtual and only have a count.
          */
-        if (packet->content) {
-            addToSendVector(q, mprGetBufStart(packet->content), mprGetBufLength(packet->content));
-
-        } else {
-            addToSendVector(q, 0, maGetPacketLength(packet));
-            mprAssert(q->ioFileEntry == 0);
-            q->ioFileEntry = 1;
-            q->ioFileOffset += maGetPacketLength(packet);
+        addToSendVector(q, mprGetBufStart(packet->content), mprGetBufLength(packet->content));
+        mask = (packet->flags & MA_PACKET_HEADER) ? MA_TRACE_HEADERS : MA_TRACE_BODY;
+        if (maShouldTrace(conn, mask)) {
+            maTraceContent(conn, packet, 0, resp->bytesWritten, mask);
         }
-    }
-    mask = (packet->flags & MA_PACKET_HEADER) ? MA_TRACE_HEADERS : MA_TRACE_BODY;
-    if (maShouldTrace(conn, mask)) {
-        maTraceContent(conn, packet, 0, resp->bytesWritten, mask);
     }
 }
 
@@ -236,23 +224,29 @@ static void freeSentPackets(MaQueue *q, int64 bytes)
         if (packet->prefix) {
             len = mprGetBufLength(packet->prefix);
             len = min(len, bytes);
-            mprAdjustBufStart(packet->prefix, len);
+            mprAdjustBufStart(packet->prefix, (int) len);
             bytes -= len;
-            /* Prefixes dont' count in the q->count. No need to adjust */
+            /* Prefixes don't count in the q->count. No need to adjust */
             if (mprGetBufLength(packet->prefix) == 0) {
                 mprFree(packet->prefix);
                 packet->prefix = 0;
             }
         }
-        if ((len = maGetPacketLength(packet)) > 0) {
-            len = min(len, bytes);
-            if (packet->content) {
-                mprAdjustBufStart(packet->content, len);
-            } else {
-                packet->entityLength -= len;
-            }
+        if (packet->esize) {
+            len = min(packet->esize, bytes);
+            packet->esize -= len;
+            packet->epos += len;
             bytes -= len;
-            q->count -= len;
+            mprAssert(packet->esize >= 0);
+            mprAssert(bytes == 0);
+            if (packet->esize > 0) {
+                break;
+            }
+        } else if ((len = maGetPacketLength(packet)) > 0) {
+            len = min(len, bytes);
+            mprAdjustBufStart(packet->content, (int) len);
+            bytes -= len;
+            q->count -= (int) len;
             mprAssert(q->count >= 0);
         }
         if (maGetPacketLength(packet) == 0) {
@@ -277,58 +271,33 @@ static void adjustSendVec(MaQueue *q, int64 written)
 {
     MprIOVec    *iovec;
     MaResponse  *resp;
-    int64       len;
+    size_t      len;
     int         i, j;
 
     resp = q->conn->response;
-
-    /*
-     *  Cleanup the IO vector
-     */
-    if (written == q->ioCount) {
-        /*
-         *  Entire vector written. Just reset.
-         */
-        q->ioIndex = 0;
-        q->ioCount = 0;
-        resp->pos = q->ioFileOffset;
-
-    } else {
-        /*
-         *  Partial write of an vector entry. Need to copy down the unwritten vector entries.
-         */
-        q->ioCount -= written;
-        mprAssert(q->ioCount >= 0);
-        iovec = q->iovec;
-        for (i = 0; i < q->ioIndex; i++) {
-            len = (int) iovec[i].len;
-            if (iovec[i].start) {
-                if (written < len) {
-                    iovec[i].start += written;
-                    iovec[i].len -= written;
-                    break;
-                } else {
-                    written -= len;
-                }
-            } else {
-                /*
-                 *  File data has a null start ptr
-                 */
-                resp->pos += written;
-                q->ioIndex = 0;
-                q->ioCount = 0;
-                return;
-            }
+    iovec = q->iovec;
+    for (i = 0; i < q->ioIndex; i++) {
+        len = iovec[i].len;
+        if (written < len) {
+            iovec[i].start += (size_t) written;
+            iovec[i].len -= (size_t) written;
+            return;
         }
-
-        /*
-         *  Compact
-         */
-        for (j = 0; i < q->ioIndex; ) {
+        written -= len;
+        q->ioCount -= len;
+        for (j = i + 1; i < q->ioIndex; ) {
             iovec[j++] = iovec[i++];
         }
-        q->ioIndex = j;
+        q->ioIndex--;
+        i--;
     }
+    if (written > 0 && q->ioFile) {
+        /* All remaining data came from the file */
+        q->ioPos += written;
+    }
+    q->ioIndex = 0;
+    q->ioCount = 0;
+    q->ioFile = 0;
 }
 
 

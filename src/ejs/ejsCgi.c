@@ -287,7 +287,7 @@ static int getRequest()
             continue;
         }
         if ((cp = strchr(ep, '=')) != 0) {
-            len = cp - ep;
+            len = (int) (cp - ep);
             mprMemcpy(key, sizeof(key), ep, len);
             key[len] = '\0';
             mprAddHash(requestHeaders, key, ++cp);
@@ -634,7 +634,7 @@ static int writeBlock(void *handle, cchar *buf, int size)
         if (size < EJS_CGI_MAX_BUF) {
             rc = mprPutBlockToBuf(output, buf, size);
         } else {
-            rc = write(1, (char*) buf, size);
+            rc = (int) write(1, (char*) buf, size);
         }
     }
     return rc;
@@ -879,7 +879,7 @@ static void emitHeaders()
 
     hp = mprGetFirstHash(responseHeaders);
     while (hp) {
-        len = strlen(hp->key) + strlen(hp->data) + 4;
+        len = (int) (strlen(hp->key) + strlen(hp->data) + 4);
         if (mprGetBufSpace(headerOutput) < len) {
             flushOutput(headerOutput);
         }
@@ -907,7 +907,7 @@ static void flushOutput(MprBuf *buf)
     }
 
     while ((len = mprGetBufLength(buf)) > 0) {
-        rc = write(1, mprGetBufStart(buf), len);
+        rc = (int) write(1, mprGetBufStart(buf), len);
         if (rc < 0) {
             return;
         }
@@ -926,7 +926,7 @@ static void decodeFormData(cchar *data)
     int     buflen;
 
     buf = mprStrdup(mpr, data);
-    buflen = strlen(buf);
+    buflen = (int) strlen(buf);
 
     /*
      *  Crack the input into name/value pairs 
@@ -952,15 +952,13 @@ static int getPostData()
     if (contentLength == 0) {
         return 0;
     }
-
     input = (char*) malloc(contentLength + 1);
     if (input == 0) {
         error(NULL, 0, "Content length is too large");
         return MPR_ERR_NO_MEMORY;
     }
-
     for (len = 0; len < contentLength; ) {
-        bytes = read(0, &input[len], contentLength - len);
+        bytes = (int) read(0, &input[len], contentLength - len);
         if (bytes < 0) {
             error(NULL, 0, "Couldn't read CGI input");
             return MPR_ERR_CANT_READ;

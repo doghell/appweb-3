@@ -263,7 +263,7 @@ int maFormatBody(MaConn *conn, cchar *title, cchar *fmt, ...)
         title, body);
     mprFree(body);
     va_end(args);
-    return strlen(resp->altBody);
+    return (int) strlen(resp->altBody);
 }
 
 

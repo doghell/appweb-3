@@ -146,38 +146,6 @@
 #define MA_HANDLER_HASH_SIZE    17              /* Size of handler hash */
 #define MA_ACTION_HASH_SIZE     13              /* Size of action program hash */
 
-/*
- *  These constants are to sanity check user input in the http.conf
- */
-#define MA_TOP_THREADS          100
-
-#define MA_BOT_BODY             512
-#define MA_TOP_BODY             (0x7fffffff)        /* 2 GB */
-
-#define MA_BOT_CHUNK_SIZE       512
-#define MA_TOP_CHUNK_SIZE       (4 * 1024 * 1024)   /* 4 MB */
-
-#define MA_BOT_NUM_HEADERS      8
-#define MA_TOP_NUM_HEADERS      (20 * 1024)
-
-#define MA_BOT_HEADER           512
-#define MA_TOP_HEADER           (20 * 1024 * 1024)
-
-#define MA_BOT_URL              64
-#define MA_TOP_URL              (255 * 1024 * 1024) /* 256 MB */
-
-#define MA_BOT_RESPONSE_BODY    512
-#define MA_TOP_RESPONSE_BODY    0x7fffffff          /* 2 GB */
-
-#define MA_BOT_STACK            (16 * 1024)
-#define MA_TOP_STACK            (4 * 1024 * 1024)
-
-#define MA_BOT_STAGE_BUFFER     (2 * 1024)
-#define MA_TOP_STAGE_BUFFER     (1 * 1024 * 1024)   /* 1 MB */
-
-#define MA_BOT_UPLOAD_SIZE      1
-#define MA_TOP_UPLOAD_SIZE      0x7fffffff          /* 2 GB */
-
 #define MA_MAX_USER             MPR_HTTP_MAX_USER
 
 #endif /* _h_HTTP_TUNE */

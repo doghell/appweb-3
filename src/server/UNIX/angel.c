@@ -132,12 +132,12 @@ int main(int argc, char *argv[])
     if (nextArg < argc) {
         serviceProgram = argv[nextArg++];
         for (len = 0, i = nextArg; i < argc; i++) {
-            len += strlen(argv[i]) + 1;
+            len += (int) strlen(argv[i]) + 1;
         }
         serviceArgs = mprAlloc(mpr, len + 1);
         for (len = 0, i = nextArg; i < argc; i++) {
             strcpy(&serviceArgs[len], argv[i]);
-            len += strlen(argv[i]);
+            len += (int) strlen(argv[i]);
             serviceArgs[len++] = ' ';
         }
         serviceArgs[len] = '\0';
@@ -247,7 +247,7 @@ static void angel()
                     ac = 0;
                 }
 
-                argv = mprAlloc(mpr, sizeof(char*) * (6 + ac));
+                argv = mprAlloc(mpr, (int) sizeof(char*) * (6 + ac));
                 env[0] = mprStrcat(mpr, -1, "LD_LIBRARY_PATH=", homeDir, NULL);
                 env[1] = mprStrcat(mpr, -1, "PATH=", getenv("PATH"), NULL);
                 env[2] = 0;

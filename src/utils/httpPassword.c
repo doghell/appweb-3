@@ -257,7 +257,7 @@ static int updatePassFile(Mpr *mpr, char *passFile)
     up = users;
     while (up) {
         sprintf(buf, "%d: %s: %s: %s\n", up->enabled, up->name, up->realm, up->password);
-        if (mprWrite(file, buf, strlen(buf)) < 0) {
+        if (mprWrite(file, buf, (int) strlen(buf)) < 0) {
             mprError(mpr, "%s: Can't write to %s", programName, tempFile);
             mprFree(file);
             mprFree(tempFile);
@@ -371,7 +371,7 @@ static char* trimWhiteSpace(char *str)
     while (isspace((int) *str)) {
         str++;
     }
-    len = strlen(str) - 1;
+    len = (int) strlen(str) - 1;
     while (isspace((int) str[len])) {
         str[len--] = '\0';
     }
@@ -493,7 +493,7 @@ char *maMD5binary(uchar *buf, int length)
  */
 char *maMD5(char *string)
 {
-    return maMD5binary((uchar*)string, strlen(string));
+    return maMD5binary((uchar*) string, (int) strlen(string));
 }
 
 

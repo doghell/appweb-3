@@ -2,7 +2,7 @@
  *  chunk.tst - Test chunked transfer encoding for response data
  */
 
-let HTTP = session["main"]
+let HTTP = session["main"] || ":4100"
 let http: Http = new Http
 
 /*

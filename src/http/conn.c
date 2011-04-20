@@ -295,8 +295,9 @@ static void readEvent(MaConn *conn)
 static inline MaPacket *getPacket(MaConn *conn, int *bytesToRead)
 {
     MaPacket    *packet;
-    MprBuf      *content;
     MaRequest   *req;
+    MprBuf      *content;
+    MprOff      remaining;
     int         len;
 
     req = conn->request;
@@ -315,13 +316,14 @@ static inline MaPacket *getPacket(MaConn *conn, int *bytesToRead)
         if (req) {
             /*
              *  Don't read more than the remainingContent unless chunked. We do this to minimize requests split 
-             *  accross packets.
+             *  across packets.
              */
             if (req->remainingContent) {
-                len = req->remainingContent;
+                remaining = req->remainingContent;
                 if (req->flags & MA_REQ_CHUNKED) {
-                    len = max(len, MA_BUFSIZE);
+                    remaining = max(remaining, MA_BUFSIZE);
                 }
+                len = (int) min(remaining, MAXINT);
             }
             len = min(len, MA_BUFSIZE);
             mprAssert(len > 0);

@@ -332,7 +332,7 @@ static int getVars(MaQueue *q, char ***keys, char *buf, int len)
     /*
      *  Crack the input into name/value pairs 
      */
-    keyList = (char**) mprAlloc(q, (keyCount * 2) * sizeof(char**));
+    keyList = (char**) mprAlloc(q, (keyCount * 2) * (int) sizeof(char**));
 
     i = 0;
     tok = 0;

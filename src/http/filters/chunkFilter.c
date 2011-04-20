@@ -23,7 +23,7 @@ static void openChunk(MaQueue *q)
     conn = q->conn;
     req = conn->request;
 
-    q->packetSize = min(conn->http->limits.maxChunkSize, q->max);
+    q->packetSize = (int) min(conn->http->limits.maxChunkSize, q->max);
     req->chunkState = MA_CHUNK_START;
 }
 
@@ -88,7 +88,7 @@ static void incomingChunkData(MaQueue *q, MaPacket *packet)
             maFailConnection(conn, MPR_HTTP_CODE_BAD_REQUEST, "Bad chunk specification");
             return;
         }
-        mprAdjustBufStart(buf, cp - start + 1);
+        mprAdjustBufStart(buf, (int) (cp - start + 1));
         req->remainingContent = req->chunkSize;
         if (req->chunkSize == 0) {
             req->chunkState = MA_CHUNK_EOF;
@@ -156,7 +156,7 @@ static void outgoingChunkService(MaQueue *q)
             }
         } else {
             if (resp->chunkSize < 0) {
-                resp->chunkSize = min(conn->http->limits.maxChunkSize, q->max);
+                resp->chunkSize = (int) min(conn->http->limits.maxChunkSize, q->max);
             }
         }
     }

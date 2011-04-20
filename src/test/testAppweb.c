@@ -187,7 +187,7 @@ bool simpleForm(MprTestGroup *gp, char *uri, char *formData, int expectCode)
     }
 
     if (formData) {
-        mprAddHttpFormData(http, formData, strlen(formData));
+        mprAddHttpFormData(http, formData, (int) strlen(formData));
     }
     if (httpRequest(gp, "POST", uri) < 0) {
         return 0;
@@ -199,7 +199,7 @@ bool simpleForm(MprTestGroup *gp, char *uri, char *formData, int expectCode)
         return 0;
     }
     gp->content = mprReadHttpString(http);
-    contentLen = mprGetHttpContentLength(http);
+    contentLen = (int) mprGetHttpContentLength(http);
     if (! assert(gp->content != 0 && contentLen > 0)) {
         return 0;
     }
@@ -234,7 +234,7 @@ bool simplePost(MprTestGroup *gp, char *uri, char *bodyData, int len, int expect
         return 0;
     }
     gp->content = mprReadHttpString(http);
-    contentLen = mprGetHttpContentLength(http);
+    contentLen = (int) mprGetHttpContentLength(http);
     if (! assert(gp->content != 0 && contentLen > 0)) {
         return 0;
     }
@@ -266,7 +266,7 @@ bool bulkPost(MprTestGroup *gp, char *url, int size, int expectCode)
     }
     post[i] = '\0';
 
-    success = simplePost(gp, url, post, strlen(post), expectCode);
+    success = simplePost(gp, url, post, (int) strlen(post), expectCode);
     assert(success);
 
     mprFree(post);

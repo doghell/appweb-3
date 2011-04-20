@@ -242,6 +242,22 @@ MaPacket *maCreateDataPacket(MprCtx ctx, int size)
 }
 
 
+MaPacket *maCreateEntityPacket(MprCtx ctx, MprOff pos, MprOff size, MaFillProc fill)
+{
+    MaPacket    *packet;
+
+    packet = maCreatePacket(ctx, 0);
+    if (packet == 0) {
+        return 0;
+    }
+    packet->flags = MA_PACKET_DATA;
+    packet->epos = pos;
+    packet->esize = size;
+    packet->fill = fill;
+    return packet;
+}
+
+
 MaPacket *maCreateEndPacket(MprCtx ctx)
 {
     MaPacket    *packet;
@@ -416,6 +432,24 @@ bool maWillNextQueueAccept(MaQueue *q, MaPacket *packet)
 }
 
 
+bool maWillNextQueueAcceptSize(MaQueue *q, int size)
+{
+    MaQueue     *next;
+
+    next = q->nextQ;
+    if (size <= next->packetSize && (size + next->count) <= next->max) {
+        return 1;
+    }
+    /*
+     *  The downstream queue is full, so disable the queue and mark the downstream queue as full and service immediately. 
+     */
+    maDisableQueue(q);
+    next->flags |= MA_QUEUE_FULL;
+    maScheduleQueue(next);
+    return 0;
+}
+
+
 void maSendEndPacket(MaQueue *q)
 {
     maPutNext(q, maCreateEndPacket(q));
@@ -532,40 +566,55 @@ bool maPacketTooBig(MaQueue *q, MaPacket *packet)
  *  Split a packet if required so it fits in the downstream queue. Put back the 2nd portion of the split packet on the queue.
  *  Ensure that the packet is not larger than "size" if it is greater than zero.
  */
-int maResizePacket(MaQueue *q, MaPacket *packet, int64 size)
+int maResizePacket(MaQueue *q, MaPacket *packet, int size)
 {
     MaPacket    *tail;
     MaConn      *conn;
     MprCtx      ctx;
-    int64       len;
+    int         len;
     
+    conn = q->conn;
     if (size <= 0) {
         size = MAXINT;
     }
-
-    /*
-     *  Calculate the size that will fit
-     */
-    len = packet->content ? maGetPacketLength(packet) : packet->entityLength;
-    size = min(size, len);
-    size = min(size, q->nextQ->max);
-    size = min(size, q->nextQ->packetSize);
-
-    if (size == 0) {
-        /* Can't fit anything downstream, no point splitting yet */
-        return 0;
-    }
-    if (size == len) {
-        return 0;
-    }
-    conn = q->conn;
     ctx = conn->request ? (MprCtx) conn->request : (MprCtx) conn;
-    tail = maSplitPacket(ctx, packet, size);
-    if (tail == 0) {
-        return MPR_ERR_NO_MEMORY;
+
+    if (packet->esize > size) {
+        if ((tail = maSplitPacket(ctx, packet, size)) == 0) {
+            return MPR_ERR_NO_MEMORY;
+        }
+    } else {
+        /*
+         *  Calculate the size that will fit
+         */
+        len = packet->content ? maGetPacketLength(packet) : 0;
+        size = min(size, len);
+        size = min(size, q->nextQ->max);
+        size = min(size, q->nextQ->packetSize);
+        if (size == 0 || size == len) {
+            return 0;
+        }
+        if ((tail = maSplitPacket(ctx, packet, size)) == 0) {
+            return MPR_ERR_NO_MEMORY;
+        }
     }
     maPutBack(q, tail);
     return 0;
+}
+
+
+MaPacket *maCloneEntityPacket(MprCtx ctx, MaPacket *orig)
+{
+    MaPacket  *packet;
+
+    if ((packet = maCreatePacket(ctx, 0)) == 0) {
+        return 0;
+    }
+    packet->flags = orig->flags;
+    packet->esize = orig->esize;
+    packet->epos = orig->epos;
+    packet->fill = orig->fill;
+    return packet;
 }
 
 
@@ -675,8 +724,10 @@ int maJoinPacket(MaPacket *packet, MaPacket *p)
 {
     int     len;
 
-    len = maGetPacketLength(p);
+    mprAssert(packet->esize == 0);
+    mprAssert(p->esize == 0);
 
+    len = maGetPacketLength(p);
     if (mprPutBlockToBuf(packet->content, mprGetBufStart(p->content), len) != len) {
         return MPR_ERR_NO_MEMORY;
     }
@@ -691,26 +742,25 @@ int maJoinPacket(MaPacket *packet, MaPacket *p)
 MaPacket *maSplitPacket(MprCtx ctx, MaPacket *orig, int offset)
 {
     MaPacket    *packet;
-    int64       count, size;
+    int         count, size;
 
-    if (offset >= maGetPacketLength(orig)) {
-        mprAssert(0);
-        return 0;
-    }
-    count = maGetPacketLength(orig) - offset;
-    size = max(count, MA_BUFSIZE);
-    size = MA_PACKET_ALIGN(size);
-    
-    if ((packet = maCreateDataPacket(ctx, (orig->content == 0) ? 0: size)) == 0) {
-        return 0;
-    }
-    packet->flags = orig->flags;
+    if (orig->esize) {
+        if ((packet = maCreateEntityPacket(ctx, orig->epos + offset, orig->esize - offset, orig->fill)) == 0) {
+            return 0;
+        }
+        orig->esize = offset;
 
-    if (orig->entityLength) {
-        orig->entityLength = offset;
-        packet->entityLength = count;
-    }
-    if (orig->content && maGetPacketLength(orig) > 0) {
+    } else {
+        if (offset >= maGetPacketLength(orig)) {
+            mprAssert(offset < maGetPacketLength(orig));
+            return 0;
+        }
+        count = maGetPacketLength(orig) - offset;
+        size = max(count, MA_BUFSIZE);
+        size = MA_PACKET_ALIGN(size);
+        if ((packet = maCreateDataPacket(ctx, size)) == 0) {
+            return 0;
+        }
         mprAdjustBufEnd(orig->content, -count);
         if (mprPutBlockToBuf(packet->content, mprGetBufEnd(orig->content), count) != count) {
             return 0;
@@ -719,7 +769,29 @@ MaPacket *maSplitPacket(MprCtx ctx, MaPacket *orig, int offset)
         mprAddNullToBuf(orig->content);
 #endif
     }
+    packet->flags = orig->flags;
     return packet;
+}
+
+
+void maAdjustPacketStart(MaPacket *packet, MprOff size)
+{
+    if (packet->esize) {
+        packet->epos += size;
+        packet->esize -= size;
+    } else if (packet->content) {
+        mprAdjustBufStart(packet->content, (int) size);
+    }
+}
+
+
+void maAdjustPacketEnd(MaPacket *packet, MprOff size)
+{
+    if (packet->esize) {
+        packet->esize += size;
+    } else if (packet->content) {
+        mprAdjustBufEnd(packet->content, (int) size);
+    }
 }
 
 

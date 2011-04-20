@@ -105,7 +105,7 @@ static char *mapDelim(char *path)
  */
 static char *trim(char *path) 
 {
-    int     len;
+    size_t  len;
 
     while (1) {
         len = strlen(path);
@@ -170,7 +170,7 @@ static char **getSegments(char *path, int *countp)
 static char *absolutePath(char *path)
 {
     char    *str, cwd[MAXPATH], *result;
-    int     len;
+    size_t  len;
 
 	if (path == NULL || *path == '\0') {
 		return path;
@@ -212,7 +212,8 @@ static char *absolutePath(char *path)
 static char *relativePath(char *path)
 {
     char    cwd[MAXPATH], **strSegments, **cwdSegments, *cp, *result;
-    int     cwdCount, strCount, i, len, commonLevels, upLevels;
+    size_t  len;
+    int     cwdCount, strCount, i, commonLevels, upLevels;
 
 	if (path == NULL || *path == '\0') {
 		return ".";
@@ -266,7 +267,8 @@ static char *relativePath(char *path)
 static char *canonPath(char *path)
 {
     char    *str, *cp, *result, **segments;
-    int     count, i, from, to, len;
+    size_t  len;
+    int     count, i, from, to;
 
 	if (path == NULL) {
 		return NULL;

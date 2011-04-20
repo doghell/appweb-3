@@ -44,7 +44,8 @@ static void closeCgi(MaQueue *q)
     MprCmd  *cmd;
 
     cmd = (MprCmd*) q->queueData;
-    if (cmd->pid) {
+    mprAssert(cmd);
+    if (cmd && cmd->pid) {
         mprStopCmd(cmd);
     }
 }
@@ -100,7 +101,7 @@ static void startCgi(MaQueue *q)
         Build environment variables
      */
     varCount = mprGetHashCount(req->headers) + mprGetHashCount(req->formVars);
-    envv = (char**) mprAlloc(cmd, (varCount + 1) * sizeof(char*));
+    envv = (char**) mprAlloc(cmd, (varCount + 1) * (int) sizeof(char*));
 
     index = 0;
     hp = mprGetFirstHash(req->headers);
@@ -699,7 +700,7 @@ static void buildArgs(MaConn *conn, MprCmd *cmd, int *argcp, char ***argvp)
     }
 }
 #else
-    len = (argc + 1) * sizeof(char*);
+    len = (argc + 1) * (int) sizeof(char*);
     argv = (char**) mprAlloc(cmd, len);
     memset(argv, 0, len);
 

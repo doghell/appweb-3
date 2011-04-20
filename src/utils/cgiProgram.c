@@ -445,7 +445,7 @@ static int getQueryString(Mpr *mpr, char **buf, int *buflen)
         *buflen = 0;
     } else {
         *buf = mprStrdup(mpr, getenv("QUERY_STRING"));
-        *buflen = strlen(*buf);
+        *buflen = (int) strlen(*buf);
     }
     return 0;
 }
@@ -470,7 +470,7 @@ static int getPostData(MprCtx ctx, MprBuf *buf)
             }
         }
         space = mprGetBufSpace(buf);
-        bytes = read(0, mprGetBufEnd(buf), space);
+        bytes = (int) read(0, mprGetBufEnd(buf), space);
         if (bytes < 0) {
             error(mpr, "Couldn't read CGI input %d", errno);
             return -1;
@@ -515,7 +515,7 @@ static int getVars(MprCtx ctx, char ***cgiKeys, char *buf, int buflen)
     /*
      *  Crack the input into name/value pairs 
      */
-    keyList = (char**) mprAlloc(ctx, (keyCount * 2) * sizeof(char**));
+    keyList = (char**) mprAlloc(ctx, (keyCount * 2) * (int) sizeof(char**));
 
     i = 0;
     for (pp = strtok(buf, "&"); pp; pp = strtok(0, "&")) {

@@ -18,7 +18,7 @@ MAIN(simpleClient, int argc, char** argv)
 	Mpr			*mpr;
 	MprHttp		*http;
 	cchar		*content;
-	int			code, contentLen, junk;
+    int         contentLen, code, junk;
 
 	mpr = mprCreate(argc, argv, NULL);
 
@@ -53,10 +53,10 @@ MAIN(simpleClient, int argc, char** argv)
 	 *	Get the actual response content
 	 */
 	content = mprReadHttpString(http);
-	contentLen = mprGetHttpContentLength(http);
+	contentLen = (int) mprGetHttpContentLength(http);
 	if (content) {
 		mprPrintf(mpr, "Server responded with:\n");
-		junk = write(1, (char*) content, contentLen);
+		junk = (int) write(1, (char*) content, contentLen);
 	}
 	return 0;
 }

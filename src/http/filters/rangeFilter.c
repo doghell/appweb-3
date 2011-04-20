@@ -11,21 +11,22 @@
 #if BLD_FEATURE_RANGE
 /********************************** Forwards **********************************/
 
+static void applyRange(MaQueue *q, MaPacket *packet);
 static MaPacket *createRangePacket(MaConn *conn, MaRange *range);
 static MaPacket *createFinalRangePacket(MaConn *conn);
+static bool fixRangeLength(MaConn *conn);
 
 /*********************************** Code *************************************/
 /*
  *  Apply ranges to outgoing data. 
  */
-static void rangeService(MaQueue *q, MaRangeFillProc fill)
+static void outgoingRangeService(MaQueue *q)
 {
     MaPacket    *packet;
     MaRange     *range;
     MaConn      *conn;
     MaRequest   *req;
     MaResponse  *resp;
-    int         bytes, count, endpos;
 
     conn = q->conn;
     req = conn->request;
@@ -33,26 +34,20 @@ static void rangeService(MaQueue *q, MaRangeFillProc fill)
     range = resp->currentRange;
 
     if (!(q->flags & MA_QUEUE_SERVICED)) {
-        if (resp->entityLength < 0 && q->last->flags & MA_PACKET_END) {
-           /*
-            *   Have all the data, so compute an entity length. This allows negative ranges computed from the 
-            *   end of the data.
-            */
-           resp->entityLength = q->count;
-        }
-        if (resp->code != MPR_HTTP_CODE_OK || !maFixRangeLength(conn)) {
-            maSendPackets(q);
+        if (resp->code != MPR_HTTP_CODE_OK || !fixRangeLength(conn)) {
             maRemoveQueue(q);
             return;
         }
+        resp->code = MPR_HTTP_CODE_PARTIAL;
         if (req->ranges->next) {
             maCreateRangeBoundary(conn);
         }
-        resp->code = MPR_HTTP_CODE_PARTIAL;
     }
 
     for (packet = maGet(q); packet; packet = maGet(q)) {
-        if (!(packet->flags & MA_PACKET_DATA)) {
+        if (packet->flags & MA_PACKET_DATA) {
+            applyRange(q, packet);
+        } else {
             if (packet->flags & MA_PACKET_END && resp->rangeBoundary) {
                 maPutNext(q, createFinalRangePacket(conn));
             }
@@ -63,75 +58,76 @@ static void rangeService(MaQueue *q, MaRangeFillProc fill)
             maPutNext(q, packet);
             continue;
         }
-
-        /*
-         *  Process the current packet over multiple ranges ranges until all the data is processed or discarded.
-         */
-        bytes = packet->content ? mprGetBufLength(packet->content) : packet->entityLength;
-        while (range && bytes > 0) {
-
-            endpos = resp->pos + bytes;
-            if (endpos < range->start) {
-                /* Packet is before the next range, so discard the entire packet */
-                resp->pos += bytes;
-                maFreePacket(q, packet);
-                break;
-
-            } else if (resp->pos > range->end) {
-                /* Missing some output - should not happen */
-                mprAssert(0);
-
-            } else if (resp->pos < range->start) {
-                /*  Packets starts before range with some data in range so skip some data */
-                count = range->start - resp->pos;
-                bytes -= count;
-                resp->pos += count;
-                if (packet->content == 0) {
-                    packet->entityLength -= count;
-                }
-                if (packet->content) {
-                    mprAdjustBufStart(packet->content, count);
-                }
-                continue;
-
-            } else {
-                /* In range */
-                mprAssert(range->start <= resp->pos && resp->pos < range->end);
-                count = min(bytes, range->end - resp->pos);
-                count = min(count, q->nextQ->packetSize);
-                mprAssert(count > 0);
-                if (count < bytes) {
-                    maResizePacket(q, packet, count);
-                }
-                if (!maWillNextQueueAccept(q, packet)) {
-                    maPutBack(q, packet);
-                    return;
-                }
-                if (fill) {
-                    if ((*fill)(q, packet) < 0) {
-                        return;
-                    }
-                }
-                bytes -= count;
-                resp->pos += count;
-                if (resp->rangeBoundary) {
-                    maPutNext(q, createRangePacket(conn, range));
-                }
-                maPutNext(q, packet);
-                if (resp->pos >= range->end) {
-                    range = range->next;
-                }
-                break;
-            }
-        }
     }
-    resp->currentRange = range;
 }
 
 
-static void outgoingRangeService(MaQueue *q)
+
+static void applyRange(MaQueue *q, MaPacket *packet)
 {
-    rangeService(q, NULL);
+    MaRange     *range;
+    MaConn      *conn;
+    MaRequest   *req;
+    MaResponse  *resp;
+    MprOff      endPacket, length, gap, span;
+    int         count;
+
+    conn = q->conn;
+    req = conn->request;
+    resp = conn->response;
+    range = resp->currentRange;
+
+    while (range) {
+        /*
+         *  Process the current packet over multiple ranges ranges until all the data is processed or discarded.
+         */
+        length = maGetPacketEntityLength(packet);
+        if (length <= 0) {
+            break;
+        }
+        endPacket = resp->rangePos + length;
+        if (endPacket < range->start) {
+            /* Packet is before the next range, so discard the entire packet */
+            resp->rangePos += length;
+            maFreePacket(q, packet);
+            break;
+
+        } else if (resp->rangePos < range->start) {
+            /*  Packets starts before range with some data in range so skip some data */
+            gap = range->start - resp->rangePos;
+            resp->rangePos += gap;
+            if (gap < length) {
+                maAdjustPacketStart(packet, (int) gap);
+            }
+            /* Keep going and examine next range */
+
+        } else {
+            /* In range */
+            mprAssert(range->start <= resp->rangePos && resp->rangePos < range->end);
+            span = min(length, range->end - resp->rangePos);
+            count = (int) min(span, q->nextQ->packetSize);
+            mprAssert(count > 0);
+            if (!maWillNextQueueAcceptSize(q, count)) {
+                maPutBack(q, packet);
+                return;
+            }
+            if (length > count) {
+                /*  Split packet if packet extends past range */
+                maPutBack(q, maSplitPacket(q, packet, count));
+            }
+            if (packet->fill && (*packet->fill)(q, packet, resp->rangePos, count) < 0) {
+                return;
+            }
+            if (resp->rangeBoundary) {
+                maPutNext(q, createRangePacket(conn, range));
+            }
+            maPutNext(q, packet);
+            resp->rangePos += count;
+        }
+        if (resp->rangePos >= range->end) {
+            resp->currentRange = range = range->next;
+        }
+    }
 }
 
 
@@ -196,16 +192,16 @@ void maCreateRangeBoundary(MaConn *conn)
 /*
  *  Ensure all the range limits are within the entity size limits. Fixup negative ranges.
  */
-bool maFixRangeLength(MaConn *conn)
+static bool fixRangeLength(MaConn *conn)
 {
     MaRequest   *req;
     MaResponse  *resp;
     MaRange     *range;
-    int         length;
+    int64       length;
 
     req = conn->request;
     resp = conn->response;
-    length = resp->entityLength;
+    length = resp->entityLength ? resp->entityLength : resp->length;
 
     for (range = req->ranges; range; range = range->next) {
         /*
@@ -235,6 +231,7 @@ bool maFixRangeLength(MaConn *conn)
         }
         if (range->end < 0) {
             if (length <= 0) {
+                 maFailRequest(conn, MPR_HTTP_CODE_RANGE_NOT_SATISFIABLE, "Bad content range");
                 return 0;
             }
             range->end = length - range->end - 1;
@@ -264,7 +261,9 @@ MprModule *maRangeFilterInit(MaHttp *http, cchar *path)
         return 0;
     }
     http->rangeFilter = filter;
+#if UNUSED
     http->rangeService = rangeService;
+#endif
     filter->outgoingService = outgoingRangeService; 
     return module;
 }

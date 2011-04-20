@@ -169,7 +169,7 @@ static bool parseRequest(MaConn *conn, MaPacket *packet)
     if ((end = mprStrnstr(start, "\r\n\r\n", len)) == 0) {
         return 0;
     }
-    len = end - start;
+    len = (int) (end - start);
     if (len >= conn->host->limits->maxHeader) {
         maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, "Header too big");
         return 0;
@@ -320,7 +320,7 @@ static bool parseFirstLine(MaConn *conn, MaPacket *packet)
                 methodName, uri, httpProtocol);
             content = packet->content;
             endp = strstr((char*) content->start, "\r\n\r\n");
-            len = (endp) ? (endp - mprGetBufStart(content) + 4) : 0;
+            len = (endp) ? (int) (endp - mprGetBufStart(content) + 4) : 0;
             maTraceContent(conn, packet, len, 0, MA_TRACE_REQUEST | MA_TRACE_HEADERS);
         }
     } else {
@@ -677,7 +677,7 @@ static int getChunkPacketSize(MaConn *conn, MprBuf *buf)
             }
             return 0;
         }
-        need = cp - start + 1;
+        need = (int) (cp - start + 1);
         size = (int) mprAtoi(&start[2], 16);
         if (size == 0 && &cp[2] < buf->end && cp[1] == '\r' && cp[2] == '\n') {
             /* 
@@ -688,7 +688,7 @@ static int getChunkPacketSize(MaConn *conn, MprBuf *buf)
         }
         break;
     case MA_CHUNK_DATA:
-        need = req->remainingContent;
+        need = (int) min(MAXINT, req->remainingContent);
         break;
 
     default:
@@ -709,7 +709,8 @@ static bool processContent(MaConn *conn, MaPacket *packet)
     MaQueue         *q;
     MaHost          *host;
     MprBuf          *content;
-    int             nbytes, remaining;
+    int64           remaining;
+    int             nbytes;
 
     req = conn->request;
     resp = conn->response;
@@ -737,7 +738,7 @@ static bool processContent(MaConn *conn, MaPacket *packet)
     } else {
         remaining = req->remainingContent;
     }
-    nbytes = min(remaining, mprGetBufLength(content));
+    nbytes = (int) min(remaining, mprGetBufLength(content));
     mprAssert(nbytes >= 0);
     mprLog(conn, 7, "processContent: packet of %d bytes, remaining %d", mprGetBufLength(content), remaining);
 
@@ -886,7 +887,7 @@ static void traceBuf(MaConn *conn, cchar *buf, int len, int mask)
 }
 
 
-void maTraceContent(MaConn *conn, MaPacket *packet, int size, int offset, int mask)
+void maTraceContent(MaConn *conn, MaPacket *packet, int64 size, int64 offset, int mask)
 {
     MaHost  *host;
     int     len;
@@ -904,12 +905,12 @@ void maTraceContent(MaConn *conn, MaPacket *packet, int size, int offset, int ma
     }
     if (packet->prefix) {
         len = mprGetBufLength(packet->prefix);
-        len = min(len, size);
+        len = (int) min(len, size);
         traceBuf(conn, mprGetBufStart(packet->prefix), len, mask);
     }
     if (packet->content) {
         len = mprGetBufLength(packet->content);
-        len = min(len, size);
+        len = (int) min(len, size);
         traceBuf(conn, mprGetBufStart(packet->content), len, mask);
     }
 }
@@ -1224,7 +1225,7 @@ bool maContentNotModified(MaConn *conn)
 }
 
 
-MaRange *maCreateRange(MaConn *conn, int start, int end)
+MaRange *maCreateRange(MaConn *conn, int64 start, int64 end)
 {
     MaRange     *range;
 

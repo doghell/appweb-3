@@ -1120,6 +1120,11 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 }
 #endif
 
+/*
+    Forward compatibility aliases
+ */
+typedef MprOffset MprOff;
+
 #endif /* _h_MPR_OS_HDRS */
 
 /*
@@ -2282,7 +2287,7 @@ extern int mprPutBlockToBuf(MprBuf *buf, cchar *ptr, int size);
  *  @returns Zero if successful and otherwise a negative error code 
  *  @ingroup MprBuf
  */
-extern int mprPutIntToBuf(MprBuf *buf, int i);
+extern int mprPutIntToBuf(MprBuf *buf, int64 i);
 
 /**
  *  Put a string to the buffer.
@@ -3106,7 +3111,7 @@ typedef int             (*MprMakeDirProc)(struct MprFileSystem *fs, cchar *path,
 typedef int             (*MprMakeLinkProc)(struct MprFileSystem *fs, cchar *path, cchar *target, int hard);
 typedef int             (*MprCloseFileProc)(struct MprFile *file);
 typedef int             (*MprReadFileProc)(struct MprFile *file, void *buf, uint size);
-typedef long            (*MprSeekFileProc)(struct MprFile *file, int seekType, long distance);
+typedef MprOff          (*MprSeekFileProc)(struct MprFile *file, int seekType, MprOff distance);
 typedef int             (*MprSetBufferedProc)(struct MprFile *file, int initialSize, int maxSize);
 typedef int             (*MprWriteFileProc)(struct MprFile *file, cvoid *buf, uint count);
 
@@ -3420,7 +3425,7 @@ extern int mprRead(MprFile *file, void *buf, uint size);
  *  @return Returns the new file position if successful otherwise a negative MPR error code is returned.
  *  @ingroup MprFile
  */
-extern long mprSeek(MprFile *file, int seekType, long distance);
+extern MprOff mprSeek(MprFile *file, int seekType, MprOff distance);
 
 /**
  *  Write data to a file.
@@ -3471,7 +3476,7 @@ typedef struct MprPath {
     MprTime         ctime;              /**< Create time */
     MprTime         mtime;              /**< Modified time */
     int64           size;               /**< File length */
-    uint            inode;              /**< Inode number */
+    int64           inode;              /**< Inode number */
     bool            isDir;              /**< Set if directory */
     bool            isLink;             /**< Set if symbolic link */
     bool            isReg;              /**< Set if a regular file */
@@ -4818,7 +4823,7 @@ typedef struct MprBlk {
 #endif
 } MprBlk;
 
-#define MPR_ALLOC_HDR_SIZE      (MPR_ALLOC_ALIGN(sizeof(struct MprBlk)))
+#define MPR_ALLOC_HDR_SIZE      ((int) (MPR_ALLOC_ALIGN(sizeof(struct MprBlk))))
 #define MPR_GET_BLK(ptr)        ((MprBlk*) (((char*) (ptr)) - MPR_ALLOC_HDR_SIZE))
 #define MPR_GET_PTR(bp)         ((void*) (((char*) (bp)) + MPR_ALLOC_HDR_SIZE))
 #define MPR_GET_BLK_SIZE(bp)    ((bp)->size)
@@ -5983,7 +5988,7 @@ extern int mprGetSocketError(MprSocket *sp);
  *  @ingroup MprSocket
  */
 extern MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, int64 bytes, MprIOVec *beforeVec, 
-    int64 beforeCount, MprIOVec *afterVec, int64 afterCount);
+    int beforeCount, MprIOVec *afterVec, int afterCount);
 #endif
 
 /**
@@ -6721,7 +6726,7 @@ extern cchar *mprGetHttpMessage(MprHttp *http);
  *  @return A count of the response content data in bytes.
  *  @ingroup MprHttp
  */
-extern int mprGetHttpContentLength(MprHttp *http);
+extern int64 mprGetHttpContentLength(MprHttp *http);
 
 /**
  *  Get the Http error message
@@ -15410,8 +15415,8 @@ Returns:             nothing
 static void
 complete_callout(uschar *previous_callout, const uschar *ptr, compile_data *cd)
 {
-int length = ptr - cd->start_pattern - GET(previous_callout, 2);
-PUT(previous_callout, 2 + LINK_SIZE, length);
+    int length = (int) (ptr - cd->start_pattern - GET(previous_callout, 2));
+    PUT(previous_callout, 2 + LINK_SIZE, length);
 }
 
 
@@ -15945,7 +15950,7 @@ for (;; ptr++)
       goto FAILED;
       }
 
-    *lengthptr += code - last_code;
+    *lengthptr += (int) (code - last_code);
     DPRINTF(("length=%d added %d c=%c\n", *lengthptr, code - last_code, c));
 
     /* If "previous" is set and it is not at the start of the work space, move
@@ -16062,7 +16067,7 @@ for (;; ptr++)
         *errorcodeptr = ERR20;
         goto FAILED;
         }
-      *lengthptr += code - last_code;   /* To include callout length */
+      *lengthptr += (int) (code - last_code);   /* To include callout length */
       DPRINTF((">> end branch\n"));
       }
     return TRUE;
@@ -16213,7 +16218,7 @@ for (;; ptr++)
 
       if (lengthptr != NULL)
         {
-        *lengthptr += class_utf8data - class_utf8data_base;
+        *lengthptr += (int) (class_utf8data - class_utf8data_base);
         class_utf8data = class_utf8data_base;
         }
 
@@ -16261,7 +16266,7 @@ for (;; ptr++)
           ptr++;
           }
 
-        posix_class = check_posix_name(ptr, tempptr - ptr);
+        posix_class = check_posix_name(ptr, (int) (tempptr - ptr));
         if (posix_class < 0)
           {
           *errorcodeptr = ERR30;
@@ -17020,7 +17025,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
         {
         uschar *lastchar = code - 1;
         while((*lastchar & 0xc0) == 0x80) lastchar--;
-        c = code - lastchar;            /* Length of UTF-8 character */
+        c = (int) (code - lastchar);    /* Length of UTF-8 character */
         memcpy(utf8_char, lastchar, c); /* Save the char */
         c |= 0x80;                      /* Flag c as a length */
         }
@@ -17288,7 +17293,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
       {
       register int i;
       int ketoffset = 0;
-      int len = code - previous;
+      int len = (int) (code - previous);
       uschar *bralink = NULL;
 
       /* Repeating a DEFINE group is pointless */
@@ -17309,7 +17314,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
         {
         register uschar *ket = previous;
         do ket += GET(ket, 1); while (*ket != OP_KET);
-        ketoffset = code - ket;
+        ketoffset = (int) (code - ket);
         }
 
       /* The case of a zero minimum is special because of the need to stick
@@ -17377,7 +17382,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
           /* We chain together the bracket offset fields that have to be
           filled in later when the ends of the brackets are reached. */
 
-          offset = (bralink == NULL)? 0 : previous - bralink;
+          offset = (bralink == NULL)? 0 : (int) (previous - bralink);
           bralink = previous;
           PUTINC(previous, 0, offset);
           }
@@ -17483,7 +17488,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
             {
             int offset;
             *code++ = OP_BRA;
-            offset = (bralink == NULL)? 0 : code - bralink;
+            offset = (bralink == NULL)? 0 : (int) (code - bralink);
             bralink = code;
             PUTINC(code, 0, offset);
             }
@@ -17504,7 +17509,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
         while (bralink != NULL)
           {
           int oldlinkoffset;
-          int offset = code - bralink + 1;
+          int offset = (int) (code - bralink + 1);
           uschar *bra = code - offset;
           oldlinkoffset = GET(bra, 1);
           bralink = (oldlinkoffset == 0)? NULL : bralink - oldlinkoffset;
@@ -17583,7 +17588,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
         tempcode += _pcre_OP_lengths[*tempcode] +
           ((*tempcode == OP_TYPEEXACT &&
              (tempcode[3] == OP_PROP || tempcode[3] == OP_NOTPROP))? 2:0);
-      len = code - tempcode;
+      len = (int) (code - tempcode);
       if (len > 0) switch (*tempcode)
         {
         case OP_STAR:  *tempcode = OP_POSSTAR; break;
@@ -17654,7 +17659,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
         *errorcodeptr = ERR60;
         goto FAILED;
         }
-      namelen = ptr - name;
+      namelen = (int) (ptr - name);
       for (i = 0; i < verbcount; i++)
         {
         if (namelen == verbs[i].len &&
@@ -17785,7 +17790,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
               recno * 10 + *ptr - '0' : -1;
           ptr++;
           }
-        namelen = ptr - name;
+        namelen = (int) (ptr - name);
 
         if ((terminator > 0 && *ptr++ != terminator) || *ptr++ != ')')
           {
@@ -18007,7 +18012,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
           name = ++ptr;
 
           while ((cd->ctypes[*ptr] & ctype_word) != 0) ptr++;
-          namelen = ptr - name;
+          namelen = (int) (ptr - name);
 
           /* In the pre-compile phase, just do a syntax check. */
 
@@ -18091,7 +18096,7 @@ we set the flag only if there is a literal "\r" or "\n" in the class. */
         NAMED_REF_OR_RECURSE:
         name = ++ptr;
         while ((cd->ctypes[*ptr] & ctype_word) != 0) ptr++;
-        namelen = ptr - name;
+        namelen = (int) (ptr - name);
 
         /* In the pre-compile phase, do a syntax check and set a dummy
         reference number. */
@@ -19034,7 +19039,7 @@ for (;;)
     {
     if (lengthptr == NULL)
       {
-      int branch_length = code - last_branch;
+      int branch_length = (int) (code - last_branch);
       do
         {
         int prev_length = GET(last_branch, 1);
@@ -19623,7 +19628,7 @@ regex compiled on a system with 4-byte pointers is run on another with 8-byte
 pointers. */
 
 re->magic_number = MAGIC_NUMBER;
-re->size = size;
+re->size = (int) size;
 re->options = cd->external_options;
 re->flags = cd->external_flags;
 re->dummy1 = 0;
@@ -19706,7 +19711,7 @@ if (errorcode != 0)
   {
   (pcre_free)(re);
   PCRE_EARLY_ERROR_RETURN:
-  *erroroffset = ptr - (const uschar *)pattern;
+  *erroroffset = (int) (ptr - (const uschar *)pattern);
   PCRE_EARLY_ERROR_RETURN2:
   *errorptr = find_error_text(errorcode);
   if (errorcodeptr != NULL) *errorcodeptr = errorcode;
@@ -20532,7 +20537,7 @@ for (;;)
       save_capture_last = md->capture_last;
 
       DPRINTF(("saving %d %d %d\n", save_offset1, save_offset2, save_offset3));
-      md->offset_vector[md->offset_end - number] = eptr - md->start_subject;
+      md->offset_vector[md->offset_end - number] = (int) (eptr - md->start_subject);
 
       flags = (op == OP_SCBRA)? match_cbegroup : 0;
       do
@@ -20813,9 +20818,9 @@ for (;;)
       cb.callout_number   = ecode[1];
       cb.offset_vector    = md->offset_vector;
       cb.subject          = (PCRE_SPTR)md->start_subject;
-      cb.subject_length   = md->end_subject - md->start_subject;
-      cb.start_match      = mstart - md->start_subject;
-      cb.current_position = eptr - md->start_subject;
+      cb.subject_length   = (int) (md->end_subject - md->start_subject);
+      cb.start_match      = (int) (mstart - md->start_subject);
+      cb.current_position = (int) (eptr - md->start_subject);
       cb.pattern_position = GET(ecode, 2);
       cb.next_item_length = GET(ecode, 2 + LINK_SIZE);
       cb.capture_top      = offset_top/2;
@@ -21084,7 +21089,7 @@ for (;;)
         {
         md->offset_vector[offset] =
           md->offset_vector[md->offset_end - number];
-        md->offset_vector[offset+1] = eptr - md->start_subject;
+        md->offset_vector[offset+1] = (int) (eptr - md->start_subject);
         if (offset_top <= offset) offset_top = offset + 2;
         }
 
@@ -21596,7 +21601,7 @@ for (;;)
       referenced subpattern. */
 
       if (offset >= offset_top || md->offset_vector[offset] < 0)
-        length = (md->jscript_compat)? 0 : md->end_subject - eptr + 1;
+        length = (md->jscript_compat)? 0 : (int) (md->end_subject - eptr + 1);
       else
         length = md->offset_vector[offset+1] - md->offset_vector[offset];
 
@@ -23749,7 +23754,7 @@ for (;;)
           case OP_ANYBYTE:
           c = max - min;
           if (c > (unsigned int)(md->end_subject - eptr))
-            c = md->end_subject - eptr;
+            c = (int) (md->end_subject - eptr);
           eptr += c;
           break;
 
@@ -23940,7 +23945,7 @@ for (;;)
           case OP_ANYBYTE:
           c = max - min;
           if (c > (unsigned int)(md->end_subject - eptr))
-            c = md->end_subject - eptr;
+            c = (int) (md->end_subject - eptr);
           eptr += c;
           break;
 
@@ -24264,7 +24269,7 @@ tables = external_re->tables;
 
 if (extra_data != NULL)
   {
-  register unsigned int flags = extra_data->flags;
+  register unsigned int flags = (unsigned int) extra_data->flags;
   if ((flags & PCRE_EXTRA_STUDY_DATA) != 0)
     study = (const pcre_study_data *)extra_data->study_data;
   if ((flags & PCRE_EXTRA_MATCH_LIMIT) != 0)
@@ -24766,8 +24771,8 @@ if (rc == MATCH_MATCH)
 
   if (offsetcount < 2) rc = 0; else
     {
-    offsets[0] = md->start_match_ptr - md->start_subject;
-    offsets[1] = md->end_match_ptr - md->start_subject;
+    offsets[0] = (int) (md->start_match_ptr - md->start_subject);
+    offsets[1] = (int) (md->end_match_ptr - md->start_subject);
     }
 
   DPRINTF((">>>> returning %d\n", rc));
@@ -25603,8 +25608,8 @@ if (byteflip(re->magic_number, sizeof(re->magic_number)) != MAGIC_NUMBER)
   return NULL;
 
 *internal_re = *re;           /* To copy other fields */
-internal_re->size = byteflip(re->size, sizeof(re->size));
-internal_re->options = byteflip(re->options, sizeof(re->options));
+internal_re->size = (int) byteflip(re->size, sizeof(re->size));
+internal_re->options = (int) byteflip(re->options, sizeof(re->options));
 internal_re->flags = (pcre_uint16)byteflip(re->flags, sizeof(re->flags));
 internal_re->top_bracket =
   (pcre_uint16)byteflip(re->top_bracket, sizeof(re->top_bracket));
@@ -25624,8 +25629,8 @@ internal_re->name_count =
 if (study != NULL)
   {
   *internal_study = *study;   /* To copy other fields */
-  internal_study->size = byteflip(study->size, sizeof(study->size));
-  internal_study->options = byteflip(study->options, sizeof(study->options));
+  internal_study->size = (int) byteflip(study->size, sizeof(study->size));
+  internal_study->options = (int) byteflip(study->options, sizeof(study->options));
   }
 
 return internal_re;
@@ -25919,7 +25924,7 @@ register const uschar *p;
 if (length < 0)
   {
   for (p = string; *p != 0; p++);
-  length = p - string;
+  length = (int) (p - string);
   }
 
 for (p = string; length-- > 0; p++)
@@ -25927,13 +25932,13 @@ for (p = string; length-- > 0; p++)
   register int ab;
   register int c = *p;
   if (c < 128) continue;
-  if (c < 0xc0) return p - string;
+  if (c < 0xc0) return (int) (p - string);
   ab = _pcre_utf8_table4[c & 0x3f];     /* Number of additional bytes */
-  if (length < ab || ab > 3) return p - string;
+  if (length < ab || ab > 3) return (int) (p - string);
   length -= ab;
 
   /* Check top bits in the second byte */
-  if ((*(++p) & 0xc0) != 0x80) return p - string;
+  if ((*(++p) & 0xc0) != 0x80) return (int) (p - string);
 
   /* Check for overlong sequences for each different length, and for the
   excluded range 0xd000 to 0xdfff.  */
@@ -25943,7 +25948,7 @@ for (p = string; length-- > 0; p++)
     /* Check for xx00 000x (overlong sequence) */
 
     case 1:
-    if ((c & 0x3e) == 0) return p - string;
+    if ((c & 0x3e) == 0) return (int) (p - string);
     continue;   /* We know there aren't any more bytes to check */
 
     /* Check for 1110 0000, xx0x xxxx (overlong sequence) or
@@ -25952,7 +25957,7 @@ for (p = string; length-- > 0; p++)
     case 2:
     if ((c == 0xe0 && (*p & 0x20) == 0) ||
         (c == 0xed && *p >= 0xa0))
-      return p - string;
+      return (int) (p - string);
     break;
 
     /* Check for 1111 0000, xx00 xxxx (overlong sequence) or
@@ -25962,7 +25967,7 @@ for (p = string; length-- > 0; p++)
     if ((c == 0xf0 && (*p & 0x30) == 0) ||
         (c > 0xf4 ) ||
         (c == 0xf4 && *p > 0x8f))
-      return p - string;
+      return (int) (p - string);
     break;
 
 #if 0
@@ -25987,7 +25992,7 @@ for (p = string; length-- > 0; p++)
   /* Check for valid bytes after the 2nd, if any; all must start 10 */
   while (--ab > 0)
     {
-    if ((*(++p) & 0xc0) != 0x80) return p - string;
+    if ((*(++p) & 0xc0) != 0x80) return (int) (p - string);
     }
   }
 #endif

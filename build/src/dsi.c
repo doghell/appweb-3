@@ -85,7 +85,7 @@ static int patchFileList(FILE *fp)
 {
     char    buf[MAX_FNAME];
     char    *cp;
-    int     len;
+    size_t  len;
 
     while (!finished && !feof(fp)) {
         if (fgets(buf, sizeof(buf), fp) == 0) {
@@ -117,7 +117,8 @@ static int patch(char *path)
     char        searchPat[MAX_FNAME], truePat[MAX_FNAME], falsePat[MAX_FNAME];
     char        *dsiBuf, *cp, *ep, *start, *end, *tok, *tag, *ext, *inBuf;
     char        *startDsi, *ip;
-    int         c, rc, i, level, len, line, patched;
+    size_t      rc, len;
+    int         c, i, level, line, patched;
     
     dsiBuf = 0;
     patched = 0;
@@ -130,17 +131,14 @@ static int patch(char *path)
         fprintf(stderr, "dsi: Path must be relative: %s\n", path);
         return -1;
     }
-
     for (level = 0, cp = path; *cp; cp++) {
         if (*cp == '/') {
             level++;
         }
     }
-
     if (verbose) {
         printf("Patching %s\n", path);
     }
-
     cp = parentDir;
     for (i = 0; i < level; i++) {
         *cp++ = '.';
@@ -155,8 +153,8 @@ static int patch(char *path)
         return -1;
     }
     stat(path, &sbuf);
-    inBuf = (char*) malloc(sbuf.st_size + 1);
-    rc = fread(inBuf, 1, sbuf.st_size, ifp);
+    inBuf = (char*) malloc((size_t) sbuf.st_size + 1);
+    rc = fread(inBuf, 1, (size_t) sbuf.st_size, ifp);
     if (rc < 0) {
         fprintf(stderr, "dsi: Can't read file %s\n", path);
         free(inBuf);
@@ -260,8 +258,8 @@ static int patch(char *path)
             tok = "<!-- EndDsi -->";
             len = strlen(tok);
             if (strncmp(start, tok, strlen(tok)) == 0) {
-                dsiBuf = (char*) malloc(sbuf.st_size + 1);
-                rc = fread(dsiBuf, 1, sbuf.st_size, dsiFp);
+                dsiBuf = (char*) malloc((size_t) sbuf.st_size + 1);
+                rc = fread(dsiBuf, 1, (size_t) sbuf.st_size, dsiFp);
                 if (rc < 0) {
                     fprintf(stderr, "dsi: Can't read DSI %s\n", dsiPath);
                     return -1;
@@ -482,7 +480,7 @@ static char *getNextTok(char *tokBuf, int tokBufSize, char *start)
  */
 static int matchLink(FILE *ofp, char *tag, char **start)
 {
-    int     len;
+    size_t  len;
 
     len = strlen(tag);
     if (strncmp(*start, tag, len) == 0) {

@@ -6,6 +6,10 @@
 
 include 		.makedep
 
+#
+#   PHP has warnings for 64-32 conversions
+#
+_CFLAGS         := $(patsubst -Wshorten-64-to-32,,$(_CFLAGS))
 MAKE_IFLAGS		:= $(BLD_PHP_IFLAGS) 
 
 ifeq	($(BLD_FEATURE_PHP),1)

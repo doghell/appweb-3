@@ -5963,7 +5963,7 @@ static void genDefaultParameterCode(EcCompiler *cp, EcNode *np, EjsFunction *fun
     mprAssert(parameters);
 
     count = mprGetListCount(parameters->children);
-    buffers = (EcCodeGen**) mprAllocZeroed(state, count * sizeof(EcCodeGen*));
+    buffers = (EcCodeGen**) mprAllocZeroed(state, count * (int) sizeof(EcCodeGen*));
 
     for (next = 0; (child = getNextNode(cp, parameters, &next)) && !cp->error; ) {
         mprAssert(child->kind == N_VAR_DEFINITION);
@@ -9916,7 +9916,7 @@ int ecCreateModuleSection(EcCompiler *cp)
     /*
      *  Remember this location for the module checksum. Reserve 4 bytes.
      */
-    state->checksumOffset = mprGetBufEnd(buf) - buf->data;
+    state->checksumOffset = (int) (mprGetBufEnd(buf) - buf->data);
     mprAdjustBufEnd(buf, 4);
 
     /*
@@ -10496,7 +10496,7 @@ static int createDocSection(EcCompiler *cp, EjsVar *block, int slotNum, EjsTrait
     }
     if (slotNum < 0) {
         mprAssert(ejsIsBlock(block));
-        slotNum = trait - ((EjsBlock*) block)->traits;
+        slotNum = (int) (trait - ((EjsBlock*) block)->traits);
     }
     mprAssert(slotNum >= 0);
     mprSprintf(key, sizeof(key), "%Lx %d", PTOL(block), slotNum);
@@ -10619,7 +10619,7 @@ int ecAddDocConstant(EcCompiler *cp, EjsTrait *trait, EjsVar *block, int slotNum
         }
         if (slotNum < 0) {
             mprAssert(ejsIsBlock(block));
-            slotNum = trait - ((EjsBlock*) block)->traits;
+            slotNum = (int) (trait - ((EjsBlock*) block)->traits);
         }
         mprAssert(slotNum >= 0);
         mprSprintf(key, sizeof(key), "%Lx %d", PTOL(block), slotNum);
@@ -11584,7 +11584,7 @@ static int compileInner(EcCompiler *cp, int argc, char **argv, int flags)
     saveFlags = ejs->flags;
     ejs->flags |= EJS_FLAG_COMPILER;
 
-    nodes = (EcNode**) mprAllocZeroed(cp, sizeof(EcNode*) * argc);
+    nodes = (EcNode**) mprAllocZeroed(cp, argc * (int) sizeof(EcNode*));
     if (nodes == 0) {
         return EJS_ERR;
     }
@@ -11939,7 +11939,7 @@ static EcNode *parseXMLText(EcCompiler *cp, EcNode *np)
         for (p = cp->peekToken->text; p && *p; p++) {
             if (*p == '{' || *p == '<') {
                 if (cp->peekToken->text < p) {
-                    mprPutBlockToBuf(np->literal.data, (cchar*) cp->token->text, p - cp->token->text);
+                    mprPutBlockToBuf(np->literal.data, (cchar*) cp->token->text, (int) (p - cp->token->text));
                     mprAddNullToBuf(np->literal.data);
                     if (getToken(cp) == T_EOF || cp->token->tokenId == T_ERR || cp->token->tokenId == T_NOP) {
                         return 0;

@@ -1518,8 +1518,7 @@ static int growArray(Ejs *ejs, EjsArray *ap, int len)
     if (len <= ap->length) {
         return 0;
     }
-
-    size = mprGetBlockSize(ap->data) / sizeof(EjsVar*);
+    size = mprGetBlockSize(ap->data) / (int) sizeof(EjsVar*);
 
     /*
      *  Allocate or grow the data structures.
@@ -1538,14 +1537,14 @@ static int growArray(Ejs *ejs, EjsArray *ap, int len)
         if (ap->data == 0) {
             mprAssert(ap->length == 0);
             mprAssert(count > 0);
-            ap->data = (EjsVar**) mprAllocZeroed(ap, sizeof(EjsVar*) * count);
+            ap->data = (EjsVar**) mprAllocZeroed(ap, (int) sizeof(EjsVar*) * count);
             if (ap->data == 0) {
                 return EJS_ERR;
             }
 
         } else {
             mprAssert(size > 0);
-            ap->data = (EjsVar**) mprRealloc(ap, ap->data, sizeof(EjsVar*) * count);
+            ap->data = (EjsVar**) mprRealloc(ap, ap->data, (int) sizeof(EjsVar*) * count);
             if (ap->data == 0) {
                 return EJS_ERR;
             }
@@ -1897,7 +1896,7 @@ static int growTraits(EjsBlock *block, int numTraits)
     }
     if (numTraits > block->sizeTraits) {
         count = EJS_PROP_ROUNDUP(numTraits);
-        block->traits = (EjsTrait*) mprRealloc(block, block->traits, sizeof(EjsTrait) * count);
+        block->traits = (EjsTrait*) mprRealloc(block, block->traits, (int) sizeof(EjsTrait) * count);
         if (block->traits == 0) {
             return EJS_ERR;
         }
@@ -3456,7 +3455,7 @@ static EjsVar *readDate(Ejs *ejs, EjsByteArray *ap, int argc, EjsVar **argv)
 
     value = * (double*) &ap->value[ap->readPosition];
     value = swapDouble(ap, value);
-    adjustReadPosition(ap, sizeof(double));
+    adjustReadPosition(ap, (int) sizeof(double));
 
     return (EjsVar*) ejsCreateDate(ejs, (MprTime) value);
 }
@@ -3481,7 +3480,7 @@ static EjsVar *readDouble(Ejs *ejs, EjsByteArray *ap, int argc, EjsVar **argv)
     memcpy(&value, (char*) &ap->value[ap->readPosition], sizeof(double));
 #endif
     value = swapDouble(ap, value);
-    adjustReadPosition(ap, sizeof(double));
+    adjustReadPosition(ap, (int) sizeof(double));
     return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) value);
 }
 #endif
@@ -3501,7 +3500,7 @@ static EjsVar *readInteger(Ejs *ejs, EjsByteArray *ap, int argc, EjsVar **argv)
 
     value = * (int*) &ap->value[ap->readPosition];
     value = swap32(ap, value);
-    adjustReadPosition(ap, sizeof(int));
+    adjustReadPosition(ap, (int) sizeof(int));
 
     return (EjsVar*) ejsCreateNumber(ejs, value);
 }
@@ -3522,7 +3521,7 @@ static EjsVar *readLong(Ejs *ejs, EjsByteArray *ap, int argc, EjsVar **argv)
 
     value = * (int64*) &ap->value[ap->readPosition];
     value = swap64(ap, value);
-    adjustReadPosition(ap, sizeof(int64));
+    adjustReadPosition(ap, (int) sizeof(int64));
 
     return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) value);
 }
@@ -3578,7 +3577,7 @@ static EjsVar *readShort(Ejs *ejs, EjsByteArray *ap, int argc, EjsVar **argv)
     }
     value = * (short*) &ap->value[ap->readPosition];
     value = swap16(ap, value);
-    adjustReadPosition(ap, sizeof(short));
+    adjustReadPosition(ap, (int) sizeof(short));
     return (EjsVar*) ejsCreateNumber(ejs, value);
 }
 
@@ -4057,7 +4056,7 @@ static void putShort(EjsByteArray *ap, int value)
     value = swap16(ap, value);
 
     *((short*) &ap->value[ap->writePosition]) = (short) value;
-    ap->writePosition += sizeof(short);
+    ap->writePosition += (int) sizeof(short);
 }
 
 
@@ -4066,7 +4065,7 @@ static void putInteger(EjsByteArray *ap, int value)
     value = swap32(ap, value);
 
     *((int*) &ap->value[ap->writePosition]) = (int) value;
-    ap->writePosition += sizeof(int);
+    ap->writePosition += (int) sizeof(int);
 }
 
 
@@ -4075,7 +4074,7 @@ static void putLong(EjsByteArray *ap, int64 value)
     value = swap64(ap, value);
 
     *((int64*) &ap->value[ap->writePosition]) = value;
-    ap->writePosition += sizeof(int64);
+    ap->writePosition += (int) sizeof(int64);
 }
 
 
@@ -4089,7 +4088,7 @@ static void putDouble(EjsByteArray *ap, double value)
 #else
     memcpy((char*) &ap->value[ap->writePosition], &value, sizeof(double));
 #endif
-    ap->writePosition += sizeof(double);
+    ap->writePosition += (int) sizeof(double);
 }
 #endif
 
@@ -4476,7 +4475,7 @@ static EjsVar *invokeDateOperator(Ejs *ejs, EjsDate *lhs, int opcode, EjsDate *r
         return (EjsVar*) ejsCreateNumber(ejs, - (MprNumber) lhs->value);
 
     case EJS_OP_LOGICAL_NOT:
-        return (EjsVar*) ejsCreateBoolean(ejs, (MprNumber) !fixed(lhs->value));
+        return (EjsVar*) ejsCreateBoolean(ejs, (int) !fixed(lhs->value));
 
     case EJS_OP_NOT:
         return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) (~fixed(lhs->value)));
@@ -4607,32 +4606,32 @@ static EjsVar *date_Date(Ejs *ejs, EjsDate *date, int argc, EjsVar **argv)
         memset(&tm, 0, sizeof(tm));
         tm.tm_isdst = -1;
         vp = ejsGetProperty(ejs, (EjsVar*) args, 0);
-        year = getNumber(ejs, vp);
+        year = (int) getNumber(ejs, vp);
         if (0 <= year && year < 100) {
             year += 1900;
         }
         tm.tm_year = year - 1900;
         if (args->length > 1) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 1);
-            tm.tm_mon = getNumber(ejs, vp);
+            tm.tm_mon = (int) getNumber(ejs, vp);
         }
         if (args->length > 2) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 2);
-            tm.tm_mday = getNumber(ejs, vp);
+            tm.tm_mday = (int) getNumber(ejs, vp);
         } else {
             tm.tm_mday = 1;
         }
         if (args->length > 3) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 3);
-            tm.tm_hour = getNumber(ejs, vp);
+            tm.tm_hour = (int) getNumber(ejs, vp);
         }
         if (args->length > 4) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 4);
-            tm.tm_min = getNumber(ejs, vp);
+            tm.tm_min = (int) getNumber(ejs, vp);
         }
         if (args->length > 5) {
             vp = ejsGetProperty(ejs, (EjsVar*) args, 5);
-            tm.tm_sec = getNumber(ejs, vp);
+            tm.tm_sec = (int) getNumber(ejs, vp);
         }
         date->value = mprMakeTime(ejs, &tm);
         if (date->value == -1) {
@@ -4792,7 +4791,7 @@ static EjsVar *date_set_fullYear(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     struct tm   tm;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
-    tm.tm_year = ejsGetNumber(argv[0]) - 1900;
+    tm.tm_year = (int) ejsGetNumber(argv[0]) - 1900;
     dp->value = mprMakeTime(ejs, &tm);
     return 0;
 }
@@ -4935,7 +4934,7 @@ static EjsVar *date_set_hours(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     struct tm   tm;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
-    tm.tm_hour = ejsGetNumber(argv[0]);
+    tm.tm_hour = (int) ejsGetNumber(argv[0]);
     dp->value = mprMakeTime(ejs, &tm);
     return 0;
 }
@@ -4980,7 +4979,7 @@ static EjsVar *date_set_minutes(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     struct tm   tm;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
-    tm.tm_min = ejsGetNumber(argv[0]);
+    tm.tm_min = (int) ejsGetNumber(argv[0]);
     dp->value = mprMakeTime(ejs, &tm);
     return 0;
 }
@@ -5007,7 +5006,7 @@ static EjsVar *date_set_month(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     struct tm   tm;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
-    tm.tm_mon = ejsGetNumber(argv[0]);
+    tm.tm_mon = (int) ejsGetNumber(argv[0]);
     dp->value = mprMakeTime(ejs, &tm);
     return 0;
 }
@@ -5118,7 +5117,7 @@ static EjsVar *date_set_seconds(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     struct tm   tm;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
-    tm.tm_sec = ejsGetNumber(argv[0]);
+    tm.tm_sec = (int) ejsGetNumber(argv[0]);
     dp->value = mprMakeTime(ejs, &tm);
     return 0;
 }
@@ -5149,7 +5148,7 @@ static EjsVar *date_setUTCFullYear(Ejs *ejs, EjsDate *dp, int argc, EjsVar **arg
     struct tm   tm;
 
     mprDecodeUniversalTime(ejs, &tm, dp->value);
-    tm.tm_year = ejsGetNumber(argv[0]) - 1900;
+    tm.tm_year = (int) ejsGetNumber(argv[0]) - 1900;
     dp->value = mprMakeUniversalTime(ejs, &tm);
     return 0;
 }
@@ -5163,7 +5162,7 @@ static EjsVar *date_setUTCHours(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     struct tm   tm;
 
     mprDecodeUniversalTime(ejs, &tm, dp->value);
-    tm.tm_hour = ejsGetNumber(argv[0]);
+    tm.tm_hour = (int) ejsGetNumber(argv[0]);
     dp->value = mprMakeUniversalTime(ejs, &tm);
     return 0;
 }
@@ -5188,7 +5187,7 @@ static EjsVar *date_setUTCMinutes(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv
     struct tm   tm;
 
     mprDecodeUniversalTime(ejs, &tm, dp->value);
-    tm.tm_min = ejsGetNumber(argv[0]);
+    tm.tm_min = (int) ejsGetNumber(argv[0]);
     dp->value = mprMakeUniversalTime(ejs, &tm);
     return 0;
 }
@@ -5202,7 +5201,7 @@ static EjsVar *date_setUTCMonth(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     struct tm   tm;
 
     mprDecodeUniversalTime(ejs, &tm, dp->value);
-    tm.tm_mon = ejsGetNumber(argv[0]);
+    tm.tm_mon = (int) ejsGetNumber(argv[0]);
     dp->value = mprMakeUniversalTime(ejs, &tm);
     return 0;
 }
@@ -5216,7 +5215,7 @@ static EjsVar *date_setUTCSeconds(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv
     struct tm   tm;
 
     mprDecodeUniversalTime(ejs, &tm, dp->value);
-    tm.tm_sec = ejsGetNumber(argv[0]);
+    tm.tm_sec = (int) ejsGetNumber(argv[0]);
     dp->value = mprMakeUniversalTime(ejs, &tm);
     if (argc >= 2) {
         dp->value = (dp->value / MPR_TICKS_PER_SEC  * MPR_TICKS_PER_SEC) + ejsGetNumber(argv[1]);
@@ -5285,25 +5284,25 @@ static EjsVar *date_UTC(Ejs *ejs, EjsDate *unused, int argc, EjsVar **argv)
     int         year;
 
     memset(&tm, 0, sizeof(tm));
-    year = getNumber(ejs, argv[0]);
+    year = (int) getNumber(ejs, argv[0]);
     if (year < 100) {
         year += 1900;
     }
     tm.tm_year = year - 1900;
     if (argc > 1) {
-        tm.tm_mon = getNumber(ejs, argv[1]);
+        tm.tm_mon = (int) getNumber(ejs, argv[1]);
     }
     if (argc > 2) {
-        tm.tm_mday = getNumber(ejs, argv[2]);
+        tm.tm_mday = (int) getNumber(ejs, argv[2]);
     }
     if (argc > 3) {
-        tm.tm_hour = getNumber(ejs, argv[3]);
+        tm.tm_hour = (int) getNumber(ejs, argv[3]);
     }
     if (argc > 4) {
-        tm.tm_min = getNumber(ejs, argv[4]);
+        tm.tm_min = (int) getNumber(ejs, argv[4]);
     }
     if (argc > 5) {
-        tm.tm_sec = getNumber(ejs, argv[5]);
+        tm.tm_sec = (int) getNumber(ejs, argv[5]);
     }
     dp = ejsCreateDate(ejs, mprMakeUniversalTime(ejs, &tm));
     if (argc > 6) {
@@ -5334,7 +5333,7 @@ static EjsVar *date_set_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
     MprNumber   value;
 
     mprDecodeLocalTime(ejs, &tm, dp->value);
-    tm.tm_year = ejsGetNumber(argv[0]) - 1900;
+    tm.tm_year = (int) ejsGetNumber(argv[0]) - 1900;
     value = mprMakeTime(ejs, &tm);
     if (value == -1) {
         ejsThrowArgError(ejs, "Invalid year");
@@ -6083,7 +6082,7 @@ EjsEx *ejsAddException(EjsFunction *fun, uint tryStart, uint tryEnd, EjsType *ca
 
     if (preferredIndex >= code->sizeHandlers) {
         size = code->sizeHandlers + EJS_EX_INC;
-        code->handlers = (EjsEx**) mprRealloc(fun, code->handlers, size * sizeof(EjsEx));
+        code->handlers = (EjsEx**) mprRealloc(fun, code->handlers, (int) (size * sizeof(EjsEx)));
         if (code->handlers == 0) {
             mprAssert(0);
             return 0;
@@ -6149,7 +6148,7 @@ static EjsFrame *allocFrame(Ejs *ejs, int numSlots)
 
     mprAssert(ejs);
 
-    size = numSlots * sizeof(EjsVar*) + sizeof(EjsFrame);
+    size = (int) (numSlots * sizeof(EjsVar*) + sizeof(EjsFrame));
 
     if ((obj = (EjsObject*) mprAllocZeroed(ejsGetAllocCtx(ejs), size)) == 0) {
         ejsThrowMemoryError(ejs);
@@ -6451,11 +6450,11 @@ static EjsVar *error(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
             }
             if (vp) {
                 s = (EjsString*) vp;
-                junk = write(2, s->value, s->length);
+                junk = (int) write(2, s->value, s->length);
             }
         }
     }
-    junk = write(2, "\n", 1);
+    junk = (int) write(2, "\n", 1);
     return 0;
 }
 
@@ -6663,15 +6662,15 @@ static EjsVar *outputData(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
                 if (ejsIsObject(vp) && s->length > 0 && s->value[0] == '"') {
                     tmp = mprStrdup(ejs, s->value);
                     cp = mprStrTrim(tmp, "\"");
-                    junk = write(1, cp, strlen(cp));
+                    junk = (int) write(1, cp, strlen(cp));
                     mprFree(tmp);
                 } else {
-                    junk = write(1, s->value, s->length);
+                    junk = (int) write(1, s->value, s->length);
                 }
             }
         }
     }
-    junk = write(1, "\n", 1);
+    junk = (int) write(1, "\n", 1);
     return 0;
 }
 
@@ -7206,7 +7205,7 @@ Token getNextJsonToken(MprBuf *buf, char **token, JsonState *js)
             }
         }
         if (buf) {
-            mprPutBlockToBuf(buf, (char*) start, cp - start);
+            mprPutBlockToBuf(buf, (char*) start, (int) (cp - start));
             mprAddNullToBuf(buf);
         }
         if (quote > 0) {
@@ -9062,7 +9061,7 @@ EjsObject *ejsCreateObject(Ejs *ejs, EjsType *type, int numExtraSlots)
             }
 
         } else {
-            if ((obj = (EjsObject*) ejsAllocVar(ejs, type, roundSlots * sizeof(EjsVar*))) == 0) {
+            if ((obj = (EjsObject*) ejsAllocVar(ejs, type, roundSlots * (int) sizeof(EjsVar*))) == 0) {
                 return 0;
             }
             /*
@@ -9073,7 +9072,7 @@ EjsObject *ejsCreateObject(Ejs *ejs, EjsType *type, int numExtraSlots)
         }
 
     } else {
-        size = type->instanceSize - sizeof(EjsObject);
+        size = type->instanceSize - (int) sizeof(EjsObject);
     }
     obj->var.type = type;
     obj->var.isObject = 1;
@@ -9791,7 +9790,7 @@ static int growSlots(Ejs *ejs, EjsObject *obj, int capacity)
         if (obj->slots == 0) {
             mprAssert(obj->capacity == 0);
             mprAssert(capacity > 0);
-            obj->slots = (EjsVar**) mprAlloc(obj, sizeof(EjsVar*) * capacity);
+            obj->slots = (EjsVar**) mprAlloc(obj, (int) sizeof(EjsVar*) * capacity);
             if (obj->slots == 0) {
                 return EJS_ERR;
             }
@@ -9800,9 +9799,9 @@ static int growSlots(Ejs *ejs, EjsObject *obj, int capacity)
         } else {
             if (obj->var.separateSlots) {
                 mprAssert(obj->capacity > 0);
-                obj->slots = (EjsVar**) mprRealloc(obj, obj->slots, sizeof(EjsVar*) * capacity);
+                obj->slots = (EjsVar**) mprRealloc(obj, obj->slots, (int) sizeof(EjsVar*) * capacity);
             } else {
-                slots = (EjsVar**) mprAlloc(obj, sizeof(EjsVar*) * capacity);
+                slots = (EjsVar**) mprAlloc(obj, (int) sizeof(EjsVar*) * capacity);
                 memcpy(slots, obj->slots, obj->capacity * sizeof(EjsVar*));
                 obj->var.separateSlots = 1;
                 obj->slots = slots;
@@ -9914,13 +9913,13 @@ int ejsGrowObjectNames(EjsObject *obj, int size)
     size = EJS_PROP_ROUNDUP(size);
     
     if (ownNames) {
-        entries = (EjsHashEntry*) mprRealloc(names, names->entries, sizeof(EjsHashEntry) * size);
+        entries = (EjsHashEntry*) mprRealloc(names, names->entries, (int) sizeof(EjsHashEntry) * size);
         if (entries == 0) {
             return EJS_ERR;
         }
 
     } else {
-        entries = (EjsHashEntry*) mprAlloc(names, sizeof(EjsHashEntry) * size);
+        entries = (EjsHashEntry*) mprAlloc(names, (int) sizeof(EjsHashEntry) * size);
         if (entries == 0) {
             return EJS_ERR;
         }
@@ -10038,7 +10037,7 @@ static int makeHash(EjsObject *obj)
     newHashSize = ejsGetHashSize(obj->numProp);
     if (names->sizeBuckets < newHashSize) {
         mprFree(names->buckets);
-        names->buckets = (int*) mprAlloc(names, newHashSize * sizeof(int));
+        names->buckets = (int*) mprAlloc(names, newHashSize * (int) sizeof(int));
         if (names->buckets == 0) {
             return EJS_ERR;
         }
@@ -11975,7 +11974,7 @@ static EjsVar *formatString(Ejs *ejs, EjsString *sp, int argc, EjsVar **argv)
                 ejsThrowArgError(ejs, "Bad format specifier");
                 return 0;
             }
-            catString(ejs, result, buf, strlen(buf));
+            catString(ejs, result, buf, (int) strlen(buf));
             mprFree(buf);
             last = i + 1;
             nextArg++;
@@ -14263,13 +14262,12 @@ static int ejsGetBlockSize(Ejs *ejs, EjsBlock *block)
 
     numProp = ejsGetPropertyCount(ejs, (EjsVar*) block);
 
-    size = sizeof(EjsType) + sizeof(EjsTypeHelpers) + (numProp * sizeof(EjsVar*));
+    size = (int) (sizeof(EjsType) + sizeof(EjsTypeHelpers) + (numProp * sizeof(EjsVar*)));
     if (block->obj.names) {
-        size += sizeof(EjsNames) + (block->obj.names->sizeEntries * sizeof(EjsHashEntry));
-        size += (block->obj.names->sizeBuckets * sizeof(int*));
+        size += (int) (sizeof(EjsNames) + (block->obj.names->sizeEntries * sizeof(EjsHashEntry)));
+        size += (int) ((block->obj.names->sizeBuckets * sizeof(int*)));
     }
-    size += ejsGetNumTraits(block) * sizeof(EjsTrait);
-
+    size += (int) (ejsGetNumTraits(block) * sizeof(EjsTrait));
     return size;
 }
 
@@ -14917,7 +14915,8 @@ static void destroyFile(Ejs *ejs, EjsFile *fp)
  */
 static EjsVar *getFileProperty(Ejs *ejs, EjsFile *fp, int slotNum)
 {
-    int     c, offset;
+    MprOff  offset;
+    int     c;
 
     if (!(fp->mode & FILE_OPEN)) {
         ejsThrowIOError(ejs, "File is not open");
@@ -14935,7 +14934,6 @@ static EjsVar *getFileProperty(Ejs *ejs, EjsFile *fp, int slotNum)
         return 0;
     }
 #endif
-
     offset = mprSeek(fp->file, SEEK_CUR, 0);
     if (offset != slotNum) {
         if (mprSeek(fp->file, SEEK_SET, slotNum) != slotNum) {
@@ -14957,7 +14955,8 @@ static EjsVar *getFileProperty(Ejs *ejs, EjsFile *fp, int slotNum)
  */
 static int setFileProperty(Ejs *ejs, EjsFile *fp, int slotNum, EjsVar *value)
 {
-    int     c, offset;
+    MprOff  offset;
+    int     c;
 
     if (!(fp->mode & FILE_OPEN)) {
         ejsThrowIOError(ejs, "File is not open");
@@ -14972,7 +14971,7 @@ static int setFileProperty(Ejs *ejs, EjsFile *fp, int slotNum, EjsVar *value)
     offset = mprSeek(fp->file, SEEK_CUR, 0);
     if (slotNum < 0) {
         //  could have an mprGetPosition(file) API
-        slotNum = offset;
+        slotNum = (int) offset;
     }
 
     if (offset != slotNum && mprSeek(fp->file, SEEK_SET, slotNum) != slotNum) {
@@ -16141,7 +16140,7 @@ EjsVar *addHeader(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
  */
 EjsVar *httpAvailable(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
 {
-    int     len;
+    MprOff  len;
 
     if (!waitForResponse(hp, -1)) {
         return 0;
@@ -16247,10 +16246,11 @@ static EjsVar *setChunked(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
 {
     mprAssert(hp->http);
     mprAssert(hp->http->state == MPR_HTTP_STATE_BEGIN || hp->http->state == MPR_HTTP_STATE_COMPLETE);
+#if UNUSED
     if (!(hp->http->state == MPR_HTTP_STATE_BEGIN || hp->http->state == MPR_HTTP_STATE_COMPLETE)) {
         printf("STATE IS %d\n", hp->http->state);
     }
-
+#endif
     if (mprSetHttpChunked(hp->http, ejsGetBoolean(argv[0])) < 0) {
         ejsThrowStateError(ejs, "Can't change chunked setting in this state. Request has already started.");
     }
@@ -16297,7 +16297,7 @@ static EjsVar *contentEncoding(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
  */
 static EjsVar *contentLength(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
 {
-    int     length;
+    MprOff  length;
 
     if (!waitForResponse(hp, -1)) {
         return 0;
@@ -16706,14 +16706,14 @@ static EjsVar *readLines(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
         lineCreated = 0;
         for (cp = start = mprGetBufStart(buf); cp < buf->end; cp++) {
             if (*cp == '\r' || *cp == '\n') {
-                len = cp - start;
+                len = (int) (cp - start);
                 str = (EjsVar*) ejsCreateStringWithLength(ejs, start, len);
                 mprAdjustBufStart(buf, len);
                 ejsSetProperty(ejs, (EjsVar*) results, nextIndex, str);
                 for (start = cp; *cp == '\r' || *cp == '\n'; ) {
                     cp++;
                 }
-                mprAdjustBufStart(buf, cp - start);
+                mprAdjustBufStart(buf, (int) (cp - start));
                 lineCreated++;
                 break;
             }
@@ -18446,7 +18446,7 @@ static EjsVar *pathToJSON(Ejs *ejs, EjsPath *fp, int argc, EjsVar **argv)
     int     i, c, len;
 
     buf = mprCreateBuf(fp, 0, 0);
-    len = strlen(fp->path);
+    len = (int) strlen(fp->path);
     mprPutCharToBuf(buf, '"');
     for (i = 0; i < len; i++) {
         c = fp->path[i];
@@ -21887,7 +21887,7 @@ static int readStringData(MprXml *xp, void *data, char *buf, int size)
     parser = (EjsXmlState*) xp->parseArg;
 
     if (parser->inputPos < parser->inputSize) {
-        len = min(size, (parser->inputSize - parser->inputPos));
+        len = (int) min(size, (parser->inputSize - parser->inputPos));
         rc = mprMemcpy(buf, size, &parser->inputBuf[parser->inputPos], len);
         parser->inputPos += len;
         return rc;
@@ -27645,7 +27645,7 @@ static void createExceptionBlock(Ejs *ejs, EjsEx *ex, int flags)
         for (i = 0; i < count; i++) {
             ejsPopBlock(ejs);
         }
-        count = state->stack - fp->stackBase;
+        count = (int) (state->stack - fp->stackBase);
         state->stack -= (count - ex->numStack);
     }
     
@@ -28193,7 +28193,7 @@ static EjsOpCode traceCode(Ejs *ejs, EjsOpCode opcode)
 
 static int growList(MprCtx ctx, EjsList *lp, int incr);
 
-#define CAPACITY(lp) (mprGetBlockSize(lp) / sizeof(void*))
+#define CAPACITY(lp) ((int) (mprGetBlockSize(lp) / sizeof(void*)))
 
 //  OPT - inline some of these functions as macros
 
@@ -28221,7 +28221,7 @@ int ejsSetListLimits(MprCtx ctx, EjsList *lp, int initialSize, int maxSize)
     if (maxSize <= 0) {
         maxSize = MAXINT;
     }
-    size = initialSize * sizeof(void*);
+    size = (int) (initialSize * sizeof(void*));
 
     if (lp->items == 0) {
         lp->items = (void**) mprAllocZeroed(ctx, size);
@@ -28472,7 +28472,7 @@ static int growList(MprCtx ctx, EjsList *lp, int incr)
     } else {
         len = capacity + incr;
     }
-    memsize = len * sizeof(void*);
+    memsize = (int) (len * sizeof(void*));
 
     /*
      *  Grow the list of items. Use the existing context for lp->items if it already exists. Otherwise use the list as the
@@ -28880,7 +28880,7 @@ static char *makeModuleName(MprCtx ctx, cchar *nameArg)
 {
     char        *name, *cp, *filename;
 
-    name = mprAlloc(ctx, strlen(nameArg) + strlen(EJS_MODULE_EXT) + 1);
+    name = mprAlloc(ctx, (int) (strlen(nameArg) + strlen(EJS_MODULE_EXT) + 1));
     strcpy(name, nameArg);
     if ((cp = strrchr(name, '.')) != 0 && strcmp(cp, EJS_MODULE_EXT) == 0) {
         *cp = '\0';
@@ -29916,7 +29916,7 @@ static char *probe(Ejs *ejs, cchar *path, int minVersion, int maxVersion)
         *ext = '\0';
     }
     files = mprGetPathFiles(ejs, dir, 0);
-    nameLen = strlen(base);
+    nameLen = (int) strlen(base);
     bestVersion = -1;
     best = 0;
 
@@ -33281,7 +33281,7 @@ static EjsVar *sqliteSql(Ejs *ejs, EjsSqlite *db, int argc, EjsVar **argv)
                         /*
                          *  Append the table name for columns from foreign tables. Convert to camel case (tableColumn)
                          */
-                        len = strlen(tableName) + 1;
+                        len = (int) strlen(tableName) + 1;
                         tableName = mprStrcat(row->names, -1, "_", tableName, colName, NULL);
                         if (len > 3 && tableName[len - 1] == 's' && tableName[len - 2] == 'e' && tableName[len - 3] == 'i') {
                             tableName[len - 3] = 'y';

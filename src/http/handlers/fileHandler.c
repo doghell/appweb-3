@@ -16,7 +16,7 @@
 /***************************** Forward Declarations ***************************/
 
 static void handleDeleteRequest(MaQueue *q);
-static int  readFileData(MaQueue *q, MaPacket *packet);
+static int  readFileData(MaQueue *q, MaPacket *packet, MprOff pos, int size);
 static void handlePutRequest(MaQueue *q);
 
 /*********************************** Code *************************************/
@@ -131,8 +131,7 @@ static void runFile(MaQueue *q)
         /*
          *  Create a single data packet based on the entity length.
          */
-        packet = maCreateDataPacket(q, 0);
-        packet->entityLength = resp->entityLength;
+        packet = maCreateEntityPacket(q, 0, resp->entityLength, readFileData);
         if (!req->ranges) {
             resp->length = resp->entityLength;
         }
@@ -143,6 +142,48 @@ static void runFile(MaQueue *q)
      *  Append end-of-data packet. Signifies end of stream.
      */
     maPutForService(q, maCreateEndPacket(q), 1);
+}
+
+
+/*  
+    Return true if the next queue will accept this packet. If not, then disable the queue's service procedure.
+    This may split the packet if it exceeds the downstreams maximum packet size.
+ */
+static int prepPacket(MaQueue *q, MaPacket *packet)
+{
+    MaConn      *conn;
+    MaResponse  *resp;
+    MaQueue     *nextQ;
+    int         size, nbytes;
+
+    conn = q->conn;
+    resp = conn->response;
+    nextQ = q->nextQ;
+
+    if (packet->esize > nextQ->packetSize) {
+        maPutBack(q, maSplitPacket(resp, packet, nextQ->packetSize));
+        size = nextQ->packetSize;
+    } else {
+        size = (int) packet->esize;
+    }
+    if ((size + nextQ->count) > nextQ->max) {
+        /*  
+            The downstream queue is full, so disable the queue and mark the downstream queue as full and service 
+            Will re-enable via a writable event on the connection.
+         */
+        mprLog(q, 7, "Disable queue %s", q->owner);
+        maDisableQueue(q);
+        nextQ->flags |= MA_QUEUE_FULL;
+        if (!(nextQ->flags & MA_QUEUE_DISABLED)) {
+            maScheduleQueue(nextQ);
+        }
+        return 0;
+    }
+    nbytes = readFileData(q, packet, q->ioPos, size);
+    if (nbytes > 0) {
+        q->ioPos += nbytes;
+    }
+    return nbytes;
 }
 
 
@@ -162,36 +203,22 @@ static void outgoingFileService(MaQueue *q)
     conn = q->conn;
     req = conn->request;
     resp = conn->response;
-
-    mprLog(q, 7, "\noutgoingFileService");
-    
     usingSend = resp->connector == conn->http->sendConnector;
 
-#if BLD_FEATURE_RANGE
-    if (req->ranges) {
-        mprAssert(conn->http->rangeService);
-        (*conn->http->rangeService)(q, (usingSend) ? NULL : readFileData);
-    
-    } else {
-#endif
-        for (packet = maGet(q); packet; packet = maGet(q)) {
-            if (!usingSend && packet->flags & MA_PACKET_DATA) {
-                if (!maWillNextQueueAccept(q, packet)) {
-                    mprLog(q, 7, "outgoingFileService downstream full, putback");
-                    maPutBack(q, packet);
+    mprLog(q, 7, "\noutgoingFileService");
+
+    for (packet = maGet(q); packet; packet = maGet(q)) {
+        if (!req->ranges && !usingSend && packet->flags & MA_PACKET_DATA) {
+            if ((len = prepPacket(q, packet)) <= 0) {
+                if (len < 0) {
                     return;
                 }
-                if ((len = readFileData(q, packet)) < 0) {
-                    return;
-                }
-                resp->pos += len;
-                mprLog(q, 7, "outgoingFileService readData %d", len);
+                maPutBack(q, packet);
+                return;
             }
-            maPutNext(q, packet);
         }
-#if BLD_FEATURE_RANGE
+        maPutNext(q, packet);
     }
-#endif
     mprLog(q, 7, "outgoingFileService complete");
 }
 
@@ -244,38 +271,26 @@ static void incomingFileData(MaQueue *q, MaPacket *packet)
 /*
  *  Populate a packet with file data
  */
-static int readFileData(MaQueue *q, MaPacket *packet)
+static int readFileData(MaQueue *q, MaPacket *packet, MprOff pos, int size)
 {
     MaConn      *conn;
     MaResponse  *resp;
     MaRequest   *req;
-    int64       len;
-    int         rc;
+    int         nbytes;
 
     conn = q->conn;
     resp = conn->response;
     req = conn->request;
     
-    if (packet->content == 0) {
-        len = packet->entityLength;
-        if (len > q->max) {
-            len = q->max;
-        }
-        if ((packet->content = mprCreateBuf(packet, len, len)) == 0) {
-            return MPR_ERR_NO_MEMORY;
-        }
-    } else {
-        len = mprGetBufSpace(packet->content);
+    if (packet->content == 0 && (packet->content = mprCreateBuf(packet, size, size)) == 0) {
+        return MPR_ERR_NO_MEMORY;
     }
-    mprLog(q, 7, "readFileData len %d, pos %d", len, resp->pos);
+    mprLog(q, 7, "readFileData size %Ld, pos %Ld", size, pos);
     
-    if (req->ranges) {
-        /*
-         *  rangeService will have set resp->pos to the next read position already
-         */
-        mprSeek(resp->file, SEEK_SET, resp->pos);
+    if (pos >= 0) {
+        mprSeek(resp->file, SEEK_SET, pos);
     }
-    if ((rc = mprRead(resp->file, mprGetBufStart(packet->content), len)) != len) {
+    if ((nbytes = mprRead(resp->file, mprGetBufStart(packet->content), size)) != size) {
         /*
          *  As we may have sent some data already to the client, the only thing we can do is abort and hope the client 
          *  notices the short data.
@@ -283,8 +298,10 @@ static int readFileData(MaQueue *q, MaPacket *packet)
         maFailRequest(conn, MPR_HTTP_CODE_SERVICE_UNAVAILABLE, "Can't read file %s", resp->filename);
         return MPR_ERR_CANT_READ;
     }
-    mprAdjustBufEnd(packet->content, len);
-    return len;
+    mprAdjustBufEnd(packet->content, nbytes);
+    packet->esize -= nbytes;
+    mprAssert(packet->esize == 0);
+    return nbytes;
 }
 
 

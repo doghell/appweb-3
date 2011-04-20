@@ -563,7 +563,8 @@ static int doRequest(MprHttp *http, cchar *url, MprList *fields, MprList *files)
     MprTime         mark;
     cchar           *msg;
     char            buf[MPR_HTTP_BUFSIZE], seqBuf[16], *responseHeaders, *redirect;
-    int             code, contentLen, elapsed, next, count, bytes, transCount;
+    int64           contentLen;
+    int             code, elapsed, next, count, bytes, transCount;
 
     file = 0;
     mprAssert(url && *url);
@@ -684,7 +685,7 @@ static int doRequest(MprHttp *http, cchar *url, MprList *fields, MprList *files)
 
     lock();
     if (verbose && noout) {
-        trace(http, url, fetchCount, method, code, contentLen);
+        trace(http, url, fetchCount, method, code, (int) contentLen);
     }
     unlock();
     return 0;
@@ -695,7 +696,7 @@ static int setContentLength(MprHttp *http, MprList *fields, MprList *files)
 {
     MprPath     info;
     char        *path, *pair;
-    int         len;
+    int64       len;
     int         next, count;
 
     len = 0;
@@ -710,7 +711,7 @@ static int setContentLength(MprHttp *http, MprList *fields, MprList *files)
                 mprError(http, "Can't access file %s", path);
                 return MPR_ERR_CANT_ACCESS;
             }
-            len += (int) info.size;
+            len += info.size;
         }
         if (fields) {
             count = mprGetListCount(fields);
@@ -720,7 +721,11 @@ static int setContentLength(MprHttp *http, MprList *fields, MprList *files)
             len += mprGetListCount(fields) - 1;
         }
     }
-    mprSetHttpBody(http, NULL, len);
+    if (len > (16 * MPR_HTTP_BUFSIZE)) {
+        mprSetHttpChunked(http, 1);
+    } else {
+        mprSetHttpBody(http, NULL, (int) len);
+    }
     return 0;
 }
 
@@ -744,9 +749,9 @@ static int writeBody(MprHttp *http, MprList *fields, MprList *files)
         if (fields) {
             count = mprGetListCount(fields);
             for (next = 0; !rc && (pair = mprGetNextItem(fields, &next)) != 0; ) {
-                len = strlen(pair);
+                len = (int) strlen(pair);
                 if (next < count) {
-                    len = strlen(pair);
+                    len = (int) strlen(pair);
                     if (mprWriteSocket(http->sock, pair, len) != len || mprWriteSocket(http->sock, "&", 1) != 1) {
                         return MPR_ERR_CANT_WRITE;
                     }
@@ -817,7 +822,7 @@ static void waitForUser(MprCtx ctx)
 
     lock();
     mprPrintf(ctx, "Pause: ");
-    junk = read(0, (char*) &value, 1);
+    junk = (int) read(0, (char*) &value, 1);
     unlock();
 }
 
@@ -861,7 +866,9 @@ static char *resolveUrl(MprHttp *http, cchar *url)
         }
     } 
     if (mprStrcmpAnyCaseCount(url, "http://", 7) != 0 && mprStrcmpAnyCaseCount(url, "https://", 8) != 0) {
-        if (isPort(url)) {
+        if (*url == ':' && isPort(&url[1])) {
+            return mprAsprintf(http, -1, "http://127.0.0.1%s", url);
+        } else if (isPort(url)) {
             return mprAsprintf(http, -1, "http://127.0.0.1:%s", url);
         } else {
             return mprAsprintf(http, -1, "http://%s", url);
@@ -885,7 +892,7 @@ static void showOutput(MprHttp *http, cchar *buf, int count)
         return;
     }
     if (!printable) {
-        junk = write(1, (char*) buf, count);
+        junk = (int) write(1, (char*) buf, count);
         return;
     }
 
@@ -896,7 +903,7 @@ static void showOutput(MprHttp *http, cchar *buf, int count)
         }
     }
     if (!isBinary) {
-        junk = write(1, (char*) buf, count);
+        junk = (int) write(1, (char*) buf, count);
         return;
     }
     for (i = 0; i < count; i++) {

@@ -103,7 +103,7 @@ static void openUpload(MaQueue *q)
     if ((boundary = strstr(req->mimeType, "boundary=")) != 0) {
         boundary += 9;
         up->boundary = mprStrcat(up, -1, "--", boundary, NULL);
-        up->boundaryLen = strlen(up->boundary);
+        up->boundaryLen = (int) strlen(up->boundary);
     }
     if (up->boundaryLen == 0 || *up->boundary == '\0') {
         maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Bad boundary");
