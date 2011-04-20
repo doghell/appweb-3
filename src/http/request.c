@@ -119,7 +119,7 @@ void maProcessReadEvent(MaConn *conn, MaPacket *packet)
     mprLog(conn, 7, "ENTER maProcessReadEvent state %d, packet %p", conn->state, packet);
     
     while (conn->canProceed) {
-        mprLog(conn, 7, "maProcessReadEvent, state %d, packet %d", conn->state, packet);
+        mprLog(conn, 7, "maProcessReadEvent, state %d, packet %p", conn->state, packet);
 
         switch (conn->state) {
         case MPR_HTTP_STATE_BEGIN:
@@ -423,7 +423,7 @@ static bool parseHeaders(MaConn *conn, MaPacket *packet)
                 }
                 if (req->length >= host->limits->maxBody) {
                     maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, 
-                        "Request content length %d is too big. Limit %d", req->length, host->limits->maxBody);
+                        "Request content length %Ld is too big. Limit %Ld", req->length, host->limits->maxBody);
                     continue;
                 }
                 mprAssert(req->length >= 0);
@@ -740,7 +740,7 @@ static bool processContent(MaConn *conn, MaPacket *packet)
     }
     nbytes = (int) min(remaining, mprGetBufLength(content));
     mprAssert(nbytes >= 0);
-    mprLog(conn, 7, "processContent: packet of %d bytes, remaining %d", mprGetBufLength(content), remaining);
+    mprLog(conn, 7, "processContent: packet of %d bytes, remaining %Ld", mprGetBufLength(content), remaining);
 
     if (maShouldTrace(conn, MA_TRACE_REQUEST | MA_TRACE_BODY)) {
         maTraceContent(conn, packet, 0, 0, MA_TRACE_REQUEST | MA_TRACE_BODY);
@@ -754,7 +754,7 @@ static bool processContent(MaConn *conn, MaPacket *packet)
         if (req->receivedContent >= host->limits->maxBody) {
             conn->keepAliveCount = 0;
             maFailConnection(conn, MPR_HTTP_CODE_REQUEST_TOO_LARGE, 
-                "Request content body is too big %d vs limit %d", 
+                "Request content body is too big %Ld vs limit %Ld", 
                 req->receivedContent, host->limits->maxBody);
             return 1;
         } 

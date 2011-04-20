@@ -790,9 +790,9 @@ extern MaLocation *maCreateLocationAlias(MaHttp *http, MaConfigState *state, cch
  *  @see MaRange
  */
 typedef struct MaRange {
-    int64           start;                  /**< Start of range */
-    int64           end;                    /**< End byte of range + 1 */
-    int64           len;                    /**< Redundant range length */
+    MprOff          start;                  /**< Start of range */
+    MprOff          end;                    /**< End byte of range + 1 */
+    MprOff          len;                    /**< Redundant range length */
     struct MaRange  *next;                  /**< Next range */
 } MaRange;
 
@@ -1655,9 +1655,9 @@ typedef struct MaRequest {
     int             form;                   /**< Form request */
     int             rewrites;               /**< Count of request rewrites */
 
-    int64           length;                 /**< Declared content length (ENV: CONTENT_LENGTH) */
-    int64           remainingContent;       /**< Remaining content data to read */
-    int64           receivedContent;        /**< Length of content actually received */
+    MprOff          length;                 /**< Declared content length (ENV: CONTENT_LENGTH) */
+    MprOff          remainingContent;       /**< Remaining content data to read */
+    MprOff          receivedContent;        /**< Length of content actually received */
 
     char            *methodName;            /**< Protocol method GET|PUT... (ENV: REQUEST_METHOD) */
     char            *httpProtocol;          /**< HTTP/1.0 or HTTP/1.1 */
@@ -1828,7 +1828,7 @@ extern cvoid        *maGetStageData(MaConn *conn, cchar *key);
 extern bool         maProcessCompletion(MaConn *conn);
 extern void         maCompleteRequest(MaConn *conn);
 extern bool         maContentNotModified(MaConn *conn);
-extern MaRange      *maCreateRange(MaConn *conn, int64 start, int64 end);
+extern MaRange      *maCreateRange(MaConn *conn, MprOff start, MprOff end);
 extern MaRequest    *maCreateRequest(MaConn *conn);
 extern MaRequest    *maCreateRequest(struct MaConn *conn);
 extern void         maDisconnectConn(struct MaConn *conn);
@@ -1879,11 +1879,7 @@ typedef struct MaResponse {
 
     MprHashTable    *headers;               /**< Custom response headers */
     MaQueue         queue[2];               /**< Dummy head for the response queues */
-
-    int64           length;                 /**< Response content length */
-#if UNUSED
-    int64           pos;                    /**< Current I/O position */
-#endif
+    MprOff          length;                 /**< Response content length */
 
     /*
      *  File information for file based handlers
@@ -1892,13 +1888,13 @@ typedef struct MaResponse {
     MprPath         fileInfo;               /**< File information if there is a real file to serve */
     char            *filename;              /**< Name of a real file being served */
     cchar           *extension;             /**< Filename extension */
-    int64           entityLength;           /**< Original content length before range subsetting */
-    int64           bytesWritten;           /**< Bytes written including headers */
+    MprOff          entityLength;           /**< Original content length before range subsetting */
+    MprOff          bytesWritten;           /**< Bytes written including headers */
     int             headerSize;             /**< Size of the header written */
 
     MaRange         *currentRange;          /**< Current range being fullfilled */
     char            *rangeBoundary;         /**< Inter-range boundary */
-    int64           rangePos;               /**< Current range I/O position */
+    MprOff          rangePos;               /**< Current range I/O position */
 
     MaRedirectCallback redirectCallback;    /**< Redirect callback */
     MaEnvCallback   envCallback;            /**< SetEnv callback */
@@ -2018,7 +2014,7 @@ extern void         maOmitResponseBody(MaConn *conn);
 extern char         *maReplaceReferences(MaHost *host, cchar *str);
 extern int          maRewriteUri(MaConn *conn);
 extern void         maRotateAccessLog(MaHost *host);
-extern void         maSetEntityLength(MaConn *conn, int64 len);
+extern void         maSetEntityLength(MaConn *conn, MprOff len);
 extern void         maSetNoResponseData(MaConn *conn);
 extern int          maStopLogging(MprCtx ctx);
 extern int          maStartLogging(MprCtx ctx, cchar *logSpec);

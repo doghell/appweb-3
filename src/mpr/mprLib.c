@@ -9380,10 +9380,10 @@ static int sanitizeArgs(MprCmd *cmd, int argc, char **argv, char **env)
          *  Add PATH and LD_LIBRARY_PATH 
          */
         if (!hasPath && (cp = getenv("PATH")) != 0) {
-            cmd->env[index++] = mprAsprintf(cmd, MPR_MAX_STRING, "PATH=%s", cp);
+            cmd->env[index++] = mprAsprintf(cmd, -1, "PATH=%s", cp);
         }
         if (!hasLibPath && (cp = getenv(LD_LIBRARY_PATH)) != 0) {
-            cmd->env[index++] = mprAsprintf(cmd, MPR_MAX_STRING, "%s=%s", LD_LIBRARY_PATH, cp);
+            cmd->env[index++] = mprAsprintf(cmd, -1, "%s=%s", LD_LIBRARY_PATH, cp);
         }
         cmd->env[index++] = '\0';
         for (i = 0; i < argc; i++) {

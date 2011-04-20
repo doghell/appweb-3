@@ -169,6 +169,7 @@ void maCreatePipeline(MaConn *conn)
             if ((filter->stage->flags & MA_STAGE_ALL & req->method) == 0) {
                 continue;
             }
+#if UNUSED
             /*
              *  Remove the chunk filter chunking if it is explicitly turned off vi a the X_APPWEB_CHUNK_SIZE header 
              *  setting the chunk size to zero. Also remove if using the fileHandler which always knows the entity 
@@ -179,6 +180,7 @@ void maCreatePipeline(MaConn *conn)
                     continue;
                 }
             }
+#endif
             if (matchFilter(conn, filter)) {
                 mprAddItem(resp->outputPipeline, filter->stage);
             }

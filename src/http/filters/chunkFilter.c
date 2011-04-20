@@ -28,6 +28,12 @@ static void openChunk(MaQueue *q)
 }
 
 
+static bool matchChunk(MaConn *conn, MaStage *handler, cchar *uri)
+{
+    return (conn->response->length <= 0) ? 1: 0;
+}
+
+
 /*
  *  Get the next chunk size. Chunked data format is:
  *      Chunk spec <CRLF>
@@ -223,6 +229,7 @@ MprModule *maChunkFilterInit(MaHttp *http, cchar *path)
     }
     http->chunkFilter = filter;
     filter->open = openChunk; 
+    filter->match = matchChunk; 
     filter->outgoingService = outgoingChunkService; 
     filter->incomingData = incomingChunkData; 
     return module;

@@ -77,7 +77,7 @@ static void applyRange(MaQueue *q, MaPacket *packet)
     resp = conn->response;
     range = resp->currentRange;
 
-    while (range) {
+    while (range && packet) {
         /*
          *  Process the current packet over multiple ranges ranges until all the data is processed or discarded.
          */
@@ -97,7 +97,7 @@ static void applyRange(MaQueue *q, MaPacket *packet)
             gap = range->start - resp->rangePos;
             resp->rangePos += gap;
             if (gap < length) {
-                maAdjustPacketStart(packet, (int) gap);
+                maAdjustPacketStart(packet, gap);
             }
             /* Keep going and examine next range */
 
@@ -122,6 +122,7 @@ static void applyRange(MaQueue *q, MaPacket *packet)
                 maPutNext(q, createRangePacket(conn, range));
             }
             maPutNext(q, packet);
+            packet = 0;
             resp->rangePos += count;
         }
         if (resp->rangePos >= range->end) {

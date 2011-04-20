@@ -120,10 +120,10 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
         if (req->ranges->next == 0) {
             range = req->ranges;
             if (resp->entityLength > 0) {
-                putFormattedHeader(conn, packet, "Content-Range", "bytes %d-%d/%d", 
+                putFormattedHeader(conn, packet, "Content-Range", "bytes %Ld-%Ld/%Ld", 
                     range->start, range->end, resp->entityLength);
             } else {
-                putFormattedHeader(conn, packet, "Content-Range", "bytes %d-%d/*", range->start, range->end);
+                putFormattedHeader(conn, packet, "Content-Range", "bytes %Ld-%Ld/*", range->start, range->end);
             }
         } else {
             putFormattedHeader(conn, packet, "Content-Type", "multipart/byteranges; boundary=%s", resp->rangeBoundary);
