@@ -56,7 +56,10 @@ _IFLAGS		    = -I$(BLD_TOP) -I$(BLD_TOP)/src/include
 #
 #	Optimization and debug settings
 #
-_CFLAGS             += -Wall -Wshorten-64-to-32
+_CFLAGS             += -Wall
+ifeq ($(BLD_OS),MACOSX)
+    _CFLAGS         += -Wshorten-64-to-32
+endif
 ifeq ($(BLD_TYPE),RELEASE)
     ifeq ($(BLD_TUNE),MPR_TUNE_SIZE)
         ifeq ($(BLD_OS),VXWORKS)
