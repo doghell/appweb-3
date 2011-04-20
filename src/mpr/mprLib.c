@@ -11056,7 +11056,7 @@ static MprOff seekFile(MprFile *file, int seekType, MprOff distance)
         return MPR_ERR_BAD_HANDLE;
     }
 #if BLD_WIN_LIKE
-    return (MprOff) lseeki64(file->fd, (int64) distance, seekType);
+    return (MprOff) _lseeki64(file->fd, (int64) distance, seekType);
 #else
     return (MprOff) lseek(file->fd, (off_t) distance, seekType);
 #endif
