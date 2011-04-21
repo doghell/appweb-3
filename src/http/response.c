@@ -445,7 +445,7 @@ void maSetCookie(MaConn *conn, cchar *name, cchar *value, cchar *path, cchar *co
 }
 
 
-void maSetEntityLength(MaConn *conn, int64 len)
+void maSetEntityLength(MaConn *conn, MprOff len)
 {
     MaRequest       *req;
     MaResponse      *resp;
