@@ -796,9 +796,6 @@ typedef struct MaRange {
     struct MaRange  *next;                  /**< Next range */
 } MaRange;
 
-#if UNUSED
-extern void maRangeService(struct MaQueue *q, MaRangeFillProc fill);
-#endif
 extern void maCreateRangeBoundary(struct MaConn *conn);
 extern bool maFixRangeLength(struct MaConn *conn);
 
