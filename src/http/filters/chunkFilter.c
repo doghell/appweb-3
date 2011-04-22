@@ -30,7 +30,14 @@ static void openChunk(MaQueue *q)
 
 static bool matchChunk(MaConn *conn, MaStage *handler, cchar *uri)
 {
-    return (conn->response->length <= 0) ? 1: 0;
+    MaResponse  *resp;
+
+    /*
+        Don't match if chunking is explicitly turned off vi a the X_APPWEB_CHUNK_SIZE header which sets the chunk 
+        size to zero. Also remove if the response length is already known.
+     */
+    resp = conn->response;
+    return (resp->length < 0 && resp->chunkSize != 0) ? 1: 0;
 }
 
 

@@ -547,8 +547,7 @@ int maParseConfig(MaServer *server, cchar *configFile)
             if (alias->filename) {
                 // mprLog(hp, 0, "Alias \"%s\" %s", alias->prefix, alias->filename);
                 path = maMakePath(hp, alias->filename);
-                bestDir = maLookupBestDir(hp, path);
-                if (bestDir == 0) {
+                if ((bestDir = maLookupBestDir(hp, path)) == 0) {
                     bestDir = maCreateDir(hp, alias->filename, stack[0].dir);
                     maInsertDir(hp, bestDir);
                 }

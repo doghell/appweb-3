@@ -1,4 +1,4 @@
-/*
+ /*
  *  var.c -- Create header and query variables.
  *
  *  Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.

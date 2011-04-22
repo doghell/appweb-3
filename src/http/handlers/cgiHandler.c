@@ -138,6 +138,9 @@ static void startCgi(MaQueue *q)
         maFailRequest(conn, MPR_HTTP_CODE_SERVICE_UNAVAILABLE, "Can't run CGI process: %s, URI %s", fileName, req->url);
         return;
     }
+    /*
+        This will dedicate this thread to the connection. It will also put the socket into blocking mode.
+     */
     maDedicateThreadToConn(conn);
 }
 
@@ -481,7 +484,7 @@ static bool parseFirstCgiResponse(MaConn *conn, MprCmd *cmd)
 /*
     Parse the CGI output headers. 
     Sample CGI program:
- *
+
     Content-type: text/html
    
     <html.....

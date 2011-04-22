@@ -78,7 +78,6 @@ void maMatchHandler(MaConn *conn)
     }
     resp->handler = handler;
     mprLog(resp, 3, "Select handler: \"%s\" for \"%s\"", handler->name, req->url);
-    setEnv(conn);
 }
 
 
@@ -169,18 +168,6 @@ void maCreatePipeline(MaConn *conn)
             if ((filter->stage->flags & MA_STAGE_ALL & req->method) == 0) {
                 continue;
             }
-#if UNUSED
-            /*
-             *  Remove the chunk filter chunking if it is explicitly turned off vi a the X_APPWEB_CHUNK_SIZE header 
-             *  setting the chunk size to zero. Also remove if using the fileHandler which always knows the entity 
-             *  length and an explicit chunk size has not been requested.
-             */
-            if (filter->stage == http->chunkFilter) {
-                if ((handler == http->fileHandler && resp->chunkSize < 0) || resp->chunkSize == 0) {
-                    continue;
-                }
-            }
-#endif
             if (matchFilter(conn, filter)) {
                 mprAddItem(resp->outputPipeline, filter->stage);
             }
@@ -281,6 +268,10 @@ void maCreatePipeline(MaConn *conn)
             }
         }
     }
+    /*
+        Now that all stages are open, we can set the environment
+     */
+    setEnv(conn);
 
     /*
         Invoke any start routines
@@ -468,6 +459,16 @@ static MaStage *findHandler(MaConn *conn)
     location = req->location;
     handler = 0;
     
+    /*
+        Do custom handler matching first
+     */
+    for (next = 0; (handler = mprGetNextItem(location->handlers, &next)) != 0; ) {
+        if (handler->match && checkStage(conn, handler)) {
+            resp->handler = handler;
+            return handler;
+        }
+    }
+
     ext = resp->extension;
     if (*ext) {
         handler = maGetHandlerByExtension(location, resp->extension);
@@ -490,16 +491,6 @@ static MaStage *findHandler(MaConn *conn)
                 }
                 mprFree(path);
             }
-        }
-    }
-
-    /*
-        Failed to match by extension, so perform custom handler matching
-     */
-    for (next = 0; (handler = mprGetNextItem(location->handlers, &next)) != 0; ) {
-        if (handler->match && checkStage(conn, handler)) {
-            resp->handler = handler;
-            return handler;
         }
     }
 
@@ -562,7 +553,9 @@ static MaStage *mapToFile(MaConn *conn, MaStage *handler)
     if ((req->dir = maLookupBestDir(req->host, resp->filename)) == 0) {
         maFailRequest(conn, MPR_HTTP_CODE_NOT_FOUND, "Missing directory block for %s", resp->filename);
     } else {
-        req->auth = req->dir->auth;
+        if (req->dir->auth) {
+            req->auth = req->dir->auth;
+        }
         if (info->isDir) {
             handler = processDirectory(conn, handler);
         } else if (info->valid) {
@@ -789,11 +782,13 @@ static void setPathInfo(MaConn *conn)
             }
             if (last) {
                 offset = alias->prefixLen + (int) (last - start);
-                if (offset <= (int) strlen(req->url)) {
+                if (offset < (int) strlen(req->url)) {
                     pathInfo = &req->url[offset];
                     req->pathInfo = mprStrdup(req, pathInfo);
                     pathInfo[0] = '\0';
                     maSetRequestUri(conn, req->url, NULL);
+                } else {
+                    req->pathInfo = "";
                 }
                 if (req->pathInfo && req->pathInfo[0]) {
                     req->pathTranslated = maMakeFilename(conn, alias, req->pathInfo, 0);

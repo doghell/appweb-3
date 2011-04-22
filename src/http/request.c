@@ -1062,10 +1062,16 @@ int maSetRequestUri(MaConn *conn, cchar *uri, cchar *query)
         req->parsedUri->query = mprStrdup(req->parsedUri, query);
     }
     req->url = mprValidateUrl(req, mprUrlDecode(req, req->parsedUri->url));
-    req->location = maLookupBestLocation(host, req->url);
-    req->auth = req->location->auth;
     req->alias = maGetAlias(host, req->url);
     resp->filename = maMakeFilename(conn, req->alias, req->url, 1);
+    req->dir = maLookupBestDir(req->host, resp->filename);
+    if (req->dir->auth) {
+        req->auth = req->dir->auth;
+    }
+    req->location = maLookupBestLocation(host, req->url);
+    if (req->auth == 0) {
+        req->auth = req->location->auth;
+    }
     mprGetPathInfo(conn, resp->filename, &resp->fileInfo);
     resp->extension = maGetExtension(conn);
     if ((resp->mimeType = (char*) maLookupMimeType(host, resp->extension)) == 0) {
