@@ -526,7 +526,6 @@ extern "C" {
     typedef unsigned long ulong;
 #endif
 
-    typedef off_t MprOffset;
     typedef intptr_t pint;
 
     #define INT64(x) (x##LL)
@@ -571,7 +570,6 @@ extern "C" {
 
 
 #if VXWORKS
-    typedef off_t MprOffset;
     typedef unsigned int uint;
     typedef unsigned long ulong;
     typedef long long int int64;
@@ -643,7 +641,6 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 
 
 #if MACOSX
-    typedef off_t MprOffset;
     typedef unsigned long ulong;
 
     __extension__ typedef long long int int64;
@@ -684,7 +681,6 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 
 
 #if FREEBSD
-    typedef off_t MprOffset;
     typedef unsigned long ulong;
     typedef intptr_t pint;
 
@@ -721,7 +717,6 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
     typedef unsigned short ushort;
     typedef __int64 int64;
     typedef unsigned __int64 uint64;
-    typedef int64   MprOffset;
     typedef int     uid_t;
     typedef void    *handle;
     typedef char    *caddr_t;
@@ -1017,7 +1012,6 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 
 
 #if SOLARIS
-    typedef off_t MprOffset;
     typedef long long int int64;
     typedef unsigned long long int uint64;
 
@@ -1041,89 +1035,16 @@ extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 
 #endif /* SOLARIS */
 
-
-
-#if BREW
-    typedef off_t MprOffset;
-    typedef unsigned int uint;
-    typedef unsigned long ulong;
-    typedef unsigned short ushort;
-    typedef uint    off_t;
-    typedef long    pid_t;
-
-    #ifndef _TIME_T_DEFINED
-        typedef int64 time_t;
-    #endif
-
-    #define O_RDONLY        0
-    #define O_WRONLY        1
-    #define O_RDWR          2
-    #define O_CREAT         0x200
-    #define O_TRUNC         0x400
-    #define O_BINARY        0
-    #define O_TEXT          0x20000
-    #define O_EXCL          0x40000
-    #define O_APPEND        0x80000
-
-    #define R_OK    4
-    #define W_OK    2
-    #define X_OK    1
-    #define F_OK    0
-
-    #define SEEK_SET    0
-    #define SEEK_CUR    1
-    #define SEEK_END    2
-
-    #undef  printf
-    #define printf DBGPRINTF
-
-    extern int  getpid();
-    extern int  isalnum(int c);
-    extern int  isalpha(int c);
-    extern int  isdigit(int c);
-    extern int  islower(int c);
-    extern int  isupper(int c);
-    extern int  isspace(int c);
-    extern int  isxdigit(int c);
-
-    extern uint strlen(cchar *str);
-    extern char *strstr(cchar *string, cchar *strSet);
-    extern void *memset(cvoid *dest, int c, uint count);
-    extern void exit(int status);
-    extern char *strpbrk(cchar *str, cchar *set);
-    extern uint strspn(cchar *str, cchar *set);
-    extern int  tolower(int c);
-    extern int  toupper(int c);
-    extern void *memcpy(void *dest, cvoid *src, uint count);
-    extern void *memmove(void *dest, cvoid *src, uint count);
-
-    extern int  atoi(cchar *str);
-    extern void free(void *ptr);
-    extern void *malloc(uint size);
-    extern void *realloc(void *ptr, uint size);
-    extern char *strcat(char *dest, cchar *src);
-    extern char *strchr(cchar *str, int c);
-    extern int  strcmp(cchar *s1, cchar *s2);
-    extern int  strncmp(cchar *s1, cchar *s2, uint count);
-    extern char *strcpy(char *dest, cchar *src);
-    extern char *strncpy(char *dest, cchar *src, uint count);
-    extern char *strrchr(cchar *str, int c);
-
-    #if BREWSIM && BLD_DEBUG
-        extern _CRTIMP int __cdecl _CrtCheckMemory(void);
-        extern _CRTIMP int __cdecl _CrtSetReportHook();
-    #endif
-
-#endif /* BREW */
-
 #ifdef __cplusplus
 }
 #endif
 
+typedef int64 MprOff;
+
 /*
-    Forward compatibility aliases
+    Backward compatibility aliases
  */
-typedef MprOffset MprOff;
+typedef MprOff MprOffset;
 
 #endif /* _h_MPR_OS_HDRS */
 
