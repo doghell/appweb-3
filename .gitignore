@@ -117,7 +117,7 @@ project.xcworkspace
 xcuserdata
 test/apps
 test/web/a
-projects/WIN/appweb-dynamic/UpgradeLog.XML
+projects/WIN/appweb-dynamic/UpgradeLog*.XML
 projects/WIN/appweb-dynamic/*.vcxproj*
 projects/WIN/appweb-dynamic/*.sln.old
 projects/WIN/appweb-dynamic/*.suo.old
