@@ -123,3 +123,5 @@ projects/WIN/appweb-dynamic/*.sln.old
 projects/WIN/appweb-dynamic/*.suo.old
 projects/WIN/appweb-dynamic/Debug/
 projects/WIN/appweb-dynamic/_UpgradeReport*
+projects/WIN/*/ipch
+projects/WIN/*/*.sdf
