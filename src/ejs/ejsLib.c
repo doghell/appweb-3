@@ -16147,7 +16147,7 @@ EjsVar *httpAvailable(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
     }
     len = mprGetHttpContentLength(hp->http);
     if (len > 0) {
-        return (EjsVar*) ejsCreateNumber(ejs, len);
+        return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) len);
     }
     return (EjsVar*) ejs->minusOneValue;
 }
@@ -16303,7 +16303,7 @@ static EjsVar *contentLength(Ejs *ejs, EjsHttp *hp, int argc, EjsVar **argv)
         return 0;
     }
     length = mprGetHttpContentLength(hp->http);
-    return (EjsVar*) ejsCreateNumber(ejs, length);
+    return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) length);
 }
 
 

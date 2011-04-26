@@ -397,7 +397,7 @@ static EjsVar *getRequestVar(void *handle, int field)
         return createString(ejs, req->connection);
 
     case ES_ejs_web_Request_contentLength:
-        return (EjsVar*) ejsCreateNumber(ejs, req->length);
+        return (EjsVar*) ejsCreateNumber(ejs, (MprNumber) req->length);
 
     case ES_ejs_web_Request_cookies:
         if (req->cookie) {
