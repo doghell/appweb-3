@@ -116,6 +116,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mod_ejs", "mod_ejs.vcproj",
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmprssl", "libmprSsl.vcproj", "{2711CA8A-73B4-475B-A98A-22E5ECB91ACF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{28760739-5566-42A2-AF7A-97AE51A63BC8} = {28760739-5566-42A2-AF7A-97AE51A63BC8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mod_auth", "mod_auth.vcproj", "{A7BAF47D-F9E7-4248-81EB-AD91D2ECA4BD}"
 	ProjectSection(ProjectDependencies) = postProject
