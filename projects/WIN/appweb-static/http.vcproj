@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="http"
-    ProjectGUID="99561fb8-52ba-428f-84c9-17a5bd55861e"
+    ProjectGUID="e6fe0b87-f981-4d1b-8d20-0b2dbec77bd7"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -53,7 +53,7 @@
                 CompileAs="0"
                 StringPooling="true"
                 MinimalRebuild="true"
-                AdditionalIncludeDirectories="../../../src/include/master;../../..;../../../src/include"
+                AdditionalIncludeDirectories="../../../src/include/master;C:/home/mob/packages/openssl/openssl-1.0.0a/inc32;C:/home/mob/packages/matrixssl/matrixssl-1-8-8-open;C:/home/mob/packages/php/php-5.3.3;C:/home/mob/packages/php/php-5.3.3/main;C:/home/mob/packages/php/php-5.3.3/Zend;C:/home/mob/packages/php/php-5.3.3/TSRM;../../..;../../../src/include"
                 PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;_REENTRANT;_MT"
                 Optimization="1"
                 FavorSizeOrSpeed="1"
@@ -111,7 +111,7 @@
                 CompileAs="0"
                 StringPooling="true"
                 MinimalRebuild="true"
-                AdditionalIncludeDirectories="../../../src/include/master;../../..;../../../src/include"
+                AdditionalIncludeDirectories="../../../src/include/master;C:/home/mob/packages/openssl/openssl-1.0.0a/inc32;C:/home/mob/packages/matrixssl/matrixssl-1-8-8-open;C:/home/mob/packages/php/php-5.3.3;C:/home/mob/packages/php/php-5.3.3/main;C:/home/mob/packages/php/php-5.3.3/Zend;C:/home/mob/packages/php/php-5.3.3/TSRM;../../..;../../../src/include"
                 PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;_REENTRANT;_MT"
                 Optimization="0"
                 FavorSizeOrSpeed="1"
@@ -136,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{b69a2218-1b2b-40e8-8d50-04b3879b4cc6}"
+            UniqueIdentifier="{2c3eaec7-857f-477b-a159-f1507cff0b44}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -154,7 +154,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{cf4d2ae3-dd1e-4ef4-818e-94f0ed15d22e}"
+            UniqueIdentifier="{92513692-ed65-4ec4-8ab6-0a3c2e61bc69}"
             >
             <File
                 RelativePath="..\..\..\src\mpr\mprLib.c"
