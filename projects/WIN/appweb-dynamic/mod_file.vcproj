@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_file"
-    ProjectGUID="9440de61-cd2d-45ed-9476-eb8d5bb23bac"
+    ProjectGUID="f2d216b9-20a4-4559-978c-884b0de2b1ac"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{4b9fc42e-5ed2-4b55-a900-eafe3ed75634}"
+            UniqueIdentifier="{9be93229-0075-47b3-9d57-9c2323fd92a9}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{3cbb548b-e1df-466a-87fb-c053100adb0d}"
+            UniqueIdentifier="{f64afbd9-24cc-4de2-bd61-3561cf501ed4}"
             >
             <File
                 RelativePath="..\..\..\src\http\handlers\fileHandler.c"

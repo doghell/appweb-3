@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="ajsc"
-    ProjectGUID="818bf013-1ab9-4e37-8af4-d4032899bf51"
+    ProjectGUID="6c7690bf-b81d-4e10-94fa-1a864b2b557f"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -59,7 +59,7 @@
                 CompileAs="0"
                 StringPooling="true"
                 MinimalRebuild="true"
-                AdditionalIncludeDirectories="../../../src/include/master;C:/home/mob/packages/openssl/openssl-1.0.0a/inc32;C:/home/mob/packages/matrixssl/matrixssl-1-8-8-open;C:/home/mob/packages/php/php-5.3.3;C:/home/mob/packages/php/php-5.3.3/main;C:/home/mob/packages/php/php-5.3.3/Zend;C:/home/mob/packages/php/php-5.3.3/TSRM;../../..;../../../src/include"
+                AdditionalIncludeDirectories="../../../src/include/master;C:/home/mob/packages/php/php-5.3.3;C:/home/mob/packages/php/php-5.3.3/main;C:/home/mob/packages/php/php-5.3.3/Zend;C:/home/mob/packages/php/php-5.3.3/TSRM;../../..;../../../src/include"
                 PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;_REENTRANT;_MT"
                 Optimization="1"
                 FavorSizeOrSpeed="1"
@@ -123,7 +123,7 @@
                 CompileAs="0"
                 StringPooling="true"
                 MinimalRebuild="true"
-                AdditionalIncludeDirectories="../../../src/include/master;C:/home/mob/packages/openssl/openssl-1.0.0a/inc32;C:/home/mob/packages/matrixssl/matrixssl-1-8-8-open;C:/home/mob/packages/php/php-5.3.3;C:/home/mob/packages/php/php-5.3.3/main;C:/home/mob/packages/php/php-5.3.3/Zend;C:/home/mob/packages/php/php-5.3.3/TSRM;../../..;../../../src/include"
+                AdditionalIncludeDirectories="../../../src/include/master;C:/home/mob/packages/php/php-5.3.3;C:/home/mob/packages/php/php-5.3.3/main;C:/home/mob/packages/php/php-5.3.3/Zend;C:/home/mob/packages/php/php-5.3.3/TSRM;../../..;../../../src/include"
                 PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;;STATIC_OVERRIDE=1;_REENTRANT;_MT"
                 Optimization="0"
                 FavorSizeOrSpeed="1"
@@ -148,7 +148,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{652a2e2b-4db0-437a-aa6f-4f48115ebb08}"
+            UniqueIdentifier="{918b09ac-e188-4509-a3fa-4acbcbea3fc2}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -182,7 +182,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{7d780a5f-fdd1-4060-903b-a2e9597b7101}"
+            UniqueIdentifier="{8d531c20-5630-493b-a421-a2590fac037e}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ecLib.c"

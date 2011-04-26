@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_cgi"
-    ProjectGUID="fd7538bb-9c1f-4159-8619-9a27db1e5495"
+    ProjectGUID="a6000445-36f5-49a8-af4d-9ad9744cb027"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{c8afef96-fd28-40b7-8471-ac000a2ad61c}"
+            UniqueIdentifier="{7616bb62-34d9-4d98-84b9-01fd6a99ab58}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{d9139c1c-27cd-4fe5-b9f4-b94df659f391}"
+            UniqueIdentifier="{33b0b8dd-4264-400b-9a6b-31af21051e45}"
             >
             <File
                 RelativePath="..\..\..\src\http\handlers\cgiHandler.c"

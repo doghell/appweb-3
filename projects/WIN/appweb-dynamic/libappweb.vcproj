@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="libappweb"
-    ProjectGUID="e9ab352c-50d2-4a2f-913e-f13beefd7da8"
+    ProjectGUID="5428a12c-b08f-4828-a75c-cbfd3304922d"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{642ed5c2-3050-4930-9fa8-20cd06b7a96a}"
+            UniqueIdentifier="{986b9a58-078b-4d08-8f74-cf7abdfc28a3}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -176,7 +176,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{f6d68145-b6d6-45ef-b685-5f4925163e40}"
+            UniqueIdentifier="{948f1276-c000-4dd8-9d31-cb778e2656b2}"
             >
             <File
                 RelativePath="..\..\..\src\http\handlers\passHandler.c"

@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="appweb"
-    ProjectGUID="2a57feb7-e3ec-4dec-9f29-0bbcf52a7240"
+    ProjectGUID="818b7277-e95c-44a8-b2a0-062aac45158c"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -136,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{07fbff7c-debb-44b6-b9e2-e91b05423438}"
+            UniqueIdentifier="{93f7fe24-e5b0-4430-b402-e2b4af1b004c}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -174,7 +174,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{4926775f-3721-4aa0-b699-7fd64584ee33}"
+            UniqueIdentifier="{db402cd1-85b4-44d3-8940-0947b5017c6a}"
             >
             <File
                 RelativePath="..\..\..\src\server\appweb.c"

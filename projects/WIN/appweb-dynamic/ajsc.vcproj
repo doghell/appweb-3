@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="ajsc"
-    ProjectGUID="e8ebee55-321b-43a2-9091-b83a2fa16676"
+    ProjectGUID="e01146d5-eed1-4e64-87d8-9f5bb12182af"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -146,7 +146,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{3e6baa95-ff3a-4273-a000-f2b75ef82abf}"
+            UniqueIdentifier="{9463a79a-3554-4af8-81bc-446541d81277}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -180,7 +180,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{dcdb756a-dc5b-45dd-907e-ccfb6419b0c6}"
+            UniqueIdentifier="{63167a8e-ba4a-47ca-ac66-83abdfb8eef7}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ejsc.c"

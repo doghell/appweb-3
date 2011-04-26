@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="appwebMonitor"
-    ProjectGUID="875466c7-f52f-45b5-83c4-db0c910686cd"
+    ProjectGUID="3e9e8cc7-8db7-4b67-b619-ee9aeb8512a2"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -136,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{170442d3-f26c-4923-a64f-58b9744b25f8}"
+            UniqueIdentifier="{da8dbb11-4514-40ec-8eeb-caf70220609f}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -166,7 +166,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{16a2737d-cf59-4a97-b258-a7d61a4cc98f}"
+            UniqueIdentifier="{988e34b2-599c-408c-bd89-710eec04d422}"
             >
             <File
                 RelativePath="..\..\..\src\server\WIN\appwebMonitor.c"

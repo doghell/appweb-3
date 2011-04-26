@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="http"
-    ProjectGUID="cf52d5f4-5c5f-4bea-a66d-52e2b684eefe"
+    ProjectGUID="7eefb653-4103-458f-8e9b-e6a9a3db35e1"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -136,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{9ffec535-aa7a-4bf4-ba62-f86b66f34ab5}"
+            UniqueIdentifier="{03c68c6e-49d8-441f-83ff-4ce15f7254c5}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -154,7 +154,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{2fafc5d0-eabf-4920-8ae5-60fa7bf8bc92}"
+            UniqueIdentifier="{7e14335d-746f-4e9b-afb9-e288dfa4700f}"
             >
             <File
                 RelativePath="..\..\..\src\mpr\http.c"

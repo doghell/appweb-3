@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="ajs"
-    ProjectGUID="5be30740-4334-4e09-836d-ccea3f135181"
+    ProjectGUID="ee0052aa-7e1b-4af2-8ab6-597539a9b7c8"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -136,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{651b42b0-2877-4cdf-a820-1aa9a976274f}"
+            UniqueIdentifier="{f1a6eb33-d0e6-4c9c-b5bf-6f491f8bc135}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -166,7 +166,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{0faf51b2-1bd0-4ae9-9eed-4de0ae40af64}"
+            UniqueIdentifier="{b4fa9f21-a859-4569-902c-6a2deb0464d4}"
             >
             <File
                 RelativePath="..\..\..\src\ejs\ejs.c"
