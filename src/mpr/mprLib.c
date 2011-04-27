@@ -11121,20 +11121,17 @@ static int makeLink(MprDiskFileSystem *fileSystem, cchar *path, cchar *target, i
 
 static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info)
 {
+#if WINCE
     struct stat s;
-#if BLD_WIN_LIKE
     cchar       *ext;
-    char        *allocPath;
 
     mprAssert(path);
     mprAssert(info);
 
-    allocPath = 0;
     info->checked = 1;
     info->valid = 0;
 
     if (stat(path, &s) < 0) {
-        mprFree(allocPath);
         return -1;
     }
 
@@ -11152,7 +11149,32 @@ static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info
         info->isLink = 1;
     }
 
-#if !WINCE
+#elif BLD_WIN_LIKE
+    struct __stat64     s;
+    cchar               *ext;
+
+    mprAssert(path);
+    mprAssert(info);
+
+    info->checked = 1;
+    info->valid = 0;
+
+    if (_stat64(path, &s) < 0) {
+        return -1;
+    }
+    info->valid = 1;
+    info->size = s.st_size;
+    info->atime = s.st_atime;
+    info->ctime = s.st_ctime;
+    info->mtime = s.st_mtime;
+    info->inode = s.st_ino;
+    info->isDir = (s.st_mode & S_IFDIR) != 0;
+    info->isReg = (s.st_mode & S_IFREG) != 0;
+    info->isLink = 0;
+    ext = mprGetPathExtension(fileSystem, path);
+    if (ext && strcmp(ext, "lnk") == 0) {
+        info->isLink = 1;
+    }
     /*
      *  Work hard on windows to determine if the file is a regular file.
      */
@@ -11160,7 +11182,6 @@ static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info
         long    att;
 
         if ((att = GetFileAttributes(path)) == -1) {
-            mprFree(allocPath);
             return -1;
         }
         if (att & (FILE_ATTRIBUTE_REPARSE_POINT | FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_ENCRYPTED |
@@ -11188,35 +11209,39 @@ static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info
     if (strcmp(path, "nul") == 0) {
         info->isReg = 0;
     }
-#endif
 
-    mprFree(allocPath);
-
-#else /* !BLD_WIN_LIKE */
-    mprAssert(path);
-    mprAssert(info);
-
+#elif VXWORKS
+    struct stat s;
     info->valid = 0;
     info->checked = 1;
-
-#if VXWORKS
     if (stat((char*) path, &s) < 0) {
         return MPR_ERR_CANT_ACCESS;
     }
+    info->valid = 1;
+    info->size = s.st_size;
+    info->atime = s.st_atime;
+    info->ctime = s.st_ctime;
+    info->mtime = s.st_mtime;
+    info->inode = (int) s.st_ino;
+    info->isDir = S_ISDIR(s.st_mode);
+    info->isReg = S_ISREG(s.st_mode);
+    info->perms = s.st_mode & 07777;
+
 #else
+    struct stat s;
+    info->valid = 0;
+    info->checked = 1;
     if (lstat((char*) path, &s) < 0) {
         return MPR_ERR_CANT_ACCESS;
     }
-#endif
-
-#ifdef S_ISLNK
-    info->isLink = S_ISLNK(s.st_mode);
-    if (info->isLink) {
-        if (stat((char*) path, &s) < 0) {
-            return MPR_ERR_CANT_ACCESS;
+    #ifdef S_ISLNK
+        info->isLink = S_ISLNK(s.st_mode);
+        if (info->isLink) {
+            if (stat((char*) path, &s) < 0) {
+                return MPR_ERR_CANT_ACCESS;
+            }
         }
-    }
-#endif
+    #endif
     info->valid = 1;
     info->size = s.st_size;
     info->atime = s.st_atime;
@@ -28474,7 +28499,7 @@ void mprStopOsService(MprOsService *os)
 }
 
 
-int access(const char *path, int mode)
+int access(cchar *path, int mode)
 {
     struct stat sbuf;
 
