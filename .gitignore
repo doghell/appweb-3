@@ -125,3 +125,4 @@ projects/WIN/appweb-dynamic/Debug/
 projects/WIN/appweb-dynamic/_UpgradeReport*
 projects/WIN/*/ipch
 projects/WIN/*/*.sdf
+test/web/huge.txt
