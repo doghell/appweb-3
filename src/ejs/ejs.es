@@ -8480,7 +8480,7 @@ module ejs.io {
 
         /**
             Wait for a request to complete.
-            @param timeout Time in seconds to wait for the request to complete
+            @param timeout Time in milliseconds to wait for the request to complete
             @return True if the request successfully completes.
          */
         native function wait(timeout: Number = -1): Boolean
