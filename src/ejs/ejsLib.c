@@ -30419,6 +30419,7 @@ int ejsEncodeWord(uchar *pos, int number)
         mprError(mprGetMpr(NULL), "Code generation error. Word %d exceeds maximum %d", number, EJS_ENCODE_MAX_WORD);
         return 0;
     }
+    memset(pos, 0, 4);
     len = ejsEncodeNum(pos, (int64) number);
     mprAssert(len <= 4);
     return 4;

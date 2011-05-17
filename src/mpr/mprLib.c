@@ -31040,7 +31040,7 @@ static MprXmlToken getToken(MprXml *xp, int state)
                 }
                 putLastChar(xp, c);
             }
-            if (mprGetBufLength(tokBuf) <= 0) {
+            if (mprGetBufLength(tokBuf) < 0) {
                 return MPR_XMLTOK_ERR;
             }
             mprAddNullToBuf(tokBuf);
