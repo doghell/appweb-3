@@ -2,7 +2,7 @@
 /******************************************************************************/
 /* 
  *  This file is an amalgamation of all the individual source code files for
- *  Embedthis Ejscript 1.1.1.
+ *  Embedthis Ejscript 1.1.2.
  *
  *  Catenating all the source into a single file makes embedding simpler and
  *  the resulting application faster, as many compilers can do whole file
@@ -28,6 +28,12 @@
 
 /* Work-around for MAC OSX Xcode bug */
 #undef BLD_FEATURE_LEGACY_API
+
+/* Suppress windows posix errors */
+#undef      _CRT_SECURE_NO_WARNINGS
+#define     _CRT_SECURE_NO_WARNINGS 1
+#undef      _CRT_SECURE_NO_DEPRECATE
+#define     _CRT_SECURE_NO_DEPRECATE 1
 
 #include "buildConfig.h"
 
