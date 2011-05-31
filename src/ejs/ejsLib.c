@@ -1238,11 +1238,11 @@ static EjsVar *sliceArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
 }
 
 
-static int partition(Ejs *ejs, EjsVar **data, int p, int r)
+static int partition(Ejs *ejs, EjsVar **data, int dir, int p, int r)
 {
     EjsVar          *tmp, *x;
     EjsString       *sx, *so;
-    int             i, j;
+    int             i, j, rc;
 
     x = data[r];
     j = p - 1;
@@ -1254,7 +1254,8 @@ static int partition(Ejs *ejs, EjsVar **data, int p, int r)
         if (sx == 0 || so == 0) {
             return 0;
         }
-        if (strcmp(sx->value, so->value) > 0) {
+        rc = strcmp(sx->value, so->value) * dir;
+        if (rc > 0) {
             j = j + 1;
             tmp = data[j];
             data[j] = data[i];
@@ -1267,14 +1268,14 @@ static int partition(Ejs *ejs, EjsVar **data, int p, int r)
 }
 
 
-void quickSort(Ejs *ejs, EjsArray *ap, int p, int r)
+void quickSort(Ejs *ejs, EjsArray *ap, int dir, int p, int r)
 {
     int     q;
 
     if (p < r) {
-        q = partition(ejs, ap->data, p, r);
-        quickSort(ejs, ap, p, q - 1);
-        quickSort(ejs, ap, q + 1, r);
+        q = partition(ejs, ap->data, dir, p, r);
+        quickSort(ejs, ap, dir, p, q - 1);
+        quickSort(ejs, ap, dir, q + 1, r);
     }
 }
 
@@ -1285,10 +1286,13 @@ void quickSort(Ejs *ejs, EjsArray *ap, int p, int r)
  */
 static EjsVar *sortArray(Ejs *ejs, EjsArray *ap, int argc, EjsVar **argv)
 {
+    int     direction;
+
     if (ap->length <= 1) {
         return (EjsVar*) ap;
     }
-    quickSort(ejs, ap, 0, ap->length - 1);
+    direction = (argc >= 2) ? ejsGetInt(argv[1]) : 1;
+    quickSort(ejs, ap, direction, 0, ap->length - 1);
     return (EjsVar*) ap;
 }
 
@@ -5319,8 +5323,11 @@ static EjsVar *date_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
 
+    /*
+        Return date with 1900 == origin 0
+     */
     mprDecodeLocalTime(ejs, &tm, dp->value);
-    return (EjsVar*) ejsCreateNumber(ejs, tm.tm_year + 1900);
+    return (EjsVar*) ejsCreateNumber(ejs, tm.tm_year);
 }
 
 
@@ -16942,6 +16949,7 @@ static bool waitForState(EjsHttp *hp, int state, int timeout, int throw)
     Ejs         *ejs;
     MprHttp     *http;
     MprTime     mark;
+    MprUri      *old;
     char        *url;
     int         count, transCount;
 
@@ -16974,7 +16982,14 @@ static bool waitForState(EjsHttp *hp, int state, int timeout, int throw)
         if (http->state >= MPR_HTTP_STATE_CONTENT && mprNeedHttpRetry(http, &url)) {
             if (url) {
                 mprFree(hp->uri);
-                hp->uri = prepUri(http, url);
+                if (*url == '/') {
+                    old = http->request->uri;
+                    url = mprFormatUri(hp, old->scheme, old->host, old->port, url, 0);
+                    hp->uri = prepUri(http, url);
+                    mprFree(url);
+                } else {
+                    hp->uri = prepUri(http, url);
+                }
             }
             count--;
             transCount++;
@@ -35412,7 +35427,7 @@ int ejsWrite(Ejs *ejs, cchar *fmt, ...)
 
     va_start(args, fmt);
     buf = mprVasprintf(web, -1, fmt, args);
-    rc = web->control->write(web->handle, buf, strlen(buf));
+    rc = web->control->write(web->handle, buf, (int) strlen(buf));
     mprFree(buf);
     va_end(args);
 
@@ -35944,7 +35959,7 @@ void ejsParseWebSessionCookie(EjsWeb *web)
         }
         control = web->control;
 
-        len = cp - value;
+        len = (int) (cp - value);
         id = mprMemdup(web, value, len + 1);
         id[len] = '\0';
 

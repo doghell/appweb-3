@@ -564,6 +564,10 @@ static bool parseHeader(MaConn *conn, MprCmd *cmd)
             } else if (strcmp(key, "content-type") == 0) {
                 maSetResponseMimeType(conn, value);
 
+            } else if (strcmp(key, "content-length") == 0) {
+                maSetEntityLength(conn, (MprOff) mprAtoi(value, 10));
+                resp->chunkSize = 0;
+
             } else {
                 /*
                     Now pass all other headers back to the client

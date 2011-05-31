@@ -224,7 +224,7 @@ module ejs {
         native function join(sep: String = undefined): String
 
         /**
-         *  Find an item searching from the end of the arry.
+         *  Find an item searching from the end of the array.
          *  Search for an item using strict equality "===". This call searches from the end of the array for the given 
          *  element.
          *  @param element The object to search for.
