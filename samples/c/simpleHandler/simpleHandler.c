@@ -54,18 +54,23 @@ static void incomingSimpleData(MaQueue *q, MaPacket *packet)
 }
 
 
-int maOpenSimpleHandler(MaHttp *http)
+MprModule *maSimpleHandlerInit(MaHttp *http)
 {
+    MprModule   *module;
     MaStage     *stage;
 
+    module = mprCreateModule(http, "simpleModule", BLD_VERSION, NULL, NULL, NULL);
+    if (module == 0) {
+        return 0;
+    }
     stage = maCreateHandler(http, "simpleHandler", MA_STAGE_ALL | MA_STAGE_VIRTUAL);
     if (stage == 0) {
-        return MPR_ERR_CANT_CREATE;
+        return 0;
     }
     stage->run = runSimple;
     stage->incomingData = incomingSimpleData;
 
-    return 0;
+    return module;
 }
 
 
@@ -97,10 +102,10 @@ int maOpenSimpleHandler(MaHttp *http)
  *  Software at http://www.embedthis.com 
  *  
  *  Local variables:
-    tab-width: 4
-    c-basic-offset: 4
-    End:
-    vim: sw=4 ts=4 expandtab
-
-    @end
+ *  tab-width: 4
+ *  c-basic-offset: 4
+ *  End:
+ *  vim: sw=4 ts=4 expandtab
+ *
+ *  @end
  */
