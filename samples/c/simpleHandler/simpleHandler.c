@@ -59,7 +59,7 @@ MprModule *maSimpleHandlerInit(MaHttp *http)
     MprModule   *module;
     MaStage     *stage;
 
-    module = mprCreateModule(http, "simpleModule", BLD_VERSION, NULL, NULL, NULL);
+    module = mprCreateModule(http, "simpleHandler", BLD_VERSION, NULL, NULL, NULL);
     if (module == 0) {
         return 0;
     }
