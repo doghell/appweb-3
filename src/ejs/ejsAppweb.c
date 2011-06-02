@@ -58,7 +58,7 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
         return 0;
 
     } else if (strncmp(url, "/web/", 5) == 0 || *url == '\0') {
-        if (!(ext && strcmp(ext, "ejs") == 0)) {
+        if (!(ext && mprStrcmpAnyCase(ext, "ejs") == 0)) {
             return 0;
         }
     } else {
