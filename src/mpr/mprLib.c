@@ -11160,7 +11160,6 @@ static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info
     info->valid = 0;
 
     if (_stat64(path, &s) < 0) {
-        int err = GetLastError();
         return -1;
     }
     info->valid = 1;

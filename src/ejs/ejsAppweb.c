@@ -41,7 +41,7 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
     req = conn->request;
     ext = conn->response->extension;
 
-    if (ext && mprStrcmpAnyCase(ext, "mod") == 0) {
+    if (ext && strcmp(ext, "mod") == 0) {
         maFormatBody(conn, "Bad Request", "Can't serve *.mod files");
         maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Can't server *.mod files");
     }

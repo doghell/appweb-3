@@ -1203,6 +1203,8 @@ module ejs {
         /**
             The year as four digits in local time.
             @spec ejs
+            @deprecated
+            @hide
          */
         native function get fullYear(): Number 
         native function set fullYear(year: Number): void
@@ -1226,7 +1228,7 @@ module ejs {
             @return The integer year
          */
         function getFullYear(): Number 
-            fullYear
+            year
 
         /**
             Return the hour (0 - 23) in local time.
@@ -1662,7 +1664,7 @@ module ejs {
             time
 
         /**
-            The current year as two digits.
+            The year in local time. This is the full year. E.g. A date of the year 2010 will return the number 2010.
             @spec ejs
          */
         native function get year(): Number 
@@ -3564,6 +3566,7 @@ module ejs {
         /**
          *  Clone the object and all its elements.
          *  @param deep If true, do a deep copy where all object references are also copied, and so on, recursively.
+         *  A shallow clone will do 1 level deep. Deep clones are N-level deep.
          *  @spec ejs
          */
         native function clone(deep: Boolean = true): Object

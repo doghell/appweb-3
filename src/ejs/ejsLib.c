@@ -5323,11 +5323,8 @@ static EjsVar *date_year(Ejs *ejs, EjsDate *dp, int argc, EjsVar **argv)
 {
     struct tm   tm;
 
-    /*
-        Return date with 1900 == origin 0
-     */
     mprDecodeLocalTime(ejs, &tm, dp->value);
-    return (EjsVar*) ejsCreateNumber(ejs, tm.tm_year);
+    return (EjsVar*) ejsCreateNumber(ejs, tm.tm_year + 1900);
 }
 
 
