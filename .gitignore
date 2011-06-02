@@ -126,3 +126,4 @@ projects/WIN/appweb-dynamic/_UpgradeReport*
 projects/WIN/*/ipch
 projects/WIN/*/*.sdf
 test/web/huge.txt
+samples/c/simpleHandler/simpleHandler.def
