@@ -22,7 +22,10 @@ MaLocation *maCreateBareLocation(MprCtx ctx)
     }
     location->errorDocuments = mprCreateHash(location, MA_ERROR_HASH_SIZE);
     location->handlers = mprCreateList(location);
+
     location->extensions = mprCreateHash(location, MA_HANDLER_HASH_SIZE);
+    mprSetHashCaseless(location->extensions);
+
     location->expires = mprCreateHash(location, MA_HANDLER_HASH_SIZE);
     location->inputStages = mprCreateList(location);
     location->outputStages = mprCreateList(location);
@@ -198,6 +201,7 @@ int maAddFilter(MaHttp *http, MaLocation *location, cchar *name, cchar *extensio
 
     if (extensions && *extensions) {
         filter->extensions = mprCreateHash(filter, 0);
+        mprSetHashCaseless(filter->extensions);
         extlist = mprStrdup(location, extensions);
         word = mprStrTok(extlist, " \t\r\n", &tok);
         while (word) {
@@ -292,6 +296,7 @@ void maResetPipeline(MaLocation *location)
         mprFree(location->extensions);
     }
     location->extensions = mprCreateHash(location, 0);
+    mprSetHashCaseless(location->extensions);
     
     if (mprGetParent(location->handlers) == location) {
         mprFree(location->handlers);

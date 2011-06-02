@@ -41,11 +41,11 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
     req = conn->request;
     ext = conn->response->extension;
 
-    if (ext && strcmp(ext, "mod") == 0) {
+    if (ext && mprStrcmpAnyCase(ext, "mod") == 0) {
         maFormatBody(conn, "Bad Request", "Can't serve *.mod files");
         maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Can't server *.mod files");
     }
-    if (req->location->handler != conn->http->ejsHandler && strcmp(ext, "ejs") != 0) {
+    if (req->location->handler != conn->http->ejsHandler && mprStrcmpAnyCase(ext, "ejs") != 0) {
         return 0;
     }
     if (*url == '\0' || strcmp(url, "/") == 0) {
@@ -62,7 +62,7 @@ static bool matchEjs(MaConn *conn, MaStage *handler, cchar *url)
             return 0;
         }
     } else {
-        if (req->location->flags & (MA_LOC_APP | MA_LOC_APP_DIR) && ext && strcmp(ext, "ejs") == 0) {
+        if (req->location->flags & (MA_LOC_APP | MA_LOC_APP_DIR) && ext && mprStrcmpAnyCase(ext, "ejs") == 0) {
             maFormatBody(conn, "Bad Request", "Can't serve *.ejs files outside web directory");
             maFailRequest(conn, MPR_HTTP_CODE_BAD_REQUEST, "Can't server *.ejs files outside web directory");
             return 1;

@@ -11160,6 +11160,7 @@ static int getPathInfo(MprDiskFileSystem *fileSystem, cchar *path, MprPath *info
     info->valid = 0;
 
     if (_stat64(path, &s) < 0) {
+        int err = GetLastError();
         return -1;
     }
     info->valid = 1;
@@ -12611,7 +12612,7 @@ void mprSetPathNewline(MprCtx ctx, cchar *path, cchar *newline)
 
 
 
-static int hashIndex(cchar *key, int size);
+static int hashIndex(MprHashTable *table, cchar *key, int size);
 static MprHash  *lookupInner(int *bucketIndex, MprHash **prevSp, MprHashTable *table, cchar *key);
 
 /*
@@ -12643,6 +12644,12 @@ MprHashTable *mprCreateHash(MprCtx ctx, int hashSize)
     }
 
     return table;
+}
+
+
+void mprSetHashCaseless(MprHashTable *table)
+{
+    table->flags |= MPR_HASH_CASELESS;
 }
 
 
@@ -12718,7 +12725,7 @@ MprHash *mprAddDuplicateHash(MprHashTable *table, cchar *key, cvoid *ptr)
         return 0;
     }
 
-    index = hashIndex(key, table->hashSize);
+    index = hashIndex(table, key, table->hashSize);
 
     sp->data = ptr;
     sp->key = mprStrdup(sp, key);
@@ -12784,6 +12791,37 @@ cvoid *mprLookupHash(MprHashTable *table, cchar *key)
 }
 
 
+static int sncasecmp(cchar *s1, cchar *s2, int n)
+{
+    int     rc;
+
+    mprAssert(0 <= n && n < MAXINT);
+
+    if (s1 == 0 || s2 == 0) {
+        return -1;
+    } else if (s1 == 0) {
+        return -1;
+    } else if (s2 == 0) {
+        return 1;
+    }
+    for (rc = 0; n > 0 && *s1 && rc == 0; s1++, s2++, n--) {
+        rc = tolower((int) *s1) - tolower((int) *s2);
+    }
+    if (rc) {
+        return (rc > 0) ? 1 : -1;
+    } else if (n == 0) {
+        return 0;
+    } else if (*s1 == '\0' && *s2 == '\0') {
+        return 0;
+    } else if (*s1 == '\0') {
+        return -1;
+    } else if (*s2 == '\0') {
+        return 1;
+    }
+    return 0;
+}
+
+
 static MprHash *lookupInner(int *bucketIndex, MprHash **prevSp, MprHashTable *table, cchar *key)
 {
     MprHash     *sp, *prev;
@@ -12791,7 +12829,7 @@ static MprHash *lookupInner(int *bucketIndex, MprHash **prevSp, MprHashTable *ta
 
     mprAssert(key);
 
-    index = hashIndex(key, table->hashSize);
+    index = hashIndex(table, key, table->hashSize);
     if (bucketIndex) {
         *bucketIndex = index;
     }
@@ -12800,7 +12838,11 @@ static MprHash *lookupInner(int *bucketIndex, MprHash **prevSp, MprHashTable *ta
     prev = 0;
 
     while (sp) {
-        rc = strcmp(sp->key, key);
+        if (table->flags & MPR_HASH_CASELESS) {
+            rc = sncasecmp(sp->key, key, (int) max(strlen(sp->key), strlen(key)));
+        } else {
+            rc = strcmp(sp->key, key);
+        }
         if (rc == 0) {
             if (prevSp) {
                 *prevSp = prev;
@@ -12870,13 +12912,20 @@ MprHash *mprGetNextHash(MprHashTable *table, MprHash *last)
 /*
  *  Hash the key to produce a hash index.
  */
-static int hashIndex(cchar *key, int size)
+static int hashIndex(MprHashTable *table, cchar *key, int size)
 {
     uint        sum;
 
     sum = 0;
-    while (*key) {
-        sum += (sum * 33) + *key++;
+    if (table->flags & MPR_HASH_CASELESS) {
+        while (*key) {
+            sum += (sum * 33) + tolower((int) *key);
+            key++;
+        }
+    } else {
+        while (*key) {
+            sum += (sum * 33) + *key++;
+        }
     }
     return sum % size;
 }
@@ -27991,13 +28040,13 @@ MprUri *mprParseUri(MprCtx ctx, cchar *uri)
         if ((last_delim = strrchr(up->url, '/')) != NULL) {
             if (last_delim <= cp) {
                 up->ext = cp + 1;
-#if BLD_WIN_LIKE
+#if UNUSED && BLD_WIN_LIKE
                 mprStrLower(up->ext);
 #endif
             }
         } else {
             up->ext = cp + 1;
-#if BLD_WIN_LIKE
+#if UNUSED && BLD_WIN_LIKE
             mprStrLower(up->ext);
 #endif
         }

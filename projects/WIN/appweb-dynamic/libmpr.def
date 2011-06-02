@@ -380,6 +380,7 @@ EXPORTS
   mprSetDomainName
   mprSetDynamicName
   mprSetFormattedHttpHeader
+  mprSetHashCaseless
   mprSetHostName
   mprSetHttpBody
   mprSetHttpCallback

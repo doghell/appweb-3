@@ -2907,6 +2907,9 @@ typedef struct MprHash {
     int             bucket;             /**< Hash bucket index */
 } MprHash;
 
+
+#define MPR_HASH_CASELESS 0x1
+
 /**
  *  Hash table control structure
  */
@@ -2914,6 +2917,7 @@ typedef struct MprHashTable {
     MprHash         **buckets;          /**< Hash collision bucket table */
     int             hashSize;           /**< Size of the buckets array */
     int             count;              /**< Number of symbols in the table */
+    int             flags;              /**< Control flags */
 } MprHashTable;
 
 /**
@@ -2960,6 +2964,7 @@ extern MprHashTable *mprCopyHash(MprCtx ctx, MprHashTable *table);
  *  @ingroup MprHash
  */
 extern MprHashTable *mprCreateHash(MprCtx ctx, int hashSize);
+extern void mprSetHashCaseless(MprHashTable *table);
 
 /**
  *  Return the first symbol in a symbol entry

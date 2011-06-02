@@ -20,6 +20,7 @@ int maOpenMimeTypes(MaHost *host, cchar *path)
 
     if (host->mimeTypes == 0) {
         host->mimeTypes = mprCreateHash(host, MA_MIME_HASH_SIZE);
+        mprSetHashCaseless(host->mimeTypes);
     }
     file = mprOpen(host, path, O_RDONLY | O_TEXT, 0);
     if (file == 0) {
@@ -61,6 +62,7 @@ MaMimeType *maAddMimeType(MaHost *host, cchar *ext, cchar *mimeType)
     mime->type = mprStrdup(host, mimeType);
     if (host->mimeTypes == 0) {
         host->mimeTypes = mprCreateHash(host, MA_MIME_HASH_SIZE);
+        mprSetHashCaseless(host->mimeTypes);
     }
     if (*ext == '.') {
         ext++;
@@ -77,6 +79,7 @@ int maSetMimeActionProgram(MaHost *host, cchar *mimeType, cchar *actionProgram)
     
     if (host->mimeTypes == 0) {
         host->mimeTypes = mprCreateHash(host, MA_MIME_HASH_SIZE);
+        mprSetHashCaseless(host->mimeTypes);
         maAddStandardMimeTypes(host);
     }
     
