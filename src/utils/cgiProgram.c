@@ -427,7 +427,7 @@ static void printPost(MprBuf *buf)
             mprPrintf(mpr, "<p>PVAR %s=%s</p>\r\n", postKeys[i], postKeys[i+1]);
         }
     } else if (buf) {
-        rc = write(1, mprGetBufStart(buf), mprGetBufLength(buf));
+        rc = (int) write(1, mprGetBufStart(buf), mprGetBufLength(buf));
     } else {
         mprPrintf(mpr, "<H2>No Post Data Found</H2>\r\n");
     }
