@@ -86,8 +86,13 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
     putHeader(conn, packet, "Date", req->host->currentDate);
     putHeader(conn, packet, "Server", MA_SERVER_NAME);
 
-    if (resp->flags & MA_RESP_DONT_CACHE) {
+    if (mprLookupHash(resp->headers, "Expires") || mprLookupHash(resp->headers, "Cache-Control")) {
+        /* User defined expiry */;
+
+    } else if (resp->flags & MA_RESP_DONT_CACHE) {
+        /* Default for Ejs */
         putHeader(conn, packet, "Cache-Control", "no-cache");
+
     } else if (req->location->expires) {
         expires = PTOI(mprLookupHash(req->location->expires, resp->mimeType));
         if (expires == 0) {
@@ -95,8 +100,9 @@ void maFillHeaders(MaConn *conn, MaPacket *packet)
         }
         if (expires) {
             mprDecodeUniversalTime(conn, &tm, mprGetTime(conn) + (expires * MPR_TICKS_PER_SEC));
-            hdr = mprFormatTime(conn, MPR_HTTP_DATE, &tm);
             putFormattedHeader(conn, packet, "Cache-Control", "max-age=%d", expires);
+            /* Expires is for old HTTP/1.0 clients */
+            hdr = mprFormatTime(conn, MPR_HTTP_DATE, &tm);
             putFormattedHeader(conn, packet, "Expires", "%s", hdr);
             mprFree(hdr);
         }
