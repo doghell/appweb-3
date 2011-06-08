@@ -124,7 +124,7 @@ void maPrepConnection(MaConn *conn)
     conn->trace = 0;
     conn->state =  MPR_HTTP_STATE_BEGIN;
     conn->flags &= ~MA_CONN_CLEAN_MASK;
-    conn->expire = conn->time + conn->host->keepAliveTimeout;
+    conn->expire = mprGetTime(conn) + conn->host->keepAliveTimeout;
     conn->dedicated = 0;
     if (conn->sock) {
         mprSetSocketBlockingMode(conn->sock, 0);
@@ -211,6 +211,7 @@ static int ioEvent(MaConn *conn, int mask)
     if (mask & MPR_READABLE) {
         readEvent(conn);
     }
+    conn->time = mprGetTime(conn);
     if (mprIsSocketEof(conn->sock) || conn->disconnected || conn->connectionFailed || 
             (conn->request == 0 && conn->keepAliveCount < 0)) {
         /*
@@ -246,7 +247,7 @@ void maEnableConnEvents(MaConn *conn, int eventMask)
         }
     }
     mprLog(conn, 7, "Enable conn events mask %x", eventMask);
-    conn->expire = conn->time;
+    conn->expire = mprGetTime(conn);
     conn->expire += (conn->state == MPR_HTTP_STATE_BEGIN) ? conn->host->keepAliveTimeout : conn->host->timeout;
     eventMask &= conn->eventMask;
     mprSetSocketCallback(conn->sock, (MprSocketProc) ioEvent, conn, eventMask, MPR_NORMAL_PRIORITY);

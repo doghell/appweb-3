@@ -675,12 +675,12 @@ static void hostTimer(MaHost *host, MprEvent *event)
         int64 diff = conn->expire - host->now;
         if (diff < 0 && !mprGetDebugMode(host)) {
             conn->keepAliveCount = 0;
-            if (conn->request) {
-                mprLog(host, 6, "Open request timed out due to inactivity: %s", conn->request->url);
-            } else {
-                mprLog(host, 6, "Idle connection timed out");
-            }
             if (!conn->disconnected) {
+                if (conn->request) {
+                    mprLog(host, 6, "Open request timed out due to inactivity: %s", conn->request->url);
+                } else {
+                    mprLog(host, 6, "Idle connection timed out");
+                }
                 conn->disconnected = 1;
                 mprDisconnectSocket(conn->sock);
             }
