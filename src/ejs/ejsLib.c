@@ -33981,7 +33981,7 @@ static EjsVar *setHeader(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
     char        *key, *value;
     bool        allowMultiple;
 
-    mprAssert(argc == 1 || argc == 2);
+    mprAssert(argc == 2 || argc == 3);
 
     web = ejsGetHandle(ejs);
     key = ejsGetString(argv[0]);
