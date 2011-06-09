@@ -35025,7 +35025,7 @@ static int caselessmatch(cchar *url, cchar *ext)
                 break;
             }
         }
-        if (*ep == 0) {
+        if (*ep == '\0') {
             return 1;
         }
     }
