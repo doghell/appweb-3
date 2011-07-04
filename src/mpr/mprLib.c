@@ -21761,9 +21761,9 @@ MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, 
 #endif
             if (rc > 0) {
                 written += rc;
-                if (rc != toWriteFile) {
-                    done++;
-                }
+            }
+            if (rc != toWriteFile) {
+                done++;
             }
         }
         if (!done && afterCount > 0) {
@@ -21773,7 +21773,6 @@ MprOffset mprSendFileToSocket(MprSocket *sock, MprFile *file, MprOffset offset, 
             }
         }
     }
-
     if (rc < 0) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             return written;
