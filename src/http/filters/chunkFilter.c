@@ -168,7 +168,7 @@ static void outgoingChunkService(MaQueue *q)
                 resp->length = q->count;
             }
         } else {
-            if (resp->chunkSize < 0) {
+            if (resp->chunkSize < 0 && resp->entityLength < 0) {
                 resp->chunkSize = (int) min(conn->http->limits.maxChunkSize, q->max);
             }
         }
