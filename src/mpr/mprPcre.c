@@ -6010,6 +6010,13 @@ typedef struct MprWorkerStats {
 } MprWorkerStats;
 
 /**
+ *  Worker thread callback signature
+ *  @param data worker callback data. Set via mprStartWorker or mprActivateWorker
+ *  @param worker Reference to the worker thread object
+ */
+typedef void (*MprWorkerProc)(void *data, struct MprWorker *worker);
+
+/**
  *  Worker Thread Service
  *  @description The MPR provides a worker thread pool for rapid starting and assignment of threads to tasks.
  *  @stability Evolving
@@ -6032,12 +6039,14 @@ typedef struct MprWorkerService {
     int             numThreads;         /* Current number of threads in worker pool */
     int             pruneHighWater;     /* Peak thread use in last minute */
     struct MprEvent *pruneTimer;        /* Timer for excess threads pruner */
+    MprWorkerProc   startWorker;        /* Worker thread startup hook */
 } MprWorkerService;
 
 
 extern MprWorkerService *mprCreateWorkerService(MprCtx ctx);
 extern int mprStartWorkerService(MprWorkerService *ws);
 extern bool mprStopWorkerService(MprWorkerService *ws, int timeout);
+extern void mprSetWorkerStartCallback(MprCtx ctx, MprWorkerProc start);
 
 /**
  *  Get the count of available worker threads
@@ -6098,13 +6107,6 @@ extern void mprGetWorkerServiceStats(MprWorkerService *ps, MprWorkerStats *stats
  *  Flags
  */
 #define MPR_WORKER_DEDICATED   0x1          /* Worker reserved and not part of the worker pool */
-
-/**
- *  Worker thread callback signature
- *  @param data worker callback data. Set via mprStartWorker or mprActivateWorker
- *  @param worker Reference to the worker thread object
- */
-typedef void (*MprWorkerProc)(void *data, struct MprWorker *worker);
 
 /*
  *  Threads in the worker thread pool

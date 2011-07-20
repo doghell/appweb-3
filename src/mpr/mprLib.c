@@ -21027,8 +21027,10 @@ static int listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptPro
     if (mprGetSocketInfo(sp, host, port, &family, &protocol, &addr, &addrlen) < 0) {
         return MPR_ERR_NOT_FOUND;
     }
+    family = AF_INET6;
     sp->fd = (int) socket(family, datagram ? SOCK_DGRAM: SOCK_STREAM, protocol);
     if (sp->fd < 0) {
+        printf("ERROR %d\n", errno);
         unlock(sp);
         return MPR_ERR_CANT_OPEN;
     }
@@ -22103,7 +22105,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
     }
     v6 = ipv6(host);
     hints.ai_socktype = SOCK_STREAM;
-    if (host) {
+    if (host && *host) {
         hints.ai_family = v6 ? AF_INET6 : AF_INET;
     } else {
         hints.ai_family = AF_UNSPEC;
@@ -22136,7 +22138,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
     mprMemcpy((char*) *addr, sizeof(struct sockaddr_storage), (char*) r->ai_addr, (int) r->ai_addrlen);
 
     *addrlen = (int) r->ai_addrlen;
-    *family = r->ai_family;
+    *family = (host && *host) ? r->ai_family : AF_UNSPEC;
     *protocol = r->ai_protocol;
 
     freeaddrinfo(res);
@@ -25092,6 +25094,15 @@ void mprGetWorkerServiceStats(MprWorkerService *ws, MprWorkerStats *stats)
 }
 
 
+void mprSetWorkerStartCallback(MprCtx ctx, MprWorkerProc start)
+{
+    MprWorkerService    *ws;
+
+    ws = mprGetMpr(ctx)->workerService;
+    ws->startWorker = start;
+}
+
+
 /*
  *  Create a new thread for the task
  */
@@ -25143,6 +25154,9 @@ static void workerMain(MprWorker *worker, MprThread *tp)
     mprAssert(worker->state == MPR_WORKER_BUSY);
     mprAssert(!worker->idleCond->triggered);
 
+    if (ws->startWorker) {
+        (*ws->startWorker)(worker->data, worker);
+    }
     mprLock(ws->mutex);
 
     while (!(worker->state & MPR_WORKER_PRUNED)) {

@@ -199,8 +199,6 @@
 		C97DCAB7101D4FE7008EB048 /* libappweb.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9761DC30FD03FD9009C78E1 /* libappweb.dylib */; };
 		C97DCABC101D5088008EB048 /* sslModule.c in Sources */ = {isa = PBXBuildFile; fileRef = C97620760FD04E38009C78E1 /* sslModule.c */; };
 		C97DCAC6101D50EB008EB048 /* libmprssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9761DAE0FD03FBA009C78E1 /* libmprssl.dylib */; };
-		C9ABFDFD107570BF0033ADE8 /* libmatrixsslstatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFDFC107570BF0033ADE8 /* libmatrixsslstatic.a */; };
-		C9ABFE01107570DD0033ADE8 /* libphp5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9ABFE00107570DD0033ADE8 /* libphp5.dylib */; };
 		C9BC70F9130255B0006AD551 /* buildConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = C9BC70F7130255B0006AD551 /* buildConfig.h */; };
 		C9BC70FA130255B0006AD551 /* customize.h in Headers */ = {isa = PBXBuildFile; fileRef = C9BC70F8130255B0006AD551 /* customize.h */; };
 		C9C2BEEC100EF66D009B160F /* libmpr.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9761DA00FD03F94009C78E1 /* libmpr.dylib */; };
@@ -895,8 +893,6 @@
 		C97620700FD04E38009C78E1 /* phpHandler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = phpHandler.c; sourceTree = "<group>"; };
 		C97620760FD04E38009C78E1 /* sslModule.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sslModule.c; sourceTree = "<group>"; };
 		C97DCABB101D4FE7008EB048 /* mod_ssl.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mod_ssl.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		C9ABFDFC107570BF0033ADE8 /* libmatrixsslstatic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmatrixsslstatic.a; path = ../../../lib/libmatrixsslstatic.a; sourceTree = SOURCE_ROOT; };
-		C9ABFE00107570DD0033ADE8 /* libphp5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libphp5.dylib; path = ../../../lib/libphp5.dylib; sourceTree = SOURCE_ROOT; };
 		C9AFCC560FC521440080E908 /* appweb */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = appweb; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AFCC5F0FC5224A0080E908 /* appweb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = appweb.h; path = ../../../src/include/appweb.h; sourceTree = SOURCE_ROOT; };
 		C9AFCC600FC5224A0080E908 /* appwebMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = appwebMonitor.h; path = ../../../src/include/appwebMonitor.h; sourceTree = SOURCE_ROOT; };
@@ -948,7 +944,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9C2BEEC100EF66D009B160F /* libmpr.dylib in Frameworks */,
-				C9ABFDFD107570BF0033ADE8 /* libmatrixsslstatic.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1193,7 +1188,6 @@
 			files = (
 				C9D817A8101D4C2A0039DD9D /* libmpr.dylib in Frameworks */,
 				C9D817A9101D4C2A0039DD9D /* libappweb.dylib in Frameworks */,
-				C9ABFE01107570DD0033ADE8 /* libphp5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1424,8 +1418,6 @@
 		C9D81660101D32A40039DD9D /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				C9ABFE00107570DD0033ADE8 /* libphp5.dylib */,
-				C9ABFDFC107570BF0033ADE8 /* libmatrixsslstatic.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -3082,7 +3074,6 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = (
-					../../../extensions/matrixssl/latest,
 					../../../extensions/openssl/latest,
 					../../../src/include,
 					../../..,
@@ -3916,7 +3907,6 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = (
-					../../../extensions/matrixssl/latest,
 					../../../src/include,
 					../../..,
 				);
