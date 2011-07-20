@@ -21027,10 +21027,8 @@ static int listenSocket(MprSocket *sp, cchar *host, int port, MprSocketAcceptPro
     if (mprGetSocketInfo(sp, host, port, &family, &protocol, &addr, &addrlen) < 0) {
         return MPR_ERR_NOT_FOUND;
     }
-    family = AF_INET6;
     sp->fd = (int) socket(family, datagram ? SOCK_DGRAM: SOCK_STREAM, protocol);
     if (sp->fd < 0) {
-        printf("ERROR %d\n", errno);
         unlock(sp);
         return MPR_ERR_CANT_OPEN;
     }
@@ -22105,7 +22103,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
     }
     v6 = ipv6(host);
     hints.ai_socktype = SOCK_STREAM;
-    if (host && *host) {
+    if (host) {
         hints.ai_family = v6 ? AF_INET6 : AF_INET;
     } else {
         hints.ai_family = AF_UNSPEC;
@@ -22126,7 +22124,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
                 break;
             }
         } else {
-            if (r->ai_family == AF_INET) {
+            if (r->ai_family == AF_INET || host == 0) {
                 break;
             }
         }
@@ -22138,7 +22136,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
     mprMemcpy((char*) *addr, sizeof(struct sockaddr_storage), (char*) r->ai_addr, (int) r->ai_addrlen);
 
     *addrlen = (int) r->ai_addrlen;
-    *family = (host && *host) ? r->ai_family : AF_UNSPEC;
+    *family = r->ai_family;
     *protocol = r->ai_protocol;
 
     freeaddrinfo(res);
@@ -22301,7 +22299,7 @@ static int ipv6(cchar *ip)
     int     colons;
 
     if (ip == 0 || *ip == 0) {
-        return 0;
+        return 1;
     }
     colons = 0;
     for (cp = (char*) ip; ((*cp != '\0') && (colons < 2)) ; cp++) {
