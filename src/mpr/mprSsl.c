@@ -1219,12 +1219,10 @@ extern "C" {
  */
 #define MPR_DEFAULT_BREAK_PORT 9473
 
-#define MPR_MAX_IP_NAME         128             /**< Maximum size of a host name string */
-#define MPR_MAX_IP_ADDR         128             /**< Maximum size of an IP address */
+#define MPR_MAX_IP_NAME         1024            /**< Maximum size of a host name string */
+#define MPR_MAX_IP_ADDR         1024            /**< Maximum size of an IP address */
 #define MPR_MAX_IP_PORT         8               /**< MMaximum size of a port number */
-
-/**< Maximum size of an IP address with port number */
-#define MPR_MAX_IP_ADDR_PORT    (MPR_MAX_IP_ADDR + MPR_MAX_IP_PORT + 1) 
+#define MPR_MAX_IP_ADDR_PORT    1024
 
 /*
  *  Signal sent on Unix to break out of a select call.
