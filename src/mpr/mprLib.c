@@ -22313,7 +22313,7 @@ static int ipv6(cchar *ip)
     int     colons;
 
     if (ip == 0 || *ip == 0) {
-        return 1;
+        return 0;
     }
     colons = 0;
     for (cp = (char*) ip; ((*cp != '\0') && (colons < 2)) ; cp++) {
