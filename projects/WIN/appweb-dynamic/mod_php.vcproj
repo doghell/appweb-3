@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_php"
-    ProjectGUID="272ccb78-aab6-4418-be20-e04592c25eb4"
+    ProjectGUID="beb7eb35-e383-4b3d-b2cd-65262dd881f4"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{1d3148fb-d7d1-484c-acb2-bbdf643b4ab7}"
+            UniqueIdentifier="{d1d7b508-9a1f-4956-a7b2-ef2407a5cf76}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{5e03da27-2e44-4279-9fad-621d3d722992}"
+            UniqueIdentifier="{1f9cdb00-c41b-489a-8b0c-012e1bb4daad}"
             >
             <File
                 RelativePath="..\..\..\src\http\handlers\phpHandler.c"

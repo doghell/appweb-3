@@ -148,6 +148,7 @@ angel.vcproj: Makefile buildConfig.override
 
 appwebMonitor.vcproj: Makefile buildConfig.override
 	@makeVsProj --project appwebMonitor.vcproj --graphical --exe appwebMonitor.exe --search "$(BLD_EJS_LIBPATHS)" \
+		--resources appweb.rc \
 		--dflags "$(DFLAGS)" --libs "libmpr.lib $(LIBS)" $(MPR_HDR) $(APPWEB_HDR) \
         $(SRC)/include/appwebMonitor.h $(SRC)/server/WIN/appwebMonitor.c
 

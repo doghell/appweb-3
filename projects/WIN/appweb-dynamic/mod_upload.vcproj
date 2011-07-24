@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_upload"
-    ProjectGUID="69e0c442-02de-4e03-9c80-c3b30dc4d841"
+    ProjectGUID="92d67879-5cf9-443e-b78a-85494eb3619a"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{0e0111d2-3124-4140-88c5-c4524a37915d}"
+            UniqueIdentifier="{6cd667e9-348e-4d51-a3fa-fc536523133d}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{1c4713ff-5198-4217-a29e-081ff53ec031}"
+            UniqueIdentifier="{25212f2c-570b-483b-94ef-233db01bb9e9}"
             >
             <File
                 RelativePath="..\..\..\src\http\filters\uploadFilter.c"

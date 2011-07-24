@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="mod_auth"
-    ProjectGUID="74863f94-cc2c-4689-b271-edb4c031749b"
+    ProjectGUID="3d27cdeb-6e35-4af2-a844-d99c8c16170b"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -138,7 +138,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{2ccd32b1-7267-49bf-a252-e8d48e827947}"
+            UniqueIdentifier="{25ced0e2-51d1-4737-a195-e6a4c3be45a0}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -168,7 +168,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{10fe3507-b8ce-416f-b5cb-5d3d84ee7b06}"
+            UniqueIdentifier="{b0cc5e88-06f5-4f34-9ea7-76157af9e35d}"
             >
             <File
                 RelativePath="..\..\..\src\http\filters\authFilter.c"

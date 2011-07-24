@@ -3,7 +3,7 @@
     ProjectType="Visual C++"
     Version="8.00"
     Name="angel"
-    ProjectGUID="0c720b0a-80c9-4d9b-b55d-0628de90f060"
+    ProjectGUID="e20a69a6-7fd4-4a03-8b3f-7e0b9055a680"
     RootNamespace=""
     Keyword="Win32Proj"
     TargetFrameworkVersion="0"
@@ -136,7 +136,7 @@
         <Filter
             Name="Header Files"
             Filter="h;hpp;hxx;hm;inl;inc;xsd"
-            UniqueIdentifier="{7dc554f5-453c-4b9b-bd46-0add47644c9d}"
+            UniqueIdentifier="{ff68c732-bd8d-4e72-89f1-a0372f7af36a}"
             >
             <File
                 RelativePath="..\..\..\buildConfig.h"
@@ -162,7 +162,7 @@
         <Filter
             Name="Source Files"
             Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-            UniqueIdentifier="{3ad39f90-9aa7-4e4d-9864-d9dae69d7e13}"
+            UniqueIdentifier="{e955857a-e8f2-4c9c-9828-b8c48b3d7d39}"
             >
             <File
                 RelativePath="..\..\..\src\server\WIN\angel.c"

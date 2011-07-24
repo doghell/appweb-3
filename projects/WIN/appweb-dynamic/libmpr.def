@@ -428,6 +428,7 @@ EXPORTS
   mprSetWaitEvents
   mprSetWinMsgCallback
   mprSetWorkerStackSize
+  mprSetWorkerStartCallback
   mprSignalCond
   mprSignalExit
   mprSignalTestComplete
