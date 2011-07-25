@@ -22124,7 +22124,7 @@ int mprGetSocketInfo(MprCtx ctx, cchar *host, int port, int *family, int *protoc
                 break;
             }
         } else {
-            if (r->ai_family == AF_INET || host == 0) {
+            if (r->ai_family == AF_INET) {
                 break;
             }
         }
