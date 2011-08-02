@@ -102,7 +102,14 @@ $(BLD_TOP)/build/src/.makedep: buildConfig.make
 $(BLD_TOOLS_DIR)/edep$(BLD_EXE): 
 	T=$(BLD_TOOLS_DIR)/src; $(DO_RECURSE)
 
-install uninstall install-% uninstall-%:
+install: install-binary
+   
+uninstall: uninstall-binary
+
+install-%:
+	@$(MAKE) -C package --no-print-directory _RECURSIVE_=1 TRACE=$(TRACE) $@
+
+uninstall-%:
 	@$(MAKE) -C package --no-print-directory _RECURSIVE_=1 TRACE=$(TRACE) $@
 
 checkInstalled: 
