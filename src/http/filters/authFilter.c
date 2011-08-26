@@ -528,6 +528,10 @@ static void formatAuthResponse(MaConn *conn, MaAuth *auth, int code, char *msg, 
         if (etag == 0) {
             etag = "";
         }
+        if (etag[0] == '"') {
+            etag = mprStrdup(req, etag);
+            etag = mprStrTrim(etag, "\"");
+        }
         mprCalcDigestNonce(req, &nonceStr, conn->host->secret, etag, auth->requiredRealm);
 
         if (strcmp(qopClass, "auth") == 0) {
