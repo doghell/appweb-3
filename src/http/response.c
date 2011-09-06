@@ -409,6 +409,7 @@ void maSetCookie(MaConn *conn, cchar *name, cchar *value, cchar *path, cchar *co
             webkitVersion = (cp[0] - '0') * 100 + (cp[2] - '0') * 10 + (cp[4] - '0');
         }
     }
+    domain = (char*) cookieDomain;
     if (webkitVersion >= 312) {
         domain = mprStrdup(resp, req->hostName);
         if ((cp = strchr(domain, ':')) != 0) {
@@ -419,13 +420,12 @@ void maSetCookie(MaConn *conn, cchar *name, cchar *value, cchar *path, cchar *co
         } else {
             domain = 0;
         }
-    } else {
-        domain = 0;
     }
     if (domain) {
         domainAtt = "; domain=";
     } else {
         domainAtt = "";
+        domain = "";
     }
     if (lifetime > 0) {
         mprDecodeUniversalTime(resp, &tm, conn->time + (lifetime * MPR_TICKS_PER_SEC));
