@@ -34003,7 +34003,7 @@ static EjsVar *setCookie(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
     char        *name, *value, *path, *domain;
     int         lifetime, secure;
     
-    mprAssert(4 <= argc && argc <= 5);
+    mprAssert(4 <= argc && argc <= 6);
     web = ejsGetHandle(ejs);
 
     name = ejsGetString(argv[0]);

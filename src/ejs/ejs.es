@@ -13319,7 +13319,7 @@ module ejs.web {
 module ejs.web {
 
     /**
-     *  Cookie class to store parsed cookie strings. The MVC web framework creates Cookie class instances when
+     *  Cookie class is used to store parsed cookie strings. The MVC web framework creates Cookie class instances when
      *  the client provides Http cookie headers.
      *  @spec ejs
      *  @stability prototype
