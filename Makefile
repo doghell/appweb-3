@@ -58,7 +58,7 @@ diff import sync:
 #
 config:
 	$(call log) "[Config]" "configure"
-	./configure
+	./configure --without-matrixSsl
 	$(MAKE) depend clean >/dev/null
 
 rom:
