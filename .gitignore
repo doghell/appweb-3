@@ -127,3 +127,4 @@ projects/WIN/*/ipch
 projects/WIN/*/*.sdf
 test/web/huge.txt
 samples/c/simpleHandler/simpleHandler.def
+test/web/cookie.ejs

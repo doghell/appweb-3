@@ -83,6 +83,7 @@
 		C94086AF101A665B0019809C /* libmpr.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9761DA00FD03F94009C78E1 /* libmpr.dylib */; };
 		C94086D8101A672F0019809C /* testAppweb.c in Sources */ = {isa = PBXBuildFile; fileRef = C94086CB101A672F0019809C /* testAppweb.c */; };
 		C94086DE101A672F0019809C /* testHttp.c in Sources */ = {isa = PBXBuildFile; fileRef = C94086D2101A672F0019809C /* testHttp.c */; };
+		C948110514190D0A00631EA3 /* libphp5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C948110414190D0A00631EA3 /* libphp5.dylib */; };
 		C9761E520FD04273009C78E1 /* mprLib.c in Sources */ = {isa = PBXBuildFile; fileRef = C9AFCC6B0FC522930080E908 /* mprLib.c */; };
 		C9761E760FD04319009C78E1 /* mprPcre.c in Sources */ = {isa = PBXBuildFile; fileRef = C9AFCC6C0FC522930080E908 /* mprPcre.c */; };
 		C9761E770FD04326009C78E1 /* mprSsl.c in Sources */ = {isa = PBXBuildFile; fileRef = C9AFCC6D0FC522930080E908 /* mprSsl.c */; };
@@ -819,6 +820,7 @@
 		C94086CB101A672F0019809C /* testAppweb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testAppweb.c; path = ../../../src/test/testAppweb.c; sourceTree = SOURCE_ROOT; };
 		C94086D2101A672F0019809C /* testHttp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testHttp.c; path = ../../../src/test/testHttp.c; sourceTree = SOURCE_ROOT; };
 		C94086E3101A67470019809C /* testAppweb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = testAppweb.h; path = ../../../src/test/testAppweb.h; sourceTree = SOURCE_ROOT; };
+		C948110414190D0A00631EA3 /* libphp5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libphp5.dylib; path = ../../../lib/libphp5.dylib; sourceTree = "<group>"; };
 		C95C31C60FC5257D00FB3105 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../../../src/ejs/sqlite3.c; sourceTree = SOURCE_ROOT; };
 		C95C31E80FC5292A00FB3105 /* appweb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = appweb.c; path = ../../../src/server/appweb.c; sourceTree = SOURCE_ROOT; };
 		C9636AA21325C039009A88B1 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -1188,6 +1190,7 @@
 			files = (
 				C9D817A8101D4C2A0039DD9D /* libmpr.dylib in Frameworks */,
 				C9D817A9101D4C2A0039DD9D /* libappweb.dylib in Frameworks */,
+				C948110514190D0A00631EA3 /* libphp5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1418,6 +1421,7 @@
 		C9D81660101D32A40039DD9D /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				C948110414190D0A00631EA3 /* libphp5.dylib */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1540,13 +1544,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C97DCAB2101D4FE7008EB048 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C9D817A4101D4C2A0039DD9D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2089,7 +2086,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C9D817AA101D4C2A0039DD9D /* Build configuration list for PBXNativeTarget "mod_php" */;
 			buildPhases = (
-				C9D817A4101D4C2A0039DD9D /* Headers */,
 				C9D817A5101D4C2A0039DD9D /* Sources */,
 				C9D817A7101D4C2A0039DD9D /* Frameworks */,
 			);
@@ -4066,12 +4062,14 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../../lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../../lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../lib\"";
 				PREBINDING = YES;
 				PRODUCT_NAME = mod_php;
 			};
@@ -4094,12 +4092,14 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../../lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../../lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../lib\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = mod_cgi;
 				ZERO_LINK = NO;
