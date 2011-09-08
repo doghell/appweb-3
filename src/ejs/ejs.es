@@ -14568,8 +14568,9 @@ module ejs.web {
             Define a cookie header to include in the reponse
             @hide
          */
-        function setCookie(name: String, value: String, lifetime: Number, path: String, secure: Boolean = false): Void
-            controller.setCookie(name, value, lifetime, path, secure)
+        function setCookie(name: String, value: String, path: String = null, domain: String = null, 
+                lifetime: Number = 0, secure: Boolean = false): Void
+            controller.setCookie(name, value, path, domain, lifetime, secure)
 
         /**
             of the format "keyword: value". If a header has already been defined and \a allowMultiple is false, 

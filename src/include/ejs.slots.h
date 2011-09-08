@@ -3920,9 +3920,10 @@
 #define ES_ejs_web_View_ejs_web_redirect_options                       2
 #define ES_ejs_web_View_ejs_web_setCookie_name                         0
 #define ES_ejs_web_View_ejs_web_setCookie_value                        1
-#define ES_ejs_web_View_ejs_web_setCookie_lifetime                     2
-#define ES_ejs_web_View_ejs_web_setCookie_path                         3
-#define ES_ejs_web_View_ejs_web_setCookie_secure                       4
+#define ES_ejs_web_View_ejs_web_setCookie_path                         2
+#define ES_ejs_web_View_ejs_web_setCookie_domain                       3
+#define ES_ejs_web_View_ejs_web_setCookie_lifetime                     4
+#define ES_ejs_web_View_ejs_web_setCookie_secure                       5
 #define ES_ejs_web_View_ejs_web_setHeader_key                          0
 #define ES_ejs_web_View_ejs_web_setHeader_value                        1
 #define ES_ejs_web_View_ejs_web_setHeader_allowMultiple                2
@@ -3951,11 +3952,11 @@
 #define ES_ejs_web_View_ejs_web_getValue_fmt                           5
 #define ES_ejs_web_View_ejs_web_getValue__hoisted_6_part               6
 #define ES_ejs_web_View_ejs_web_date_fmt                               0
-#define ES_ejs_web_View_ejs_web_date___fun_26417__                     1
+#define ES_ejs_web_View_ejs_web_date___fun_26427__                     1
 #define ES_ejs_web_View_ejs_web_currency_fmt                           0
-#define ES_ejs_web_View_ejs_web_currency___fun_26451__                 1
+#define ES_ejs_web_View_ejs_web_currency___fun_26461__                 1
 #define ES_ejs_web_View_ejs_web_number_fmt                             0
-#define ES_ejs_web_View_ejs_web_number___fun_26481__                   1
+#define ES_ejs_web_View_ejs_web_number___fun_26491__                   1
 #define ES_ejs_web_View_ejs_web_getOptions_options                     0
 #define ES_ejs_web_View_ejs_web_getOptions_result                      1
 #define ES_ejs_web_View_ejs_web_getOptions__hoisted_2_option           2
@@ -4232,6 +4233,6 @@
 #define ES_LocalModel_ejs_db_constructor_fields                        0
 #define ES_LocalModel_LocalModel_fields                                0
 
-#define _ES_CHECKSUM_ejs_web 458420
+#define _ES_CHECKSUM_ejs_web 459061
 
 #endif
