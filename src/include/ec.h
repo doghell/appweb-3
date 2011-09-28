@@ -992,6 +992,7 @@ typedef struct EcCompiler {
     EcState     *blockState;                /* State for the current block */
 
     EjsLookup   lookup;                     /* Lookup residuals */
+    EjsBlock    *compilerBlock;             /* Dummy top of scope */
 
     int         currentLineNumber;          /* Current input source line number */
     cchar       *currentFilename;           /* Current input file name */

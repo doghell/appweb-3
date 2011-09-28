@@ -16637,10 +16637,17 @@ MprModuleService *mprCreateModuleService(MprCtx ctx)
         /*
          *  Put the mod prefix here incase running an installed debug build
          */
-        searchPath = ".:" BLD_MOD_NAME ":../" BLD_MOD_NAME ":../../" BLD_MOD_NAME ":../../../" BLD_MOD_NAME ":" \
+        searchPath = \
+            "." MPR_SEARCH_SEP \
+            BLD_MOD_NAME MPR_SEARCH_SEP \
+            "../" BLD_MOD_NAME MPR_SEARCH_SEP \
+            "../../" BLD_MOD_NAME MPR_SEARCH_SEP \
+            "../../../" BLD_MOD_NAME MPR_SEARCH_SEP \
             BLD_MOD_PREFIX;
 #else
-        searchPath = BLD_MOD_PREFIX ":.";
+        searchPath = \
+             BLD_MOD_PREFIX MPR_SEARCH_SEP \
+             ".";
 #endif
     } else {
         searchPath = ms->searchPath;

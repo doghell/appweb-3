@@ -28022,7 +28022,7 @@ static EjsVar *getNthBase(Ejs *ejs, EjsVar *obj, int nthBase)
     EjsType     *type;
 
     if (obj) {
-        if (ejsIsType(obj) || obj == ejs->global) {
+        if (ejsIsType(obj)) {
             type = (EjsType*) obj;
         } else {
             type = obj->type;
