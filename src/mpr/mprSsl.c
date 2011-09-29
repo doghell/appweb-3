@@ -10105,7 +10105,6 @@ static int verifyX509Certificate(int ok, X509_STORE_CTX *xContext)
     char            subject[260], issuer[260], peer[260];
     int             error, depth;
     
-    return 1;
     subject[0] = issuer[0] = '\0';
 
     osslStruct = (SSL*) X509_STORE_CTX_get_app_data(xContext);
