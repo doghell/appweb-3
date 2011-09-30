@@ -9972,10 +9972,14 @@ static int readOss(MprSocket *sp, void *buf, int len)
     for (i = 0; i < retries; i++) {
         rc = SSL_read(osp->osslStruct, buf, len);
         if (rc < 0) {
+            char    ebuf[MPR_MAX_STRING];
             error = SSL_get_error(osp->osslStruct, rc);
             if (error == SSL_ERROR_WANT_READ || error == SSL_ERROR_WANT_CONNECT || error == SSL_ERROR_WANT_ACCEPT) {
                 continue;
             }
+            ERR_error_string_n(error, ebuf, sizeof(ebuf) - 1);
+            mprLog(sp, 4, "SSL_read error %d, %s", error, ebuf);
+
         }
         break;
     }
