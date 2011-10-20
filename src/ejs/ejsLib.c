@@ -9833,7 +9833,6 @@ void ejsRemoveSlot(Ejs *ejs, EjsObject *obj, int slotNum, int compact)
     mprAssert(obj);
     mprAssert(slotNum >= 0);
     mprAssert(slotNum >= 0);
-    mprAssert(ejs->flags & EJS_FLAG_COMPILER);
 
     names = obj->names;
 
@@ -10120,10 +10119,8 @@ static void removeHashEntry(EjsObject *obj, EjsName *qname)
                 return;
             }
         }
-        mprAssert(0);
         return;
     }
-
 
     index = ejsComputeHashCode(names, qname);
     slotNum = names->buckets[index];
@@ -10145,7 +10142,6 @@ static void removeHashEntry(EjsObject *obj, EjsName *qname)
         lastSlot = slotNum;
         slotNum = names->entries[slotNum].nextSlot;
     }
-    mprAssert(0);
 }
 
 
@@ -19763,7 +19759,7 @@ static EjsVar *getSystemRam(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv)
 static EjsVar *printStats(Ejs *ejs, EjsVar *thisObj, int argc, EjsVar **argv)
 {
     ejsPrintAllocReport(ejs);
-    mprPrintAllocReport(ejs, "Memroy Report");
+    mprPrintAllocReport(ejs, "Memory Report");
     return 0;
 }
 
@@ -23915,12 +23911,12 @@ void ejsFreeVar(Ejs *ejs, EjsVar *vp, int id)
     if (id < 0) {
         id = type->id;
     }
+    pool = gc->pools[id];
 
-    if (!vp->noPool && !type->dontPool && 0 <= id && id < gc->numPools) {
+    if (!vp->noPool && !type->dontPool && 0 <= id && id < gc->numPools && pool->count < EJS_MAX_TYPE_POOL) {
         /*
          *  Transfer from the current generation back to the pool. Inline for speed.
          */
-        pool = gc->pools[id];
         pool->type = vp->type; 
         pp = MPR_GET_BLK(pool);
         bp = MPR_GET_BLK(vp);
@@ -23993,6 +23989,10 @@ void ejsCollectGarbage(Ejs *ejs, int gen)
     gc->collecting = 0;
 #if BLD_DEBUG
     gc->totalSweeps++;
+#if REPORT
+    ejsPrintAllocReport(ejs);
+    mprPrintAllocReport(ejs, "Memory Report");
+#endif
 #endif
 }
 
@@ -24025,6 +24025,9 @@ static void mark(Ejs *ejs, int generation)
     }
     if (ejs->memoryCallback) {
         ejsMarkVar(ejs, NULL, (EjsVar*) ejs->memoryCallback);
+    }
+    if (ejs->sessions) {
+        ejsMarkVar(ejs, NULL, (EjsVar*) ejs->sessions);
     }
 
     /*
@@ -33852,7 +33855,7 @@ static EjsVar *createSession(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
 /*
  *  function destroySession(): Void
  */
-static EjsVar *destroySession(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
+static EjsVar *destroyControllerSession(Ejs *ejs, EjsVar *unused, int argc, EjsVar **argv)
 {
     ejsDestroySession(ejs);
     return 0;
@@ -34130,7 +34133,7 @@ void ejsConfigureWebControllerType(Ejs *ejs)
     }
     ejsBindMethod(ejs, type, ES_ejs_web_Controller_ejs_web_cache, (EjsNativeFunction) cache);
     ejsBindMethod(ejs, type, ES_ejs_web_Controller_ejs_web_createSession, (EjsNativeFunction) createSession);
-    ejsBindMethod(ejs, type, ES_ejs_web_Controller_ejs_web_destroySession, (EjsNativeFunction) destroySession);
+    ejsBindMethod(ejs, type, ES_ejs_web_Controller_ejs_web_destroySession, (EjsNativeFunction) destroyControllerSession);
     ejsBindMethod(ejs, type, ES_ejs_web_Controller_ejs_web_discardOutput, (EjsNativeFunction) discardOutput);
     ejsBindMethod(ejs, type, ES_ejs_web_Controller_ejs_web_sendError, (EjsNativeFunction) sendError);
     ejsBindMethod(ejs, type, ES_ejs_web_Controller_ejs_web_keepAlive, (EjsNativeFunction) keepAlive);
@@ -34330,7 +34333,7 @@ static int initInterp(Ejs *ejs, EjsWebControl *control)
     sessions = ejsGetPropertyByName(ejs, ejs->global, ejsName(&qname, "ejs.web", "sessions"));
 }
 #endif
-    ejsMakePermanent(ejs, sessions);
+    ejs->sessions = sessions;
     control->sessions = (EjsObject*) sessions;
     ejs->dontExit = 1;
     return 0;
@@ -35927,6 +35930,7 @@ static void sessionTimer(EjsWebControl *control, MprEvent *event)
             if (session->obj.var.type == control->sessionType) {
                 if (session && session->expire <= now) {
                     ejsDeleteProperty(master, (EjsVar*) sessions, i);
+                    ejsRemoveSlot(master, sessions, i, 1);
                     deleted++;
                 }
             }
@@ -36101,6 +36105,16 @@ bool ejsDestroySession(Ejs *ejs)
 }
 
 
+static void destroySession(Ejs *ejs, EjsWebSession *session)
+{
+    mprAssert(session);
+
+    mprFree(session->id);
+    session->id = 0;
+    ejsFreeVar(ejs, (EjsVar*) session, -1);
+}
+
+
 void ejsConfigureWebSessionType(Ejs *ejs)
 {
     EjsType     *type;
@@ -36123,6 +36137,7 @@ void ejsConfigureWebSessionType(Ejs *ejs)
     type->helpers->getProperty = (EjsGetPropertyHelper) getSessionProperty;
     type->helpers->getPropertyByName = (EjsGetPropertyByNameHelper) getSessionPropertyByName;
     type->helpers->setProperty = (EjsSetPropertyHelper) setSessionProperty;
+    type->helpers->destroyVar = (EjsDestroyVarHelper) destroySession;
 }
 
 #endif /* BLD_FEATURE_EJS_WEB */
