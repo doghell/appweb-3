@@ -57,7 +57,6 @@
 				C90A198C0FD6D9B9006A9E86 /* PBXTargetDependency */,
 				C90A19910FD6D9E9006A9E86 /* PBXTargetDependency */,
 				C94086E8101A67800019809C /* PBXTargetDependency */,
-				C9D817B3101D4CC70039DD9D /* PBXTargetDependency */,
 				C97DCABE101D5094008EB048 /* PBXTargetDependency */,
 			);
 			name = All;
@@ -804,13 +803,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = C9761DC20FD03FD9009C78E1;
 			remoteInfo = libappweb;
-		};
-		C9D817B2101D4CC70039DD9D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C9AFCC4A0FC521150080E908 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C9D817A1101D4C2A0039DD9D;
-			remoteInfo = mod_php;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -2876,11 +2868,6 @@
 			isa = PBXTargetDependency;
 			target = C9761DC20FD03FD9009C78E1 /* libappweb */;
 			targetProxy = C9D817A3101D4C2A0039DD9D /* PBXContainerItemProxy */;
-		};
-		C9D817B3101D4CC70039DD9D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C9D817A1101D4C2A0039DD9D /* mod_php */;
-			targetProxy = C9D817B2101D4CC70039DD9D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

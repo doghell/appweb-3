@@ -122,6 +122,28 @@ static cchar *cback(MaConn *conn, int *code, cchar *targetUri)
 
 static void simpleTest(MaQueue *q)
 {
+    MaHttp          *http;
+    MaServer        *server;
+    MaListen        *listen;
+    MaHostAddress   *address;
+
+    http = mprGetMpr(q)->appwebHttpService;
+    server = http->defaultServer;
+    listen = mprGetFirstItem(server->listens);
+    maStopListening(listen);
+
+    if ((address = maLookupHostAddress(server, listen->ipAddr, listen->port)) != 0) {
+        mprRemoveItem(server->hostAddresses, address);
+    }
+    listen->port = 5555;
+    // listen->ipAddr = 5555;
+
+    address = maCreateHostAddress(server, listen->ipAddr, listen->port);
+    mprAddItem(server->hostAddresses, address);
+    maInsertVirtualHost(address, server->defaultHost);
+
+    maStartListening(listen);
+
 #if UNUSED
     maSetRedirectCallback(q->conn, cback);
     maRedirect(q->conn, 302, "/abc/anything");

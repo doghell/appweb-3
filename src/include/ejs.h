@@ -135,6 +135,7 @@ extern "C" {
  *  Set cross gen root set size to the work quote * 120%. This ensures we don't often overflow a root set.
  */
 #define EJS_NUM_CROSS_GEN           (EJS_GC_WORK_QUOTA * 12 / 10) 
+#define EJS_MAX_TYPE_POOL           200             /* Number of objects to pool per type */
 
 #define EJS_SQLITE_TIMEOUT          30000           /* Database busy timeout */
 #define EJS_SESSION_TIMEOUT         1800
@@ -998,6 +999,7 @@ typedef struct EjsGen
     uint            totalSweeps;        /* Total sweeps */
 } EjsGen;
 
+
 /*
  *  GC Pool of free objects of a given type. Each type maintains a free pool for faster allocations.
  *  Types in the pool have a weak reference and may be reclaimed.
@@ -1172,6 +1174,7 @@ typedef struct Ejs {
     uint                exiting: 1;         /**< VM should exit */
 
     struct EjsVar       *exceptionArg;      /**< Exception object for catch block */
+    struct EjsVar       *sessions;          /**< Sessions object in the master interpreter*/
 
     bool                attention;          /**< VM needs attention */
 
@@ -4697,7 +4700,7 @@ typedef struct EjsWebSession
 {
     EjsObject   obj;
     MprTime     expire;                     /* When the session should expire */
-    cchar       *id;                        /* Session ID */
+    char        *id;                        /* Session ID */
     int         timeout;                    /* Session inactivity lifespan */
     int         index;                      /* Index in sesssions[] */
 } EjsWebSession;

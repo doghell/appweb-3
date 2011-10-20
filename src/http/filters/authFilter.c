@@ -557,7 +557,9 @@ static void formatAuthResponse(MaConn *conn, MaAuth *auth, int code, char *msg, 
 
 void maSetAuthQop(MaAuth *auth, cchar *qop)
 {
-    mprFree(auth->qop);
+    if (mprGetParent(auth->qop) == auth) {
+        mprFree(auth->qop);
+    }
     if (strcmp(qop, "auth") == 0 || strcmp(qop, "auth-int") == 0) {
         auth->qop = mprStrdup(auth, qop);
     } else {
@@ -568,14 +570,18 @@ void maSetAuthQop(MaAuth *auth, cchar *qop)
 
 void maSetAuthRealm(MaAuth *auth, cchar *realm)
 {
-    mprFree(auth->requiredRealm);
+    if (mprGetParent(auth->requiredRealm) == auth) {
+        mprFree(auth->requiredRealm);
+    }
     auth->requiredRealm = mprStrdup(auth, realm);
 }
 
 
 void maSetAuthRequiredGroups(MaAuth *auth, cchar *groups)
 {
-    mprFree(auth->requiredGroups);
+    if (mprGetParent(auth->requiredGroups) == auth) {
+        mprFree(auth->requiredGroups);
+    }
     auth->requiredGroups = mprStrdup(auth, groups);
     auth->flags |= MA_AUTH_REQUIRED;
     auth->anyValidUser = 0;
@@ -584,7 +590,9 @@ void maSetAuthRequiredGroups(MaAuth *auth, cchar *groups)
 
 void maSetAuthRequiredUsers(MaAuth *auth, cchar *users)
 {
-    mprFree(auth->requiredUsers);
+    if (mprGetParent(auth->requiredUsers) == auth) {
+        mprFree(auth->requiredUsers);
+    }
     auth->requiredUsers = mprStrdup(auth, users);
     auth->flags |= MA_AUTH_REQUIRED;
     auth->anyValidUser = 0;

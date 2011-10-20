@@ -19760,7 +19760,7 @@ char *mprDtoa(MprCtx ctx, double value, int ndigits, int mode, int flags)
     char    *intermediate, *ip;
     int     period, sign, len, exponentForm, fixedForm, exponent, count, totalDigits;
 
-    buf = mprCreateBuf(ctx, MPR_MAX_STRING, -1);
+    buf = mprCreateBuf(ctx, 64, -1);
     intermediate = 0;
     exponentForm = 0;
     fixedForm = 0;

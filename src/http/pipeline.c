@@ -173,8 +173,11 @@ void maCreatePipeline(MaConn *conn)
             }
         }
     }
-    
     connector = location->connector;
+    if (connector == 0) {
+        mprError(conn, "No connector defined, using net connector");
+        connector = http->netConnector;
+    }
 #if BLD_FEATURE_SEND
     if (resp->handler == http->fileHandler && connector == http->netConnector && req->method == MA_REQ_GET && 
             http->sendConnector && !req->ranges && !host->secure && resp->chunkSize <= 0 && !conn->trace) {

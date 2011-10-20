@@ -282,7 +282,7 @@ static int readFileData(MaQueue *q, MaPacket *packet, MprOff pos, int size)
     resp = conn->response;
     req = conn->request;
     
-    if (packet->content == 0 && (packet->content = mprCreateBuf(packet, size, size)) == 0) {
+    if (packet->content == 0 && (packet->content = mprCreateBuf(packet, size, -1)) == 0) {
         return MPR_ERR_NO_MEMORY;
     }
     mprLog(q, 7, "readFileData size %Ld, pos %Ld", size, pos);
