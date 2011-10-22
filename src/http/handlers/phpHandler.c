@@ -173,7 +173,15 @@ static void runPhp(MaQueue *q)
     zend_first_try {
         php->var_array = 0;
         SG(server_context) = conn;
-        SG(request_info).auth_user = req->user;
+        if (req->user) {
+            SG(request_info).auth_user = estrdup(req->user);
+        }
+        if (req->password) {
+            SG(request_info).auth_password = estrdup(req->password);
+        }
+        if (req->authType && req->authDetails) {
+            SG(request_info).auth_digest = estrdup(mprAsprintf(req, -1, "%s %s", req->authType, req->authDetails));
+        }
         SG(request_info).auth_password = req->password;
         SG(request_info).content_type = req->mimeType;
         SG(request_info).content_length = req->length;

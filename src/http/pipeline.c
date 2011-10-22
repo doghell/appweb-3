@@ -173,6 +173,10 @@ void maCreatePipeline(MaConn *conn)
             }
         }
     }
+    if (conn->requestFailed) {
+        handler = resp->handler = http->passHandler;
+        mprSetItem(resp->outputPipeline, 0, resp->handler);
+    }
     connector = location->connector;
     if (connector == 0) {
         mprError(conn, "No connector defined, using net connector");
@@ -270,7 +274,7 @@ void maCreatePipeline(MaConn *conn)
                 }
             }
         }
-    }
+    }    
     /*
         Now that all stages are open, we can set the environment
      */
