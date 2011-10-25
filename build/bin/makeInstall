@@ -204,7 +204,7 @@ copyRemoveFiles() {
         installRemoveLog ${packName}
     done
 
-    configureProduct --quiet copy
+    configureProduct copy
 
     #
     #   Don't remove empty directories if installing to "/"
@@ -458,7 +458,7 @@ done
 PACKS=${*:-binary}
 
 setup
-configureProduct --quiet initialize
+configureProduct initialize
 
 if [ $TASK = Remove ] ; then
     #
