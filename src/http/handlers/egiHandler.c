@@ -136,7 +136,6 @@ static void simpleTest(MaQueue *q)
         mprRemoveItem(server->hostAddresses, address);
     }
     listen->port = 5555;
-    // listen->ipAddr = 5555;
 
     address = maCreateHostAddress(server, listen->ipAddr, listen->port);
     mprAddItem(server->hostAddresses, address);
