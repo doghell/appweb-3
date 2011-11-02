@@ -289,7 +289,9 @@ MAIN(appweb, int argc, char **argv)
     /*
      *  Service I/O events until instructed to exit
      */
-    mprServiceEvents(mpr->dispatcher, -1, MPR_SERVICE_EVENTS | MPR_SERVICE_IO);
+    while (!mprIsExiting(mpr)) {
+        mprServiceEvents(mpr->dispatcher, -1, MPR_SERVICE_EVENTS | MPR_SERVICE_IO);
+    }
 
     /*
      *  Signal a graceful shutdown
