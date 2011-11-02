@@ -466,7 +466,7 @@ int mprGetDirName(char *buf, int bufsize, char *path)
     }
 
     dlen = cp - path;
-    if (dlen < bufsize) {
+    if ((int) dlen < bufsize) {
         if (dlen == 0) {
             dlen++;
         }
